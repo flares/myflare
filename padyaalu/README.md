@@ -79,20 +79,32 @@ python3 -m http.server        # then open http://localhost:8000/padyaalu/
 
 ## Current status
 
-**Working app + verified engine.** Seed corpus:
+**Working app + verified engine.** Corpus:
 
 | Śatakam | Metre | Poems | Verified |
 |---|---|---|---|
-| Vemana (వేమన) | ఆటవెలది | 4 | ✓ |
-| Sumati (సుమతీ) | కంద పద్యం | 2 | ✓ |
-| Dāśarathi (దాశరథి) | ఉత్పలమాల / చంపకమాల | 0 | — |
+| Vemana (వేమన) | ఆటవెలది | 9 | ✓ all |
+| Sumati (సుమతీ) | కంద పద్యం | 8 | ✓ all |
+| Dāśarathi (దాశరథి) | ఉత్పలమాల / చంపకమాల | 0 | pending source |
 
-> **On the full corpus:** the intended source (andhrabharati.com) and every other
-> external content site (Wikisource, etc.) are **blocked by this environment's network
-> policy**, so the complete texts of the three śatakams could not be fetched here. The
-> app, data schema, Telugu meanings, and the chandassu engine are all built and proven
-> on a verified seed set; the corpus can be grown as soon as the poem texts are available
-> (see next steps).
+Every poem above passes `verify.cjs`.
+
+> **On sourcing the texts.** The intended source (andhrabharati.com) and every other
+> external content site (Wikisource, Wikipedia, vignanam.org, archive.org, …) are
+> **blocked by this environment's network policy** — only package registries and
+> `raw.githubusercontent.com` are reachable, and no public repo/gist of these śatakams
+> could be located from here (GitHub search is also blocked). The verses above were
+> therefore **reproduced from memory and then filtered by the verifier** — several
+> misremembered lines were caught and dropped rather than shipped. This is a curated,
+> engine-checked subset, **not** the complete ~100-verse śatakams.
+>
+> **Dāśarathi** is left empty on purpose: its metres are vṛttamulu (ఉత్పలమాల /
+> చంపకమాల), which the verifier matches by exact gaṇa pattern, and from-memory attempts
+> did not scan cleanly — so nothing was included rather than risk wrong text.
+>
+> To complete the full corpus accurately, either point the project at a reachable source
+> (a GitHub repo/raw URL, since raw.githubusercontent.com works), paste the texts, or run
+> ingestion in an environment whose network policy allows the content sites.
 
 ## Planned next steps
 
