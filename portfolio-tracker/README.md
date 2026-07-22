@@ -39,10 +39,14 @@ The app (**Option A** design, mobile-first) is wired and lives at [`index.html`]
 - **Vault**: on first use you choose a passphrase; all data is encrypted client-side (PBKDF2 → AES-GCM via Web Crypto) before storage. Unlock on each visit; 🔒 Lock button re-locks.
 - **Add portfolio**: owner (with autocomplete of existing people) + portfolio name + optional first fund.
 - **Fund dropdown**: typeahead search against `https://api.mfapi.in/mf/search?q=…` (free JSON API over AMFI data, open CORS). Picking a fund fetches its latest NAV; **Buy NAV defaults to the latest NAV** if left blank.
-- **Add funds on the fly**: every portfolio card has "+ Add fund". Units accept 3 decimal places; each fund takes an optional **buy date**, which drives **XIRR / CAGR** (annualised return) shown per fund, per portfolio, and overall. Edit a fund's units/buy NAV/buy date via ✎, remove via ✕, and delete whole portfolios.
+- **Add funds on the fly**: every portfolio card has "+ Add fund". Units accept 3 decimal places; each fund takes an optional **buy date**, which drives **XIRR / CAGR** (annualised return) shown per fund, per portfolio, and overall. Tap a fund row to edit its units/buy NAV/buy date or remove it (edit dialog opens without stealing focus into a text box); delete whole portfolios from the card.
+- **Short display names**: long AMFI scheme names (e.g. "Aditya Birla Sun Life Nifty India Defence Index Fund-Direct Plan-Growth") are abbreviated for the fund row ("ABSL Nifty India Defence Index") via a built-in AMC abbreviation table + boilerplate stripper (Direct/Regular/Plan/Growth/IDCW/…); the full name is always kept as a hover title and used everywhere else (search, edit dialog).
+- **1D / 1W / 1M change**: a segmented control under the total switches the header's change figure between today's move, the past week's, and the past month's. 1W/1M pull each held fund's historical NAV series (`api.mfapi.in/mf/{schemeCode}`, cached in memory for the session) and diff against the nearest prior trading day.
 - **NAV refresh**: `https://api.mfapi.in/mf/{schemeCode}/latest` per held fund — on demand ("↻ Refresh NAV") and automatically on unlock when data is older than 6 h. Previous-day NAV is kept to show the day's ₹ change.
 - **Persistence**: the encrypted blob is always in `localStorage`; optionally synced to **Firebase** (Firestore) — newer copy wins on load.
+- **Stays unlocked**: after entering your passphrase once, the derived key is cached (non-extractable, in IndexedDB) for a **30-minute sliding session** — refreshing the page doesn't ask again. 🔒 Lock (top-right) ends the session immediately.
 - **Backup**: Settings → Export/Import JSON (decrypted, for your own safekeeping).
+- **Not pinch-zoomable** — the app is fixed-scale like a native app; pinch-to-zoom is disabled via the viewport meta tag.
 
 ### Firebase setup (optional, for cross-device sync)
 1. Create a Firebase project → add a **Web app** → copy its config JSON.

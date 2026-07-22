@@ -14,6 +14,8 @@ let vault = null;      // decrypted data
 let cryptoKey = null;  // AES-GCM key (in memory only)
 let saltB64 = null;    // PBKDF2 salt for current vault
 let fbase = null;      // { db, docRef, setDoc } when Firebase is connected
+let changePeriod = '1d';       // '1d' | '1w' | '1m' — which change the header shows
+const historyCache = {};       // code -> { rows: [{t, nav, date}] desc by t } — session only, not persisted
 
 /* ================= tiny helpers ================= */
 const $ = (sel, el = document) => el.querySelector(sel);
@@ -28,6 +30,40 @@ const fmtPct = p => (p >= 0 ? '▲ ' : '▼ ') + Math.abs(p).toFixed(1) + '%';
 const cls = p => (p >= 0 ? 'up' : 'down');
 const debounce = (fn, ms) => { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; };
 const uid = () => Math.random().toString(36).slice(2, 10);
+
+/* shorten AMFI scheme names for compact display: "Aditya Birla Sun Life Nifty
+   India Defence Index Fund-Direct Plan-Growth" -> "ABSL Nifty India Defence Index".
+   Full name is preserved everywhere else (search results, chosen preview,
+   title attribute) — this is a display-only shortener. */
+const AMC_ABBR = [
+  [/^aditya birla sun life\b/i, 'ABSL'], [/^icici prudential\b/i, 'ICICI Pru'],
+  [/^nippon india\b/i, 'Nippon'], [/^kotak mahindra\b/i, 'Kotak'],
+  [/^mirae asset\b/i, 'Mirae'], [/^parag parikh\b/i, 'PP'],
+  [/^franklin templeton\b/i, 'FT'], [/^motilal oswal\b/i, 'MOSL'],
+  [/^canara robeco\b/i, 'Canara Robeco'], [/^baroda bnp paribas\b/i, 'Baroda BNP'],
+  [/^pgim india\b/i, 'PGIM'], [/^mahindra manulife\b/i, 'Mahindra'],
+  [/^whiteoak capital\b/i, 'WhiteOak'], [/^bank of india\b/i, 'BOI'],
+  [/^bandhan\b/i, 'Bandhan'], [/^quant\b/i, 'Quant'], [/^sbi\b/i, 'SBI'],
+  [/^hdfc\b/i, 'HDFC'], [/^uti\b/i, 'UTI'], [/^axis\b/i, 'Axis'],
+  [/^tata\b/i, 'Tata'], [/^dsp\b/i, 'DSP'], [/^lic\b/i, 'LIC'],
+  [/^edelweiss\b/i, 'Edelweiss'], [/^invesco\b/i, 'Invesco'],
+  [/^sundaram\b/i, 'Sundaram'], [/^union\b/i, 'Union'], [/^navi\b/i, 'Navi'],
+  [/^groww\b/i, 'Groww'], [/^zerodha\b/i, 'Zerodha'], [/^samco\b/i, 'Samco'],
+  [/^helios\b/i, 'Helios'], [/^l&t\b/i, 'L&T'],
+];
+const FUND_STOP = new Set(['direct', 'regular', 'plan', 'growth', 'option', 'idcw',
+  'dividend', 'bonus', 'payout', 'reinvestment', 'reinvest', 'fund', 'scheme']);
+function shortFundName(name, max = 32) {
+  let rest = name, prefix = '';
+  for (const [re, ab] of AMC_ABBR) {
+    const m = rest.match(re);
+    if (m) { prefix = ab; rest = rest.slice(m[0].length); break; }
+  }
+  const tokens = rest.split(/[\s\-()]+/).filter(t => t && !FUND_STOP.has(t.toLowerCase()));
+  let short = [prefix, ...tokens].filter(Boolean).join(' ').trim() || name;
+  if (short.length > max) short = short.slice(0, max - 1).trimEnd() + '…';
+  return short;
+}
 
 function toast(msg) {
   let el = $('.toast');
@@ -145,6 +181,62 @@ async function fetchLatestNav(code) {
   const row = json && json.data && json.data[0];
   if (!row) throw new Error('no nav data');
   return { nav: parseFloat(row.nav), date: row.date, name: json.meta && json.meta.scheme_name };
+}
+
+function parseDMY(s) {
+  const [d, m, y] = s.split('-').map(Number);
+  return new Date(y, m - 1, d).getTime();
+}
+
+async function fetchHistory(code) {
+  const res = await fetch(`${API}/mf/${code}`);
+  if (!res.ok) throw new Error('history fetch failed');
+  const json = await res.json();
+  const rows = (json.data || [])
+    .map(r => ({ t: parseDMY(r.date), nav: parseFloat(r.nav), date: r.date }))
+    .filter(r => !isNaN(r.t) && !isNaN(r.nav))
+    .sort((a, b) => b.t - a.t); // newest first
+  return rows;
+}
+
+async function ensureHistory() {
+  const codes = [...new Set(vault.portfolios.flatMap(p => p.funds.map(f => f.code)))]
+    .filter(c => !historyCache[c]);
+  if (!codes.length) return;
+  await Promise.allSettled(codes.map(async c => {
+    try { historyCache[c] = { rows: await fetchHistory(c) }; } catch { /* leave uncached; retried next call */ }
+  }));
+  render();
+}
+
+/* most recent NAV row on or before targetTs (rows sorted newest-first) */
+function navAtOrBefore(rows, targetTs) {
+  for (const r of rows) if (r.t <= targetTs) return r;
+  return null;
+}
+
+const PERIOD_DAYS = { '1w': 7, '1m': 30 };
+
+function periodChangeTotal(period) {
+  const days = PERIOD_DAYS[period];
+  const target = Date.now() - days * 24 * 3600e3;
+  const codes = new Set();
+  let amt = 0, base = 0, covered = 0;
+  for (const p of vault.portfolios) {
+    for (const f of p.funds) {
+      codes.add(f.code);
+      const h = historyCache[f.code];
+      if (!h) continue;
+      const past = navAtOrBefore(h.rows, target);
+      if (!past) continue;
+      const navNow = (vault.navCache[f.code] || {}).nav ?? f.buyNav;
+      amt += f.units * (navNow - past.nav);
+      base += f.units * past.nav;
+      covered++;
+    }
+  }
+  if (!covered) return null;
+  return { amt, pct: base ? amt / base * 100 : 0, partial: covered < codes.size };
 }
 
 async function refreshNavs() {
@@ -329,8 +421,8 @@ function render() {
       let rows = '';
       for (const f of p.funds) {
         const fc = fundCalc(f);
-        rows += `<div class="fundrow" data-action="edit-fund" data-pid="${p.id}" data-code="${esc(String(f.code))}" title="Tap to edit">
-          <div class="r1"><b>${esc(f.name)}</b></div>
+        rows += `<div class="fundrow" data-action="edit-fund" data-pid="${p.id}" data-code="${esc(String(f.code))}">
+          <div class="r1"><b title="${esc(f.name)}">${esc(shortFundName(f.name))}</b></div>
           <div class="r2"><span>${fmtUnits.format(f.units)} u × ${inr2.format(fc.nav)}${fc.stale ? ' (buy NAV)' : ''}</span>
             <span class="val">${inr.format(fc.value)}</span></div>
           <div class="r3"><span>${f.buyDate ? 'since ' + fmtDate(f.buyDate) : 'tap to set buy date (XIRR)'}</span>
@@ -350,12 +442,31 @@ function render() {
     sections += `</div></section>`;
   }
 
+  let periodHtml;
+  if (changePeriod === '1d') {
+    periodHtml = hasDay
+      ? `<span class="pdelta ${cls(totDay)}">${totDay >= 0 ? '▲' : '▼'} ${inr.format(Math.abs(totDay))}</span>`
+      : `<span class="pdelta muted">no change data yet</span>`;
+  } else {
+    const pc = periodChangeTotal(changePeriod);
+    periodHtml = pc
+      ? `<span class="pdelta ${cls(pc.amt)}">${pc.partial ? '≈ ' : ''}${pc.amt >= 0 ? '▲' : '▼'} ${inr.format(Math.abs(pc.amt))} (${pc.pct >= 0 ? '+' : ''}${pc.pct.toFixed(1)}%)</span>`
+      : `<span class="pdelta muted">loading…</span>`;
+  }
+
   app.innerHTML = `
     <div class="overall">
       <span class="total">${inr.format(totValue)}</span>
       <span class="delta ${cls(totPnl)}">${totPnl >= 0 ? '▲' : '▼'} ${inr.format(Math.abs(totPnl))} (${totPct >= 0 ? '+' : ''}${totPct.toFixed(1)}%)</span>
-      ${hasDay ? `<span class="today">today <span class="${cls(totDay)}">${totDay >= 0 ? '▲' : '▼'} ${inr.format(Math.abs(totDay))}</span></span>` : ''}
       ${totRate !== null ? `<span class="today">XIRR ${fmtPa(totRate)}</span>` : ''}
+    </div>
+    <div class="periodrow">
+      <div class="segctl">
+        <button class="segbtn ${changePeriod === '1d' ? 'active' : ''}" data-action="set-period" data-period="1d">1D</button>
+        <button class="segbtn ${changePeriod === '1w' ? 'active' : ''}" data-action="set-period" data-period="1w">1W</button>
+        <button class="segbtn ${changePeriod === '1m' ? 'active' : ''}" data-action="set-period" data-period="1m">1M</button>
+      </div>
+      ${periodHtml}
     </div>
     <nav class="quick">${quick}</nav>
     ${actionsHtml(false)}
@@ -595,8 +706,13 @@ async function handleSettings(e) {
 function onAppClick(e) {
   const btn = e.target.closest('[data-action]');
   if (!btn || !vault) return;
-  const { action, pid, code } = btn.dataset;
+  const { action, pid, code, period } = btn.dataset;
   if (action === 'refresh') refreshNavs();
+  if (action === 'set-period') {
+    changePeriod = period;
+    render();
+    if (period !== '1d') ensureHistory();
+  }
   if (action === 'add-portfolio') {
     $('#frmPortfolio').reset(); $('#pfErr').textContent = '';
     pfPicker.reset();
@@ -624,6 +740,7 @@ function onAppClick(e) {
     $('#fundErr').textContent = '';
     fundPicker.setFixed(f);
     $('#dlgFund').showModal();
+    $('#fundTitle').focus({ preventScroll: true }); // avoid autofocusing a prefilled text field (no keyboard pop-up)
   }
   if (action === 'del-portfolio') {
     const p = vault.portfolios.find(x => x.id === pid);

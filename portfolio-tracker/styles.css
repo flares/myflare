@@ -29,12 +29,24 @@ body {
   border-radius: 8px; padding: 0.3rem 0.5rem; cursor: pointer; font-size: 0.85rem; line-height: 1;
 }
 
-.overall { display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; margin: 0.5rem 0 0.75rem; }
+.overall { display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; margin: 0.5rem 0 0.6rem; }
 .overall .total { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.01em; }
 .overall .delta { font-size: 0.85rem; font-weight: 650; }
 .overall .today { font-size: 0.78rem; color: var(--muted); }
 .up { color: var(--up); }
 .down { color: var(--down); }
+
+.periodrow { display: flex; align-items: center; gap: 0.7rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+.segctl { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; flex: none; }
+.segbtn {
+  font: inherit; font-size: 0.78rem; font-weight: 600; padding: 0.3rem 0.65rem;
+  border: none; background: var(--surface); color: var(--ink-2); cursor: pointer;
+  border-right: 1px solid var(--border);
+}
+.segbtn:last-child { border-right: none; }
+.segbtn.active { background: var(--accent); color: #fff; }
+.pdelta { font-size: 0.85rem; font-weight: 650; font-variant-numeric: tabular-nums; }
+.pdelta.muted { color: var(--muted); font-weight: 500; }
 
 /* quick per-portfolio summary */
 .quick { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 0.35rem 0.9rem; }
