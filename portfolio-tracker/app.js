@@ -184,25 +184,62 @@ function parseDMY(s) {
   return new Date(y, m - 1, d).getTime();
 }
 
-async function fetchHistory(code) {
+async function fetchSchemeDetail(code) {
   const res = await fetch(`${API}/mf/${code}`);
-  if (!res.ok) throw new Error('history fetch failed');
+  if (!res.ok) throw new Error('scheme detail fetch failed');
   const json = await res.json();
   const rows = (json.data || [])
     .map(r => ({ t: parseDMY(r.date), nav: parseFloat(r.nav), date: r.date }))
     .filter(r => !isNaN(r.t) && !isNaN(r.nav))
     .sort((a, b) => b.t - a.t); // newest first
-  return rows;
+  return { rows, meta: json.meta || {} };
 }
 
 async function ensureHistory() {
-  const codes = [...new Set(vault.portfolios.flatMap(p => p.funds.map(f => f.code)))]
+  const codes = [...new Set(vault.portfolios.flatMap(p => p.funds.map(f => f.code).filter(Boolean)))]
     .filter(c => !historyCache[c]);
   if (!codes.length) return;
   await Promise.allSettled(codes.map(async c => {
-    try { historyCache[c] = { rows: await fetchHistory(c) }; } catch { /* leave uncached; retried next call */ }
+    try { historyCache[c] = await fetchSchemeDetail(c); } catch { /* leave uncached; retried next call */ }
   }));
   render();
+}
+
+/* Best-effort, correctness-safe auto-link for funds imported without a mfapi.in
+   scheme code (e.g. pasted from a CAS statement, which has ISIN but no scheme code).
+   Only attaches a code when the candidate's ISIN matches exactly — never guesses by
+   name alone, since a wrong code would silently show the wrong fund's live NAV. */
+async function resolveFundCode(isin, name) {
+  if (!isin) return null;
+  let candidates;
+  try { candidates = await searchFunds(name); } catch { return null; }
+  for (const cand of candidates.slice(0, 15)) {
+    try {
+      const detail = await fetchSchemeDetail(cand.schemeCode);
+      const { meta } = detail;
+      if (meta.isin_growth === isin || meta.isin_div_reinvestment === isin) {
+        return { code: String(cand.schemeCode), name: cand.schemeName, detail };
+      }
+    } catch { /* try next candidate */ }
+  }
+  return null;
+}
+
+async function resolveUnlinkedFunds() {
+  const targets = [];
+  for (const p of vault.portfolios) for (const f of p.funds) if (!f.code && f.isin) targets.push(f);
+  if (!targets.length) return;
+  let linked = 0;
+  for (const f of targets) {
+    const r = await resolveFundCode(f.isin, f.name);
+    if (!r) continue;
+    f.code = r.code; f.name = r.name; delete f.isin; linked++;
+    historyCache[r.code] = { rows: r.detail.rows, meta: r.detail.meta }; // already fetched — avoid a second round-trip
+    if (r.detail.rows[0]) vault.navCache[r.code] = { nav: r.detail.rows[0].nav, date: r.detail.rows[0].date };
+  }
+  if (linked) { await persist(); render(); }
+  toast(`Linked ${linked} of ${targets.length} fund${targets.length === 1 ? '' : 's'} to live NAV`
+    + (linked < targets.length ? ' — tap the rest to link manually' : ''));
 }
 
 /* most recent NAV row on or before targetTs (rows sorted newest-first) */
@@ -258,7 +295,7 @@ function metricText(m) {
 const metricClass = m => (m ? cls(m.pct) : 'muted');
 
 async function refreshNavs() {
-  const codes = [...new Set(vault.portfolios.flatMap(p => p.funds.map(f => f.code)))];
+  const codes = [...new Set(vault.portfolios.flatMap(p => p.funds.map(f => f.code).filter(Boolean)))];
   if (!codes.length) return;
   const btn = $('[data-action=refresh]');
   if (btn) { btn.disabled = true; btn.textContent = '↻ Refreshing…'; }
@@ -405,9 +442,10 @@ function render() {
       for (const f of p.funds) {
         const fc = fundCalc(f);
         const fm = aggregateChange([f], changePeriod);
+        const linked = !!f.code;
         rows += `<div class="fundrow" data-action="edit-fund" data-pid="${p.id}" data-code="${esc(String(f.code))}">
           <span class="fname" title="${esc(f.name)}">${esc(f.shortName || shortFundName(f.name))}</span>
-          <span class="fnum"><b>${inr.format(fc.value)}</b><span class="pct ${metricClass(fm)}">${metricText(fm)}</span></span>
+          <span class="fnum"><b>${inr.format(fc.value)}</b><span class="pct ${linked ? metricClass(fm) : 'muted'}">${linked ? metricText(fm) : '🔗 link fund'}</span></span>
         </div>`;
       }
       sections += `<div class="card" id="pf-${p.id}">
@@ -451,6 +489,7 @@ function createFundPicker(container) {
       <div class="results" hidden></div>
     </div>
     <div class="chosen" hidden></div>
+    <button type="button" class="changefund" hidden>🔍 Change fund…</button>
     <label class="shortnamerow" hidden>Display name <span class="hint" style="display:inline">(shown on cards)</span>
       <input type="text" class="shortname" maxlength="40"></label>
     <div class="grid2">
@@ -487,9 +526,17 @@ function createFundPicker(container) {
     showChosen();
   });
   document.addEventListener('click', e => { if (!container.contains(e.target)) results.hidden = true; });
+  $('.changefund', container).addEventListener('click', () => {
+    $('.searchbox', container).hidden = false;
+    $('.changefund', container).hidden = true;
+  });
 
   async function showChosen() {
     chosen.hidden = false;
+    if (!selection.code) {
+      chosen.innerHTML = `<b>${esc(selection.name)}</b><br><span class="navnow">Not linked to a live NAV source — search above to link it.</span>`;
+      return;
+    }
     chosen.innerHTML = `<b>${esc(selection.name)}</b><br><span class="navnow">Fetching latest NAV…</span>`;
     latest = null;
     try {
@@ -520,15 +567,18 @@ function createFundPicker(container) {
       selection = null; latest = null;
       $('.searchbox', container).hidden = false;
       q.value = ''; results.hidden = true; chosen.hidden = true;
+      $('.changefund', container).hidden = true;
       $('.shortnamerow', container).hidden = true; $('.shortname', container).value = '';
       $('.units', container).value = ''; $('.buynav', container).value = '';
       $('.buynav', container).placeholder = 'defaults to latest';
       $('.buydate', container).value = todayISO();
     },
-    setFixed(f) { // edit mode: fund identity locked, fields prefilled
+    setFixed(f) { // edit mode: fund identity locked (unless still unlinked), fields prefilled
       this.reset();
-      selection = { code: String(f.code), name: f.name };
-      $('.searchbox', container).hidden = true;
+      const linked = f.code != null;
+      selection = { code: linked ? String(f.code) : null, name: f.name };
+      $('.searchbox', container).hidden = linked;
+      $('.changefund', container).hidden = !linked;
       $('.shortnamerow', container).hidden = false;
       $('.shortname', container).value = f.shortName || shortFundName(f.name);
       $('.units', container).value = f.units;
@@ -589,7 +639,71 @@ function maybeAutoRefresh() {
   if (has && stale) refreshNavs();
 }
 
+function setPortfolioDialogMode(mode) {
+  const dlg = $('#dlgPortfolio');
+  dlg.dataset.mode = mode;
+  $('#pfFormMode').hidden = mode !== 'form';
+  $('#pfJsonMode').hidden = mode !== 'json';
+  $('#frmPortfolio .btn.primary').textContent = mode === 'json' ? 'Import' : 'Create portfolio';
+  $('#pfErr').textContent = '';
+  document.querySelectorAll('#dlgPortfolio .modetab').forEach(b => b.classList.toggle('active', b.dataset.pfmode === mode));
+}
+
+function validateImportedFund(raw) {
+  const units = parseFloat(raw.units), buyNav = parseFloat(raw.buyNav);
+  if (!raw.name || typeof raw.name !== 'string') return { error: 'a fund is missing "name"' };
+  if (!units || units <= 0) return { error: `"${raw.name}" needs a positive "units"` };
+  if (!buyNav || buyNav <= 0) return { error: `"${raw.name}" needs a positive "buyNav"` };
+  const buyDate = raw.buyDate && /^\d{4}-\d{2}-\d{2}$/.test(raw.buyDate) ? raw.buyDate : undefined;
+  return {
+    fund: {
+      code: raw.code != null ? String(raw.code) : null,
+      name: raw.name,
+      shortName: raw.shortName || shortFundName(raw.name),
+      units, buyNav, buyDate,
+      isin: raw.isin || undefined,
+    },
+  };
+}
+
+function handleAddPortfolioJson(e) {
+  e.preventDefault();
+  const err = $('#pfErr');
+  err.textContent = '';
+  let data;
+  try { data = JSON.parse($('#pfJson').value); } catch { err.textContent = 'That is not valid JSON.'; return; }
+  const list = Array.isArray(data) ? data : [data];
+  if (!list.length) { err.textContent = 'Paste at least one portfolio.'; return; }
+
+  const built = [];
+  for (const raw of list) {
+    if (!raw || typeof raw !== 'object' || !raw.owner || !raw.name) {
+      err.textContent = 'Each portfolio needs "owner" and "name".'; return;
+    }
+    const funds = [];
+    for (const rf of (raw.funds || [])) {
+      const r = validateImportedFund(rf);
+      if (r.error) { err.textContent = r.error; return; }
+      funds.push(r.fund);
+    }
+    built.push({ id: uid(), owner: String(raw.owner).trim(), name: String(raw.name).trim(), funds });
+  }
+
+  for (const p of built) {
+    if (!vault.owners.includes(p.owner)) vault.owners.push(p.owner);
+    vault.portfolios.push(p);
+  }
+  const fundCount = built.reduce((n, p) => n + p.funds.length, 0);
+  persist().then(() => {
+    $('#dlgPortfolio').close();
+    render();
+    toast(`Added ${built.length} portfolio${built.length === 1 ? '' : 's'}, ${fundCount} fund${fundCount === 1 ? '' : 's'}`);
+    resolveUnlinkedFunds();
+  });
+}
+
 async function handleAddPortfolio(e) {
+  if ($('#dlgPortfolio').dataset.mode === 'json') return handleAddPortfolioJson(e);
   e.preventDefault();
   const owner = $('#pfOwner').value.trim();
   const name = $('#pfName').value.trim();
@@ -628,6 +742,8 @@ async function handleAddFund(e) {
     const f = p.funds.find(x => String(x.code) === String(fundEditCode));
     if (!f) return;
     f.units = fund.units; f.buyNav = fund.buyNav; f.buyDate = fund.buyDate; f.shortName = fund.shortName;
+    f.code = fund.code; f.name = fund.name; // may have been (re-)linked via "Change fund"
+    if (f.code) delete f.isin; // no longer needed once a real scheme code is attached
     toast('Fund updated');
   } else {
     if (p.funds.some(f => String(f.code) === String(fund.code))) { err.textContent = 'This fund is already in the portfolio.'; return; }
@@ -682,8 +798,10 @@ function onAppClick(e) {
     $('#frmPortfolio').reset(); $('#pfErr').textContent = '';
     pfPicker.reset();
     $('#ownerList').innerHTML = vault.owners.map(o => `<option value="${esc(o)}">`).join('');
+    setPortfolioDialogMode('form');
     $('#dlgPortfolio').showModal();
   }
+  if (action === 'set-pfmode') setPortfolioDialogMode(btn.dataset.pfmode);
   if (action === 'add-fund') {
     fundTargetPid = pid; fundEditCode = null;
     const p = vault.portfolios.find(x => x.id === pid);

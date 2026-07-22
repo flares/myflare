@@ -37,7 +37,9 @@ The app (**Option A** design, mobile-first) is wired and lives at [`index.html`]
 
 ### What works
 - **Vault**: on first use you choose a passphrase; all data is encrypted client-side (PBKDF2 → AES-GCM via Web Crypto) before storage. Unlock on each visit; 🔒 Lock button re-locks.
-- **Add portfolio**: owner (with autocomplete of existing people) + portfolio name + optional first fund.
+- **Add portfolio**: two modes, switchable via tabs in the dialog:
+  - **Fill form** — owner (with autocomplete of existing people) + portfolio name + optional first fund.
+  - **Paste JSON** — paste a portfolio object or an array of them (e.g. transcribed from a CAMS/KFintech CAS statement) and it **adds** to your existing data, never replaces it. Funds can be given an `isin` instead of a scheme `code`; on import the app searches mfapi.in by name and auto-links any fund whose ISIN matches exactly — never a name-only guess, since a wrong code would silently show the wrong fund's live NAV. Unmatched funds show **"🔗 link fund"** instead of a price; tap the row, search, and pick the right scheme — units/buy NAV/buy date already entered are kept. See [JSON import shape](#json-import-shape) below.
 - **Fund dropdown**: typeahead search against `https://api.mfapi.in/mf/search?q=…` (free JSON API over AMFI data, open CORS). Picking a fund fetches its latest NAV; **Buy NAV defaults to the latest NAV** if left blank.
 - **Add funds on the fly**: every portfolio card has "+ Add fund". Units accept 3 decimal places; each fund takes an optional **buy date**, which drives **XIRR / CAGR** (annualised return) shown per fund, per portfolio, and overall. Tap a fund row to edit its units/buy NAV/buy date or remove it (edit dialog opens without stealing focus into a text box); delete whole portfolios from the card.
 - **Short display names**: long AMFI scheme names (e.g. "Aditya Birla Sun Life Nifty India Defence Index Fund-Direct Plan-Growth") are auto-abbreviated for the fund row ("ABSL Nifty India Defence Index") via a built-in AMC abbreviation table + boilerplate stripper (Direct/Regular/Plan/Growth/IDCW/…). The auto name is only a starting point — the **Display name** field (add or edit dialog) is editable, so you can rename any fund to whatever's recognisable to you; the full official name is always kept as a hover title and used in search.
@@ -59,6 +61,43 @@ The app (**Option A** design, mobile-first) is wired and lives at [`index.html`]
 Only ciphertext ever reaches Firestore; the passphrase never leaves the device.
 
 ⚠️ There is **no passphrase recovery** — the encryption is only as good as that. Export a JSON backup now and then.
+
+### JSON import shape
+
+Used by Add portfolio → Paste JSON. A single object or an array of them:
+
+```json
+[
+  {
+    "owner": "Manoj",
+    "name": "CAS Import",
+    "funds": [
+      {
+        "isin": "INF209KC1183",
+        "name": "Aditya Birla Sun Life Nifty India Defence Index Fund - Direct Plan - Growth",
+        "shortName": "ABSL Nifty India Defence Index",
+        "units": 39394.089,
+        "buyNav": 10.1538,
+        "buyDate": null
+      }
+    ]
+  }
+]
+```
+
+`code` (mfapi.in scheme code) can be given directly if known; otherwise `isin` triggers auto-linking as
+described above. `buyNav` from a CAS statement is usually the **blended average cost** (Cost Value ÷ Unit
+Balance) since a folio is often built from several purchases — good enough for absolute gain, but only an
+approximation for XIRR if you then set a single `buyDate`, since the app models each fund as one lump buy.
+
+### Where holdings data comes from
+
+There's no API for an individual to pull their own holdings from CAMS/KFintech — the practical options:
+1. **Paste JSON** (above) — transcribe or convert a CAS statement by hand or with help, paste once.
+2. A future **CAS PDF import** (not built): CAMS/KFintech/MFCentral email a free password-protected PDF
+   (password is usually your PAN) with every holding across AMCs. Parsing it client-side with pdf.js — PDF and
+   password never leaving the browser — would be the natural next step if this becomes a repeated task, but
+   needs a real (redacted) sample PDF to build the parser against, not just screenshots.
 
 ### Mockups (historical)
 The three UI directions reviewed before building are kept in [`mockups/`](mockups/): [Option A](mockups/option-a-cards.html) (chosen), [Option B](mockups/option-b-ledger.html), [Option C](mockups/option-c-sidebar.html).

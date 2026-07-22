@@ -51,17 +51,33 @@
 <dialog id="dlgPortfolio">
   <form method="dialog" class="modal" id="frmPortfolio">
     <h2>Add portfolio</h2>
-    <label>Owner (person)
-      <input type="text" id="pfOwner" list="ownerList" placeholder="e.g. Manoj" required maxlength="40">
-      <datalist id="ownerList"></datalist>
-    </label>
-    <label>Portfolio name
-      <input type="text" id="pfName" placeholder="e.g. Retirement" required maxlength="60">
-    </label>
-    <fieldset>
-      <legend>First fund <span class="hint">(optional — you can add funds any time)</span></legend>
-      <div class="fundpicker" id="pfFundPicker"></div>
-    </fieldset>
+    <div class="modetabs">
+      <button type="button" class="modetab active" data-action="set-pfmode" data-pfmode="form">Fill form</button>
+      <button type="button" class="modetab" data-action="set-pfmode" data-pfmode="json">Paste JSON</button>
+    </div>
+
+    <div id="pfFormMode">
+      <label>Owner (person)
+        <input type="text" id="pfOwner" list="ownerList" placeholder="e.g. Manoj" maxlength="40">
+        <datalist id="ownerList"></datalist>
+      </label>
+      <label>Portfolio name
+        <input type="text" id="pfName" placeholder="e.g. Retirement" maxlength="60">
+      </label>
+      <fieldset>
+        <legend>First fund <span class="hint">(optional — you can add funds any time)</span></legend>
+        <div class="fundpicker" id="pfFundPicker"></div>
+      </fieldset>
+    </div>
+
+    <div id="pfJsonMode" hidden>
+      <p class="hint">Paste one portfolio object, or an array of them. This <b>adds</b> to your existing
+        data — it never replaces it. Funds without a <code>code</code> (mfapi.in scheme code) are linked
+        to live NAV automatically by ISIN where possible; the rest can be linked later by tapping the fund.</p>
+      <textarea id="pfJson" rows="10" spellcheck="false"
+        placeholder='[{"owner":"Manoj","name":"External","funds":[{"isin":"INF209KC1183","name":"...","units":39394.089,"buyNav":10.1538,"buyDate":null}]}]'></textarea>
+    </div>
+
     <p class="err" id="pfErr"></p>
     <div class="modalactions">
       <button type="button" class="btn" data-close>Cancel</button>
