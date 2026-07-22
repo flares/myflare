@@ -4,9 +4,15 @@ Sub-project of **myflare**. Tracks Indian mutual fund portfolios with live NAV d
 
 ## Requirements
 
-### Portfolios
-- Track **5 Indian mutual fund portfolios** (e.g., Retirement, Kids Education, Tax Saver, Wealth Builder, Emergency).
-- Provide an **"Add portfolio"** option to create new portfolios beyond the initial five.
+### People & portfolios
+- Portfolios belong to **people**, and each person can have **multiple portfolios** (two-level hierarchy: person → portfolios → funds).
+- Initial set — 5 portfolios across 4 people:
+  - **Manoj** — Retirement, Kids Education
+  - **Savarnika** — Main Portfolio
+  - **Nanna** — Retirement
+  - **Amma** — Exploratory
+- Provide an **"Add portfolio"** option (and the ability to introduce new people).
+- Mobile-first: the top of the page shows a **compact summary of every portfolio (grouped by person)** without much scrolling; details follow below.
 
 ### Holdings (per portfolio)
 Each entry the user adds consists of:
