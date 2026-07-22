@@ -14,7 +14,7 @@ let vault = null;      // decrypted data
 let cryptoKey = null;  // AES-GCM key (in memory only)
 let saltB64 = null;    // PBKDF2 salt for current vault
 let fbase = null;      // { db, docRef, setDoc } when Firebase is connected
-let changePeriod = '1d';       // '1d' | '1w' | '1m' — which change the header shows
+let changePeriod = 'xirr';     // 'xirr' | '1d' | '1w' | '1m' — the change metric shown everywhere
 const historyCache = {};       // code -> { rows: [{t, nav, date}] desc by t } — session only, not persisted
 
 /* ================= tiny helpers ================= */
@@ -22,11 +22,7 @@ const $ = (sel, el = document) => el.querySelector(sel);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const inr = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
 const inr2 = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
-const fmtUnits = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 3 });
-const fmtPa = r => { const v = r * 100; return (Math.abs(v) < 0.05 ? '0.0' : v.toFixed(1)) + '% p.a.'; };
-const fmtDate = s => { const d = new Date(s + 'T00:00:00'); return isNaN(d) ? s : d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: '2-digit' }); };
 const todayISO = () => new Date().toISOString().slice(0, 10);
-const fmtPct = p => (p >= 0 ? '▲ ' : '▼ ') + Math.abs(p).toFixed(1) + '%';
 const cls = p => (p >= 0 ? 'up' : 'down');
 const debounce = (fn, ms) => { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; };
 const uid = () => Math.random().toString(36).slice(2, 10);
@@ -217,27 +213,57 @@ function navAtOrBefore(rows, targetTs) {
 
 const PERIOD_DAYS = { '1w': 7, '1m': 30 };
 
-function periodChangeTotal(period) {
+/* Unified change metric for a list of funds, for whichever mode is selected:
+   'xirr' -> annualised return (falls back to plain since-buy % if no buy dates);
+   '1d'   -> since the previous NAV publish (no fetch needed);
+   '1w'/'1m' -> from held-fund NAV history (fetched on demand, session-cached).
+   Used identically at fund / portfolio / owner scope — same function, different fund lists. */
+function aggregateChange(funds, period) {
+  if (!funds.length) return null;
+  if (period === 'xirr') {
+    const flows = [];
+    let invested = 0, value = 0;
+    for (const f of funds) {
+      const c = fundCalc(f);
+      invested += c.invested; value += c.value;
+      if (f.buyDate) flows.push({ t: Date.parse(f.buyDate + 'T00:00:00'), amt: -c.invested }, { t: Date.now(), amt: c.value });
+    }
+    const rate = flows.length ? xirr(flows) : null;
+    if (rate !== null) return { pct: rate * 100, isRate: true };
+    return { pct: invested ? (value - invested) / invested * 100 : 0, isRate: false };
+  }
+  if (period === '1d') {
+    let amt = 0, base = 0, any = false;
+    for (const f of funds) {
+      const c = fundCalc(f);
+      if (c.day === null) continue;
+      amt += c.day; base += c.value - c.day; any = true;
+    }
+    if (!any) return null;
+    return { pct: base ? amt / base * 100 : 0, isRate: false };
+  }
   const days = PERIOD_DAYS[period];
   const target = Date.now() - days * 24 * 3600e3;
-  const codes = new Set();
   let amt = 0, base = 0, covered = 0;
-  for (const p of vault.portfolios) {
-    for (const f of p.funds) {
-      codes.add(f.code);
-      const h = historyCache[f.code];
-      if (!h) continue;
-      const past = navAtOrBefore(h.rows, target);
-      if (!past) continue;
-      const navNow = (vault.navCache[f.code] || {}).nav ?? f.buyNav;
-      amt += f.units * (navNow - past.nav);
-      base += f.units * past.nav;
-      covered++;
-    }
+  for (const f of funds) {
+    const h = historyCache[f.code];
+    if (!h) continue;
+    const past = navAtOrBefore(h.rows, target);
+    if (!past) continue;
+    const navNow = (vault.navCache[f.code] || {}).nav ?? f.buyNav;
+    amt += f.units * (navNow - past.nav);
+    base += f.units * past.nav;
+    covered++;
   }
   if (!covered) return null;
-  return { amt, pct: base ? amt / base * 100 : 0, partial: covered < codes.size };
+  return { pct: base ? amt / base * 100 : 0, isRate: false, partial: covered < funds.length };
 }
+function metricText(m) {
+  if (!m) return '…';
+  const arrow = m.pct >= 0 ? '▲ ' : '▼ ';
+  return (m.partial ? '≈ ' : '') + arrow + Math.abs(m.pct).toFixed(2) + '%' + (m.isRate ? ' p.a.' : '');
+}
+const metricClass = m => (m ? cls(m.pct) : 'muted');
 
 async function refreshNavs() {
   const codes = [...new Set(vault.portfolios.flatMap(p => p.funds.map(f => f.code)))];
@@ -304,21 +330,9 @@ function fundCalc(f) {
 }
 
 function portfolioCalc(p) {
-  let value = 0, invested = 0, day = 0, hasDay = false;
-  const flows = [];
-  for (const f of p.funds) {
-    const c = fundCalc(f);
-    value += c.value; invested += c.invested;
-    if (c.day !== null) { day += c.day; hasDay = true; }
-    if (f.buyDate) flows.push({ t: Date.parse(f.buyDate + 'T00:00:00'), amt: -c.invested }, { t: Date.now(), amt: c.value });
-  }
-  return {
-    value, invested, pnl: value - invested,
-    pct: invested ? (value - invested) / invested * 100 : 0,
-    day: hasDay ? day : null,
-    rate: flows.length ? xirr(flows) : null,
-    flows,
-  };
+  let value = 0, invested = 0;
+  for (const f of p.funds) { const c = fundCalc(f); value += c.value; invested += c.invested; }
+  return { value, invested, pnl: value - invested };
 }
 
 function ownerColor(owner) {
@@ -364,47 +378,29 @@ function render() {
   }
 
   const groups = grouped();
-  let totValue = 0, totInvested = 0, totDay = 0, hasDay = false;
-  const totFlows = [];
   const ownerCalcs = new Map();
   for (const [owner, ports] of groups) {
     let v = 0, inv = 0;
-    for (const p of ports) {
-      const c = portfolioCalc(p);
-      v += c.value; inv += c.invested;
-      if (c.day !== null) { totDay += c.day; hasDay = true; }
-      totFlows.push(...c.flows);
-    }
-    ownerCalcs.set(owner, { value: v, invested: inv, pct: inv ? (v - inv) / inv * 100 : 0 });
-    totValue += v; totInvested += inv;
+    const funds = ports.flatMap(p => p.funds);
+    for (const p of ports) { const c = portfolioCalc(p); v += c.value; inv += c.invested; }
+    ownerCalcs.set(owner, { value: v, invested: inv, metric: aggregateChange(funds, changePeriod) });
   }
-  const totPnl = totValue - totInvested;
-  const totPct = totInvested ? totPnl / totInvested * 100 : 0;
-  const totRate = totFlows.length ? xirr(totFlows) : null;
 
-  /* quick summary */
+  /* quick summary — every portfolio, grouped by person, no cross-person total */
   let quick = '';
   for (const [owner, ports] of groups) {
     const oc = ownerCalcs.get(owner);
     quick += `<div class="qgroup">
       <div class="owner"><i class="dot" style="background:${ownerColor(owner)}"></i>${esc(owner)}
-        <span class="osum">${inr.format(oc.value)} · ${(oc.pct >= 0 ? '+' : '')}${oc.pct.toFixed(1)}%</span></div>`;
+        <span class="osum">${inr.format(oc.value)} · <b class="${metricClass(oc.metric)}">${metricText(oc.metric)}</b></span></div>`;
     for (const p of ports) {
       const c = portfolioCalc(p);
+      const m = aggregateChange(p.funds, changePeriod);
       quick += `<a class="qrow" href="#pf-${p.id}">
         <span class="pname">${esc(p.name)}</span>
-        <span class="num"><b>${inr.format(c.value)}</b><span class="pct ${cls(c.pct)}">${fmtPct(c.pct)}</span></span></a>`;
+        <span class="num"><b>${inr.format(c.value)}</b><span class="pct ${metricClass(m)}">${metricText(m)}</span></span></a>`;
     }
     quick += `</div>`;
-  }
-
-  /* allocation by person */
-  let bar = '', legend = '';
-  for (const [owner] of groups) {
-    const oc = ownerCalcs.get(owner);
-    const w = totValue ? (oc.value / totValue * 100) : 0;
-    bar += `<span style="width:${w.toFixed(1)}%; background:${ownerColor(owner)}"></span>`;
-    legend += `<span><i style="background:${ownerColor(owner)}"></i>${esc(owner)} ${w.toFixed(1)}%</span>`;
   }
 
   /* person sections */
@@ -414,25 +410,24 @@ function render() {
     sections += `<section class="person">
       <h2><i class="dot" style="background:${ownerColor(owner)}"></i>${esc(owner)}
         <span class="psum">${ports.length} portfolio${ports.length === 1 ? '' : 's'} · ${inr.format(oc.value)} ·
-        <span class="${cls(oc.pct)}">${fmtPct(oc.pct)}</span></span></h2>
+        <span class="${metricClass(oc.metric)}">${metricText(oc.metric)}</span></span></h2>
       <div class="cards">`;
     for (const p of ports) {
       const c = portfolioCalc(p);
+      const pm = aggregateChange(p.funds, changePeriod);
       let rows = '';
       for (const f of p.funds) {
         const fc = fundCalc(f);
+        const fm = aggregateChange([f], changePeriod);
         rows += `<div class="fundrow" data-action="edit-fund" data-pid="${p.id}" data-code="${esc(String(f.code))}">
-          <div class="r1"><b title="${esc(f.name)}">${esc(shortFundName(f.name))}</b></div>
-          <div class="r2"><span>${fmtUnits.format(f.units)} u × ${inr2.format(fc.nav)}${fc.stale ? ' (buy NAV)' : ''}</span>
-            <span class="val">${inr.format(fc.value)}</span></div>
-          <div class="r3"><span>${f.buyDate ? 'since ' + fmtDate(f.buyDate) : 'tap to set buy date (XIRR)'}</span>
-            <span><span class="pct ${cls(fc.pct)}">${fmtPct(fc.pct)}</span>${fc.rate !== null ? ` · ${fmtPa(fc.rate)}` : ''}</span></div>
+          <span class="fname" title="${esc(f.name)}">${esc(shortFundName(f.name))}</span>
+          <span class="fnum"><b>${inr.format(fc.value)}</b><span class="pct ${metricClass(fm)}">${metricText(fm)}</span></span>
         </div>`;
       }
       sections += `<div class="card" id="pf-${p.id}">
-        <header><h3>${esc(p.name)}</h3><span class="badge ${cls(c.pct)}">${fmtPct(c.pct)}</span></header>
-        <div class="money"><span class="cur">${inr.format(c.value)}</span><span class="inv">invested ${inr.format(c.invested)}</span>${c.rate !== null ? `<span class="inv">XIRR ${fmtPa(c.rate)}</span>` : ''}</div>
-        <div class="holdings">${rows || '<div class="r2" style="color:var(--muted);font-size:0.8rem">No funds yet.</div>'}</div>
+        <header><h3>${esc(p.name)}</h3><span class="badge ${metricClass(pm)}">${metricText(pm)}</span></header>
+        <div class="money"><span class="cur">${inr.format(c.value)}</span><span class="inv">invested ${inr.format(c.invested)}</span></div>
+        <div class="holdings">${rows || '<div class="fnum" style="color:var(--muted);font-size:0.8rem">No funds yet.</div>'}</div>
         <div class="cardactions">
           <button data-action="add-fund" data-pid="${p.id}">+ Add fund</button>
           <button class="danger" data-action="del-portfolio" data-pid="${p.id}">Delete</button>
@@ -442,39 +437,18 @@ function render() {
     sections += `</div></section>`;
   }
 
-  let periodHtml;
-  if (changePeriod === '1d') {
-    periodHtml = hasDay
-      ? `<span class="pdelta ${cls(totDay)}">${totDay >= 0 ? '▲' : '▼'} ${inr.format(Math.abs(totDay))}</span>`
-      : `<span class="pdelta muted">no change data yet</span>`;
-  } else {
-    const pc = periodChangeTotal(changePeriod);
-    periodHtml = pc
-      ? `<span class="pdelta ${cls(pc.amt)}">${pc.partial ? '≈ ' : ''}${pc.amt >= 0 ? '▲' : '▼'} ${inr.format(Math.abs(pc.amt))} (${pc.pct >= 0 ? '+' : ''}${pc.pct.toFixed(1)}%)</span>`
-      : `<span class="pdelta muted">loading…</span>`;
-  }
-
   app.innerHTML = `
-    <div class="overall">
-      <span class="total">${inr.format(totValue)}</span>
-      <span class="delta ${cls(totPnl)}">${totPnl >= 0 ? '▲' : '▼'} ${inr.format(Math.abs(totPnl))} (${totPct >= 0 ? '+' : ''}${totPct.toFixed(1)}%)</span>
-      ${totRate !== null ? `<span class="today">XIRR ${fmtPa(totRate)}</span>` : ''}
-    </div>
     <div class="periodrow">
+      <span class="plabel">Show</span>
       <div class="segctl">
+        <button class="segbtn ${changePeriod === 'xirr' ? 'active' : ''}" data-action="set-period" data-period="xirr">XIRR</button>
         <button class="segbtn ${changePeriod === '1d' ? 'active' : ''}" data-action="set-period" data-period="1d">1D</button>
         <button class="segbtn ${changePeriod === '1w' ? 'active' : ''}" data-action="set-period" data-period="1w">1W</button>
         <button class="segbtn ${changePeriod === '1m' ? 'active' : ''}" data-action="set-period" data-period="1m">1M</button>
       </div>
-      ${periodHtml}
     </div>
     <nav class="quick">${quick}</nav>
     ${actionsHtml(false)}
-    <div class="alloc">
-      <div class="label">Allocation by person (current value)</div>
-      <div class="bar">${bar}</div>
-      <div class="legend">${legend}</div>
-    </div>
     ${sections}`;
 }
 
@@ -711,7 +685,7 @@ function onAppClick(e) {
   if (action === 'set-period') {
     changePeriod = period;
     render();
-    if (period !== '1d') ensureHistory();
+    if (period === '1w' || period === '1m') ensureHistory();
   }
   if (action === 'add-portfolio') {
     $('#frmPortfolio').reset(); $('#pfErr').textContent = '';
