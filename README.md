@@ -6,7 +6,7 @@ Personal web interface — a hub page (`index.html`) linking to individual sub-p
 
 | Sub-project | Folder | Status |
 |---|---|---|
-| Portfolio Tracker | [`portfolio-tracker/`](portfolio-tracker/) | UI mockups under review — see [`portfolio-tracker/README.md`](portfolio-tracker/README.md) |
+| Portfolio Tracker | [`portfolio-tracker/`](portfolio-tracker/) | Live — encrypted MF portfolio tracker; see [`portfolio-tracker/README.md`](portfolio-tracker/README.md) |
 | Padyaalu | [`padyaalu/`](padyaalu/) | Working reading app with seed corpus — see [`padyaalu/README.md`](padyaalu/README.md) |
 
 ## Structure
@@ -14,9 +14,10 @@ Personal web interface — a hub page (`index.html`) linking to individual sub-p
 ```
 index.html              ← main hub page with links to sub-projects
 portfolio-tracker/
-  README.md             ← project spec & requirements
-  index.html            ← sub-project landing page
-  mockups/              ← unwired UI samples for review
+  README.md             ← project spec, feature list & Firebase setup
+  index.html            ← the app (static, GitHub Pages friendly)
+  app.js  styles.css    ← app logic & styles
+  mockups/              ← UI samples reviewed before building
 padyaalu/
   README.md             ← project spec & requirements
   index.html            ← full-page-card reading app

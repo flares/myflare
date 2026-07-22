@@ -31,20 +31,28 @@ Each entry the user adds consists of:
 - Raw portfolio/fund data is persisted as an **encrypted blob** in a **Firebase** backend (Firestore or Realtime Database).
 - Encryption happens **client-side** before upload (e.g., AES-GCM via Web Crypto API with a user-supplied passphrase), so Firebase only ever stores ciphertext.
 
-## Current status
+## Current status — app is live
 
-**Frontend UI direction under review.** Three unwired sample pages (static HTML, sample data, no JavaScript/backend) are in [`mockups/`](mockups/):
+The app (**Option A** design, mobile-first) is wired and lives at [`index.html`](index.html) + [`app.js`](app.js) + [`styles.css`](styles.css). Pure static files — works on GitHub Pages, no build step.
 
-| Sample | File | Direction |
-|---|---|---|
-| Option A | [`mockups/option-a-cards.html`](mockups/option-a-cards.html) | Dashboard with summary stat tiles + portfolio cards grid |
-| Option B | [`mockups/option-b-ledger.html`](mockups/option-b-ledger.html) | Dense single-page ledger — all funds in one grouped table |
-| Option C | [`mockups/option-c-sidebar.html`](mockups/option-c-sidebar.html) | App-style dark UI — sidebar portfolio navigation + detail pane |
+### What works
+- **Vault**: on first use you choose a passphrase; all data is encrypted client-side (PBKDF2 → AES-GCM via Web Crypto) before storage. Unlock on each visit; 🔒 Lock button re-locks.
+- **Add portfolio**: owner (with autocomplete of existing people) + portfolio name + optional first fund.
+- **Fund dropdown**: typeahead search against `https://api.mfapi.in/mf/search?q=…` (free JSON API over AMFI data, open CORS). Picking a fund fetches its latest NAV; **Buy NAV defaults to the latest NAV** if left blank.
+- **Add funds on the fly**: every portfolio card has "+ Add fund". Remove funds (✕) and delete portfolios too.
+- **NAV refresh**: `https://api.mfapi.in/mf/{schemeCode}/latest` per held fund — on demand ("↻ Refresh NAV") and automatically on unlock when data is older than 6 h. Previous-day NAV is kept to show the day's ₹ change.
+- **Persistence**: the encrypted blob is always in `localStorage`; optionally synced to **Firebase** (Firestore) — newer copy wins on load.
+- **Backup**: Settings → Export/Import JSON (decrypted, for your own safekeeping).
 
-Once one direction is approved, wiring proceeds: forms, NAV fetch, encryption, Firebase persistence.
+### Firebase setup (optional, for cross-device sync)
+1. Create a Firebase project → add a **Web app** → copy its config JSON.
+2. Enable **Authentication → Anonymous** sign-in.
+3. Create a **Firestore** database, with rules allowing signed-in access, e.g.
+   `allow read, write: if request.auth != null;` on `portfolio-tracker/vault`.
+4. Paste the config JSON into the app's **Settings** dialog.
+Only ciphertext ever reaches Firestore; the passphrase never leaves the device.
 
-## Planned next steps (after UI approval)
-1. Wire chosen mockup into the working app (vanilla JS or a light framework — TBD).
-2. NAV fetch layer with scheme-code lookup and daily-NAV caching.
-3. Client-side encryption (Web Crypto AES-GCM) + Firebase read/write of the blob.
-4. Add/edit/delete flows for portfolios and holdings.
+⚠️ There is **no passphrase recovery** — the encryption is only as good as that. Export a JSON backup now and then.
+
+### Mockups (historical)
+The three UI directions reviewed before building are kept in [`mockups/`](mockups/): [Option A](mockups/option-a-cards.html) (chosen), [Option B](mockups/option-b-ledger.html), [Option C](mockups/option-c-sidebar.html).
