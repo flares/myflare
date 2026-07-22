@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Option A — Dashboard cards · Portfolio Tracker mockup</title>
 <style>
   :root {
@@ -13,72 +13,109 @@
     --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100; --s5: #e87ba4;
   }
   * { box-sizing: border-box; margin: 0; }
+
+  /* ---------- mobile-first base ---------- */
   body {
     font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-    background: var(--page); color: var(--ink); padding: 1.5rem;
+    background: var(--page); color: var(--ink);
+    padding: 1rem;
+    padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
   }
   .wrap { max-width: 1080px; margin: 0 auto; }
 
-  .topbar { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
-  .topbar h1 { font-size: 1.35rem; letter-spacing: -0.02em; margin-right: auto; }
-  .navdate { color: var(--muted); font-size: 0.82rem; }
+  .topbar { margin-bottom: 1rem; }
+  .titlerow { display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem; }
+  .titlerow h1 { font-size: 1.25rem; letter-spacing: -0.02em; }
+  .navdate { color: var(--muted); font-size: 0.75rem; white-space: nowrap; }
+  .actions { display: flex; gap: 0.6rem; margin-top: 0.75rem; }
   .btn {
-    font: inherit; font-size: 0.85rem; padding: 0.45rem 0.9rem; border-radius: 8px;
-    border: 1px solid var(--border); background: var(--surface); color: var(--ink); cursor: pointer;
+    flex: 1; font: inherit; font-size: 0.9rem; padding: 0.6rem 0.9rem; border-radius: 10px;
+    border: 1px solid var(--border); background: var(--surface); color: var(--ink);
+    cursor: pointer; text-align: center;
   }
   .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
 
-  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.25rem; }
-  .tile { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; }
-  .tile .label { font-size: 0.78rem; color: var(--ink-2); margin-bottom: 0.35rem; }
-  .tile .value { font-size: 1.55rem; font-weight: 650; letter-spacing: -0.01em; }
-  .delta { font-size: 0.85rem; font-weight: 600; margin-top: 0.25rem; }
+  .tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem; }
+  .tile { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 0.85rem 1rem; }
+  .tile.hero { grid-column: 1 / -1; }
+  .tile .label { font-size: 0.75rem; color: var(--ink-2); margin-bottom: 0.3rem; }
+  .tile .value { font-size: 1.35rem; font-weight: 650; letter-spacing: -0.01em; }
+  .tile.hero .value { font-size: 1.9rem; }
+  .delta { font-size: 0.82rem; font-weight: 600; margin-top: 0.25rem; }
   .delta.up { color: var(--up); }
   .delta.down { color: var(--down); }
 
-  .alloc { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.5rem; }
-  .alloc .label { font-size: 0.78rem; color: var(--ink-2); margin-bottom: 0.6rem; }
-  .bar { display: flex; height: 14px; border-radius: 4px; overflow: hidden; gap: 2px; background: var(--surface); }
+  .alloc { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 0.85rem 1rem; margin-bottom: 1rem; }
+  .alloc .label { font-size: 0.75rem; color: var(--ink-2); margin-bottom: 0.6rem; }
+  .bar { display: flex; height: 12px; border-radius: 4px; overflow: hidden; gap: 2px; background: var(--surface); }
   .bar span { display: block; height: 100%; }
-  .legend { display: flex; flex-wrap: wrap; gap: 0.4rem 1.2rem; margin-top: 0.7rem; font-size: 0.8rem; color: var(--ink-2); }
-  .legend i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 0.4rem; }
+  .legend { display: flex; flex-wrap: wrap; gap: 0.35rem 1rem; margin-top: 0.65rem; font-size: 0.78rem; color: var(--ink-2); }
+  .legend i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 0.35rem; }
 
-  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.2rem; }
-  .card header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; }
+  .cards { display: grid; grid-template-columns: 1fr; gap: 0.75rem; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.1rem; }
+  .card header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.65rem; }
   .card header i { width: 9px; height: 9px; border-radius: 50%; flex: none; }
-  .card header h2 { font-size: 0.98rem; margin-right: auto; }
-  .badge { font-size: 0.78rem; font-weight: 650; padding: 0.15rem 0.5rem; border-radius: 999px; border: 1px solid var(--border); }
+  .card header h2 { font-size: 0.95rem; margin-right: auto; line-height: 1.3; }
+  .badge { font-size: 0.76rem; font-weight: 650; padding: 0.15rem 0.5rem; border-radius: 999px; border: 1px solid var(--border); white-space: nowrap; flex: none; }
   .badge.up { color: var(--up); }
   .badge.down { color: var(--down); }
-  .card .money { display: flex; align-items: baseline; gap: 0.6rem; }
-  .card .cur { font-size: 1.3rem; font-weight: 650; }
-  .card .inv { font-size: 0.8rem; color: var(--muted); }
-  .holdings { margin-top: 0.85rem; border-top: 1px solid var(--grid); padding-top: 0.6rem; font-size: 0.82rem; }
-  .holdings div { display: flex; justify-content: space-between; gap: 1rem; padding: 0.22rem 0; color: var(--ink-2); }
+  .card .money { display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; }
+  .card .cur { font-size: 1.25rem; font-weight: 650; }
+  .card .inv { font-size: 0.78rem; color: var(--muted); }
+  .holdings { margin-top: 0.75rem; border-top: 1px solid var(--grid); padding-top: 0.55rem; font-size: 0.82rem; }
+  .holdings div { display: flex; justify-content: space-between; gap: 1rem; padding: 0.25rem 0; color: var(--ink-2); }
   .holdings b { font-weight: 500; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .holdings .up { color: var(--up); font-variant-numeric: tabular-nums; }
-  .holdings .down { color: var(--down); font-variant-numeric: tabular-nums; }
+  .holdings .up { color: var(--up); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .holdings .down { color: var(--down); font-variant-numeric: tabular-nums; white-space: nowrap; }
   .card.add {
     border-style: dashed; display: flex; align-items: center; justify-content: center;
-    color: var(--muted); min-height: 160px; cursor: pointer; font-size: 0.95rem;
+    color: var(--muted); min-height: 72px; cursor: pointer; font-size: 0.95rem;
   }
   .card.add:hover { color: var(--accent); border-color: var(--accent); }
-  footer { margin-top: 2rem; color: var(--muted); font-size: 0.78rem; }
+  footer { margin-top: 1.5rem; color: var(--muted); font-size: 0.75rem; line-height: 1.5; }
+
+  /* ---------- tablet ≥ 640px ---------- */
+  @media (min-width: 640px) {
+    body { padding: 1.5rem; }
+    .cards { grid-template-columns: repeat(2, 1fr); }
+    .card.add { min-height: 120px; }
+    .tiles { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* ---------- desktop ≥ 1000px ---------- */
+  @media (min-width: 1000px) {
+    .topbar { display: flex; align-items: center; gap: 1rem; }
+    .titlerow { margin-right: auto; gap: 1rem; }
+    .titlerow h1 { font-size: 1.35rem; }
+    .navdate { font-size: 0.82rem; }
+    .actions { margin-top: 0; }
+    .btn { flex: none; padding: 0.45rem 0.9rem; font-size: 0.85rem; }
+    .tiles { grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.25rem; }
+    .tile.hero { grid-column: auto; }
+    .tile.hero .value { font-size: 1.55rem; }
+    .tile .value { font-size: 1.55rem; }
+    .alloc { margin-bottom: 1.5rem; }
+    .cards { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
 
   <div class="topbar">
-    <h1>Portfolio Tracker</h1>
-    <span class="navdate">NAV as of 21 Jul 2026</span>
-    <button class="btn">↻ Refresh NAV</button>
-    <button class="btn primary">+ Add portfolio</button>
+    <div class="titlerow">
+      <h1>Portfolio Tracker</h1>
+      <span class="navdate">NAV as of 21 Jul 2026</span>
+    </div>
+    <div class="actions">
+      <button class="btn">↻ Refresh NAV</button>
+      <button class="btn primary">+ Add portfolio</button>
+    </div>
   </div>
 
   <div class="tiles">
-    <div class="tile">
+    <div class="tile hero">
       <div class="label">Current value</div>
       <div class="value">₹9,23,970</div>
       <div class="delta up">▲ ₹3,880 today (+0.42%)</div>
@@ -108,17 +145,17 @@
       <span style="width:8.9%;  background:var(--s5)"></span>
     </div>
     <div class="legend">
-      <span><i style="background:var(--s1)"></i>Retirement 26.5%</span>
+      <span><i style="background:var(--s1)"></i>Manoj · Retirement 26.5%</span>
       <span><i style="background:var(--s2)"></i>Kids Education 15.3%</span>
-      <span><i style="background:var(--s3)"></i>Tax Saver 20.2%</span>
-      <span><i style="background:var(--s4)"></i>Wealth Builder 29.1%</span>
-      <span><i style="background:var(--s5)"></i>Emergency 8.9%</span>
+      <span><i style="background:var(--s3)"></i>Savarnika · Main 20.2%</span>
+      <span><i style="background:var(--s4)"></i>Nanna · Retirement 29.1%</span>
+      <span><i style="background:var(--s5)"></i>Amma · Exploratory 8.9%</span>
     </div>
   </div>
 
   <div class="cards">
     <div class="card">
-      <header><i style="background:var(--s1)"></i><h2>Retirement</h2><span class="badge up">▲ 34.2%</span></header>
+      <header><i style="background:var(--s1)"></i><h2>Manoj Portfolio - Retirement</h2><span class="badge up">▲ 34.2%</span></header>
       <div class="money"><span class="cur">₹2,44,530</span><span class="inv">invested ₹1,82,160</span></div>
       <div class="holdings">
         <div><b>Parag Parikh Flexi Cap</b><span class="up">▲ 40.0%</span></div>
@@ -137,7 +174,7 @@
     </div>
 
     <div class="card">
-      <header><i style="background:var(--s3)"></i><h2>Tax Saver (ELSS)</h2><span class="badge up">▲ 24.3%</span></header>
+      <header><i style="background:var(--s3)"></i><h2>Savarnika - Main Portfolio</h2><span class="badge up">▲ 24.3%</span></header>
       <div class="money"><span class="cur">₹1,86,430</span><span class="inv">invested ₹1,50,000</span></div>
       <div class="holdings">
         <div><b>Mirae Asset Tax Saver</b><span class="up">▲ 24.3%</span></div>
@@ -146,7 +183,7 @@
     </div>
 
     <div class="card">
-      <header><i style="background:var(--s4)"></i><h2>Wealth Builder</h2><span class="badge up">▲ 27.8%</span></header>
+      <header><i style="background:var(--s4)"></i><h2>Nanna - Retirement</h2><span class="badge up">▲ 27.8%</span></header>
       <div class="money"><span class="cur">₹2,68,960</span><span class="inv">invested ₹2,10,500</span></div>
       <div class="holdings">
         <div><b>ICICI Pru Bluechip</b><span class="up">▲ 29.1%</span></div>
@@ -156,7 +193,7 @@
     </div>
 
     <div class="card">
-      <header><i style="background:var(--s5)"></i><h2>Emergency / Short Term</h2><span class="badge up">▲ 2.9%</span></header>
+      <header><i style="background:var(--s5)"></i><h2>Amma - Exploratory</h2><span class="badge up">▲ 2.9%</span></header>
       <div class="money"><span class="cur">₹82,320</span><span class="inv">invested ₹80,000</span></div>
       <div class="holdings">
         <div><b>SBI Magnum Ultra Short</b><span class="up">▲ 5.4%</span></div>
