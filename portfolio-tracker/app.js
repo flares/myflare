@@ -6,6 +6,7 @@ const LS_BLOB = 'pt.vault.blob';
 const LS_FB = 'pt.firebase.config';
 const PBKDF2_ITERS = 310000;
 const NAV_STALE_MS = 6 * 60 * 60 * 1000; // auto-refresh if older than 6h
+const SESSION_MS = 30 * 60 * 1000;       // stay unlocked for 30 min (sliding)
 const COLORS = 8; // categorical slots --c0..--c7
 
 /* ================= state ================= */
@@ -70,7 +71,32 @@ function localBlob() {
 async function persist() {
   const blob = await encryptVault();
   localStorage.setItem(LS_BLOB, JSON.stringify(blob));
+  saveSession(); // activity extends the unlocked session
   if (fbase) pushRemote(blob);
+}
+
+/* ---- unlocked-session cache (IndexedDB can hold a non-extractable CryptoKey) ---- */
+function idbStore(mode, fn) {
+  return new Promise((resolve, reject) => {
+    const open = indexedDB.open('pt-session', 1);
+    open.onupgradeneeded = () => open.result.createObjectStore('kv');
+    open.onerror = () => reject(open.error);
+    open.onsuccess = () => {
+      const tx = open.result.transaction('kv', mode);
+      const req = fn(tx.objectStore('kv'));
+      tx.oncomplete = () => resolve(req && req.result);
+      tx.onerror = () => reject(tx.error);
+    };
+  });
+}
+async function saveSession() {
+  try { await idbStore('readwrite', s => s.put({ key: cryptoKey, salt: saltB64, exp: Date.now() + SESSION_MS }, 'session')); } catch {}
+}
+async function loadSession() {
+  try { return await idbStore('readonly', s => s.get('session')); } catch { return null; }
+}
+async function clearSession() {
+  try { await idbStore('readwrite', s => s.delete('session')); } catch {}
 }
 
 function syncStatus(msg) { $('#syncStatus').textContent = msg ? msg + ' · ' : ''; }
@@ -303,15 +329,11 @@ function render() {
       let rows = '';
       for (const f of p.funds) {
         const fc = fundCalc(f);
-        rows += `<div class="fundrow">
-          <div class="r1"><b title="${esc(f.name)}">${esc(f.name)}</b>
-            <span class="acts">
-              <button data-action="edit-fund" data-pid="${p.id}" data-code="${esc(String(f.code))}" title="Edit units / buy NAV / buy date">✎</button>
-              <button data-action="del-fund" data-pid="${p.id}" data-code="${esc(String(f.code))}" title="Remove fund">✕</button>
-            </span></div>
+        rows += `<div class="fundrow" data-action="edit-fund" data-pid="${p.id}" data-code="${esc(String(f.code))}" title="Tap to edit">
+          <div class="r1"><b>${esc(f.name)}</b></div>
           <div class="r2"><span>${fmtUnits.format(f.units)} u × ${inr2.format(fc.nav)}${fc.stale ? ' (buy NAV)' : ''}</span>
             <span class="val">${inr.format(fc.value)}</span></div>
-          <div class="r3"><span>${f.buyDate ? 'since ' + fmtDate(f.buyDate) : '✎ set buy date for XIRR'}</span>
+          <div class="r3"><span>${f.buyDate ? 'since ' + fmtDate(f.buyDate) : 'tap to set buy date (XIRR)'}</span>
             <span><span class="pct ${cls(fc.pct)}">${fmtPct(fc.pct)}</span>${fc.rate !== null ? ` · ${fmtPa(fc.rate)}` : ''}</span></div>
         </div>`;
       }
@@ -476,6 +498,7 @@ async function handleVaultSubmit(e) {
       cryptoKey = key; saltB64 = blob.salt; vault = data;
     }
     $('#vaultPass').value = ''; $('#vaultPass2').value = '';
+    await saveSession();
     dlg.close();
     render();
     maybeAutoRefresh();
@@ -585,6 +608,7 @@ function onAppClick(e) {
     const p = vault.portfolios.find(x => x.id === pid);
     $('#fundTitle').textContent = `Add fund — ${p ? p.name : ''}`;
     $('#frmFund .btn.primary').textContent = 'Add fund';
+    $('#btnRemoveFund').hidden = true;
     $('#fundErr').textContent = '';
     fundPicker.reset();
     $('#dlgFund').showModal();
@@ -596,17 +620,10 @@ function onAppClick(e) {
     if (!f) return;
     $('#fundTitle').textContent = 'Edit fund';
     $('#frmFund .btn.primary').textContent = 'Save';
+    $('#btnRemoveFund').hidden = false;
     $('#fundErr').textContent = '';
     fundPicker.setFixed(f);
     $('#dlgFund').showModal();
-  }
-  if (action === 'del-fund') {
-    const p = vault.portfolios.find(x => x.id === pid);
-    const f = p && p.funds.find(f => String(f.code) === String(code));
-    if (f && confirm(`Remove “${f.name}” from ${p.name}?`)) {
-      p.funds = p.funds.filter(x => x !== f);
-      persist().then(render);
-    }
   }
   if (action === 'del-portfolio') {
     const p = vault.portfolios.find(x => x.id === pid);
@@ -622,7 +639,7 @@ function onAppClick(e) {
     $('#fbStatus').textContent = fbase ? 'Status: connected.' : 'Status: not connected (local-only).';
     $('#dlgSettings').showModal();
   }
-  if (action === 'lock') location.reload();
+  if (action === 'lock') clearSession().finally(() => location.reload());
 }
 
 /* ================= boot ================= */
@@ -637,6 +654,18 @@ async function boot() {
   document.addEventListener('click', onAppClick);
   document.querySelectorAll('[data-close]').forEach(b =>
     b.addEventListener('click', () => b.closest('dialog').close()));
+
+  $('#btnRemoveFund').addEventListener('click', async () => {
+    const p = vault && vault.portfolios.find(x => x.id === fundTargetPid);
+    const f = p && p.funds.find(x => String(x.code) === String(fundEditCode));
+    if (!f) return;
+    if (!confirm(`Remove “${f.name}” from ${p.name}?`)) return;
+    p.funds = p.funds.filter(x => x !== f);
+    await persist();
+    $('#dlgFund').close();
+    render();
+    toast('Fund removed');
+  });
 
   $('#btnExport').addEventListener('click', () => {
     if (!vault) return;
@@ -679,7 +708,22 @@ async function boot() {
     syncStatus('Local-only (set up Firebase in Settings)');
   }
 
-  openVaultDialog(localBlob() ? 'unlock' : 'create');
+  const blob = localBlob();
+  if (!blob) { openVaultDialog('create'); return; }
+
+  /* resume unlocked session if fresh enough and for the same vault */
+  const s = await loadSession();
+  if (s && s.exp > Date.now() && s.salt === blob.salt) {
+    try {
+      const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(blob.iv) }, s.key, unb64(blob.ct));
+      cryptoKey = s.key; saltB64 = blob.salt; vault = JSON.parse(new TextDecoder().decode(pt));
+      saveSession();
+      render();
+      maybeAutoRefresh();
+      return;
+    } catch { /* stale/foreign key — fall through to passphrase */ }
+  }
+  openVaultDialog('unlock');
 }
 
 boot();
