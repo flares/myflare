@@ -211,12 +211,14 @@ function navAtOrBefore(rows, targetTs) {
   return null;
 }
 
-const PERIOD_DAYS = { '1w': 7, '1m': 30 };
+const PERIOD_DAYS = { '1d': 1, '1w': 7, '1m': 30 };
 
 /* Unified change metric for a list of funds, for whichever mode is selected:
    'xirr' -> annualised return (falls back to plain since-buy % if no buy dates);
-   '1d'   -> since the previous NAV publish (no fetch needed);
-   '1w'/'1m' -> from held-fund NAV history (fetched on demand, session-cached).
+   '1d'/'1w'/'1m' -> from held-fund NAV history (fetched on demand, session-cached),
+   measured from each fund's own latest known NAV date minus N days — e.g. "1D" is
+   the last published NAV vs. the trading day before *that* date, not vs. "now"
+   (which would be wrong/misleading if NAVs haven't been refreshed today).
    Used identically at fund / portfolio / owner scope — same function, different fund lists. */
 function aggregateChange(funds, period) {
   if (!funds.length) return null;
@@ -232,26 +234,16 @@ function aggregateChange(funds, period) {
     if (rate !== null) return { pct: rate * 100, isRate: true };
     return { pct: invested ? (value - invested) / invested * 100 : 0, isRate: false };
   }
-  if (period === '1d') {
-    let amt = 0, base = 0, any = false;
-    for (const f of funds) {
-      const c = fundCalc(f);
-      if (c.day === null) continue;
-      amt += c.day; base += c.value - c.day; any = true;
-    }
-    if (!any) return null;
-    return { pct: base ? amt / base * 100 : 0, isRate: false };
-  }
   const days = PERIOD_DAYS[period];
-  const target = Date.now() - days * 24 * 3600e3;
   let amt = 0, base = 0, covered = 0;
   for (const f of funds) {
+    const cache = vault.navCache[f.code];
     const h = historyCache[f.code];
-    if (!h) continue;
+    if (!cache || !h) continue; // never refreshed, or history not loaded yet
+    const target = parseDMY(cache.date) - days * 24 * 3600e3;
     const past = navAtOrBefore(h.rows, target);
     if (!past) continue;
-    const navNow = (vault.navCache[f.code] || {}).nav ?? f.buyNav;
-    amt += f.units * (navNow - past.nav);
+    amt += f.units * (cache.nav - past.nav);
     base += f.units * past.nav;
     covered++;
   }
@@ -276,10 +268,7 @@ async function refreshNavs() {
     if (r.status !== 'fulfilled' || isNaN(r.value.nav)) { fail++; continue; }
     ok++;
     const { code, nav, date } = r.value;
-    const prev = vault.navCache[code];
-    vault.navCache[code] = (prev && prev.date !== date)
-      ? { nav, date, prevNav: prev.nav, prevDate: prev.date }
-      : { nav, date, prevNav: prev && prev.prevNav, prevDate: prev && prev.prevDate };
+    vault.navCache[code] = { nav, date };
   }
   vault.lastRefresh = new Date().toISOString();
   await persist();
@@ -321,9 +310,7 @@ function fundCalc(f) {
   const nav = cache ? cache.nav : f.buyNav;
   const value = f.units * nav;
   const invested = f.units * f.buyNav;
-  const day = (cache && cache.prevNav && cache.prevDate !== cache.date)
-    ? f.units * (cache.nav - cache.prevNav) : null;
-  const c = { nav, value, invested, pnl: value - invested, pct: invested ? (value - invested) / invested * 100 : 0, day, stale: !cache };
+  const c = { nav, value, invested, pnl: value - invested, pct: invested ? (value - invested) / invested * 100 : 0 };
   const flows = fundFlows(f, c);
   c.rate = flows ? xirr(flows) : null;
   return c;
@@ -372,8 +359,7 @@ function render() {
     app.innerHTML = `
       <div class="empty">No portfolios yet.<br><br>
         <button class="btn primary icon" data-action="add-portfolio">+ Add your first portfolio</button>
-      </div>
-      ${actionsHtml(true)}`;
+      </div>`;
     return;
   }
 
@@ -420,7 +406,7 @@ function render() {
         const fc = fundCalc(f);
         const fm = aggregateChange([f], changePeriod);
         rows += `<div class="fundrow" data-action="edit-fund" data-pid="${p.id}" data-code="${esc(String(f.code))}">
-          <span class="fname" title="${esc(f.name)}">${esc(shortFundName(f.name))}</span>
+          <span class="fname" title="${esc(f.name)}">${esc(f.shortName || shortFundName(f.name))}</span>
           <span class="fnum"><b>${inr.format(fc.value)}</b><span class="pct ${metricClass(fm)}">${metricText(fm)}</span></span>
         </div>`;
       }
@@ -439,25 +425,22 @@ function render() {
 
   app.innerHTML = `
     <div class="periodrow">
-      <span class="plabel">Show</span>
-      <div class="segctl">
-        <button class="segbtn ${changePeriod === 'xirr' ? 'active' : ''}" data-action="set-period" data-period="xirr">XIRR</button>
-        <button class="segbtn ${changePeriod === '1d' ? 'active' : ''}" data-action="set-period" data-period="1d">1D</button>
-        <button class="segbtn ${changePeriod === '1w' ? 'active' : ''}" data-action="set-period" data-period="1w">1W</button>
-        <button class="segbtn ${changePeriod === '1m' ? 'active' : ''}" data-action="set-period" data-period="1m">1M</button>
+      <div class="segwrap">
+        <span class="plabel">Show</span>
+        <div class="segctl">
+          <button class="segbtn ${changePeriod === 'xirr' ? 'active' : ''}" data-action="set-period" data-period="xirr">XIRR</button>
+          <button class="segbtn ${changePeriod === '1d' ? 'active' : ''}" data-action="set-period" data-period="1d">1D</button>
+          <button class="segbtn ${changePeriod === '1w' ? 'active' : ''}" data-action="set-period" data-period="1w">1W</button>
+          <button class="segbtn ${changePeriod === '1m' ? 'active' : ''}" data-action="set-period" data-period="1m">1M</button>
+        </div>
       </div>
+      <button class="btn sm" data-action="refresh">↻ Refresh NAV</button>
     </div>
     <nav class="quick">${quick}</nav>
-    ${actionsHtml(false)}
-    ${sections}`;
-}
-
-function actionsHtml(minimal) {
-  if (minimal) return '';
-  return `<div class="actions">
-    <button class="btn" data-action="refresh">↻ Refresh NAV</button>
-    <button class="btn primary" data-action="add-portfolio">+ Add portfolio</button>
-  </div>`;
+    ${sections}
+    <div class="actions bottomactions">
+      <button class="btn primary" data-action="add-portfolio">+ Add portfolio</button>
+    </div>`;
 }
 
 /* ================= fund typeahead picker ================= */
@@ -468,6 +451,8 @@ function createFundPicker(container) {
       <div class="results" hidden></div>
     </div>
     <div class="chosen" hidden></div>
+    <label class="shortnamerow" hidden>Display name <span class="hint" style="display:inline">(shown on cards)</span>
+      <input type="text" class="shortname" maxlength="40"></label>
     <div class="grid2">
       <label>Units<input type="number" class="units" step="0.001" min="0.001" placeholder="e.g. 125.503"></label>
       <label>Buy NAV (₹)<input type="number" class="buynav" step="any" min="0.0001" placeholder="defaults to latest"></label>
@@ -497,6 +482,8 @@ function createFundPicker(container) {
     if (!item) return;
     selection = { code: item.dataset.code, name: item.dataset.name };
     q.value = ''; results.hidden = true;
+    $('.shortnamerow', container).hidden = false;
+    $('.shortname', container).value = shortFundName(selection.name);
     showChosen();
   });
   document.addEventListener('click', e => { if (!container.contains(e.target)) results.hidden = true; });
@@ -521,17 +508,19 @@ function createFundPicker(container) {
       const units = parseFloat($('.units', container).value);
       let buyNav = parseFloat($('.buynav', container).value);
       const buyDate = $('.buydate', container).value || undefined;
+      const shortName = $('.shortname', container).value.trim() || shortFundName(selection.name);
       if (!buyNav && latest) buyNav = latest.nav;
       if (!units || units <= 0) return { error: 'Enter the number of units.' };
       if (!buyNav || buyNav <= 0) return { error: 'Enter the buy NAV (latest NAV unavailable).' };
       if (buyDate && buyDate > todayISO()) return { error: 'Buy date cannot be in the future.' };
-      return { code: selection.code, name: selection.name, units, buyNav, buyDate, latest };
+      return { code: selection.code, name: selection.name, units, buyNav, buyDate, shortName, latest };
     },
     hasQuery: () => !!selection,
     reset() {
       selection = null; latest = null;
       $('.searchbox', container).hidden = false;
       q.value = ''; results.hidden = true; chosen.hidden = true;
+      $('.shortnamerow', container).hidden = true; $('.shortname', container).value = '';
       $('.units', container).value = ''; $('.buynav', container).value = '';
       $('.buynav', container).placeholder = 'defaults to latest';
       $('.buydate', container).value = todayISO();
@@ -540,6 +529,8 @@ function createFundPicker(container) {
       this.reset();
       selection = { code: String(f.code), name: f.name };
       $('.searchbox', container).hidden = true;
+      $('.shortnamerow', container).hidden = false;
+      $('.shortname', container).value = f.shortName || shortFundName(f.name);
       $('.units', container).value = f.units;
       $('.buynav', container).value = f.buyNav;
       $('.buydate', container).value = f.buyDate || '';
@@ -614,7 +605,7 @@ async function handleAddPortfolio(e) {
   const p = { id: uid(), owner, name, funds: [] };
   if (!vault.owners.includes(owner)) vault.owners.push(owner);
   if (fund) {
-    p.funds.push({ code: fund.code, name: fund.name, units: fund.units, buyNav: fund.buyNav, buyDate: fund.buyDate });
+    p.funds.push({ code: fund.code, name: fund.name, shortName: fund.shortName, units: fund.units, buyNav: fund.buyNav, buyDate: fund.buyDate });
     if (fund.latest) vault.navCache[fund.code] = { nav: fund.latest.nav, date: fund.latest.date };
   }
   vault.portfolios.push(p);
@@ -636,11 +627,11 @@ async function handleAddFund(e) {
   if (fundEditCode) {
     const f = p.funds.find(x => String(x.code) === String(fundEditCode));
     if (!f) return;
-    f.units = fund.units; f.buyNav = fund.buyNav; f.buyDate = fund.buyDate;
+    f.units = fund.units; f.buyNav = fund.buyNav; f.buyDate = fund.buyDate; f.shortName = fund.shortName;
     toast('Fund updated');
   } else {
     if (p.funds.some(f => String(f.code) === String(fund.code))) { err.textContent = 'This fund is already in the portfolio.'; return; }
-    p.funds.push({ code: fund.code, name: fund.name, units: fund.units, buyNav: fund.buyNav, buyDate: fund.buyDate });
+    p.funds.push({ code: fund.code, name: fund.name, shortName: fund.shortName, units: fund.units, buyNav: fund.buyNav, buyDate: fund.buyDate });
     toast(`Added to “${p.name}”`);
   }
   if (fund.latest) {
@@ -685,7 +676,7 @@ function onAppClick(e) {
   if (action === 'set-period') {
     changePeriod = period;
     render();
-    if (period === '1w' || period === '1m') ensureHistory();
+    if (period !== 'xirr') ensureHistory();
   }
   if (action === 'add-portfolio') {
     $('#frmPortfolio').reset(); $('#pfErr').textContent = '';

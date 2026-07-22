@@ -1,5 +1,5 @@
 :root {
-  --page: #f9f9f7; --surface: #fcfcfb;
+  --page: #f9f9f7; --surface: #fcfcfb; --card-bg: #ffffff;
   --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
   --grid: #e1e0d9; --border: rgba(11,11,11,0.10);
   --up: #006300; --down: #d03b3b; --accent: #2a78d6;
@@ -33,7 +33,8 @@ body {
 .down { color: var(--down); }
 .muted { color: var(--muted); }
 
-.periodrow { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; margin: 0.6rem 0 0.75rem; }
+.periodrow { display: flex; align-items: center; justify-content: space-between; gap: 0.6rem 0.75rem; flex-wrap: wrap; margin: 0.6rem 0 0.75rem; }
+.segwrap { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
 .plabel { font-size: 0.75rem; color: var(--muted); }
 .segctl { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; flex: none; }
 .segbtn {
@@ -43,6 +44,7 @@ body {
 }
 .segbtn:last-child { border-right: none; }
 .segbtn.active { background: var(--accent); color: #fff; }
+.btn.sm { flex: none; padding: 0.35rem 0.7rem; font-size: 0.8rem; }
 
 /* quick per-portfolio summary */
 .quick { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 0.35rem 0.9rem; }
@@ -66,6 +68,7 @@ body {
 .pct { font-weight: 650; font-size: 0.82rem; }
 
 .actions { display: flex; gap: 0.6rem; margin: 0.75rem 0; flex-wrap: wrap; }
+.bottomactions { margin: 1.25rem 0 0.5rem; }
 .btn {
   flex: 1; font: inherit; font-size: 0.88rem; padding: 0.55rem 0.9rem; border-radius: 10px;
   border: 1px solid var(--border); background: var(--surface); color: var(--ink);
@@ -80,8 +83,12 @@ body {
 .person { margin-bottom: 1.25rem; }
 .person > h2 { display: flex; align-items: center; gap: 0.5rem; font-size: 1rem; margin-bottom: 0.6rem; }
 .person > h2 .psum { margin-left: auto; font-size: 0.78rem; font-weight: 500; color: var(--muted); font-variant-numeric: tabular-nums; }
-.cards { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.75rem; }
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.1rem; min-width: 0; }
+.cards { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.9rem; }
+.card {
+  background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px;
+  padding: 1rem 1.1rem; min-width: 0;
+  box-shadow: 0 1px 2px rgba(11,11,11,0.05), 0 6px 16px rgba(11,11,11,0.07);
+}
 .card header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.65rem; }
 .card header h3 { font-size: 0.95rem; margin-right: auto; line-height: 1.3; }
 .badge { font-size: 0.76rem; font-weight: 650; padding: 0.15rem 0.5rem; border-radius: 999px; border: 1px solid var(--border); white-space: nowrap; flex: none; }
