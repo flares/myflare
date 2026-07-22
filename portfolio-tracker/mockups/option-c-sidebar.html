@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Option C — Sidebar app · Portfolio Tracker mockup</title>
+<style>
+  :root {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface: #1a1a19; --raised: #222220;
+    --ink: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --border: rgba(255,255,255,0.10);
+    --up: #0ca30c; --down: #d03b3b; --accent: #3987e5;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--page); color: var(--ink);
+    display: flex; min-height: 100vh;
+  }
+
+  aside {
+    width: 264px; flex: none; background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; padding: 1.1rem 0.8rem;
+  }
+  aside .brand { font-size: 1.02rem; font-weight: 700; letter-spacing: -0.01em; padding: 0 0.6rem 1rem; }
+  aside .section { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); padding: 0.5rem 0.6rem 0.4rem; }
+  .pf {
+    display: flex; justify-content: space-between; align-items: center; gap: 0.6rem;
+    padding: 0.55rem 0.6rem; border-radius: 8px; cursor: pointer; color: var(--ink-2);
+  }
+  .pf:hover { background: var(--raised); }
+  .pf.active { background: var(--raised); color: var(--ink); box-shadow: inset 2px 0 0 var(--accent); }
+  .pf .name { font-size: 0.88rem; font-weight: 500; }
+  .pf .val { font-size: 0.78rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .pf .up { color: var(--up); }
+  .pf .down { color: var(--down); }
+  .newpf {
+    margin-top: 0.5rem; padding: 0.55rem 0.6rem; border: 1px dashed var(--border);
+    border-radius: 8px; color: var(--muted); font-size: 0.85rem; cursor: pointer; text-align: center;
+  }
+  .newpf:hover { color: var(--accent); border-color: var(--accent); }
+  aside .foot { margin-top: auto; padding: 0.8rem 0.6rem 0; font-size: 0.72rem; color: var(--muted); line-height: 1.5; }
+
+  main { flex: 1; padding: 1.5rem 2rem; min-width: 0; }
+  .overall { font-size: 0.82rem; color: var(--muted); margin-bottom: 1.4rem; }
+  .overall b { color: var(--ink-2); font-variant-numeric: tabular-nums; }
+  .overall .up { color: var(--up); font-weight: 600; }
+
+  .head { display: flex; align-items: flex-start; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.4rem; }
+  .head h1 { font-size: 1.5rem; letter-spacing: -0.02em; }
+  .head .sub { color: var(--muted); font-size: 0.82rem; margin-top: 0.3rem; }
+  .head .grow { margin-right: auto; }
+  .btn {
+    font: inherit; font-size: 0.84rem; padding: 0.45rem 0.9rem; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--surface); color: var(--ink); cursor: pointer;
+  }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  .stats { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .stat { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 0.85rem 1.2rem; min-width: 170px; }
+  .stat .label { font-size: 0.75rem; color: var(--muted); margin-bottom: 0.3rem; }
+  .stat .value { font-size: 1.35rem; font-weight: 650; }
+  .stat .delta { font-size: 0.82rem; font-weight: 600; margin-top: 0.2rem; }
+  .stat .delta.up { color: var(--up); }
+
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.86rem; min-width: 720px; }
+  th, td { padding: 0.6rem 1rem; text-align: right; white-space: nowrap; }
+  th:first-child, td:first-child { text-align: left; }
+  thead th {
+    font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--muted); font-weight: 600; border-bottom: 1px solid var(--grid);
+  }
+  tbody td { border-bottom: 1px solid var(--grid); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody td:first-child { color: var(--ink); font-weight: 500; }
+  td .up { color: var(--up); font-weight: 600; }
+  td .down { color: var(--down); font-weight: 600; }
+  .addfund { padding: 0.7rem 1rem; color: var(--accent); font-size: 0.85rem; cursor: pointer; border-top: 1px solid var(--grid); }
+  footer { margin-top: 1.5rem; color: var(--muted); font-size: 0.76rem; }
+</style>
+</head>
+<body>
+
+  <aside>
+    <div class="brand">◆ Portfolio Tracker</div>
+    <div class="section">Portfolios</div>
+    <div class="pf active">
+      <span class="name">Retirement</span>
+      <span class="val">₹2.45L <span class="up">▲34.2%</span></span>
+    </div>
+    <div class="pf">
+      <span class="name">Kids Education</span>
+      <span class="val">₹1.42L <span class="up">▲18.1%</span></span>
+    </div>
+    <div class="pf">
+      <span class="name">Tax Saver (ELSS)</span>
+      <span class="val">₹1.86L <span class="up">▲24.3%</span></span>
+    </div>
+    <div class="pf">
+      <span class="name">Wealth Builder</span>
+      <span class="val">₹2.69L <span class="up">▲27.8%</span></span>
+    </div>
+    <div class="pf">
+      <span class="name">Emergency</span>
+      <span class="val">₹0.82L <span class="up">▲2.9%</span></span>
+    </div>
+    <div class="newpf">+ New portfolio</div>
+    <div class="foot">🔒 Data encrypted client-side · synced to Firebase<br>NAV as of 21 Jul 2026</div>
+  </aside>
+
+  <main>
+    <div class="overall">All portfolios: <b>₹9,23,970</b> · gain <span class="up">▲ ₹1,81,310 (+24.4%)</span> · today <span class="up">▲ ₹3,880 (+0.42%)</span></div>
+
+    <div class="head">
+      <div class="grow">
+        <h1>Retirement</h1>
+        <div class="sub">3 funds · NAV as of 21 Jul 2026</div>
+      </div>
+      <button class="btn">↻ Refresh NAV</button>
+      <button class="btn primary">+ Add fund</button>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="label">Current value</div>
+        <div class="value">₹2,44,530</div>
+        <div class="delta up">▲ ₹1,120 today</div>
+      </div>
+      <div class="stat">
+        <div class="label">Invested</div>
+        <div class="value">₹1,82,160</div>
+      </div>
+      <div class="stat">
+        <div class="label">Gain</div>
+        <div class="value">₹62,370</div>
+        <div class="delta up">▲ +34.2%</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <table>
+        <thead>
+          <tr>
+            <th>Fund</th><th>Units</th><th>Buy NAV</th><th>Latest NAV</th>
+            <th>Invested</th><th>Current</th><th>P&amp;L %</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Parag Parikh Flexi Cap — Direct (G)</td>
+            <td>1,250.43</td><td>58.20</td><td>81.46</td>
+            <td>72,775</td><td>1,01,860</td><td><span class="up">▲ 40.0%</span></td>
+          </tr>
+          <tr>
+            <td>HDFC Index Fund Nifty 50 — Direct (G)</td>
+            <td>420.12</td><td>165.30</td><td>212.44</td>
+            <td>69,446</td><td>89,250</td><td><span class="up">▲ 28.5%</span></td>
+          </tr>
+          <tr>
+            <td>SBI Small Cap — Direct (G)</td>
+            <td>310.22</td><td>128.75</td><td>172.19</td>
+            <td>39,941</td><td>53,416</td><td><span class="up">▲ 33.7%</span></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="addfund">+ Add fund to Retirement…</div>
+    </div>
+
+    <footer>Mockup — static sample data, no wiring. Sidebar selection, forms, NAV fetch and Firebase sync come after UI approval.</footer>
+  </main>
+
+</body>
+</html>
