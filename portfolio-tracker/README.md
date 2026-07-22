@@ -39,7 +39,7 @@ The app (**Option A** design, mobile-first) is wired and lives at [`index.html`]
 - **Vault**: on first use you choose a passphrase; all data is encrypted client-side (PBKDF2 → AES-GCM via Web Crypto) before storage. Unlock on each visit; 🔒 Lock button re-locks.
 - **Add portfolio**: owner (with autocomplete of existing people) + portfolio name + optional first fund.
 - **Fund dropdown**: typeahead search against `https://api.mfapi.in/mf/search?q=…` (free JSON API over AMFI data, open CORS). Picking a fund fetches its latest NAV; **Buy NAV defaults to the latest NAV** if left blank.
-- **Add funds on the fly**: every portfolio card has "+ Add fund". Remove funds (✕) and delete portfolios too.
+- **Add funds on the fly**: every portfolio card has "+ Add fund". Units accept 3 decimal places; each fund takes an optional **buy date**, which drives **XIRR / CAGR** (annualised return) shown per fund, per portfolio, and overall. Edit a fund's units/buy NAV/buy date via ✎, remove via ✕, and delete whole portfolios.
 - **NAV refresh**: `https://api.mfapi.in/mf/{schemeCode}/latest` per held fund — on demand ("↻ Refresh NAV") and automatically on unlock when data is older than 6 h. Previous-day NAV is kept to show the day's ₹ change.
 - **Persistence**: the encrypted blob is always in `localStorage`; optionally synced to **Firebase** (Firestore) — newer copy wins on load.
 - **Backup**: Settings → Export/Import JSON (decrypted, for your own safekeeping).

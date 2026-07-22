@@ -19,6 +19,10 @@ const $ = (sel, el = document) => el.querySelector(sel);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const inr = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
 const inr2 = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
+const fmtUnits = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 3 });
+const fmtPa = r => { const v = r * 100; return (Math.abs(v) < 0.05 ? '0.0' : v.toFixed(1)) + '% p.a.'; };
+const fmtDate = s => { const d = new Date(s + 'T00:00:00'); return isNaN(d) ? s : d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: '2-digit' }); };
+const todayISO = () => new Date().toISOString().slice(0, 10);
 const fmtPct = p => (p >= 0 ? '▲ ' : '▼ ') + Math.abs(p).toFixed(1) + '%';
 const cls = p => (p >= 0 ? 'up' : 'down');
 const debounce = (fn, ms) => { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; };
@@ -145,6 +149,29 @@ function emptyVault() {
   return { v: 1, portfolios: [], owners: [], navCache: {}, lastRefresh: null, updatedAt: null };
 }
 
+/* annualised return from dated cashflows (negative = money in, positive = current value).
+   Bisection on NPV; needs flows of both signs and ≥ ~18 days of history. */
+function xirr(flows) {
+  if (flows.length < 2) return null;
+  const t0 = Math.min(...flows.map(f => f.t));
+  const yrs = t => (t - t0) / (365.25 * 24 * 3600e3);
+  if (Math.max(...flows.map(f => yrs(f.t))) < 0.05) return null;
+  const npv = r => flows.reduce((s, f) => s + f.amt / Math.pow(1 + r, yrs(f.t)), 0);
+  let lo = -0.9999, hi = 100, flo = npv(lo), fhi = npv(hi);
+  if (!isFinite(flo) || !isFinite(fhi) || flo * fhi > 0) return null;
+  for (let i = 0; i < 200 && hi - lo > 1e-7; i++) {
+    const mid = (lo + hi) / 2, fm = npv(mid);
+    if (!isFinite(fm)) return null;
+    if (flo * fm < 0) { hi = mid; fhi = fm; } else { lo = mid; flo = fm; }
+  }
+  const r = (lo + hi) / 2;
+  return Math.abs(r) > 5 ? null : r;
+}
+
+function fundFlows(f, calc) {
+  return f.buyDate ? [{ t: Date.parse(f.buyDate + 'T00:00:00'), amt: -calc.invested }, { t: Date.now(), amt: calc.value }] : null;
+}
+
 function fundCalc(f) {
   const cache = vault.navCache[f.code];
   const nav = cache ? cache.nav : f.buyNav;
@@ -152,17 +179,28 @@ function fundCalc(f) {
   const invested = f.units * f.buyNav;
   const day = (cache && cache.prevNav && cache.prevDate !== cache.date)
     ? f.units * (cache.nav - cache.prevNav) : null;
-  return { nav, value, invested, pnl: value - invested, pct: invested ? (value - invested) / invested * 100 : 0, day, stale: !cache };
+  const c = { nav, value, invested, pnl: value - invested, pct: invested ? (value - invested) / invested * 100 : 0, day, stale: !cache };
+  const flows = fundFlows(f, c);
+  c.rate = flows ? xirr(flows) : null;
+  return c;
 }
 
 function portfolioCalc(p) {
   let value = 0, invested = 0, day = 0, hasDay = false;
+  const flows = [];
   for (const f of p.funds) {
     const c = fundCalc(f);
     value += c.value; invested += c.invested;
     if (c.day !== null) { day += c.day; hasDay = true; }
+    if (f.buyDate) flows.push({ t: Date.parse(f.buyDate + 'T00:00:00'), amt: -c.invested }, { t: Date.now(), amt: c.value });
   }
-  return { value, invested, pnl: value - invested, pct: invested ? (value - invested) / invested * 100 : 0, day: hasDay ? day : null };
+  return {
+    value, invested, pnl: value - invested,
+    pct: invested ? (value - invested) / invested * 100 : 0,
+    day: hasDay ? day : null,
+    rate: flows.length ? xirr(flows) : null,
+    flows,
+  };
 }
 
 function ownerColor(owner) {
@@ -196,7 +234,7 @@ function latestNavDate() {
 function render() {
   const app = $('#app');
   const navD = latestNavDate();
-  $('#navDate').textContent = navD ? `NAV as of ${navD}` : '';
+  $('#navDate').textContent = navD ? `NAV ${navD}` : '';
 
   if (!vault.portfolios.length) {
     app.innerHTML = `
@@ -209,15 +247,22 @@ function render() {
 
   const groups = grouped();
   let totValue = 0, totInvested = 0, totDay = 0, hasDay = false;
+  const totFlows = [];
   const ownerCalcs = new Map();
   for (const [owner, ports] of groups) {
     let v = 0, inv = 0;
-    for (const p of ports) { const c = portfolioCalc(p); v += c.value; inv += c.invested; if (c.day !== null) { totDay += c.day; hasDay = true; } }
+    for (const p of ports) {
+      const c = portfolioCalc(p);
+      v += c.value; inv += c.invested;
+      if (c.day !== null) { totDay += c.day; hasDay = true; }
+      totFlows.push(...c.flows);
+    }
     ownerCalcs.set(owner, { value: v, invested: inv, pct: inv ? (v - inv) / inv * 100 : 0 });
     totValue += v; totInvested += inv;
   }
   const totPnl = totValue - totInvested;
   const totPct = totInvested ? totPnl / totInvested * 100 : 0;
+  const totRate = totFlows.length ? xirr(totFlows) : null;
 
   /* quick summary */
   let quick = '';
@@ -260,15 +305,19 @@ function render() {
         const fc = fundCalc(f);
         rows += `<div class="fundrow">
           <div class="r1"><b title="${esc(f.name)}">${esc(f.name)}</b>
-            <span class="pct ${cls(fc.pct)}">${fmtPct(fc.pct)}</span>
-            <button class="del" data-action="del-fund" data-pid="${p.id}" data-code="${esc(String(f.code))}" title="Remove fund">✕</button></div>
-          <div class="r2"><span>${inr2.format(f.units)} u × ${inr2.format(fc.nav)}${fc.stale ? ' (buy NAV)' : ''}</span>
-            <span>${inr.format(fc.value)}</span></div>
+            <span class="acts">
+              <button data-action="edit-fund" data-pid="${p.id}" data-code="${esc(String(f.code))}" title="Edit units / buy NAV / buy date">✎</button>
+              <button data-action="del-fund" data-pid="${p.id}" data-code="${esc(String(f.code))}" title="Remove fund">✕</button>
+            </span></div>
+          <div class="r2"><span>${fmtUnits.format(f.units)} u × ${inr2.format(fc.nav)}${fc.stale ? ' (buy NAV)' : ''}</span>
+            <span class="val">${inr.format(fc.value)}</span></div>
+          <div class="r3"><span>${f.buyDate ? 'since ' + fmtDate(f.buyDate) : '✎ set buy date for XIRR'}</span>
+            <span><span class="pct ${cls(fc.pct)}">${fmtPct(fc.pct)}</span>${fc.rate !== null ? ` · ${fmtPa(fc.rate)}` : ''}</span></div>
         </div>`;
       }
       sections += `<div class="card" id="pf-${p.id}">
         <header><h3>${esc(p.name)}</h3><span class="badge ${cls(c.pct)}">${fmtPct(c.pct)}</span></header>
-        <div class="money"><span class="cur">${inr.format(c.value)}</span><span class="inv">invested ${inr.format(c.invested)}</span></div>
+        <div class="money"><span class="cur">${inr.format(c.value)}</span><span class="inv">invested ${inr.format(c.invested)}</span>${c.rate !== null ? `<span class="inv">XIRR ${fmtPa(c.rate)}</span>` : ''}</div>
         <div class="holdings">${rows || '<div class="r2" style="color:var(--muted);font-size:0.8rem">No funds yet.</div>'}</div>
         <div class="cardactions">
           <button data-action="add-fund" data-pid="${p.id}">+ Add fund</button>
@@ -284,6 +333,7 @@ function render() {
       <span class="total">${inr.format(totValue)}</span>
       <span class="delta ${cls(totPnl)}">${totPnl >= 0 ? '▲' : '▼'} ${inr.format(Math.abs(totPnl))} (${totPct >= 0 ? '+' : ''}${totPct.toFixed(1)}%)</span>
       ${hasDay ? `<span class="today">today <span class="${cls(totDay)}">${totDay >= 0 ? '▲' : '▼'} ${inr.format(Math.abs(totDay))}</span></span>` : ''}
+      ${totRate !== null ? `<span class="today">XIRR ${fmtPa(totRate)}</span>` : ''}
     </div>
     <nav class="quick">${quick}</nav>
     ${actionsHtml(false)}
@@ -296,11 +346,10 @@ function render() {
 }
 
 function actionsHtml(minimal) {
+  if (minimal) return '';
   return `<div class="actions">
-    ${minimal ? '' : `<button class="btn" data-action="refresh">↻ Refresh NAV</button>
-    <button class="btn primary" data-action="add-portfolio">+ Add portfolio</button>`}
-    <button class="btn icon" data-action="settings" title="Settings">⚙ Settings</button>
-    <button class="btn icon" data-action="lock" title="Lock">🔒 Lock</button>
+    <button class="btn" data-action="refresh">↻ Refresh NAV</button>
+    <button class="btn primary" data-action="add-portfolio">+ Add portfolio</button>
   </div>`;
 }
 
@@ -313,9 +362,11 @@ function createFundPicker(container) {
     </div>
     <div class="chosen" hidden></div>
     <div class="grid2">
-      <label>Units<input type="number" class="units" step="any" min="0.0001" placeholder="e.g. 125.5"></label>
+      <label>Units<input type="number" class="units" step="0.001" min="0.001" placeholder="e.g. 125.503"></label>
       <label>Buy NAV (₹)<input type="number" class="buynav" step="any" min="0.0001" placeholder="defaults to latest"></label>
-    </div>`;
+    </div>
+    <label>Buy date <span class="hint" style="display:inline">(for XIRR / CAGR)</span>
+      <input type="date" class="buydate"></label>`;
   const q = $('.q', container), results = $('.results', container), chosen = $('.chosen', container);
   let selection = null, latest = null;
 
@@ -334,11 +385,16 @@ function createFundPicker(container) {
   }, 300);
 
   q.addEventListener('input', () => { selection = null; chosen.hidden = true; doSearch(); });
-  results.addEventListener('mousedown', async e => {
+  results.addEventListener('mousedown', e => {
     const item = e.target.closest('[data-code]');
     if (!item) return;
     selection = { code: item.dataset.code, name: item.dataset.name };
     q.value = ''; results.hidden = true;
+    showChosen();
+  });
+  document.addEventListener('click', e => { if (!container.contains(e.target)) results.hidden = true; });
+
+  async function showChosen() {
     chosen.hidden = false;
     chosen.innerHTML = `<b>${esc(selection.name)}</b><br><span class="navnow">Fetching latest NAV…</span>`;
     latest = null;
@@ -350,30 +406,43 @@ function createFundPicker(container) {
     } catch {
       chosen.innerHTML = `<b>${esc(selection.name)}</b><br><span class="navnow">Could not fetch latest NAV.</span>`;
     }
-  });
-  document.addEventListener('click', e => { if (!container.contains(e.target)) results.hidden = true; });
+  }
 
   return {
     getFund() {
       if (!selection) return null;
       const units = parseFloat($('.units', container).value);
       let buyNav = parseFloat($('.buynav', container).value);
+      const buyDate = $('.buydate', container).value || undefined;
       if (!buyNav && latest) buyNav = latest.nav;
       if (!units || units <= 0) return { error: 'Enter the number of units.' };
       if (!buyNav || buyNav <= 0) return { error: 'Enter the buy NAV (latest NAV unavailable).' };
-      return { code: selection.code, name: selection.name, units, buyNav, latest };
+      if (buyDate && buyDate > todayISO()) return { error: 'Buy date cannot be in the future.' };
+      return { code: selection.code, name: selection.name, units, buyNav, buyDate, latest };
     },
     hasQuery: () => !!selection,
     reset() {
       selection = null; latest = null;
+      $('.searchbox', container).hidden = false;
       q.value = ''; results.hidden = true; chosen.hidden = true;
-      $('.units', container).value = ''; $('.buynav', container).value = ''; $('.buynav', container).placeholder = 'defaults to latest';
+      $('.units', container).value = ''; $('.buynav', container).value = '';
+      $('.buynav', container).placeholder = 'defaults to latest';
+      $('.buydate', container).value = todayISO();
+    },
+    setFixed(f) { // edit mode: fund identity locked, fields prefilled
+      this.reset();
+      selection = { code: String(f.code), name: f.name };
+      $('.searchbox', container).hidden = true;
+      $('.units', container).value = f.units;
+      $('.buynav', container).value = f.buyNav;
+      $('.buydate', container).value = f.buyDate || '';
+      showChosen();
     },
   };
 }
 
 /* ================= dialogs & actions ================= */
-let pfPicker, fundPicker, fundTargetPid = null;
+let pfPicker, fundPicker, fundTargetPid = null, fundEditCode = null;
 
 function openVaultDialog(mode) { // 'create' | 'unlock'
   const dlg = $('#dlgVault');
@@ -437,7 +506,7 @@ async function handleAddPortfolio(e) {
   const p = { id: uid(), owner, name, funds: [] };
   if (!vault.owners.includes(owner)) vault.owners.push(owner);
   if (fund) {
-    p.funds.push({ code: fund.code, name: fund.name, units: fund.units, buyNav: fund.buyNav });
+    p.funds.push({ code: fund.code, name: fund.name, units: fund.units, buyNav: fund.buyNav, buyDate: fund.buyDate });
     if (fund.latest) vault.navCache[fund.code] = { nav: fund.latest.nav, date: fund.latest.date };
   }
   vault.portfolios.push(p);
@@ -456,8 +525,16 @@ async function handleAddFund(e) {
   if (fund.error) { err.textContent = fund.error; return; }
   const p = vault.portfolios.find(x => x.id === fundTargetPid);
   if (!p) return;
-  if (p.funds.some(f => String(f.code) === String(fund.code))) { err.textContent = 'This fund is already in the portfolio.'; return; }
-  p.funds.push({ code: fund.code, name: fund.name, units: fund.units, buyNav: fund.buyNav });
+  if (fundEditCode) {
+    const f = p.funds.find(x => String(x.code) === String(fundEditCode));
+    if (!f) return;
+    f.units = fund.units; f.buyNav = fund.buyNav; f.buyDate = fund.buyDate;
+    toast('Fund updated');
+  } else {
+    if (p.funds.some(f => String(f.code) === String(fund.code))) { err.textContent = 'This fund is already in the portfolio.'; return; }
+    p.funds.push({ code: fund.code, name: fund.name, units: fund.units, buyNav: fund.buyNav, buyDate: fund.buyDate });
+    toast(`Added to “${p.name}”`);
+  }
   if (fund.latest) {
     const prev = vault.navCache[fund.code];
     if (!prev) vault.navCache[fund.code] = { nav: fund.latest.nav, date: fund.latest.date };
@@ -465,7 +542,6 @@ async function handleAddFund(e) {
   await persist();
   $('#dlgFund').close();
   render();
-  toast(`Added to “${p.name}”`);
 }
 
 async function handleSettings(e) {
@@ -495,7 +571,7 @@ async function handleSettings(e) {
 
 function onAppClick(e) {
   const btn = e.target.closest('[data-action]');
-  if (!btn) return;
+  if (!btn || !vault) return;
   const { action, pid, code } = btn.dataset;
   if (action === 'refresh') refreshNavs();
   if (action === 'add-portfolio') {
@@ -505,11 +581,23 @@ function onAppClick(e) {
     $('#dlgPortfolio').showModal();
   }
   if (action === 'add-fund') {
-    fundTargetPid = pid;
+    fundTargetPid = pid; fundEditCode = null;
     const p = vault.portfolios.find(x => x.id === pid);
     $('#fundTitle').textContent = `Add fund — ${p ? p.name : ''}`;
+    $('#frmFund .btn.primary').textContent = 'Add fund';
     $('#fundErr').textContent = '';
     fundPicker.reset();
+    $('#dlgFund').showModal();
+  }
+  if (action === 'edit-fund') {
+    fundTargetPid = pid; fundEditCode = code;
+    const p = vault.portfolios.find(x => x.id === pid);
+    const f = p && p.funds.find(f => String(f.code) === String(code));
+    if (!f) return;
+    $('#fundTitle').textContent = 'Edit fund';
+    $('#frmFund .btn.primary').textContent = 'Save';
+    $('#fundErr').textContent = '';
+    fundPicker.setFixed(f);
     $('#dlgFund').showModal();
   }
   if (action === 'del-fund') {
@@ -546,7 +634,7 @@ async function boot() {
   $('#frmPortfolio').addEventListener('submit', handleAddPortfolio);
   $('#frmFund').addEventListener('submit', handleAddFund);
   $('#frmSettings').addEventListener('submit', handleSettings);
-  $('#app').addEventListener('click', onAppClick);
+  document.addEventListener('click', onAppClick);
   document.querySelectorAll('[data-close]').forEach(b =>
     b.addEventListener('click', () => b.closest('dialog').close()));
 
