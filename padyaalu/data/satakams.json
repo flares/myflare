@@ -1,0 +1,29 @@
+{
+  "order": ["vemana", "sumati", "dasarathi"],
+  "satakams": {
+    "vemana": {
+      "name": "వేమన శతకం",
+      "short": "వేమన",
+      "poet": "వేమన",
+      "meter": "ఆటవెలది",
+      "makutam": "విశ్వదాభిరామ వినుర వేమ",
+      "file": "data/vemana.json"
+    },
+    "sumati": {
+      "name": "సుమతీ శతకం",
+      "short": "సుమతి",
+      "poet": "బద్దెన",
+      "meter": "కంద పద్యం",
+      "makutam": "… వినురా సుమతీ",
+      "file": "data/sumati.json"
+    },
+    "dasarathi": {
+      "name": "దాశరథీ శతకం",
+      "short": "దాశరథి",
+      "poet": "కంచెర్ల గోపన్న (భద్రాచల రామదాసు)",
+      "meter": "ఉత్పలమాల / చంపకమాల",
+      "makutam": "దాశరథీ కరుణాపయోనిధీ",
+      "file": "data/dasarathi.json"
+    }
+  }
+}

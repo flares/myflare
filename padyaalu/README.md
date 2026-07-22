@@ -1,79 +1,103 @@
 # Padyaalu (పద్యాలు)
 
 Sub-project of **myflare**. A digital collection of Telugu **śatakamulu** (శతకాలు) —
-Vemana, Sumati, Dāśarathi, and others — presented one padyam per **full-page card**,
-each annotated with meaning and (eventually) prosody.
-
-## Concept
-
-Classical Telugu didactic poetry is written as *śatakams*: sets of ~100+ standalone
-verses (padyaalu), each in a fixed meter and closing with a signature refrain
-(*makuṭam*) — e.g. Vemana's *"viśvadābhirāma vinura vema."* This project collects them
-so each poem gets a clean, focused, full-screen card you can read, understand, and
-scan through one at a time.
+Vemana, Sumati, Dāśarathi, … — presented one padyam per **full-page card**, each with
+meaning (in Telugu) and a live **chandassu** (prosody) breakdown.
 
 ## What each poem card shows
 
-1. **Padyam (పద్యం)** — the verse itself, in Telugu, line by line, given visual priority.
-2. **Prati padārtham (ప్రతిపదార్థం)** — word-by-word gloss (word → meaning).
-3. **Tātparyam (తాత్పర్యం)** — the overall meaning / purport in plain prose.
-4. **Chandassu (ఛందస్సు)** — *(phase 2)* the meter, and eventually a gaṇa-by-gaṇa
-   scansion breakdown. For now each card names its meter and marks the full
-   breakdown as coming.
+1. **Padyam (పద్యం)** — the verse in **4 lines** (paadaalu). A line too long for the
+   screen wraps with a hanging indent so the runover is clearly offset (`--runover`).
+2. **Prati padārtham (ప్రతిపదార్థం)** — word-by-word gloss, **in Telugu**.
+3. **Tātparyam (తాత్పర్యం)** — the purport, **in Telugu**.
+4. **Chandassu (ఛందస్సు)** — computed live: each syllable marked **U** (గురువు) / **I**
+   (లఘువు), grouped into **gaṇaalu** (named), with a ✓/✗ verdict on whether the padyam
+   scans for its declared metre.
 
-## Requirements
+## Architecture
 
-- **Collection of many śatakams.** Start with the most-loved ones and grow:
-  Vemana (వేమన), Sumati (సుమతీ), Dāśarathi (దాశరథీ), and later Bhāskara, Kṛṣṇa,
-  Kumārī, Nārāyaṇa, etc.
-- **One poem per full-page card**, with easy prev/next navigation (buttons +
-  keyboard arrows) and a running counter.
-- **Filter by śatakam** so a reader can focus on a single collection or view all.
-- **Structured per-poem data** — padyam lines, prati padārtham pairs, tātparyam,
-  meter — so content is easy to add and later re-render (search, print, etc.).
-- **Chandassu breakdown is the eventual goal**, layered on top of the existing
-  data once the reading experience is solid.
+```
+padyaalu/
+  index.html          ← the reading app (fetches the JSON data, renders cards)
+  chandassu.js        ← the prosody engine (browser + Node); no dependencies
+  verify.cjs          ← Node script: scans every poem, exits non-zero on any failure
+  data/
+    satakams.json     ← metadata + load order for each śatakam
+    vemana.json       ← poems (padyam + Telugu meanings) — one file per śatakam
+    sumati.json
+    dasarathi.json
+```
 
-## Data model
+Poem text and meanings live in **JSON data files** (one per śatakam) so files stay
+small and content is easy to add. Chandassu is **not stored** — it is computed from the
+padyam by `chandassu.js`, so the data never drifts from the scansion.
 
-Each poem is one record (see `data/poems.js`):
+### Poem record
 
-```js
+```json
 {
-  id: "vemana-001",
-  satakam: "vemana",          // key into SATAKAMS
-  number: 1,                   // sequence within this collection
-  meter: "ఆటవెలది",            // chandassu (Aataveladi / Kanda / ...)
-  lines: [ "...", "...", ... ],// the padyam, one string per line
-  pratipadartham: [            // word-by-word gloss
-    { word: "ఉప్పు", meaning: "salt" },
-    ...
-  ],
-  tatparyam: "…plain-prose purport…",
-  chandassu: null              // gaṇa breakdown — phase 2
+  "id": "vemana-001", "number": 1, "meter": "ఆటవెలది",
+  "padyam": ["…", "…", "…", "…"],
+  "pratipadartham": [ { "padam": "ఉప్పు", "artham": "ఉప్పు (లవణము)" }, … ],
+  "tatparyam": "…"
 }
+```
+
+## The chandassu engine (`chandassu.js`)
+
+- **Syllable splitting** — parses Telugu Unicode (consonants, vowels, mātras, virama,
+  anusvāram/visargam) into aksharaalu.
+- **Laghu / guru** — a syllable is **guru** if: its vowel is deergham (long); it carries
+  anusvāram (ం) or visargam (ః); it has a coda half-consonant (e.g. word-final న్); or it
+  is followed by a samyuktākṣaram (conjunct). Otherwise **laghu**. (Arasunna ఁ does not
+  force guru; paadaanta syllable is read flexibly.)
+- **Gaṇa grouping & verification** —
+  - **ఆటవెలది** (Vemana): odd paadas = 3 sūrya + 2 indra gaṇaalu; even paadas = 5 sūrya.
+  - **కంద పద్యం** (Sumati): all caturmātra gaṇaalu (3 per odd paada, 5 per even), plus the
+    positional rules (odd gaṇa ≠ ja; 6th gaṇa = ja or nala).
+  - **ఉత్పలమాల / చంపకమాల** (Dāśarathi): exact gaṇa-sequence (bha-ra-na-bha-bha-ra-la-ga /
+    na-ja-bha-ja-ja-ja-ra) match.
+
+### Run the verifier
+
+```bash
+node padyaalu/verify.cjs        # ✓/✗ per poem; non-zero exit if any fail
+node padyaalu/verify.cjs -v     # also print the gaṇa breakdown for each paada
+```
+
+The verifier is a genuine correctness check: while seeding, it caught a mistyped Sumati
+line (an extra syllable → 21 mātras where a kanda paada needs 20), which was then fixed.
+
+## Running the app
+
+Because the data is in separate JSON files, the page must be **served over HTTP**
+(browsers block `fetch` of local files over `file://`):
+
+```bash
+python3 -m http.server        # then open http://localhost:8000/padyaalu/
 ```
 
 ## Current status
 
-**Working first cut.** `index.html` is a self-contained, data-driven reading app
-(vanilla JS, no backend, no external dependencies — opens straight from the file
-system). It is seeded with a handful of famous, well-known padyaalu, each with
-prati padārtham and tātparyam. Meters are named; the gaṇa breakdown is stubbed.
+**Working app + verified engine.** Seed corpus:
 
-Seed content:
+| Śatakam | Metre | Poems | Verified |
+|---|---|---|---|
+| Vemana (వేమన) | ఆటవెలది | 4 | ✓ |
+| Sumati (సుమతీ) | కంద పద్యం | 2 | ✓ |
+| Dāśarathi (దాశరథి) | ఉత్పలమాల / చంపకమాల | 0 | — |
 
-| Śatakam | Meter | Poems seeded |
-|---|---|---|
-| Vemana (వేమన) | ఆటవెలది | 4 |
-| Sumati (సుమతీ) | కంద పద్యం | 2 |
+> **On the full corpus:** the intended source (andhrabharati.com) and every other
+> external content site (Wikisource, etc.) are **blocked by this environment's network
+> policy**, so the complete texts of the three śatakams could not be fetched here. The
+> app, data schema, Telugu meanings, and the chandassu engine are all built and proven
+> on a verified seed set; the corpus can be grown as soon as the poem texts are available
+> (see next steps).
 
 ## Planned next steps
 
-1. **Grow the corpus** — more Vemana/Sumati, then Dāśarathi and other śatakams.
-   (Verified transcriptions only — accuracy of the padyam text and glosses matters
-   more than volume.)
-2. **Chandassu engine** — name → gaṇa split → per-syllable laghu/guru scansion,
-   rendered under each poem.
-3. **Reading niceties** — per-śatakam view, search across padyaalu, transliteration
-   toggle (Telugu ⇄ Roman), and print/share of a single card.
+1. **Ingest the full corpus** — Vemana, Sumati, Dāśarathi (each ~100+ padyaalu) once the
+   source is reachable or the texts are supplied. Every ingested poem is auto-checked by
+   `verify.cjs`.
+2. **Draft prati padārtham + tātparyam (Telugu)** for the corpus.
+3. **Reading niceties** — per-śatakam view, search, and yati/prāsa checks in the engine.
