@@ -7,7 +7,7 @@ html, body { height: 100%; }
 body {
   font-family: "Baloo 2", "Comic Sans MS", "Segoe UI Rounded", system-ui, sans-serif;
   overflow: hidden;
-  background: #7ec8e3;
+  background: #35803d;
   color: #123;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
@@ -16,47 +16,35 @@ body {
 /* ----------------------------- SCENE ----------------------------- */
 .scene { position: fixed; inset: 0; overflow: hidden; }
 
-.sky {
-  position: absolute; inset: 0;
-  background: linear-gradient(#8fd3f4 0%, #a8e0f0 42%, #d6f2d0 60%, #cdeeb0 62%, #cdeeb0 100%);
-}
-.sun {
-  position: absolute; top: 4vh; left: 6vw; font-size: clamp(48px, 9vw, 110px);
-  filter: drop-shadow(0 0 18px rgba(255,220,80,.8));
-  animation: sunspin 40s linear infinite;
-}
-@keyframes sunspin { to { transform: rotate(360deg); } }
-
-.clouds { position: absolute; inset: 0; pointer-events: none; }
-.cloud { position: absolute; font-size: clamp(40px, 7vw, 84px); opacity: .95; }
-.c1 { top: 8vh;  left: -20%; animation: drift 38s linear infinite; }
-.c2 { top: 16vh; left: -30%; animation: drift 55s linear infinite; animation-delay: -12s; }
-.c3 { top: 5vh;  left: -25%; animation: drift 47s linear infinite; animation-delay: -30s; }
-@keyframes drift { to { transform: translateX(150vw); } }
-
-.hills {
-  position: absolute; left: 0; right: 0; bottom: 22vh; height: 26vh;
+/* Top-down forest floor: layered greens + a dotted canopy texture */
+.scene {
   background:
-    radial-gradient(120% 100% at 20% 100%, #93d67a 0 40%, transparent 41%),
-    radial-gradient(120% 100% at 75% 100%, #7fc966 0 42%, transparent 43%);
+    radial-gradient(1200px 820px at 72% 18%, #5cb95a 0%, transparent 60%),
+    radial-gradient(1000px 720px at 18% 82%, #3f9c46 0%, transparent 60%),
+    linear-gradient(160deg, #4aa84f 0%, #3d9143 55%, #35803d 100%);
 }
-.ground {
-  position: absolute; left: 0; right: 0; bottom: 0; height: 26vh;
-  background: linear-gradient(#6ab04c, #4e8b36);
-  box-shadow: inset 0 6px 0 rgba(255,255,255,.18);
+.scene::before {   /* mottled foliage speckle */
+  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .5;
+  background-image:
+    radial-gradient(rgba(0,50,0,.18) 22%, transparent 24%),
+    radial-gradient(rgba(255,255,255,.06) 22%, transparent 24%);
+  background-size: 48px 48px, 48px 48px;
+  background-position: 0 0, 24px 24px;
 }
 
-/* trees are emoji injected by JS into .treeline */
-.treeline {
-  position: absolute; left: 0; right: 0; bottom: 20vh; height: 18vh;
-  display: flex; align-items: flex-end; justify-content: space-around;
-  padding: 0 1vw; pointer-events: none; font-size: clamp(46px, 8vw, 100px);
-  line-height: 1;
+/* scattered tree canopies (viewed from above), filled by JS */
+.forest { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.canopy {
+  position: absolute; border-radius: 50%;
+  background: radial-gradient(circle at 38% 32%, #83cf6d 0%, #4f9e48 46%, #3a7a37 100%);
+  box-shadow: 0 8px 12px rgba(0,0,0,.16);
+  transform-origin: center; animation: canopySway 7s ease-in-out infinite;
 }
-.treeline span { filter: drop-shadow(0 6px 3px rgba(0,0,0,.12)); transform-origin: bottom center; }
-.treeline span:nth-child(odd)  { font-size: .82em; animation: sway 6s ease-in-out infinite; }
-.treeline span:nth-child(even) { animation: sway 7.5s ease-in-out infinite reverse; }
-@keyframes sway { 0%,100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
+.canopy::after {
+  content: ""; position: absolute; inset: 14%; border-radius: 50%;
+  background: radial-gradient(circle at 42% 34%, rgba(255,255,255,.20), transparent 62%);
+}
+@keyframes canopySway { 0%,100% { transform: scale(1) rotate(-1.2deg); } 50% { transform: scale(1.02) rotate(1.2deg); } }
 
 /* ----------------------------- STAGE / ANIMALS ----------------------------- */
 /* The stage is the whole playfield — animals roam sky-to-ground. Its top sits
@@ -65,19 +53,9 @@ body {
   position: absolute; left: 0; right: 0; top: 6.5vh; bottom: 3vh;
   z-index: 5;
 }
-/* the pond — water animals swim here (bounds kept in sync with pond() in game.js) */
-.pond {
-  position: absolute; left: 6%; width: 36%; top: 64%; height: 26%;
-  border-radius: 50%;
-  background: radial-gradient(ellipse at 50% 35%, #9fe4ff 0%, #57b9e6 55%, #2f8fc4 100%);
-  box-shadow: inset 0 6px 18px rgba(255,255,255,.5), inset 0 -10px 22px rgba(0,60,100,.35),
-              0 4px 10px rgba(0,0,0,.15);
-  z-index: 1; pointer-events: none;
-}
-.pond::after {   /* a little shine on the water */
-  content: ""; position: absolute; left: 16%; top: 18%; width: 40%; height: 22%;
-  border-radius: 50%; background: rgba(255,255,255,.35); filter: blur(2px);
-}
+/* the river stream — an SVG whose winding path is drawn by buildRiver() in
+   game.js; water animals swim along that same centreline */
+.river { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; overflow: visible; }
 /* Each animal is JS-driven: game.js sets transform every frame to make it
    roam. So keep transform free of CSS transitions/animations here — the
    pop-in and gentle waddle live on the inner .a-emoji instead. */
@@ -87,12 +65,28 @@ body {
   line-height: 1; cursor: pointer;
   transform-origin: center center; will-change: transform;
 }
+/* .a-flip carries only the left/right facing flip, so the name label (a direct
+   child of .animal) is never mirrored */
+.animal .a-flip { display: block; line-height: 1; transform-origin: center; }
 .animal .a-emoji {
   display: block; line-height: 1;
-  filter: drop-shadow(0 10px 8px rgba(0,0,0,.22));
-  animation: popIn .45s cubic-bezier(.2,1.4,.4,1) both, waddle 1.1s ease-in-out infinite;
+  filter: drop-shadow(0 8px 7px rgba(0,0,0,.28));
+  animation: popIn .45s cubic-bezier(.2,1.4,.4,1) both;
 }
-.animal.bye .a-emoji { animation: popOut .5s ease forwards; }
+/* three distinct gaits, one per motion type (set as a class in game.js) */
+.animal.gait-walk .a-emoji { animation: popIn .45s cubic-bezier(.2,1.4,.4,1) both, gaitWalk .5s ease-in-out infinite; }
+.animal.gait-fly  .a-emoji { animation: popIn .45s cubic-bezier(.2,1.4,.4,1) both, gaitFly .34s ease-in-out infinite; }
+.animal.gait-swim .a-emoji { animation: popIn .45s cubic-bezier(.2,1.4,.4,1) both, gaitSwim 1.5s ease-in-out infinite; }
+/* walk: a trotting two-step bob */
+@keyframes gaitWalk { 0%,100% { transform: translateY(0) rotate(-3deg); } 25% { transform: translateY(-9%) rotate(0deg); } 50% { transform: translateY(0) rotate(3deg); } 75% { transform: translateY(-9%) rotate(0deg); } }
+/* fly: quick flapping — rises and squashes like beating wings, banking side to side */
+@keyframes gaitFly  { 0%,100% { transform: translateY(0) scaleY(1) rotate(-6deg); } 50% { transform: translateY(-17%) scaleY(.88) rotate(6deg); } }
+/* swim: a slow fishy side-to-side undulation */
+@keyframes gaitSwim { 0%,100% { transform: translateX(-6%) rotate(-8deg); } 50% { transform: translateX(6%) rotate(8deg); } }
+/* exit wins over any gait (declared last) */
+.animal.bye .a-emoji, .animal.gait-walk.bye .a-emoji, .animal.gait-fly.bye .a-emoji, .animal.gait-swim.bye .a-emoji {
+  animation: popOut .5s ease forwards;
+}
 .animal .a-name {
   position: absolute; left: 50%; top: 100%; transform: translateX(-50%);
   font-size: .2em; background: rgba(255,255,255,.9); color: #234;
@@ -101,7 +95,6 @@ body {
 }
 @keyframes popIn  { from { transform: scale(.2); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 @keyframes popOut { to { transform: scale(.2); opacity: 0; } }
-@keyframes waddle { 0%,100% { rotate: -4deg; } 50% { rotate: 4deg; } }
 
 /* celebratory sparkle when a matching animal arrives */
 .sparkle {

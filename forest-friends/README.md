@@ -61,45 +61,74 @@ the current letter's animals**. So on letter **W**, "wales" → **Whale**, "beer
 *to/too* → 2, *for* → 4, *ate* → 8. This can't leak across letters, so a
 mis-hearing only ever picks a same-letter animal.
 
-## How animals move — habitats
+## The map — a top-down forest with a river
 
-Every animal is driven by a single `requestAnimationFrame` loop (`game.js`) that
-moves it in 2-D and bounces it off the bounds of its **habitat band**:
+The background is a **bird's-eye view** of the forest: a green floor with
+scattered round tree canopies, and a **river** winding across it (an SVG path
+drawn by `buildRiver()`). Animals roam the whole map, driven by a single
+`requestAnimationFrame` loop in `game.js`.
 
-| Habitat | Where they roam | Examples |
-|---|---|---|
-| 🐦 Air | the upper sky | bat, bee, eagle, owl, parrot, vulture, nightingale |
-| 🐠 Water | inside the pond | whale, dolphin, frog, turtle, duck, penguin, crab-like yabby … |
-| 🐾 Land | the ground | lion, elephant, bear, zebra, and everyone else |
+### Three motions, three gaits
 
-Land and air animals run/fly in from a random side; water animals pop into the
-pond. Each instance has its own speed, size, phase and bob, so a herd never
-marches in lockstep. Tapping an animal replays its sound; sending one home fades
-it out where it stands.
+Each animal has one of three motion types, each with its own **gait** animation
+and its own way of moving:
+
+| Motion | Gait animation | How it moves | Examples |
+|---|---|---|---|
+| 🐾 Walk | trotting two-step bob | wanders the whole map, bouncing off edges | lion, elephant, bear, zebra … |
+| 🐦 Fly | quick wing-flap (rises & squashes, banking) | darts fast across the whole map | bat, bee, eagle, owl, parrot, vulture, nightingale |
+| 🐠 Swim | slow side-to-side undulation | follows the **river** centreline up and down the stream | whale, dolphin, frog, turtle, duck, penguin, yabby … |
+
+Walkers and fliers run/fly in from a random side; swimmers appear in the river.
+Each instance has its own speed, size and phase, so a herd never marches in
+lockstep. Tapping an animal replays its sound; sending one home fades it out.
+
+## Realistic animal sounds (with an offline fallback)
+
+Synthesized voices can only sound so real, so the game tries to play an actual
+**recording** first. At play time the visitor's **browser** asks
+[Wikimedia Commons](https://commons.wikimedia.org) for a freely-licensed audio
+file of the animal (`realsounds.js`): Commons is HTTPS, its API allows
+cross-origin requests (`origin=*`), and an HTML5 `<audio>` element plays the
+returned file. Results are cached and **prefetched** the moment a letter appears,
+so summoning is snappy.
+
+If anything goes wrong — offline, request blocked, no recording for that animal,
+or a decode error — it silently falls back to the built-in **synthesized** voice
+(played three times). So the game still works with no network at all; it just
+sounds more robotic. Nothing is fetched or bundled at build time — the recording
+is fetched by the end-user's browser, which keeps the repo tiny and adds no audio
+files to host or license.
 
 ## Design notes — "publicly available assets"
 
-Everything is generated on the device, so there are **no downloads, no external
-requests, and nothing to break offline**:
+The game bundles **no media files** — nothing to host, license, or ship:
 
-- **Animals & scenery** are **Unicode emoji** — a public, cross-platform asset set
-  rendered by the OS (🐻 🦁 🐘 🌲 🌞). No image files to host or license.
-- **Animal sounds & background music** are **synthesized live** with the Web Audio
-  API (`audio.js`) — oscillators, noise and gain envelopes shaped into a roar, a
-  chirp, an elephant trumpet, etc., plus a soft looping pentatonic tune. No audio
-  files, so nothing to hotlink or attribute.
+- **Animals & scenery** are **Unicode emoji** plus pure-CSS/SVG (the forest floor,
+  canopies and river are all drawn) — a public, cross-platform asset set rendered
+  by the OS. No image files.
+- **Animal sounds** prefer a real **freely-licensed recording fetched at runtime
+  from Wikimedia Commons** by the visitor's browser (`realsounds.js`), and fall
+  back to a **live Web-Audio synthesized** voice (`audio.js`) when offline — so
+  there's still nothing to bundle, and the game works with no network.
+- **Background music** is always **synthesized live** (a soft looping pentatonic
+  tune), no files.
 - **Voice input** uses the browser's built-in **Web Speech API**
   (`SpeechRecognition`) — best support in Chrome/Edge. Where it's unavailable the
   tap-to-summon fallback keeps the game fully playable.
+
+> The only optional network request is the Commons audio lookup, made from the
+> end-user's browser at play time; everything else is 100% offline.
 
 ## Files
 
 ```
 index.html    scene markup, control bar, letter card, index row, help overlay
-styles.css    the forest (CSS gradients + emoji), animals, animations
+styles.css    top-down forest, river, animals, the three gait animations
 animals.js    window.ANIMALS dataset — name, emoji, Telugu name, aliases, sound
 audio.js      window.GameAudio — synthesized animal sounds + background music
-game.js       game core — speech recognition, command parsing, scene, letter index
+realsounds.js window.RealSounds — real recordings fetched from Wikimedia Commons
+game.js       game core — speech, command parsing, top-down scene, river, motions
 ```
 
 ### Data / engine contracts

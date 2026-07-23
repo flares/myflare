@@ -21,7 +21,8 @@
   // ---- DOM handles -------------------------------------------------
   var stage        = document.getElementById("stage");
   var indexBar     = document.querySelector(".index-bar");
-  var treeline     = document.getElementById("treeline");
+  var forest       = document.getElementById("forest");
+  var riverSvg     = document.getElementById("river");
   var letterGlyph  = document.getElementById("letterGlyph");
   var letterCard   = document.getElementById("letterCard");
   var indexRow     = document.getElementById("indexRow");
@@ -102,17 +103,57 @@
     }
     var r = stage.getBoundingClientRect();
     stageW = r.width; stageH = r.height;
+    buildRiver();
   }
 
+  // scatter round tree canopies across the whole map (top-down look)
   function plantTrees() {
-    var kinds = ["🌲","🌳","🌴","🌲","🌳","🎋","🌲","🌳","🌴","🌲","🌳"];
-    var n = Math.max(6, Math.min(11, Math.round(window.innerWidth / 130)));
-    treeline.innerHTML = "";
+    if (!forest) return;
+    var area = window.innerWidth * window.innerHeight;
+    var n = Math.max(24, Math.min(70, Math.round(area / 26000)));
+    var html = "";
     for (var i = 0; i < n; i++) {
-      var s = document.createElement("span");
-      s.textContent = kinds[i % kinds.length];
-      treeline.appendChild(s);
+      var size = (30 + Math.random() * Math.random() * 130) | 0;   // many small, few big
+      var left = (Math.random() * 100).toFixed(1);
+      var top = (Math.random() * 100).toFixed(1);
+      var delay = (-Math.random() * 7).toFixed(1);
+      var op = (0.82 + Math.random() * 0.18).toFixed(2);
+      html += '<div class="canopy" style="width:' + size + 'px;height:' + size + 'px;left:' + left +
+              '%;top:' + top + '%;opacity:' + op + ';animation-delay:' + delay + 's"></div>';
     }
+    forest.innerHTML = html;
+  }
+
+  // ---- the river: a winding centreline the swimmers follow --------------
+  var RIVER_PTS = [[-0.06, 0.20], [0.20, 0.30], [0.40, 0.46], [0.55, 0.60], [0.72, 0.66], [0.88, 0.80], [1.06, 0.92]];
+  function riverCenterline() {
+    return RIVER_PTS.map(function (p) { return { x: p[0] * stageW, y: p[1] * stageH }; });
+  }
+  function riverWidth() { return Math.max(30, Math.min(stageH, stageW) * 0.14); }
+
+  function buildRiver() {
+    if (!riverSvg || !stageW || !stageH) return;
+    var pts = riverCenterline();
+    var d = "M " + pts[0].x.toFixed(1) + " " + pts[0].y.toFixed(1);
+    for (var i = 1; i < pts.length; i++) d += " L " + pts[i].x.toFixed(1) + " " + pts[i].y.toFixed(1);
+    var w = riverWidth();
+    riverSvg.setAttribute("viewBox", "0 0 " + stageW.toFixed(0) + " " + stageH.toFixed(0));
+    riverSvg.innerHTML =
+      '<path d="' + d + '" fill="none" stroke="#2f86c4" stroke-width="' + w.toFixed(1) + '" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '<path d="' + d + '" fill="none" stroke="#57b3e6" stroke-width="' + (w * 0.66).toFixed(1) + '" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '<path d="' + d + '" fill="none" stroke="#bfe8fb" stroke-width="' + (w * 0.22).toFixed(1) + '" stroke-linecap="round" stroke-linejoin="round" opacity="0.75"/>';
+  }
+
+  // position + unit tangent at parameter t (0..1) along the river polyline
+  function pointOnRiver(t) {
+    var pts = riverCenterline();
+    var segs = pts.length - 1;
+    var ft = Math.max(0, Math.min(0.9999, t)) * segs;
+    var i = ft | 0, f = ft - i;
+    var a = pts[i], b = pts[i + 1];
+    var tx = b.x - a.x, ty = b.y - a.y;
+    var len = Math.hypot(tx, ty) || 1;
+    return { x: a.x + tx * f, y: a.y + ty * f, tx: tx / len, ty: ty / len };
   }
 
   // -------------------------------------------------------------------
@@ -170,6 +211,7 @@
         '<span class="chip-tel">' + (a.teluguRoman || "") + '</span>';
       chip.addEventListener("click", function () { ensureAudio(); enterN(a, 1); });
       indexRow.appendChild(chip);
+      if (window.RealSounds) window.RealSounds.prefetch(a);   // warm real-sound lookups
     });
     refreshChips();
     measureStage();   // index-row height affects where the stage sits
@@ -207,32 +249,33 @@
   function rand(a, b) { return a + Math.random() * (b - a); }
   function sign() { return Math.random() < 0.5 ? -1 : 1; }
 
-  // the pond rectangle (fractions of the stage) — kept in sync with .pond in CSS
-  function pond() {
-    return { x0: stageW * 0.06, x1: stageW * 0.42, y0: stageH * 0.64, y1: stageH * 0.90 };
-  }
-  // vertical/horizontal roaming band for a habitat, given a scaled element size
-  function bandFor(hab, w, h) {
-    var maxTop = Math.max(8, stageH - h);
-    if (hab === "air")   return { x0: 0, x1: stageW - w, y0: stageH * 0.02, y1: Math.min(maxTop, stageH * 0.34) };
-    if (hab === "water") { var p = pond(); return { x0: p.x0, x1: Math.max(p.x0, p.x1 - w), y0: p.y0, y1: Math.min(maxTop, p.y1 - h * 0.2) }; }
-    return { x0: 0, x1: stageW - w, y0: Math.min(maxTop, stageH * 0.52), y1: maxTop };   // land
-  }
-  // roaming speed (px/s) by habitat
+  // motion type per habitat -> the gait class + how it roams
+  function gaitOf(hab) { return hab === "air" ? "fly" : hab === "water" ? "swim" : "walk"; }
+
+  // land & air roam the whole map; each gait has its own speed feel
   function speedFor(hab) {
-    if (hab === "air")   return { vx: stageW * rand(0.05, 0.12), vy: stageH * rand(0.04, 0.09) };
-    if (hab === "water") return { vx: stageW * rand(0.02, 0.05), vy: stageH * rand(0.02, 0.05) };
-    return { vx: stageW * rand(0.03, 0.09), vy: stageH * rand(0.015, 0.05) };            // land
+    if (hab === "air")  return { vx: stageW * rand(0.06, 0.13), vy: stageH * rand(0.05, 0.11) };   // fast, darting
+    return { vx: stageW * rand(0.03, 0.08), vy: stageH * rand(0.02, 0.06) };                        // land, steady
   }
 
   function update(dt, now) {
     for (var i = instances.length - 1; i >= 0; i--) {
       var it = instances[i];
-      if (it.leaving) {
-        it.x += it.vx * dt; it.y += it.vy * dt;                 // drift while fading out
+      if (it.leaving) continue;                       // fading out in place (CSS popOut)
+
+      if (it.hab === "water") {
+        // swim ALONG the river centreline, turning around at the ends
+        it.t += it.tv * it.tdir * dt;
+        if (it.t >= 1) { it.t = 1; it.tdir = -1; } else if (it.t <= 0) { it.t = 0; it.tdir = 1; }
+        var pr = pointOnRiver(it.t);
+        var wig = Math.sin(now * 0.004 + it.phase) * it.lat;    // gentle side-to-side in the current
+        it.x = pr.x - it.tx * 0 - pr.ty * wig - it.w / 2;       // offset perpendicular to flow
+        it.y = pr.y + pr.tx * wig - it.h / 2;
+        it.faceDir = pr.tx * it.tdir >= 0 ? -1 : 1;
       } else if (it.entering) {
-        it.x += it.vx * dt;                                     // walk/fly in horizontally
-        if (it.x >= it.xMin && it.x <= it.xMax) { it.entering = false; scheduleTurn(it, now); }
+        it.x += it.vx * dt;                            // run/fly in from the side
+        if (it.x >= 0 && it.x <= stageW - it.w) { it.entering = false; scheduleTurn(it, now); }
+        it.faceDir = it.vx > 0 ? -1 : 1;
       } else {
         it.x += it.vx * dt;
         if (it.x < it.xMin) { it.x = it.xMin; it.vx = Math.abs(it.vx); }
@@ -241,11 +284,14 @@
         if (it.y < it.yMin) { it.y = it.yMin; it.vy = Math.abs(it.vy); }
         else if (it.y > it.yMax) { it.y = it.yMax; it.vy = -Math.abs(it.vy); }
         if (now > it.nextTurn) scheduleTurn(it, now);
+        it.faceDir = it.vx > 0 ? -1 : 1;
       }
-      var yb = it.y + Math.sin(now * 0.003 + it.phase) * it.bobAmp;
-      var dir = it.vx > 0 ? -1 : 1;   // flip to face travel direction
-      it.el.style.transform = "translate(" + it.x.toFixed(1) + "px," + yb.toFixed(1) + "px) " +
-                              "scale(" + (dir * it.scale).toFixed(3) + "," + it.scale.toFixed(3) + ")";
+      it.el.style.transform = "translate(" + it.x.toFixed(1) + "px," + it.y.toFixed(1) + "px) " +
+                              "scale(" + it.scale.toFixed(3) + ")";
+      if (it.faceDir !== it.lastDir) {   // flip only the emoji, so the name stays upright
+        it.flip.style.transform = "scaleX(" + it.faceDir + ")";
+        it.lastDir = it.faceDir;
+      }
       it.el.style.zIndex = 100 + Math.round(it.y);   // lower on screen = nearer = in front
     }
   }
@@ -269,37 +315,38 @@
   // -------------------------------------------------------------------
   function spawnOne(a) {
     if (instances.length >= ZOO_CAP) {
-      showBubble("🐾 The zoo is full! Say “reduce zoo size”.", true);
+      showBubble("🐾 The forest is full! Say “reduce zoo size”.", true);
       return false;
     }
     measureStage();
+    var hab = habitatOf(a.key);
     var el = document.createElement("div");
-    el.className = "animal";
-    el.innerHTML = '<span class="a-emoji">' + a.emoji + '</span>' +
+    el.className = "animal gait-" + gaitOf(hab);
+    el.innerHTML = '<span class="a-flip"><span class="a-emoji">' + a.emoji + '</span></span>' +
                    '<span class="a-name">' + a.name + (a.teluguRoman ? " · " + a.teluguRoman : "") + '</span>';
     stage.appendChild(el);
+    var flipEl = el.querySelector(".a-flip");
 
     var box = el.getBoundingClientRect();
     var scale = rand(0.85, 1.15);
     var w = (box.width || 90) * scale, h = (box.height || 90) * scale;
-    var hab = habitatOf(a.key);
-    var band = bandFor(hab, w, h);
 
     var it = {
-      key: a.key, sound: a.sound, el: el, w: w, h: h, hab: hab,
-      xMin: band.x0, xMax: Math.max(band.x0, band.x1),
-      yMin: band.y0, yMax: Math.max(band.y0, band.y1),
-      phase: rand(0, Math.PI * 2), bobAmp: hab === "land" ? rand(3, 7) : rand(6, 14),
-      scale: scale, vx: 0, vy: 0, entering: false, leaving: false, nextTurn: 0,
-      y: rand(band.y0, Math.max(band.y0, band.y1))
+      key: a.key, sound: a.sound, el: el, flip: flipEl, w: w, h: h, hab: hab,
+      xMin: 0, xMax: Math.max(0, stageW - w), yMin: stageH * 0.02, yMax: Math.max(stageH * 0.02, stageH - h),
+      phase: rand(0, Math.PI * 2), scale: scale, faceDir: -1, lastDir: 0,
+      vx: 0, vy: 0, entering: false, leaving: false, nextTurn: 0, y: 0,
+      // swimmer-only fields
+      t: 0, tdir: 1, tv: rand(0.05, 0.12), lat: rand(6, riverWidth() * 0.32)
     };
 
     if (hab === "water") {
-      // fish/ducks pop into the pond rather than walk across land
-      it.x = rand(it.xMin, it.xMax);
-      var sw = speedFor(hab); it.vx = sw.vx * sign(); it.vy = sw.vy * sign();
+      it.t = rand(0.1, 0.9);
+      it.tdir = sign();
+      var pr = pointOnRiver(it.t);          // start on the river so it pops in there
+      it.x = pr.x - w / 2; it.y = pr.y - h / 2;
     } else {
-      // land & air critters run/fly in from a random side
+      it.y = rand(it.yMin, it.yMax);              // roam the whole map
       var side = sign();
       var enterSpeed = Math.max(120, stageW * 0.4);
       it.entering = true;
@@ -309,7 +356,7 @@
     instances.push(it);
 
     el.addEventListener("click", function () {
-      ensureAudio(); playSoundThrice(a.sound); sparkle(it);   // tap a critter to hear it
+      ensureAudio(); playSoundThrice(a); sparkle(it);   // tap a critter to hear it
     });
 
     sparkle(it);
@@ -329,7 +376,7 @@
       made++;
     }
     showBubble((made > 1 ? made + " " : "") + a.name + (made > 1 ? "s" : "") + " coming in! " + a.emoji);
-    playSoundThrice(a.sound);   // hear the animal's voice three times as it arrives
+    playSoundThrice(a);   // real recording if available, else synth x3
     advanceLetter();
   }
 
@@ -389,14 +436,25 @@
     }
   }
 
-  function playSound(a) { if (AUDIO) try { AUDIO.playAnimal(a.sound || "generic"); } catch (e) {} }
   function playReject() { if (AUDIO) try { AUDIO.playAnimal("click"); } catch (e) {} }
-  // play a sound three times so the child hears the animal's voice clearly
-  function playSoundThrice(sound) {
-    if (!AUDIO) return;
-    for (var i = 0; i < 3; i++) (function (i) {
-      setTimeout(function () { try { AUDIO.playAnimal(sound || "generic"); } catch (e) {} }, i * 330);
-    })(i);
+
+  // Play a real recording if RealSounds can get one for this animal; otherwise
+  // fall back to the synthesized voice, played three times so it's clear.
+  function playSoundThrice(a) {
+    var sound = a && a.sound ? a.sound : "generic";
+    var synthThrice = function () {
+      if (!AUDIO) return;
+      for (var i = 0; i < 3; i++) (function (i) {
+        setTimeout(function () { try { AUDIO.playAnimal(sound); } catch (e) {} }, i * 330);
+      })(i);
+    };
+    if (a && a.key && window.RealSounds) {
+      window.RealSounds.play(a, /*times*/ 2).then(function (ok) {
+        if (!ok) synthThrice();      // no real clip available -> synth
+      });
+    } else {
+      synthThrice();
+    }
   }
 
   function rejectWrongLetter(a) {
