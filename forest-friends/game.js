@@ -487,10 +487,19 @@
     var isTe = langSelect.value === "te-IN";
     showBubble(isTe ? "తెలుగులో మాట్లాడండి — “పులి రా”" : "Say an animal — “Tiger come!”");
   });
-  helpBtn.addEventListener("click", function () { helpOverlay.hidden = false; });
-  helpClose.addEventListener("click", function () { helpOverlay.hidden = true; });
+  // Toggle the help overlay. Sets BOTH the hidden attribute and an inline
+  // display style so a stale/cached stylesheet can never keep it on screen
+  // (inline style beats any author CSS rule).
+  function showHelp(open) {
+    helpOverlay.hidden = !open;
+    helpOverlay.style.display = open ? "grid" : "none";
+  }
+  helpBtn.addEventListener("click", function () { showHelp(true); });
+  helpClose.addEventListener("click", function () { showHelp(false); });
+  helpOverlay.addEventListener("click", function (e) { if (e.target === helpOverlay) showHelp(false); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") showHelp(false); });
   helpStart.addEventListener("click", function () {
-    helpOverlay.hidden = true; ensureAudio(); startListening();
+    showHelp(false); ensureAudio(); startListening();
     if (AUDIO && !AUDIO.isMusicOn()) { AUDIO.startMusic(); musicBtn.setAttribute("aria-pressed", "true"); musicBtn.textContent = "🔊 Music on"; }
   });
   window.addEventListener("resize", function () { plantTrees(); measureStage(); });
@@ -509,7 +518,7 @@
     measureStage();
     randomLetter();
     if (!SR) micLabel.textContent = "No mic — tap below";
-    helpOverlay.hidden = false;
+    showHelp(true);
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
