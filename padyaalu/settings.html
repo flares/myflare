@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="te">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Padyaalu — స్థితి & ప్రణాళిక</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --page: #f9f9f7; --surface: #fcfcfb; --ink: #0b0b0b; --ink-2: #52514e;
+    --muted: #898781; --border: rgba(11,11,11,0.10); --accent: #a6641b;
+    --chip: rgba(11,11,11,0.04); --accent-soft: rgba(166,100,27,0.10);
+    --ok: #2e7d32; --track: rgba(11,11,11,0.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink-2: #c3c2b7;
+      --muted: #898781; --border: rgba(255,255,255,0.10); --accent: #e0a35c;
+      --chip: rgba(255,255,255,0.06); --accent-soft: rgba(224,163,92,0.12);
+      --ok: #7cc47f; --track: rgba(255,255,255,0.10);
+    }
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--page); color: var(--ink); line-height: 1.6;
+    padding: 8vh 1.25rem 4rem; max-width: 780px; margin: 0 auto;
+  }
+  .telugu-serif { font-family: "Noto Serif Telugu", "Gautami", "Noto Sans Telugu", Georgia, serif; }
+  nav { margin-bottom: 2rem; display: flex; gap: 1.25rem; }
+  nav a { color: var(--muted); text-decoration: none; font-size: 0.85rem; }
+  nav a:hover { color: var(--accent); }
+  header h1 { font-size: 1.9rem; letter-spacing: -0.02em; }
+  header p { color: var(--ink-2); margin-top: 0.4rem; }
+  h2 {
+    font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.09em; color: var(--muted);
+    margin: 2.75rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border);
+    display: flex; align-items: baseline; gap: 0.6rem;
+  }
+  h2 .te { text-transform: none; letter-spacing: 0; color: var(--ink-2); font-size: 1rem; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.9rem; }
+  .stat {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1.1rem 1.25rem;
+  }
+  .stat .big { font-size: 1.9rem; font-weight: 700; letter-spacing: -0.02em; }
+  .stat .lbl { color: var(--ink-2); font-size: 0.9rem; margin-top: 0.15rem; }
+  .stat .sub { color: var(--muted); font-size: 0.8rem; margin-top: 0.35rem; }
+  .bar { height: 7px; border-radius: 999px; background: var(--track); margin-top: 0.7rem; overflow: hidden; }
+  .bar > span { display: block; height: 100%; background: var(--accent); border-radius: 999px; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+  th, td { text-align: left; padding: 0.55rem 0.5rem; border-bottom: 1px solid var(--border); }
+  th { color: var(--muted); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  ul.tasks { list-style: none; display: grid; gap: 0.5rem; }
+  ul.tasks li { display: flex; gap: 0.6rem; align-items: flex-start; }
+  ul.tasks li .box {
+    flex: none; width: 1.05rem; height: 1.05rem; border-radius: 5px; border: 1.5px solid var(--border);
+    margin-top: 0.15rem; display: grid; place-items: center; font-size: 0.72rem; color: var(--ok);
+  }
+  ul.tasks li.done .box { background: var(--accent-soft); border-color: var(--accent); }
+  ul.tasks li.done > span { color: var(--ink-2); }
+  ul.tasks li .tag {
+    font-size: 0.68rem; color: var(--muted); border: 1px solid var(--border);
+    border-radius: 999px; padding: 0.02rem 0.45rem; margin-left: 0.4rem; white-space: nowrap;
+  }
+  p.lead { color: var(--ink-2); }
+  .goals { display: grid; gap: 1rem; }
+  .goal { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1rem 1.2rem; }
+  .goal h3 { font-size: 1rem; margin-bottom: 0.3rem; }
+  .goal p { color: var(--ink-2); font-size: 0.92rem; }
+  code { background: var(--chip); padding: 0.08rem 0.35rem; border-radius: 5px; font-size: 0.85em; }
+  pre { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1rem; overflow-x: auto; font-size: 0.82rem; }
+  footer { margin-top: 3rem; color: var(--muted); font-size: 0.8rem; }
+</style>
+</head>
+<body>
+  <nav>
+    <a href="../index.html">← myflare</a>
+    <a href="index.html">← పద్యాలు (reader)</a>
+  </nav>
+  <header>
+    <h1>Padyaalu — స్థితి &amp; ప్రణాళిక</h1>
+    <p class="lead">Live status, goals, and the pending-task list for this sub-project.
+       The numbers below are computed from the data files on load.</p>
+  </header>
+
+  <h2>Live status <span class="te telugu-serif">స్థితి</span></h2>
+  <div class="cards" id="stat-cards">
+    <div class="stat"><div class="big">…</div><div class="lbl">లోడ్ అవుతోంది</div></div>
+  </div>
+
+  <h2 style="margin-top:2rem">Per śatakam <span class="te telugu-serif">శతకాల వారీగా</span></h2>
+  <table id="satakam-table">
+    <thead><tr><th>Śatakam</th><th>Metre</th><th class="num">Padyaalu</th><th class="num">Chandassu ✓</th><th class="num">Meanings ✓</th></tr></thead>
+    <tbody><tr><td colspan="5" style="color:var(--muted)">లోడ్ అవుతోంది…</td></tr></tbody>
+  </table>
+
+  <h2>Goals <span class="te telugu-serif">లక్ష్యాలు</span></h2>
+  <div class="goals">
+    <div class="goal">
+      <h3>Vision</h3>
+      <p>A clean, faithful, dependency-free digital home for Telugu <em>śataka</em> literature —
+         every padyam on its own full-page card with Telugu meaning and a live prosody breakdown.</p>
+    </div>
+    <div class="goal">
+      <h3>Short-term</h3>
+      <p>Finish <b>Dāśarathi</b>: verify chandassu for the remaining verses, reconcile the few
+         supplied lines whose syllable counts are off, and author Telugu prati padārtham +
+         tātparyam for all 104.</p>
+    </div>
+    <div class="goal">
+      <h3>Long-term</h3>
+      <p>Grow to many śatakams (Bhāskara, Kṛṣṇa, Kumārī, Nārāyaṇa…), complete Vemana &amp; Sumati
+         to their full ~100+ verses, and add search, transliteration, audio recitation, and deeper
+         prosody (yati/prāsa) checks.</p>
+    </div>
+  </div>
+
+  <h2>Pending tasks <span class="te telugu-serif">చేయవలసినవి</span></h2>
+  <ul class="tasks">
+    <li><span class="box"></span><span><b>Meanings for Dāśarathi</b> — author Telugu prati padārtham + tātparyam for the remaining ~101 verses (3 seeded).<span class="tag">short-term · large</span></span></li>
+    <li><span class="box"></span><span><b>Chandassu for the remaining Dāśarathi verses</b> — handle the longer 5-line vṛttas (మత్తేభం / శార్దూలం layouts) so they split into 4 metrical padas and verify.<span class="tag">short-term</span></span></li>
+    <li><span class="box"></span><span><b>Reconcile off-count verses</b> — ~14 supplied Dāśarathi lines come out 1–3 aksharas off; check them against a trusted text.<span class="tag">short-term</span></span></li>
+    <li><span class="box"></span><span><b>Grow Vemana &amp; Sumati</b> to their full ~100+ verses (currently curated subsets).<span class="tag">long-term</span></span></li>
+    <li><span class="box"></span><span><b>Add more śatakams</b> — Bhāskara, Kṛṣṇa, Kumārī, Nārāyaṇa, ….<span class="tag">long-term</span></span></li>
+    <li><span class="box"></span><span><b>Search across padyaalu</b> and a per-śatakam index view.<span class="tag">long-term</span></span></li>
+    <li><span class="box"></span><span><b>Transliteration toggle</b> (Telugu ⇄ Roman) and optional audio recitation per verse.<span class="tag">long-term</span></span></li>
+    <li><span class="box"></span><span><b>Prosody depth</b> — yati / prāsa checks in <code>chandassu.js</code>.<span class="tag">long-term</span></span></li>
+  </ul>
+
+  <h2>Recently done <span class="te telugu-serif">పూర్తయినవి</span></h2>
+  <ul class="tasks">
+    <li class="done"><span class="box">✓</span><span>Chandassu engine — laghu/guru marking, gaṇa grouping, metre verification.</span></li>
+    <li class="done"><span class="box">✓</span><span>Metres: ఆటవెలది, కంద పద్యం, ఉత్పలమాల, చంపకమాల, మత్తేభం, శార్దూలం (auto-detected).</span></li>
+    <li class="done"><span class="box">✓</span><span><b>ర-వత్తు</b> optional-guru rule (వైకల్పిక గురువు).</span></li>
+    <li class="done"><span class="box">✓</span><span>Full Dāśarathi Śatakam (104 verses) ingested; split into 4 metrical padas.</span></li>
+    <li class="done"><span class="box">✓</span><span>JSON data files per śatakam; 4-line display with hanging-indent runovers.</span></li>
+    <li class="done"><span class="box">✓</span><span>Live chandassu highlighting, <code>verify.cjs</code> corpus check, cache-proof data loading.</span></li>
+  </ul>
+
+  <h2>Capabilities <span class="te telugu-serif">సామర్థ్యాలు</span></h2>
+  <ul class="tasks">
+    <li class="done"><span class="box">✓</span><span>Full-page card reader — filter by śatakam, prev/next + arrow-key navigation.</span></li>
+    <li class="done"><span class="box">✓</span><span>Telugu prati padārtham (word-by-word) + tātparyam (purport).</span></li>
+    <li class="done"><span class="box">✓</span><span>Live chandassu: per-syllable U/I, named gaṇaalu, metre auto-detect, ✓ verification.</span></li>
+    <li class="done"><span class="box">✓</span><span>Dependency-free; runs in the browser and in Node (same engine).</span></li>
+  </ul>
+
+  <h2>Files <span class="te telugu-serif">ఫైళ్లు</span></h2>
+<pre>padyaalu/
+  index.html      ← the reading app (fetches JSON, renders full-page cards)
+  settings.html   ← this page: live status, goals, roadmap
+  chandassu.js    ← prosody engine (browser + Node), no dependencies
+  verify.cjs      ← Node script: scans every poem, non-zero exit on failure
+  data/
+    satakams.json ← metadata + load order per śatakam
+    vemana.json   ← poems: padyam + Telugu meanings (one file per śatakam)
+    sumati.json
+    dasarathi.json</pre>
+
+  <footer>Padyaalu · sub-project of myflare. See <code>README.md</code> for full docs.</footer>
+
+  <script>
+    const esc = (s) => String(s).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+    const verified = (p) => p.chandassuVerified !== false;               // vemana/sumati lack the field = verified
+    const hasMeaning = (p) => (p.pratipadartham && p.pratipadartham.length) && p.tatparyam;
+
+    (async () => {
+      try {
+        const opts = { cache: "no-store" };
+        const meta = await (await fetch("data/satakams.json", opts)).json();
+        const rows = [];
+        let all = [];
+        for (const key of meta.order) {
+          const s = meta.satakams[key];
+          const arr = await (await fetch(s.file, opts)).json();
+          all = all.concat(arr);
+          rows.push({ s, n: arr.length, cv: arr.filter(verified).length, mn: arr.filter(hasMeaning).length });
+        }
+        const N = all.length, CV = all.filter(verified).length, MN = all.filter(hasMeaning).length;
+        const pct = (a, b) => (b ? Math.round((a / b) * 100) : 0);
+
+        $("stat-cards").innerHTML = [
+          card(N, "పద్యాలు మొత్తం", `${meta.order.length} śatakams`, 100),
+          card(`${CV}/${N}`, "ఛందస్సు నిర్ధారితం", `${pct(CV, N)}% verified`, pct(CV, N)),
+          card(`${MN}/${N}`, "అర్థాలు చేర్చినవి", `${pct(MN, N)}% with meanings`, pct(MN, N)),
+        ].join("");
+
+        document.querySelector("#satakam-table tbody").innerHTML = rows.map((r) =>
+          `<tr><td>${esc(r.s.name)}</td><td style="color:var(--ink-2)">${esc(r.s.meter)}</td>` +
+          `<td class="num">${r.n}</td><td class="num">${r.cv}</td><td class="num">${r.mn}</td></tr>`).join("");
+      } catch (e) {
+        $("stat-cards").innerHTML = `<div class="stat"><div class="lbl">స్థితి లోడ్ కాలేదు — పేజీని వెబ్ సర్వర్ ద్వారా తెరవండి.<br><small>${esc(e.message)}</small></div></div>`;
+      }
+    })();
+
+    function $(id) { return document.getElementById(id); }
+    function card(big, lbl, sub, pct) {
+      return `<div class="stat"><div class="big">${esc(big)}</div><div class="lbl">${esc(lbl)}</div>` +
+             `<div class="sub">${esc(sub)}</div><div class="bar"><span style="width:${pct}%"></span></div></div>`;
+    }
+  </script>
+</body>
+</html>

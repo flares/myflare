@@ -20,6 +20,7 @@ portfolio-tracker/
 padyaalu/
   README.md             ← project spec & requirements
   index.html            ← full-page-card reading app
+  settings.html         ← live status, goals & pending-task roadmap
   chandassu.js          ← prosody engine (browser + Node)
   verify.cjs            ← scansion verifier for the corpus
   data/                 ← poem text + Telugu meanings, one JSON per satakam
