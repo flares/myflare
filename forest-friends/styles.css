@@ -63,28 +63,30 @@ body {
   position: absolute; left: 0; right: 0; bottom: 3vh; height: 30vh;
   z-index: 5;
 }
+/* Each animal is JS-driven: game.js sets transform every frame to make it
+   roam. So keep transform free of CSS transitions/animations here — the
+   pop-in and gentle waddle live on the inner .a-emoji instead. */
 .animal {
-  position: absolute; bottom: 0;
-  font-size: clamp(56px, 12vw, 150px);
+  position: absolute; left: 0; top: 0;
+  font-size: clamp(52px, 11vw, 140px);
   line-height: 1; cursor: pointer;
+  transform-origin: center center; will-change: transform;
+}
+.animal .a-emoji {
+  display: block; line-height: 1;
   filter: drop-shadow(0 10px 8px rgba(0,0,0,.22));
-  will-change: transform, opacity;
+  animation: popIn .45s cubic-bezier(.2,1.4,.4,1) both, waddle 1.1s ease-in-out infinite;
 }
+.animal.bye .a-emoji { animation: popOut .5s ease forwards; }
 .animal .a-name {
-  position: absolute; left: 50%; bottom: -1.6em; transform: translateX(-50%);
-  font-size: .22em; background: rgba(255,255,255,.9); color: #234;
+  position: absolute; left: 50%; top: 100%; transform: translateX(-50%);
+  font-size: .2em; background: rgba(255,255,255,.9); color: #234;
   padding: .15em .6em; border-radius: 999px; white-space: nowrap;
-  box-shadow: 0 2px 6px rgba(0,0,0,.15);
+  box-shadow: 0 2px 6px rgba(0,0,0,.15); pointer-events: none;
 }
-/* entrance from the left or right, with a happy hop settle */
-@keyframes walkInLeft  { 0% { transform: translateX(-70vw) scaleX(1); } 100% { transform: translateX(0) scaleX(1); } }
-@keyframes walkInRight { 0% { transform: translateX(70vw) scaleX(-1); } 100% { transform: translateX(0) scaleX(-1); } }
-@keyframes idleHop     { 0%,100% { translate: 0 0; } 50% { translate: 0 -10px; } }
-.animal.from-left  { animation: walkInLeft .9s cubic-bezier(.2,.7,.3,1) both; }
-.animal.from-right { animation: walkInRight .9s cubic-bezier(.2,.7,.3,1) both; }
-.animal.settled    { animation: idleHop 2.4s ease-in-out infinite; }
-.animal.leaving-left  { animation: walkInLeft .8s ease-in reverse both; }
-.animal.leaving-right { animation: walkInRight .8s ease-in reverse both; }
+@keyframes popIn  { from { transform: scale(.2); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes popOut { to { transform: scale(.2); opacity: 0; } }
+@keyframes waddle { 0%,100% { rotate: -4deg; } 50% { rotate: 4deg; } }
 
 /* celebratory sparkle when a matching animal arrives */
 .sparkle {
@@ -105,6 +107,14 @@ body {
 }
 .letter-card.bump { animation: bump .5s ease; }
 @keyframes bump { 0%,100% { transform: none; } 30% { transform: scale(1.12) rotate(-3deg); } }
+.letter-card.nope { animation: nope .45s ease; }
+@keyframes nope {
+  0%,100% { transform: translateX(0); border-color: #ffcf3f; }
+  20% { transform: translateX(-9px); border-color: #ff5a5a; }
+  40% { transform: translateX(9px);  border-color: #ff5a5a; }
+  60% { transform: translateX(-6px); border-color: #ff5a5a; }
+  80% { transform: translateX(6px);  border-color: #ff5a5a; }
+}
 .letter-glyph { font-size: clamp(56px, 11vw, 120px); font-weight: 800; color: #ef6c3b; line-height: 1; }
 .letter-hint { font-size: clamp(11px, 1.6vw, 15px); color: #a06; font-weight: 700; margin-top: .3em; }
 
@@ -159,10 +169,17 @@ select.btn { -webkit-appearance: none; appearance: none; padding-right: 1.4em; }
   scrollbar-width: thin;
 }
 .chip {
+  position: relative;
   flex: 0 0 auto; display: flex; flex-direction: column; align-items: center;
   gap: .1rem; background: rgba(255,255,255,.14); border: 2px solid transparent;
   border-radius: 14px; padding: .35rem .6rem; cursor: pointer; min-width: 68px;
   transition: transform .12s, background .12s, border-color .12s;
+}
+.chip-count {
+  position: absolute; top: -6px; right: -6px; min-width: 1.35em; height: 1.35em;
+  padding: 0 .25em; border-radius: 999px; background: #ff5a5a; color: #fff;
+  font-size: .72rem; font-weight: 800; line-height: 1.35em; text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,.3);
 }
 .chip:hover { background: rgba(255,255,255,.26); transform: translateY(-2px); }
 .chip.active { border-color: #ffd257; background: rgba(255,210,87,.25); }
@@ -175,6 +192,7 @@ select.btn { -webkit-appearance: none; appearance: none; padding-right: 1.4em; }
   position: fixed; inset: 0; z-index: 50; display: grid; place-items: center;
   background: rgba(0,0,0,.5); padding: 1rem;
 }
+.overlay[hidden] { display: none; }  /* author display:grid must not defeat the hidden attr */
 .overlay-card {
   position: relative; background: #fff; color: #234; border-radius: 22px;
   padding: 1.6rem 1.4rem; max-width: 460px; width: 100%;

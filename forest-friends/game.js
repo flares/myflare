@@ -2,8 +2,15 @@
    Forest Friends — game core
    Ties together: the animal dataset (animals.js -> window.ANIMALS),
    the synthesized sound engine (audio.js -> window.GameAudio), the
-   Web Speech API for voice commands, and the forest scene / letter
-   index rendering.
+   Web Speech API for voice commands, and the forest scene.
+
+   Behaviour:
+   - A letter is shown. The child may only call animals for that letter.
+   - Summoned animals enter from a random side with their own sound and
+     then roam the scene continuously (via a requestAnimationFrame loop).
+   - The same animal can be summoned many times; instances accumulate.
+   - "Lion exit" / "5 lion exit" removes up to N of that animal.
+   - Special ungated commands: "exit all animals" and "reduce zoo size".
    =================================================================== */
 (function () {
   "use strict";
@@ -26,6 +33,7 @@
   var musicBtn     = document.getElementById("musicBtn");
   var newLetterBtn = document.getElementById("newLetterBtn");
   var clearBtn     = document.getElementById("clearBtn");
+  var reduceBtn    = document.getElementById("reduceBtn");
   var langSelect   = document.getElementById("langSelect");
   var helpBtn      = document.getElementById("helpBtn");
   var helpOverlay  = document.getElementById("helpOverlay");
@@ -34,41 +42,50 @@
 
   // ---- state -------------------------------------------------------
   var currentLetter = "A";
-  var onStage = {};            // key -> DOM element for animals currently in the forest
+  var instances = [];          // live roaming animals (multiple per key allowed)
   var LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
   var audioReady = false;
+  var ENTER_CAP = 5;           // max instances added by a single spoken command
+  var EXIT_CAP  = 5;           // max instances removed by a single spoken command
+  var ZOO_CAP   = 40;          // hard ceiling on total animals roaming at once
+  var stageW = 0, stageH = 0;
 
   // command vocabulary ------------------------------------------------
   var ENTER_WORDS = ["enter","come","comes","coming","raa","ra","randi","vachu","vachchu","vachi",
-                     "appear","in","here","arrive","hello","hi","play"];
+                     "appear","arrive","hello","hi","play","join"];
   var EXIT_WORDS  = ["exit","go","goes","going","out","leave","leaves","bye","goodbye",
-                     "po","pommu","pomma","velli","vellu","vellipo","away"];
+                     "po","pommu","pomma","velli","vellu","vellipo","away","home"];
+  var NUMBERS = { a:1, an:1, one:1, two:2, three:3, four:4, five:5, six:6, seven:7,
+                  eight:8, nine:9, ten:10, "1":1,"2":2,"3":3,"4":4,"5":5,"6":6,"7":7,"8":8,"9":9,"10":10 };
 
   // -------------------------------------------------------------------
-  //  Build a fast lookup: spoken word/phrase -> animal
+  //  Spoken-word -> animal lookup (longest phrase wins)
   // -------------------------------------------------------------------
-  var aliasIndex = [];   // [{ phrase, animal }] sorted longest-first
-  (function buildAliasIndex() {
+  var aliasIndex = [];
+  function buildAliasIndex() {
+    aliasIndex.length = 0;
     ANIMALS.forEach(function (a) {
       var phrases = [a.name, a.key, a.teluguRoman].concat(a.aliases || []);
       if (a.telugu) phrases.push(a.telugu);
-      phrases.forEach(function (p) {
-        if (!p) return;
-        aliasIndex.push({ phrase: norm(p), animal: a });
-      });
+      phrases.forEach(function (p) { if (p) aliasIndex.push({ phrase: norm(p), animal: a }); });
     });
-    // longest phrases first so "polar bear" beats "bear"
     aliasIndex.sort(function (x, y) { return y.phrase.length - x.phrase.length; });
-  })();
+  }
 
   function norm(s) {
     return String(s).toLowerCase().replace(/[^a-z0-9ఀ-౿\s]/g, " ")
             .replace(/\s+/g, " ").trim();
   }
+  function has(text, word) { return text.indexOf(" " + word + " ") !== -1; }
 
   // -------------------------------------------------------------------
   //  Scene setup
   // -------------------------------------------------------------------
+  function measureStage() {
+    var r = stage.getBoundingClientRect();
+    stageW = r.width; stageH = r.height;
+  }
+
   function plantTrees() {
     var kinds = ["🌲","🌳","🌴","🌲","🌳","🎋","🌲","🌳","🌴","🌲","🌳"];
     var n = Math.max(6, Math.min(11, Math.round(window.innerWidth / 130)));
@@ -83,30 +100,29 @@
   // -------------------------------------------------------------------
   //  Letter + index bar
   // -------------------------------------------------------------------
-  function lettersWithAnimals() {
-    return LETTERS.filter(function (L) { return animalsForLetter(L).length > 0; });
-  }
-
   function animalsForLetter(L) {
     if (typeof window.animalsByLetter === "function") return window.animalsByLetter(L);
     return ANIMALS.filter(function (a) {
-      var c = a.name.replace(/[^a-z]/i, "").charAt(0).toUpperCase();
-      return c === L;
+      return a.name.replace(/[^a-z]/i, "").charAt(0).toUpperCase() === L;
     });
+  }
+  function lettersWithAnimals() {
+    return LETTERS.filter(function (L) { return animalsForLetter(L).length > 0; });
+  }
+  function firstLetterOf(a) {
+    return a.name.replace(/[^a-z]/i, "").charAt(0).toUpperCase();
   }
 
   function setLetter(L) {
     currentLetter = L;
     letterGlyph.textContent = L;
     indexLetter.textContent = L;
-    letterCard.classList.remove("bump"); void letterCard.offsetWidth;
+    letterCard.classList.remove("bump", "nope"); void letterCard.offsetWidth;
     letterCard.classList.add("bump");
     renderIndex(L);
   }
-
   function randomLetter() {
-    var pool = lettersWithAnimals();
-    var next;
+    var pool = lettersWithAnimals(), next;
     do { next = pool[Math.floor(Math.random() * pool.length)]; }
     while (pool.length > 1 && next === currentLetter);
     setLetter(next);
@@ -115,148 +131,268 @@
   function renderIndex(L) {
     var list = animalsForLetter(L);
     indexRow.innerHTML = "";
-    if (list[0]) { indexExample.textContent = list[0].name; }
-    if (list[1] || list[0]) { indexExample2.textContent = (list[1] || list[0]).name; }
+    if (list[0]) indexExample.textContent = list[0].name;
+    if (list[1] || list[0]) indexExample2.textContent = (list[1] || list[0]).name;
     list.forEach(function (a) {
       var chip = document.createElement("button");
-      chip.className = "chip" + (onStage[a.key] ? " active" : "");
+      chip.className = "chip";
       chip.dataset.key = a.key;
       chip.innerHTML =
+        '<span class="chip-count" hidden>0</span>' +
         '<span class="chip-emoji">' + a.emoji + '</span>' +
         '<span class="chip-name">' + a.name + '</span>' +
         '<span class="chip-tel">' + (a.teluguRoman || "") + '</span>';
-      chip.addEventListener("click", function () {
-        ensureAudio();
-        if (onStage[a.key]) exitAnimal(a); else enterAnimal(a, true);
-      });
+      chip.addEventListener("click", function () { ensureAudio(); enterN(a, 1); });
       indexRow.appendChild(chip);
     });
+    refreshChips();
   }
 
-  function refreshChipStates() {
+  function countByKey(key) {
+    var n = 0;
+    for (var i = 0; i < instances.length; i++)
+      if (instances[i].key === key && !instances[i].leaving) n++;
+    return n;
+  }
+  function refreshChips() {
     Array.prototype.forEach.call(indexRow.children, function (chip) {
-      chip.classList.toggle("active", !!onStage[chip.dataset.key]);
+      var n = countByKey(chip.dataset.key);
+      var badge = chip.querySelector(".chip-count");
+      chip.classList.toggle("active", n > 0);
+      badge.hidden = n === 0;
+      badge.textContent = n;
     });
   }
 
   // -------------------------------------------------------------------
-  //  Animals enter / exit
+  //  Roaming engine (requestAnimationFrame)
   // -------------------------------------------------------------------
-  function enterAnimal(a, fromChip) {
-    if (onStage[a.key]) { hop(onStage[a.key]); playSound(a); return; }
+  var rafId = null, lastT = 0;
 
+  function startLoop() {
+    if (rafId == null) { lastT = performance.now(); rafId = requestAnimationFrame(tick); }
+  }
+  function tick(now) {
+    var dt = Math.min(0.05, (now - lastT) / 1000); lastT = now;
+    update(dt, now);
+    rafId = instances.length ? requestAnimationFrame(tick) : null;
+  }
+  function rand(a, b) { return a + Math.random() * (b - a); }
+
+  function update(dt, now) {
+    for (var i = instances.length - 1; i >= 0; i--) {
+      var it = instances[i];
+      if (it.entering) {
+        it.x += it.vx * dt;
+        if (it.x >= it.margin && it.x <= stageW - it.w - it.margin) {
+          it.entering = false; scheduleTurn(it, now);
+        }
+      } else if (it.leaving) {
+        it.x += it.vx * dt;
+        if (it.x < -it.w - 80 || it.x > stageW + 80) { removeInstance(i); continue; }
+      } else {
+        it.x += it.vx * dt;
+        if (it.x < it.margin) { it.x = it.margin; it.vx = Math.abs(it.vx); }
+        else if (it.x > stageW - it.w - it.margin) { it.x = stageW - it.w - it.margin; it.vx = -Math.abs(it.vx); }
+        if (now > it.nextTurn) scheduleTurn(it, now);
+      }
+      var y = it.baseTop + Math.sin(now * 0.002 + it.phase) * it.amp;
+      var dir = it.vx > 0 ? -1 : 1;   // flip to face travel direction
+      it.el.style.transform = "translate(" + it.x.toFixed(1) + "px," + y.toFixed(1) + "px) " +
+                              "scale(" + (dir * it.scale).toFixed(3) + "," + it.scale.toFixed(3) + ")";
+      it.el.style.zIndex = 100 + Math.round(it.baseTop);
+    }
+  }
+
+  function scheduleTurn(it, now) {
+    var speed = Math.max(24, stageW * rand(0.04, 0.10));  // px/s
+    it.vx = speed * (Math.random() < 0.5 ? -1 : 1);
+    it.nextTurn = now + rand(1400, 4200);
+  }
+
+  function removeInstance(i) {
+    var it = instances[i];
+    if (it.el && it.el.parentNode) it.el.parentNode.removeChild(it.el);
+    instances.splice(i, 1);
+    refreshChips();
+  }
+
+  // -------------------------------------------------------------------
+  //  Enter / exit
+  // -------------------------------------------------------------------
+  function spawnOne(a) {
+    if (instances.length >= ZOO_CAP) {
+      showBubble("🐾 The zoo is full! Say “reduce zoo size”.", true);
+      return false;
+    }
+    measureStage();
     var el = document.createElement("div");
-    var fromLeft = Math.random() < 0.5;
-    el.className = "animal " + (fromLeft ? "from-left" : "from-right");
-    el.textContent = a.emoji;
-    el.title = a.name;
-
-    var label = document.createElement("span");
-    label.className = "a-name";
-    label.textContent = a.name + (a.teluguRoman ? " · " + a.teluguRoman : "");
-    el.appendChild(label);
-
-    // spread animals across the ground so they don't fully overlap
-    var slots = Object.keys(onStage).length;
-    var left = 10 + ((slots * 17) % 70);
-    el.style.left = left + "vw";
-    el.style.zIndex = 5 + slots;
-
-    el.addEventListener("click", function () { ensureAudio(); exitAnimal(a); });
-
+    el.className = "animal";
+    el.innerHTML = '<span class="a-emoji">' + a.emoji + '</span>' +
+                   '<span class="a-name">' + a.name + (a.teluguRoman ? " · " + a.teluguRoman : "") + '</span>';
     stage.appendChild(el);
-    onStage[a.key] = el;
 
-    el.addEventListener("animationend", function onEnd() {
-      el.removeEventListener("animationend", onEnd);
-      el.classList.remove("from-left", "from-right");
-      el.classList.add("settled");
+    var box = el.getBoundingClientRect();
+    var w = box.width || 90, h = box.height || 90;
+    var scale = rand(0.78, 1.08);
+    var side = Math.random() < 0.5 ? -1 : 1;   // -1 enters from left, 1 from right
+    var enterSpeed = Math.max(120, stageW * 0.35);
+
+    var it = {
+      key: a.key, sound: a.sound, el: el, w: w * scale, h: h * scale,
+      x: side < 0 ? -(w * scale) - 40 : stageW + 40,
+      vx: side < 0 ? enterSpeed : -enterSpeed,
+      baseTop: rand(0, Math.max(8, stageH - h * scale)),
+      phase: rand(0, Math.PI * 2), amp: rand(5, 12), scale: scale,
+      margin: 4, entering: true, leaving: false, nextTurn: 0
+    };
+    instances.push(it);
+
+    el.addEventListener("click", function () {
+      ensureAudio(); beginExit(it); playReject();  // tap a critter to send it home
     });
 
     playSound(a);
-    refreshChipStates();
-
-    // celebrate if this animal matches the prompt letter
-    if (firstLetterOf(a) === currentLetter) {
-      celebrate(el);
-      setTimeout(randomLetter, 1400);
-    }
-    return el;
+    sparkle(it);
+    refreshChips();
+    startLoop();
+    return true;
   }
 
-  function exitAnimal(a) {
-    var el = onStage[a.key];
-    if (!el) return;
-    delete onStage[a.key];
-    el.classList.remove("settled");
-    el.classList.add(Math.random() < 0.5 ? "leaving-left" : "leaving-right");
-    el.addEventListener("animationend", function () {
-      if (el.parentNode) el.parentNode.removeChild(el);
-    });
-    refreshChipStates();
-  }
-
-  function clearStage() {
-    Object.keys(onStage).forEach(function (k) {
-      var a = ANIMALS.filter(function (x) { return x.key === k; })[0];
-      if (a) exitAnimal(a);
-    });
-  }
-
-  function hop(el) {
-    el.classList.remove("settled"); void el.offsetWidth; el.classList.add("settled");
-  }
-
-  function firstLetterOf(a) {
-    return a.name.replace(/[^a-z]/i, "").charAt(0).toUpperCase();
-  }
-
-  function celebrate(el) {
-    var marks = ["⭐","🎉","✨","🌟"];
-    for (var i = 0; i < 5; i++) {
+  // summon N instances of an animal, staggered like a little parade
+  function enterN(a, n) {
+    n = Math.max(1, Math.min(ENTER_CAP, n | 0));
+    var made = 0;
+    for (var i = 0; i < n; i++) {
       (function (i) {
-        var s = document.createElement("span");
-        s.className = "sparkle";
-        s.textContent = marks[i % marks.length];
-        s.style.left = (parseFloat(el.style.left) + (Math.random() * 12 - 6)) + "vw";
-        s.style.bottom = (18 + Math.random() * 14) + "vh";
-        stage.appendChild(s);
-        setTimeout(function () { if (s.parentNode) s.parentNode.removeChild(s); }, 1000);
+        setTimeout(function () { spawnOne(a); }, i * 200);
       })(i);
+      made++;
+    }
+    showBubble((made > 1 ? made + " " : "") + a.name + (made > 1 ? "s" : "") + " coming in! " + a.emoji);
+  }
+
+  function beginExit(it) {
+    if (it.leaving) return;
+    it.leaving = true; it.entering = false;
+    var toLeft = it.x < stageW / 2;
+    it.vx = (toLeft ? -1 : 1) * Math.max(160, stageW * 0.5);
+    it.el.classList.add("bye");
+    refreshChips();
+    startLoop();
+  }
+
+  // exit up to n instances of a given animal key
+  function exitByKey(a, n) {
+    n = Math.max(1, Math.min(EXIT_CAP, n | 0));
+    var removed = 0;
+    for (var i = 0; i < instances.length && removed < n; i++) {
+      if (instances[i].key === a.key && !instances[i].leaving) { beginExit(instances[i]); removed++; }
+    }
+    if (removed) showBubble("👋 " + removed + " " + a.name + (removed > 1 ? "s" : "") + " going home!");
+    else showBubble("No " + a.name + "s here to send home.", true);
+  }
+
+  function exitAll() {
+    var n = 0;
+    instances.forEach(function (it) { if (!it.leaving) { beginExit(it); n++; } });
+    showBubble(n ? "👋 Bye everyone! (" + n + ")" : "The forest is already empty.");
+  }
+
+  // randomly send home about half of the roaming animals
+  function reduceZoo() {
+    var live = instances.filter(function (it) { return !it.leaving; });
+    if (!live.length) { showBubble("Nothing to reduce — the forest is empty."); return; }
+    // shuffle
+    for (var i = live.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1)); var t = live[i]; live[i] = live[j]; live[j] = t;
+    }
+    var kick = Math.ceil(live.length / 2);
+    for (var k = 0; k < kick; k++) beginExit(live[k]);
+    playReject();
+    showBubble("✂️ Zoo trimmed! Sent " + kick + " home, " + (live.length - kick) + " left.");
+  }
+
+  function sparkle(it) {
+    var marks = ["⭐","✨","🌟"];
+    for (var i = 0; i < 3; i++) {
+      var s = document.createElement("span");
+      s.className = "sparkle";
+      s.textContent = marks[i % marks.length];
+      s.style.left = (it.x + it.w / 2 + rand(-20, 20)) + "px";
+      s.style.top = (it.baseTop - rand(4, 20)) + "px";
+      stage.appendChild(s);
+      (function (s) { setTimeout(function () { if (s.parentNode) s.parentNode.removeChild(s); }, 1000); })(s);
     }
   }
 
-  function playSound(a) {
-    if (!AUDIO) return;
-    try { AUDIO.playAnimal(a.sound || "generic"); } catch (e) {}
+  function playSound(a) { if (AUDIO) try { AUDIO.playAnimal(a.sound || "generic"); } catch (e) {} }
+  function playReject() { if (AUDIO) try { AUDIO.playAnimal("click"); } catch (e) {} }
+
+  function rejectWrongLetter(a) {
+    letterCard.classList.remove("nope"); void letterCard.offsetWidth; letterCard.classList.add("nope");
+    showBubble("🚫 " + a.name + " starts with " + firstLetterOf(a) + " — say a " + currentLetter +
+               " animal! (or “exit all”)", true);
+    playReject();
   }
 
   // -------------------------------------------------------------------
   //  Command interpretation
   // -------------------------------------------------------------------
-  function interpret(transcript) {
-    var text = " " + norm(transcript) + " ";
-
-    // find the animal whose alias phrase appears in the transcript (longest wins)
-    var found = null;
+  function isExitAll(text) {
+    return /\b(exit|clear|remove|send|out|bye)\b/.test(text) && /\b(all|everyone|everybody|every animal|everything)\b/.test(text)
+        || has(text, "clear all") || has(text, "empty forest") || has(text, "empty the forest")
+        || has(text, "empty zoo") || has(text, "clear forest") || has(text, "clear the forest")
+        || has(text, "bye bye everyone");
+  }
+  function isReduce(text) {
+    return (/\b(reduce|fewer|less|trim|thin|shrink|halve|half)\b/.test(text) &&
+            /\b(zoo|size|animal|animals|crowd|forest)\b/.test(text))
+        || has(text, "reduce zoo") || has(text, "reduce size") || has(text, "too many")
+        || has(text, "too many animals") || has(text, "less animals") || has(text, "fewer animals");
+  }
+  function findCount(text) {
+    // scan tokens for the first recognised number word or digit
+    var toks = text.trim().split(" ");
+    for (var i = 0; i < toks.length; i++) {
+      if (Object.prototype.hasOwnProperty.call(NUMBERS, toks[i])) return NUMBERS[toks[i]];
+    }
+    return 1;
+  }
+  function findAnimal(text) {
     for (var i = 0; i < aliasIndex.length; i++) {
       var p = aliasIndex[i].phrase;
       if (!p) continue;
-      if (text.indexOf(" " + p + " ") !== -1) { found = aliasIndex[i].animal; break; }
+      // match the phrase, allowing an optional plural "s" (lion / lions)
+      if (has(text, p) || has(text, p + "s")) return aliasIndex[i].animal;
     }
+    return null;
+  }
+
+  function interpret(transcript) {
+    var text = " " + norm(transcript) + " ";
+
+    // special ungated commands first
+    if (isReduce(text)) { reduceZoo(); return true; }
+    if (isExitAll(text)) { exitAll(); return true; }
+
+    var found = findAnimal(text);
     if (!found) return false;
 
-    var wantsExit = EXIT_WORDS.some(function (w) { return text.indexOf(" " + w + " ") !== -1; });
-    var wantsEnter = ENTER_WORDS.some(function (w) { return text.indexOf(" " + w + " ") !== -1; });
+    var wantsExit = EXIT_WORDS.some(function (w) { return has(text, w); });
+    var wantsEnter = ENTER_WORDS.some(function (w) { return has(text, w); });
+    var count = findCount(text);
 
-    // default action: if only an animal name was said, bring it in
-    if (wantsExit && !wantsEnter) exitAnimal(found);
-    else enterAnimal(found);
+    // the child may only call the animal that matches the shown letter
+    if (firstLetterOf(found) !== currentLetter) { rejectWrongLetter(found); return true; }
+
+    if (wantsExit && !wantsEnter) exitByKey(found, count);
+    else enterN(found, count);
     return true;
   }
 
   // -------------------------------------------------------------------
-  //  Heard bubble helper
+  //  Heard bubble
   // -------------------------------------------------------------------
   var bubbleTimer;
   function showBubble(text, isErr) {
@@ -264,7 +400,7 @@
     heardBubble.textContent = text;
     heardBubble.classList.toggle("err", !!isErr);
     clearTimeout(bubbleTimer);
-    bubbleTimer = setTimeout(function () { heardBubble.hidden = true; }, 2600);
+    bubbleTimer = setTimeout(function () { heardBubble.hidden = true; }, 2800);
   }
 
   // -------------------------------------------------------------------
@@ -276,11 +412,8 @@
   function buildRecognizer() {
     if (!SR) return null;
     var r = new SR();
-    r.continuous = true;
-    r.interimResults = true;
-    r.maxAlternatives = 3;
+    r.continuous = true; r.interimResults = true; r.maxAlternatives = 3;
     r.lang = langSelect.value || "en-IN";
-
     r.onstart = function () { listening = true; setMicUI(true); };
     r.onerror = function (e) {
       if (e.error === "not-allowed" || e.error === "service-not-allowed") {
@@ -290,14 +423,12 @@
     };
     r.onend = function () {
       listening = false; setMicUI(false);
-      // Chrome stops periodically; restart if the child still wants to talk
       if (wantListening) { try { r.start(); } catch (e) {} }
     };
     r.onresult = function (ev) {
       var handled = false, lastText = "";
       for (var i = ev.resultIndex; i < ev.results.length; i++) {
         var res = ev.results[i];
-        // try every alternative for a match, prefer final results
         for (var j = 0; j < res.length; j++) {
           var t = res[j].transcript;
           if (j === 0) lastText = t;
@@ -314,22 +445,17 @@
 
   function startListening() {
     ensureAudio();
-    if (!SR) {
-      showBubble("Voice not supported here — tap animals below 👇", true);
-      return;
-    }
+    if (!SR) { showBubble("Voice not supported here — tap animals below 👇", true); return; }
     wantListening = true;
     if (!recog) recog = buildRecognizer();
     recog.lang = langSelect.value || "en-IN";
-    try { recog.start(); } catch (e) { /* already started */ }
+    try { recog.start(); } catch (e) {}
   }
-
   function stopListening() {
     wantListening = false;
     if (recog) { try { recog.stop(); } catch (e) {} }
     setMicUI(false);
   }
-
   function setMicUI(on) {
     micBtn.setAttribute("aria-pressed", on ? "true" : "false");
     micLabel.textContent = on ? "Listening…" : "Tap to talk";
@@ -345,61 +471,45 @@
   }
 
   // -------------------------------------------------------------------
-  //  Wire up controls
+  //  Controls
   // -------------------------------------------------------------------
-  micBtn.addEventListener("click", function () {
-    if (wantListening) stopListening(); else startListening();
-  });
-
+  micBtn.addEventListener("click", function () { if (wantListening) stopListening(); else startListening(); });
   musicBtn.addEventListener("click", function () {
-    ensureAudio();
-    if (!AUDIO) return;
+    ensureAudio(); if (!AUDIO) return;
     if (AUDIO.isMusicOn()) { AUDIO.stopMusic(); musicBtn.setAttribute("aria-pressed", "false"); musicBtn.textContent = "🎵 Music"; }
     else { AUDIO.startMusic(); musicBtn.setAttribute("aria-pressed", "true"); musicBtn.textContent = "🔊 Music on"; }
   });
-
   newLetterBtn.addEventListener("click", function () { ensureAudio(); randomLetter(); });
-  clearBtn.addEventListener("click", function () { ensureAudio(); clearStage(); });
-
+  clearBtn.addEventListener("click", function () { ensureAudio(); exitAll(); });
+  if (reduceBtn) reduceBtn.addEventListener("click", function () { ensureAudio(); reduceZoo(); });
   langSelect.addEventListener("change", function () {
     if (recog) { recog.lang = langSelect.value; if (wantListening) { try { recog.stop(); } catch (e) {} } }
     var isTe = langSelect.value === "te-IN";
     showBubble(isTe ? "తెలుగులో మాట్లాడండి — “పులి రా”" : "Say an animal — “Tiger come!”");
   });
-
   helpBtn.addEventListener("click", function () { helpOverlay.hidden = false; });
   helpClose.addEventListener("click", function () { helpOverlay.hidden = true; });
   helpStart.addEventListener("click", function () {
     helpOverlay.hidden = true; ensureAudio(); startListening();
     if (AUDIO && !AUDIO.isMusicOn()) { AUDIO.startMusic(); musicBtn.setAttribute("aria-pressed", "true"); musicBtn.textContent = "🔊 Music on"; }
   });
-
-  window.addEventListener("resize", plantTrees);
+  window.addEventListener("resize", function () { plantTrees(); measureStage(); });
 
   // -------------------------------------------------------------------
   //  Boot
   // -------------------------------------------------------------------
   function boot() {
+    if (!ANIMALS.length && window.ANIMALS && window.ANIMALS.length) ANIMALS = window.ANIMALS;
     if (!ANIMALS.length) {
       showBubble("Loading animals…", true);
-      return setTimeout(function () { ANIMALS = window.ANIMALS || []; if (ANIMALS.length) { rebuild(); } }, 300);
+      return setTimeout(function () { ANIMALS = window.ANIMALS || []; if (ANIMALS.length) { buildAliasIndex(); plantTrees(); measureStage(); randomLetter(); } }, 300);
     }
+    buildAliasIndex();
     plantTrees();
+    measureStage();
     randomLetter();
     if (!SR) micLabel.textContent = "No mic — tap below";
-    helpOverlay.hidden = false; // greet with instructions
-  }
-
-  function rebuild() {
-    // in case ANIMALS loaded late
-    aliasIndex.length = 0;
-    ANIMALS.forEach(function (a) {
-      var phrases = [a.name, a.key, a.teluguRoman].concat(a.aliases || []);
-      if (a.telugu) phrases.push(a.telugu);
-      phrases.forEach(function (p) { if (p) aliasIndex.push({ phrase: norm(p), animal: a }); });
-    });
-    aliasIndex.sort(function (x, y) { return y.phrase.length - x.phrase.length; });
-    plantTrees(); randomLetter();
+    helpOverlay.hidden = false;
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
