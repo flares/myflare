@@ -2,7 +2,7 @@
 <html lang="te">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Padyaalu — పద్యాలు</title>
 <style>
   :root {
@@ -25,7 +25,7 @@
   }
   * { box-sizing: border-box; margin: 0; }
   html, body { min-height: 100%; }
-  body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--page); color: var(--ink); }
+  body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--page); color: var(--ink); touch-action: manipulation; -webkit-text-size-adjust: 100%; }
   .telugu-serif { font-family: "Noto Serif Telugu", "Ramaraja", "Gautami", "Pothana2000", "Mandali", "Noto Sans Telugu", Georgia, serif; }
   .view[hidden] { display: none !important; }
 
@@ -55,6 +55,8 @@
     animation: bob 5s ease-in-out infinite; transition: transform .18s ease;
   }
   .bubble:hover, .bubble:focus-visible { transform: scale(1.06); outline: none; }
+  .bubble.empty { opacity: 0.45; cursor: default; filter: grayscale(0.35); animation: none; }
+  .bubble.empty:hover { transform: none; }
   .bubble .bname { font-size: clamp(1.2rem, 4.5vw, 1.7rem); font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,0.25); }
   .bubble .bcount { font-size: 0.82rem; opacity: 0.92; }
   .bubble .bpoet { font-size: 0.72rem; opacity: 0.8; max-width: 80%; }
@@ -103,11 +105,11 @@
   .pending-note { color: var(--muted); font-size: 0.92rem; font-style: italic; }
 
   /* chandassu */
-  .chandassu { display: grid; gap: 0.8rem; }
-  .cpaada { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: flex-end; }
-  .gana { display: flex; flex-direction: column; align-items: center; gap: 0.15rem; border: 1px solid var(--border); border-radius: 9px; padding: 0.35rem 0.4rem 0.3rem; }
+  .chandassu { display: grid; gap: 0.8rem; max-width: 100%; }
+  .cpaada { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: flex-end; max-width: 100%; }
+  .gana { display: flex; flex-direction: column; align-items: center; gap: 0.15rem; border: 1px solid var(--border); border-radius: 9px; padding: 0.35rem 0.4rem 0.3rem; max-width: 100%; }
   .gana.plain { border-color: transparent; padding: 0.15rem 0; }
-  .gana .syls { display: flex; gap: 0.15rem; }
+  .gana .syls { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.15rem; max-width: 100%; }
   .syl { padding: 0.1rem 0.35rem 0.05rem; border-radius: 6px; font-size: 1.02rem; display: flex; flex-direction: column; align-items: center; line-height: 1.25; }
   .syl.G { background: var(--guru); } .syl.L { background: var(--laghu); }
   .syl .mark { font-size: 0.62rem; color: var(--muted); font-family: ui-monospace, monospace; }
@@ -116,22 +118,20 @@
   .legend { color: var(--muted); font-size: 0.78rem; margin-top: 0.35rem; line-height: 1.5; }
   .legend b { color: var(--ink-2); }
 
-  /* verdict as a clickable disclosure */
-  details.verdict-wrap { margin-left: auto; }
-  details.verdict-wrap > summary {
-    list-style: none; cursor: pointer; font-size: 0.74rem; font-weight: 600;
-    border: 1px solid var(--ok); color: var(--ok); border-radius: 999px; padding: 0.14rem 0.6rem;
-    display: inline-flex; align-items: center; gap: 0.35rem; user-select: none;
-  }
-  details.verdict-wrap > summary::-webkit-details-marker { display: none; }
-  details.verdict-wrap > summary .hint { color: var(--muted); font-weight: 500; }
-  details.verdict-wrap[open] > summary .hint::after { content: " ▲"; }
-  details.verdict-wrap:not([open]) > summary .hint::after { content: " ▾"; }
-  .verdict.pending { font-size: 0.74rem; font-weight: 600; color: var(--muted); border: 1px solid var(--border); border-radius: 999px; padding: 0.14rem 0.6rem; margin-left: auto; }
-  .explain {
-    margin-top: 0.9rem; background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
-    padding: 1rem 1.1rem; font-size: 0.92rem; line-height: 1.65;
-  }
+  /* verdict badge → opens a popup */
+  button.verdict { font: inherit; cursor: pointer; }
+  .verdict.ok { font-size: 0.74rem; font-weight: 600; color: var(--ok); background: var(--panel);
+    border: 1px solid var(--ok); border-radius: 999px; padding: 0.16rem 0.7rem; margin-left: auto;
+    display: inline-flex; align-items: center; gap: 0.3rem; }
+  .verdict.ok:hover { background: color-mix(in srgb, var(--ok) 16%, transparent); }
+  .verdict.pending { font-size: 0.74rem; font-weight: 600; color: var(--muted); border: 1px solid var(--border); border-radius: 999px; padding: 0.16rem 0.7rem; margin-left: auto; }
+  /* explanation popup */
+  #explain-overlay { position: fixed; inset: 0; z-index: 45; background: rgba(0,0,0,0.4); backdrop-filter: blur(3px); display: flex; justify-content: center; align-items: flex-start; padding: 6vh 1rem 2rem; }
+  #explain-overlay[hidden] { display: none !important; }
+  .explain-box { position: relative; width: 100%; max-width: 680px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem 1.4rem 1.3rem; box-shadow: 0 20px 60px rgba(0,0,0,0.35); max-height: 84vh; overflow-y: auto; }
+  .explain-close { position: absolute; top: 0.8rem; right: 0.8rem; }
+  .explain { font-size: 0.95rem; line-height: 1.65; }
+  .explain-box .explain { padding-right: 1.6rem; }
   .explain h4 { font-size: 0.85rem; margin: 0 0 0.4rem; }
   .explain .rules { margin: 0 0 0.8rem; padding-left: 1.1rem; color: var(--ink-2); }
   .explain .rules li { margin: 0.15rem 0; }
@@ -149,6 +149,7 @@
   .nav button { font: inherit; cursor: pointer; color: var(--ink); background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 0.5rem 1rem; transition: border-color .15s, color .15s; }
   .nav button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
   .nav button:disabled { opacity: 0.4; cursor: default; }
+  .nav .random-nav { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 40%, var(--border)); }
   .counter { color: var(--muted); font-size: 0.85rem; min-width: 5rem; text-align: center; }
 
   /* ================= SEARCH ================= */
@@ -187,16 +188,24 @@
   <section id="reader" class="view" hidden>
     <button class="icon-btn corner left" id="to-home" title="శతకాలు (home)">☰</button>
     <div class="corner right">
-      <button class="icon-btn" id="reader-random" title="యాదృచ్ఛికం">🎲</button>
       <button class="icon-btn" id="reader-search" title="వెతుకు">🔍</button>
     </div>
     <main class="stage"><article class="card" id="card"></article></main>
     <div class="nav">
       <button id="prev">← ముందు</button>
+      <button id="reader-random" class="random-nav">🎲 యాదృచ్ఛికం</button>
       <span class="counter" id="counter">— / —</span>
       <button id="next">తరువాత →</button>
     </div>
   </section>
+
+  <!-- ============ CHANDASSU EXPLANATION POPUP ============ -->
+  <div id="explain-overlay" hidden>
+    <div class="explain-box">
+      <button class="icon-btn explain-close" onclick="closeExplain()" title="మూసివేయి">✕</button>
+      <div id="explain-content"></div>
+    </div>
+  </div>
 
   <!-- ============ SEARCH ============ -->
   <div id="search-overlay" hidden>
@@ -215,7 +224,7 @@
     const $ = (id) => document.getElementById(id);
     const esc = (s) => String(s).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
     const glUI = (s) => s.replace(/G/g, "U").replace(/L/g, "I");
-    let SATAKAMS = {}, ORDER = [], POEMS = [], filter = "all", idx = 0;
+    let SATAKAMS = {}, ORDER = [], POEMS = [], filter = "all", idx = 0, currentExplain = null;
 
     async function load() {
       try {
@@ -237,16 +246,17 @@
     function renderBubbles() {
       const counts = {};
       POEMS.forEach((p) => (counts[p.satakam] = (counts[p.satakam] || 0) + 1));
-      $("bubbles").innerHTML = ORDER.filter((k) => counts[k]).map((k, i) => {
-        const s = SATAKAMS[k], h = s.hue ?? (i * 90);
+      $("bubbles").innerHTML = ORDER.map((k, i) => {
+        const s = SATAKAMS[k], h = s.hue ?? (i * 90), n = counts[k] || 0, empty = n === 0;
         const bg = `radial-gradient(circle at 32% 28%, hsl(${h} 68% 58%), hsl(${h} 62% 40%))`;
         const offset = i % 2 ? "margin-top:2.4rem" : "";
-        return `<button class="bubble" data-key="${k}" style="background:${bg};${offset};animation-delay:${i * 0.6}s">` +
+        return `<button class="bubble${empty ? " empty" : ""}" data-key="${k}"${empty ? " disabled" : ""} ` +
+          `style="background:${bg};${offset};animation-delay:${(i % 5) * 0.6}s">` +
           `<span class="bname telugu-serif">${esc(s.short)}</span>` +
-          `<span class="bcount">${counts[k]} పద్యాలు</span>` +
-          `<span class="bpoet">${esc(s.poet.split("(")[0].trim())}</span></button>`;
+          `<span class="bcount">${empty ? "త్వరలో" : n + " పద్యాలు"}</span>` +
+          `<span class="bpoet">${esc((s.poet || "").split("(")[0].trim())}</span></button>`;
       }).join("");
-      $("bubbles").querySelectorAll(".bubble").forEach((b) =>
+      $("bubbles").querySelectorAll(".bubble:not(.empty)").forEach((b) =>
         b.addEventListener("click", () => openSatakam(b.dataset.key)));
     }
 
@@ -257,7 +267,12 @@
     }
     function openSatakam(key) { filter = key; idx = 0; showView("reader"); renderCard(); }
     function openPoem(p) { filter = "all"; idx = POEMS.indexOf(p); showView("reader"); renderCard(); }
-    function openRandom() { filter = "all"; idx = Math.floor(Math.random() * POEMS.length); showView("reader"); renderCard(); }
+    // home random → across ALL satakams
+    function openRandom() { filter = "all"; showView("reader"); idx = Math.floor(Math.random() * POEMS.length); renderCard(); }
+    // reader random → stays within the current scope (a picked satakam, or all)
+    function readerRandom() { const n = visible().length; if (!n) return; idx = Math.floor(Math.random() * n); renderCard(); }
+    function openExplain() { if (!currentExplain) return; $("explain-content").innerHTML = currentExplain; $("explain-overlay").hidden = false; }
+    function closeExplain() { $("explain-overlay").hidden = true; }
     const visible = () => (filter === "all" ? POEMS : POEMS.filter((p) => p.satakam === filter));
 
     /* ---------- reader card ---------- */
@@ -306,11 +321,12 @@
         return `<div class="cpaada"><div class="gana plain"><div class="syls">${p.syllables.map(sylSpan).join("")}</div></div></div>`;
       }).join("");
 
+      currentExplain = verified ? explainMetre(poem, a) : null;
       const verdict = verified
-        ? `<details class="verdict-wrap"><summary>✓ ${esc(a.metre)} — నిరూపితం <span class="hint">ఎందుకు?</span></summary>${explainMetre(poem, a)}</details>`
+        ? `<button type="button" class="verdict ok" onclick="openExplain()">✓ ${esc(a.metre)} — నిరూపితం · వివరణ ⓘ</button>`
         : `<span class="verdict pending">గణ విభజన త్వరలో</span>`;
       const legend = verified
-        ? `పైన ప్రతి పెట్టె ఒక గణం; కింద గణం పేరు. ✓ పై నొక్కితే ఈ ఛందస్సు నియమాలు ఎలా పాటించబడ్డాయో వివరణ.`
+        ? `పైన ప్రతి పెట్టె ఒక గణం; కింద గణం పేరు. ✓ బ్యాడ్జ్ నొక్కితే ఈ ఛందస్సు నియమాలు ఎలా పాటించబడ్డాయో వివరణ పాప్‌అప్‌లో చూడవచ్చు.`
         : `ప్రతి అక్షరం లఘువు/గురువుగా గుర్తించబడింది; గణ విభజన త్వరలో.`;
       return `<section class="block"><h3>Chandassu <span class="te telugu-serif">ఛందస్సు</span><span class="spacer"></span>${verdict}</h3>` +
         `<div class="chandassu">${rows}</div><p class="legend"><b>U</b> = గురువు, <b>I</b> = లఘువు. ${legend}</p></section>`;
@@ -408,7 +424,7 @@
 
     /* ---------- wiring ---------- */
     $("home-random").addEventListener("click", openRandom);
-    $("reader-random").addEventListener("click", openRandom);
+    $("reader-random").addEventListener("click", readerRandom);
     $("to-home").addEventListener("click", () => showView("home"));
     $("prev").addEventListener("click", () => go(-1));
     $("next").addEventListener("click", () => go(1));
@@ -417,10 +433,11 @@
     $("search-close").addEventListener("click", closeSearch);
     $("search-input").addEventListener("input", (e) => runSearch(e.target.value));
     document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") { closeSearch(); return; }
-      if (!$("search-overlay").hidden) return;
+      if (e.key === "Escape") { closeSearch(); closeExplain(); return; }
+      if (!$("search-overlay").hidden || !$("explain-overlay").hidden) return;
       if (!$("reader").hidden) { if (e.key === "ArrowLeft") go(-1); else if (e.key === "ArrowRight") go(1); }
     });
+    $("explain-overlay").addEventListener("click", (e) => { if (e.target.id === "explain-overlay") closeExplain(); });
 
     load();
   </script>

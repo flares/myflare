@@ -112,13 +112,21 @@ python3 -m http.server        # then open http://localhost:8000/padyaalu/
 
 | Śatakam | Metre | Poems | Chandassu verified | Meanings |
 |---|---|---|---|---|
-| Vemana (వేమన) | ఆటవెలది | 9 | ✓ all 9 | ✓ all |
-| Sumati (సుమతీ) | కంద పద్యం | 8 | ✓ all 8 | ✓ all |
-| Dāśarathi (దాశరథి) | ఉత్పలమాల / చంపకమాల / మత్తేభం | 104 | 63 of 104 | ✓ all 104 (AI-drafted) |
+| Vemana (వేమన) | ఆటవెలది | 114 | 90 of 114 | tātparyam (from PDF) |
+| Sumati (సుమతీ) | కంద పద్యం | 100 | 39 of 100 | tātparyam (from PDF) |
+| Dāśarathi (దాశరథి) | ఉత్పలమాల / చంపకమాల / మత్తేభం | 104 | 63 of 104 | prati + tātparyam |
+| Bhāskara, Kṛṣṇa, Kumāra, Kāḷahastīśvara | — | 0 | — | placeholder bubbles ("త్వరలో") |
 
-**80 of 121 verses** currently pass `verify.cjs` (Vemana + Sumati fully; 63 Dāśarathi
-vṛttas). The other 41 Dāśarathi verses are marked `chandassuVerified: false` — the app
-still shows their syllable laghu/guru marks, just not a verified gaṇa split yet.
+**318 padyaalu** total. `verify.cjs` confirms every verse marked verified actually scans
+(192 verified across the three); the rest are `chandassuVerified: false` and shown with
+syllable laghu/guru marks but no gaṇa split.
+
+**Vemana & Sumati** were **OCR-transcribed from user-supplied PDFs** (legacy-font Telugu,
+rendered to page images and read by parallel vision subagents), with the PDF's tātparyam
+per verse. The verifier caught the imperfect transcriptions: verses that don't scan
+(24 Vemana, 61 Sumati) have subtle vision-OCR slips — usually a missed vowel-length
+(hrasva/deergham) — and are flagged for proof-reading. Prati padārtham for these two is
+pending (the PDFs give tātparyam only).
 
 ### Notes on the corpus
 

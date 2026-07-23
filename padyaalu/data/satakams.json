@@ -1,35 +1,40 @@
 {
-  "order": ["vemana", "sumati", "dasarathi"],
+  "order": ["vemana", "sumati", "dasarathi", "bhaskara", "krishna", "kumara", "kalahastisvara"],
   "satakams": {
     "vemana": {
-      "name": "వేమన శతకం",
-      "short": "వేమన",
-      "poet": "వేమన",
-      "meter": "ఆటవెలది",
-      "makutam": "విశ్వదాభిరామ వినుర వేమ",
-      "prefix": "VM",
-      "hue": 28,
-      "file": "data/vemana.json"
+      "name": "వేమన శతకం", "short": "వేమన", "poet": "వేమన",
+      "meter": "ఆటవెలది", "makutam": "విశ్వదాభిరామ వినుర వేమ",
+      "prefix": "VM", "hue": 28, "file": "data/vemana.json"
     },
     "sumati": {
-      "name": "సుమతీ శతకం",
-      "short": "సుమతి",
-      "poet": "బద్దెన",
-      "meter": "కంద పద్యం",
-      "makutam": "… వినురా సుమతీ",
-      "prefix": "SM",
-      "hue": 205,
-      "file": "data/sumati.json"
+      "name": "సుమతీ శతకం", "short": "సుమతి", "poet": "బద్దెన",
+      "meter": "కంద పద్యం", "makutam": "… వినురా సుమతీ",
+      "prefix": "SM", "hue": 205, "file": "data/sumati.json"
     },
     "dasarathi": {
-      "name": "దాశరథీ శతకం",
-      "short": "దాశరథి",
-      "poet": "కంచెర్ల గోపన్న (భద్రాచల రామదాసు)",
-      "meter": "ఉత్పలమాల / చంపకమాల / మత్తేభం",
-      "makutam": "దాశరథీ కరుణాపయోనిధీ",
-      "prefix": "DS",
-      "hue": 280,
-      "file": "data/dasarathi.json"
+      "name": "దాశరథీ శతకం", "short": "దాశరథి", "poet": "కంచెర్ల గోపన్న (భద్రాచల రామదాసు)",
+      "meter": "ఉత్పలమాల / చంపకమాల / మత్తేభం", "makutam": "దాశరథీ కరుణాపయోనిధీ",
+      "prefix": "DS", "hue": 280, "file": "data/dasarathi.json"
+    },
+    "bhaskara": {
+      "name": "భాస్కర శతకం", "short": "భాస్కర", "poet": "సంప్రదాయ కర్త",
+      "meter": "ఉత్పలమాల / చంపకమాల", "makutam": "భాస్కరా",
+      "prefix": "BH", "hue": 15, "file": "data/bhaskara.json"
+    },
+    "krishna": {
+      "name": "కృష్ణ శతకం", "short": "కృష్ణ", "poet": "సంప్రదాయ కర్త",
+      "meter": "కంద పద్యం", "makutam": "కృష్ణా",
+      "prefix": "KR", "hue": 330, "file": "data/krishna.json"
+    },
+    "kumara": {
+      "name": "కుమార శతకం", "short": "కుమార", "poet": "పక్కి అప్పలనరసింహ కవి",
+      "meter": "కంద పద్యం", "makutam": "కుమారా",
+      "prefix": "KM", "hue": 95, "file": "data/kumara.json"
+    },
+    "kalahastisvara": {
+      "name": "శ్రీ కాళహస్తీశ్వర శతకం", "short": "కాళహస్తి", "poet": "ధూర్జటి",
+      "meter": "మత్తేభం / శార్దూలం", "makutam": "శ్రీ కాళహస్తీశ్వరా",
+      "prefix": "KH", "hue": 250, "file": "data/kalahastisvara.json"
     }
   }
 }
