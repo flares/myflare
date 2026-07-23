@@ -20,6 +20,7 @@
 
   // ---- DOM handles -------------------------------------------------
   var stage        = document.getElementById("stage");
+  var indexBar     = document.querySelector(".index-bar");
   var treeline     = document.getElementById("treeline");
   var letterGlyph  = document.getElementById("letterGlyph");
   var letterCard   = document.getElementById("letterCard");
@@ -82,6 +83,13 @@
   //  Scene setup
   // -------------------------------------------------------------------
   function measureStage() {
+    // sit the roaming stage (and the letter card) just above the bottom index
+    // row so animals are never hidden behind it
+    if (indexBar) {
+      var ibh = indexBar.getBoundingClientRect().height;
+      stage.style.bottom = (ibh + 8) + "px";
+      letterCard.style.bottom = (ibh + 8) + "px";
+    }
     var r = stage.getBoundingClientRect();
     stageW = r.width; stageH = r.height;
   }
@@ -128,6 +136,14 @@
     setLetter(next);
   }
 
+  // after each successful enter/exit, move on to a fresh letter (briefly delayed
+  // so the child sees the animal act before the prompt flips)
+  var letterTimer = null;
+  function advanceLetter() {
+    clearTimeout(letterTimer);
+    letterTimer = setTimeout(randomLetter, 750);
+  }
+
   function renderIndex(L) {
     var list = animalsForLetter(L);
     indexRow.innerHTML = "";
@@ -146,6 +162,7 @@
       indexRow.appendChild(chip);
     });
     refreshChips();
+    measureStage();   // index-row height affects where the stage sits
   }
 
   function countByKey(key) {
@@ -249,7 +266,7 @@
     instances.push(it);
 
     el.addEventListener("click", function () {
-      ensureAudio(); beginExit(it); playReject();  // tap a critter to send it home
+      ensureAudio(); beginExit(it); advanceLetter();  // tap a critter to send it home
     });
 
     playSound(a);
@@ -270,6 +287,7 @@
       made++;
     }
     showBubble((made > 1 ? made + " " : "") + a.name + (made > 1 ? "s" : "") + " coming in! " + a.emoji);
+    advanceLetter();
   }
 
   function beginExit(it) {
@@ -289,7 +307,7 @@
     for (var i = 0; i < instances.length && removed < n; i++) {
       if (instances[i].key === a.key && !instances[i].leaving) { beginExit(instances[i]); removed++; }
     }
-    if (removed) showBubble("👋 " + removed + " " + a.name + (removed > 1 ? "s" : "") + " going home!");
+    if (removed) { showBubble("👋 " + removed + " " + a.name + (removed > 1 ? "s" : "") + " going home!"); advanceLetter(); }
     else showBubble("No " + a.name + "s here to send home.", true);
   }
 

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Forest Friends — voice animal game for kids</title>
-<link rel="stylesheet" href="styles.css?v=3">
+<link rel="stylesheet" href="styles.css?v=4">
 </head>
 <body>
   <!-- ======================= FOREST SCENE ======================= -->
@@ -61,7 +61,7 @@
   <footer class="index-bar">
     <div class="index-label">
       Only <b id="indexLetter">A</b> animals now —
-      <span class="index-tip">say “<span id="indexExample">Ant</span> enter”, “5 <span id="indexExample2">Ant</span> exit”, or “exit all”</span>
+      <span class="index-tip">say “<span id="indexExample">Ant</span> enter” or “3 <span id="indexExample2">Ant</span> enter” — a new letter follows each time · “exit all” anytime</span>
     </div>
     <div id="indexRow" class="index-row"><!-- animal chips injected here --></div>
   </footer>
@@ -75,11 +75,11 @@
         <li>Tap <b>Tap to talk</b> and allow the microphone.</li>
         <li>A letter shows in the bottom-right. You may only call the animal for <b>that</b> letter — the bottom row lists them.</li>
         <li>Say the animal and “come”: <b>“Bear enter”</b>, <b>“Bear come”</b>, or in Telugu <b>“Bear <i>raa</i>”</b> / <b>“ఎలుగుబంటి రా”</b>.</li>
-        <li>It runs in from a random side with its own sound and <b>roams around</b>. 🐻🔊</li>
-        <li>Summon the same animal again and again — a whole family roams together! 🦁🦁🦁</li>
+        <li>It runs in from a random side with its own sound and <b>roams around</b> — then a <b>new letter</b> pops up for the next animal. 🐻🔊</li>
+        <li>Want a whole family at once? Say a number: <b>“3 lions enter”</b> (up to five) — they all roam together! 🦁🦁🦁</li>
         <li>Send some home: <b>“Lion exit”</b> (one) or <b>“5 lion exit”</b> (up to five). <i>po</i> / <i>bye</i> work too.</li>
         <li>Special commands anytime: <b>“exit all animals”</b> empties the forest; <b>“reduce zoo size”</b> randomly sends some home.</li>
-        <li>Change the letter with <b>🎲 New letter</b>. No microphone? <b>Tap an animal</b> below to summon it, or tap a roaming animal to send it home.</li>
+        <li>No microphone? <b>Tap an animal</b> below to summon it, or tap a roaming animal to send it home. Use <b>🎲 New letter</b> to skip a letter.</li>
       </ol>
       <p class="overlay-note">Tip: works best in Chrome. Everything runs offline — the animals are emoji and every sound is made live in your browser (no downloads).</p>
       <button id="helpStart" class="btn btn-primary">Let's play! 🎉</button>
@@ -87,8 +87,8 @@
   </div>
 
   <!-- data + engines (built as separate modules) -->
-  <script src="animals.js?v=3"></script>
-  <script src="audio.js?v=3"></script>
-  <script src="game.js?v=3"></script>
+  <script src="animals.js?v=4"></script>
+  <script src="audio.js?v=4"></script>
+  <script src="game.js?v=4"></script>
 </body>
 </html>
