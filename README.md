@@ -8,6 +8,7 @@ Personal web interface — a hub page (`index.html`) linking to individual sub-p
 |---|---|---|
 | Portfolio Tracker | [`portfolio-tracker/`](portfolio-tracker/) | Live — encrypted MF portfolio tracker; see [`portfolio-tracker/README.md`](portfolio-tracker/README.md) |
 | Padyaalu | [`padyaalu/`](padyaalu/) | Working reading app with seed corpus — see [`padyaalu/README.md`](padyaalu/README.md) |
+| Forest Friends | [`forest-friends/`](forest-friends/) | Voice-controlled kids' animal game (English & Telugu) — see [`forest-friends/README.md`](forest-friends/README.md) |
 
 ## Structure
 
@@ -25,4 +26,11 @@ padyaalu/
   chandassu.js          ← prosody engine (browser + Node)
   verify.cjs            ← scansion verifier for the corpus
   data/                 ← poem text + Telugu meanings, one JSON per satakam
+forest-friends/
+  README.md             ← project spec & design notes
+  index.html            ← the forest scene, controls & letter index
+  styles.css            ← CSS forest, animal animations
+  animals.js            ← animal dataset (emoji, Telugu names, aliases, sound)
+  audio.js              ← Web Audio synthesized sounds + background music
+  game.js               ← voice recognition, command parsing, game core
 ```

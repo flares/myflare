@@ -1,0 +1,221 @@
+/* ===================================================================
+   Forest Friends — kids' voice animal game
+   Pure CSS forest scene; animals are emoji, sounds are synthesized.
+   =================================================================== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: "Baloo 2", "Comic Sans MS", "Segoe UI Rounded", system-ui, sans-serif;
+  overflow: hidden;
+  background: #35803d;
+  color: #123;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ----------------------------- SCENE ----------------------------- */
+.scene { position: fixed; inset: 0; overflow: hidden; }
+
+/* Top-down forest floor: layered greens + a dotted canopy texture */
+.scene {
+  background:
+    radial-gradient(1200px 820px at 72% 18%, #5cb95a 0%, transparent 60%),
+    radial-gradient(1000px 720px at 18% 82%, #3f9c46 0%, transparent 60%),
+    linear-gradient(160deg, #4aa84f 0%, #3d9143 55%, #35803d 100%);
+}
+.scene::before {   /* mottled foliage speckle */
+  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .5;
+  background-image:
+    radial-gradient(rgba(0,50,0,.18) 22%, transparent 24%),
+    radial-gradient(rgba(255,255,255,.06) 22%, transparent 24%);
+  background-size: 48px 48px, 48px 48px;
+  background-position: 0 0, 24px 24px;
+}
+
+/* scattered tree canopies (viewed from above), filled by JS */
+.forest { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.canopy {
+  position: absolute; border-radius: 50%;
+  background: radial-gradient(circle at 38% 32%, #83cf6d 0%, #4f9e48 46%, #3a7a37 100%);
+  box-shadow: 0 8px 12px rgba(0,0,0,.16);
+  transform-origin: center; animation: canopySway 7s ease-in-out infinite;
+}
+.canopy::after {
+  content: ""; position: absolute; inset: 14%; border-radius: 50%;
+  background: radial-gradient(circle at 42% 34%, rgba(255,255,255,.20), transparent 62%);
+}
+@keyframes canopySway { 0%,100% { transform: scale(1) rotate(-1.2deg); } 50% { transform: scale(1.02) rotate(1.2deg); } }
+
+/* ----------------------------- STAGE / ANIMALS ----------------------------- */
+/* The stage is the whole playfield — animals roam sky-to-ground. Its top sits
+   just under the control bar; its bottom is set by JS to clear the index row. */
+.stage {
+  position: absolute; left: 0; right: 0; top: 6.5vh; bottom: 3vh;
+  z-index: 5;
+}
+/* the river stream — an SVG whose winding path is drawn by buildRiver() in
+   game.js; water animals swim along that same centreline */
+.river { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; overflow: visible; }
+/* Each animal is JS-driven: game.js sets transform every frame to make it
+   roam. So keep transform free of CSS transitions/animations here — the
+   pop-in and gentle waddle live on the inner .a-emoji instead. */
+.animal {
+  position: absolute; left: 0; top: 0;
+  font-size: clamp(66px, 13vw, 180px);
+  line-height: 1; cursor: pointer;
+  transform-origin: center center; will-change: transform;
+}
+/* .a-flip carries only the left/right facing flip, so the name label (a direct
+   child of .animal) is never mirrored */
+.animal .a-flip { display: block; line-height: 1; transform-origin: center; }
+.animal .a-emoji {
+  display: block; line-height: 1;
+  filter: drop-shadow(0 8px 7px rgba(0,0,0,.28));
+  animation: popIn .45s cubic-bezier(.2,1.4,.4,1) both;
+}
+/* three distinct gaits, one per motion type (set as a class in game.js) */
+.animal.gait-walk .a-emoji { animation: popIn .45s cubic-bezier(.2,1.4,.4,1) both, gaitWalk .5s ease-in-out infinite; }
+.animal.gait-fly  .a-emoji { animation: popIn .45s cubic-bezier(.2,1.4,.4,1) both, gaitFly .34s ease-in-out infinite; }
+.animal.gait-swim .a-emoji { animation: popIn .45s cubic-bezier(.2,1.4,.4,1) both, gaitSwim 1.5s ease-in-out infinite; }
+/* walk: a trotting two-step bob */
+@keyframes gaitWalk { 0%,100% { transform: translateY(0) rotate(-3deg); } 25% { transform: translateY(-9%) rotate(0deg); } 50% { transform: translateY(0) rotate(3deg); } 75% { transform: translateY(-9%) rotate(0deg); } }
+/* fly: quick flapping — rises and squashes like beating wings, banking side to side */
+@keyframes gaitFly  { 0%,100% { transform: translateY(0) scaleY(1) rotate(-6deg); } 50% { transform: translateY(-17%) scaleY(.88) rotate(6deg); } }
+/* swim: a slow fishy side-to-side undulation */
+@keyframes gaitSwim { 0%,100% { transform: translateX(-6%) rotate(-8deg); } 50% { transform: translateX(6%) rotate(8deg); } }
+/* exit wins over any gait (declared last) */
+.animal.bye .a-emoji, .animal.gait-walk.bye .a-emoji, .animal.gait-fly.bye .a-emoji, .animal.gait-swim.bye .a-emoji {
+  animation: popOut .5s ease forwards;
+}
+.animal .a-name {
+  position: absolute; left: 50%; top: 100%; transform: translateX(-50%);
+  font-size: .2em; background: rgba(255,255,255,.9); color: #234;
+  padding: .15em .6em; border-radius: 999px; white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0,0,0,.15); pointer-events: none;
+}
+@keyframes popIn  { from { transform: scale(.2); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes popOut { to { transform: scale(.2); opacity: 0; } }
+
+/* celebratory sparkle when a matching animal arrives */
+.sparkle {
+  position: absolute; z-index: 6; font-size: clamp(30px, 6vw, 64px);
+  pointer-events: none; animation: pop 1s ease-out forwards;
+}
+@keyframes pop { 0% { transform: scale(.3); opacity: 0; } 30% { opacity: 1; } 100% { transform: scale(1.6) translateY(-40px); opacity: 0; } }
+
+/* ----------------------------- LETTER CARD ----------------------------- */
+.letter-card {
+  position: absolute; right: 2.5vw; bottom: 4vh; z-index: 8;
+  width: clamp(96px, 15vw, 168px); aspect-ratio: 3/4;
+  background: linear-gradient(#fff, #fff5d6);
+  border: 5px solid #ffcf3f; border-radius: 18px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  box-shadow: 0 12px 26px rgba(0,0,0,.22); text-align: center;
+  transition: transform .2s;
+}
+.letter-card.bump { animation: bump .5s ease; }
+@keyframes bump { 0%,100% { transform: none; } 30% { transform: scale(1.12) rotate(-3deg); } }
+.letter-card.nope { animation: nope .45s ease; }
+@keyframes nope {
+  0%,100% { transform: translateX(0); border-color: #ffcf3f; }
+  20% { transform: translateX(-9px); border-color: #ff5a5a; }
+  40% { transform: translateX(9px);  border-color: #ff5a5a; }
+  60% { transform: translateX(-6px); border-color: #ff5a5a; }
+  80% { transform: translateX(6px);  border-color: #ff5a5a; }
+}
+.letter-glyph { font-size: clamp(56px, 11vw, 120px); font-weight: 800; color: #ef6c3b; line-height: 1; }
+.letter-hint { font-size: clamp(11px, 1.6vw, 15px); color: #a06; font-weight: 700; margin-top: .3em; }
+
+/* ----------------------------- HEARD BUBBLE ----------------------------- */
+.heard-bubble {
+  position: absolute; left: 50%; top: 14vh; transform: translateX(-50%);
+  z-index: 9; background: rgba(255,255,255,.95); color: #234;
+  padding: .5em 1em; border-radius: 999px; font-size: clamp(16px, 3vw, 26px);
+  font-weight: 700; box-shadow: 0 6px 18px rgba(0,0,0,.18); max-width: 84vw;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.heard-bubble.err { color: #b23; }
+
+/* ----------------------------- TOP BAR ----------------------------- */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 20;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: .6rem; padding: .5rem .8rem; flex-wrap: wrap;
+  background: linear-gradient(rgba(0,0,0,.16), transparent);
+}
+.brand { display: flex; align-items: center; gap: .4rem; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,.35); }
+.brand-emoji { font-size: 1.6rem; }
+.brand-name { font-weight: 800; font-size: clamp(1rem, 2.6vw, 1.4rem); }
+.controls { display: flex; gap: .4rem; flex-wrap: wrap; }
+.btn {
+  font: inherit; font-weight: 700; font-size: clamp(.8rem, 1.8vw, 1rem);
+  border: 0; border-radius: 999px; padding: .5em .9em; cursor: pointer;
+  background: rgba(255,255,255,.92); color: #234; box-shadow: 0 3px 8px rgba(0,0,0,.18);
+  transition: transform .12s, background .12s;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: translateY(1px) scale(.98); }
+.btn-primary { background: #ffcf3f; }
+select.btn { -webkit-appearance: none; appearance: none; padding-right: 1.4em; }
+.btn-mic { display: inline-flex; align-items: center; gap: .5em; background: #fff; }
+.btn-mic[aria-pressed="true"] { background: #ff5a5a; color: #fff; }
+.mic-dot { width: .7em; height: .7em; border-radius: 50%; background: #ff5a5a; }
+.btn-mic[aria-pressed="true"] .mic-dot { background: #fff; animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .4; transform: scale(1.5); } }
+
+/* ----------------------------- INDEX BAR ----------------------------- */
+.index-bar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 15;
+  background: rgba(20,40,20,.72); backdrop-filter: blur(6px);
+  color: #fff; padding: .4rem .7rem .5rem;
+}
+.index-label { font-size: clamp(.75rem, 2vw, 1rem); margin-bottom: .35rem; opacity: .95; }
+.index-label b { color: #ffd257; font-size: 1.2em; }
+.index-tip { opacity: .8; font-size: .85em; }
+.index-row {
+  display: flex; gap: .5rem; overflow-x: auto; padding-bottom: .2rem;
+  scrollbar-width: thin;
+}
+.chip {
+  position: relative;
+  flex: 0 0 auto; display: flex; flex-direction: column; align-items: center;
+  gap: .1rem; background: rgba(255,255,255,.14); border: 2px solid transparent;
+  border-radius: 14px; padding: .35rem .6rem; cursor: pointer; min-width: 68px;
+  transition: transform .12s, background .12s, border-color .12s;
+}
+.chip-count {
+  position: absolute; top: -6px; right: -6px; min-width: 1.35em; height: 1.35em;
+  padding: 0 .25em; border-radius: 999px; background: #ff5a5a; color: #fff;
+  font-size: .72rem; font-weight: 800; line-height: 1.35em; text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,.3);
+}
+.chip:hover { background: rgba(255,255,255,.26); transform: translateY(-2px); }
+.chip.active { border-color: #ffd257; background: rgba(255,210,87,.25); }
+.chip-emoji { font-size: clamp(1.6rem, 4.5vw, 2.4rem); line-height: 1; }
+.chip-name { font-size: clamp(.62rem, 1.6vw, .8rem); font-weight: 700; }
+.chip-tel  { font-size: clamp(.55rem, 1.4vw, .7rem); opacity: .7; }
+
+/* ----------------------------- OVERLAY ----------------------------- */
+.overlay {
+  position: fixed; inset: 0; z-index: 50; display: grid; place-items: center;
+  background: rgba(0,0,0,.5); padding: 1rem;
+}
+.overlay[hidden] { display: none; }  /* author display:grid must not defeat the hidden attr */
+.overlay-card {
+  position: relative; background: #fff; color: #234; border-radius: 22px;
+  padding: 1.6rem 1.4rem; max-width: 460px; width: 100%;
+  box-shadow: 0 20px 60px rgba(0,0,0,.4); max-height: 90vh; overflow: auto;
+}
+.overlay-card h2 { font-size: 1.5rem; margin-bottom: .8rem; }
+.overlay-card ol { margin: 0 0 .8rem 1.1rem; display: grid; gap: .45rem; line-height: 1.35; }
+.overlay-note { font-size: .85rem; color: #567; margin-bottom: 1rem; }
+.overlay-close {
+  position: absolute; top: .6rem; right: .6rem; border: 0; background: #eee;
+  width: 2rem; height: 2rem; border-radius: 50%; cursor: pointer; font-size: 1rem;
+}
+.overlay-card .btn-primary { width: 100%; padding: .7em; font-size: 1.05rem; }
+
+@media (max-width: 560px) {
+  .brand-name { display: none; }
+  .letter-card { bottom: 10vh; }
+}
