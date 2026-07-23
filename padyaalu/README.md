@@ -114,7 +114,7 @@ python3 -m http.server        # then open http://localhost:8000/padyaalu/
 |---|---|---|---|---|
 | Vemana (వేమన) | ఆటవెలది | 9 | ✓ all 9 | ✓ all |
 | Sumati (సుమతీ) | కంద పద్యం | 8 | ✓ all 8 | ✓ all |
-| Dāśarathi (దాశరథి) | ఉత్పలమాల / చంపకమాల / మత్తేభం | 104 | 63 of 104 | 3 seeded, rest pending |
+| Dāśarathi (దాశరథి) | ఉత్పలమాల / చంపకమాల / మత్తేభం | 104 | 63 of 104 | ✓ all 104 (AI-drafted) |
 
 **80 of 121 verses** currently pass `verify.cjs` (Vemana + Sumati fully; 63 Dāśarathi
 vṛttas). The other 41 Dāśarathi verses are marked `chandassuVerified: false` — the app
@@ -129,10 +129,11 @@ still shows their syllable laghu/guru marks, just not a verified gaṇa split ye
   each verse into 4 metrical padas and auto-detects the vṛtta; 63 verify exactly. The
   unverified 41 are mostly the longer 5-line vṛttas (mattebha/śārdūla layouts) and a few
   verses with small transcription deviations in the supplied text — to be reconciled.
-- **Meanings** for Dāśarathi are the large remaining task: its verses are dense, ornate,
-  Sanskrit-compound-heavy Telugu. Three are seeded (verses 16, 24, 25) to establish the
-  pattern; the rest show a "త్వరలో" placeholder. External content sites remain blocked by
-  the environment network policy, so meanings are authored, not fetched.
+- **Meanings** — all 104 Dāśarathi verses now have Telugu prati padārtham + tātparyam.
+  Verses 16, 24, 25 were authored by hand; the other 101 were **drafted by parallel
+  Sonnet subagents** (10 verses each) and merged after JSON validation. Dāśarathi is
+  dense, ornate, Sanskrit-compound-heavy — treat these AI drafts as a strong first pass
+  worth a scholarly proof-read, not final authority.
 
 ## Planned next steps
 
