@@ -10,10 +10,21 @@ Personal web interface — a hub page (`index.html`) linking to individual sub-p
 | Padyaalu | [`padyaalu/`](padyaalu/) | Working reading app with seed corpus — see [`padyaalu/README.md`](padyaalu/README.md) |
 | Forest Friends | [`forest-friends/`](forest-friends/) | Voice-controlled kids' animal game (English & Telugu) — see [`forest-friends/README.md`](forest-friends/README.md) |
 
+## Todo / planning
+
+New ideas are logged on the [todo board](todo/index.html) (linked from the home
+page) and go through a planning phase — tracked in [`todo/`](todo/) — before
+being promoted into their own sub-project folder above. See
+[`todo/README.md`](todo/README.md) for the workflow.
+
 ## Structure
 
 ```
-index.html              ← main hub page with links to sub-projects
+index.html              ← main hub page with links to sub-projects, incl. Todo
+todo/
+  README.md             ← idea → planning → promotion workflow
+  index.html            ← todo/status board
+  notes/                ← one planning note per idea (pre-promotion)
 portfolio-tracker/
   README.md             ← project spec, feature list & Firebase setup
   index.html            ← the app (static, GitHub Pages friendly)

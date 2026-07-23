@@ -37,9 +37,26 @@
     align-items: center;
     padding: 10vh 1.5rem 3rem;
   }
-  header { text-align: center; margin-bottom: 3rem; }
+  header { text-align: center; margin-bottom: 3rem; position: relative; width: 100%; max-width: 560px; }
   h1 { font-size: 2rem; font-weight: 700; letter-spacing: -0.02em; }
   header p { color: var(--ink-2); margin-top: 0.5rem; }
+  a.todo-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--ink-2);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.35rem 0.85rem;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+  a.todo-btn:hover { border-color: var(--accent); color: var(--accent); }
   main { width: 100%; max-width: 560px; display: grid; gap: 1rem; }
   a.project {
     display: block;
@@ -69,6 +86,7 @@
 </head>
 <body>
   <header>
+    <a class="todo-btn" href="todo/index.html">Todo →</a>
     <h1>myflare</h1>
     <p>Personal web interface — sub-projects</p>
   </header>
