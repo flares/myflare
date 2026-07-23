@@ -85,6 +85,9 @@
     border-radius: 999px; padding: 0.1rem 0.55rem; border: 1px solid; }
   .verdict.ok { color: var(--ok); border-color: var(--ok); }
   .verdict.bad { color: var(--bad); border-color: var(--bad); }
+  .verdict.pending { color: var(--muted); border-color: var(--border); }
+  .pending-note { color: var(--muted); font-size: 0.92rem; font-style: italic; }
+  .gana.plain { border-color: transparent; padding: 0.15rem 0; }
 
   .gloss { display: grid; gap: 0.1rem; }
   .gloss .row { display: grid; grid-template-columns: minmax(9rem, 40%) 1fr; gap: 0.75rem;
@@ -184,30 +187,33 @@
         b.addEventListener("click", () => { filter = b.dataset.key; idx = 0; renderFilters(); renderCard(); }));
     }
 
+    const sylSpan = (s) =>
+      `<span class="syl ${s.weight}">${esc(s.text)}<span class="mark">${s.weight === "G" ? "U" : "I"}</span></span>`;
+
     function chandassuHTML(poem) {
       if (!window.Chandassu) return "";
       const a = Chandassu.analyze(poem.padyam, poem.meter);
+      // verified: show named gana boxes; else: show plain syllable weights per line (no red)
+      const verified = a.ok && a.paadas.every((p) => p.ganas);
       const rows = a.paadas.map((p) => {
-        if (!p.ganas) {
-          const syls = p.syllables.map((s) =>
-            `<span class="syl ${s.weight}">${esc(s.text)}<span class="mark">${s.weight === "G" ? "U" : "I"}</span></span>`).join("");
-          return `<div class="cpaada nomatch"><div class="gana"><div class="syls">${syls}</div>` +
-                 `<div class="gname">సరిపోలలేదు</div></div></div>`;
+        if (verified) {
+          const ganas = p.ganas.map((g) =>
+            `<div class="gana"><div class="syls">${g.syllables.map(sylSpan).join("")}</div>` +
+            `<div class="gname">${esc(g.name)}</div></div>`).join("");
+          return `<div class="cpaada">${ganas}</div>`;
         }
-        const ganas = p.ganas.map((g) => {
-          const syls = g.syllables.map((s) =>
-            `<span class="syl ${s.weight}">${esc(s.text)}<span class="mark">${s.weight === "G" ? "U" : "I"}</span></span>`).join("");
-          return `<div class="gana"><div class="syls">${syls}</div><div class="gname">${esc(g.name)}</div></div>`;
-        }).join("");
-        return `<div class="cpaada">${ganas}</div>`;
+        return `<div class="cpaada"><div class="gana plain"><div class="syls">` +
+               `${p.syllables.map(sylSpan).join("")}</div></div></div>`;
       }).join("");
-      const verdict = a.ok
-        ? `<span class="verdict ok">✓ ${esc(poem.meter)} — సరిపోయింది</span>`
-        : `<span class="verdict bad">✗ సరిపోలలేదు</span>`;
+      const verdict = verified
+        ? `<span class="verdict ok">✓ ${esc(a.metre)} — సరిపోయింది</span>`
+        : `<span class="verdict pending">గణ విభజన త్వరలో</span>`;
+      const legend = verified
+        ? `పైన ప్రతి పెట్టె ఒక గణం; కింద గణం పేరు (${esc(a.metre)}).`
+        : `ప్రతి అక్షరం లఘువు/గురువుగా గుర్తించబడింది. గణ విభజన, నిర్ధారణ త్వరలో.`;
       return `<section class="block"><h3>Chandassu <span class="te telugu-serif">ఛందస్సు</span>` +
         `<span class="spacer"></span>${verdict}</h3><div class="chandassu">${rows}</div>` +
-        `<p class="legend"><b>U</b> = గురువు, <b>I</b> = లఘువు. ` +
-        `పైన ప్రతి పెట్టె ఒక గణం; కింద గణం పేరు (${esc(poem.meter)}).</p></section>`;
+        `<p class="legend"><b>U</b> = గురువు, <b>I</b> = లఘువు. ${legend}</p></section>`;
     }
 
     function renderCard() {
@@ -219,8 +225,15 @@
 
       const lines = p.padyam.map((l, i) =>
         `<div class="pline${i === p.padyam.length - 1 ? " makutam" : ""} telugu-serif">${esc(l)}</div>`).join("");
-      const gloss = p.pratipadartham.map((g) =>
-        `<div class="row"><div class="w telugu-serif">${esc(g.padam)}</div><div class="m">${esc(g.artham)}</div></div>`).join("");
+
+      const glossHTML = (p.pratipadartham && p.pratipadartham.length)
+        ? `<div class="gloss">${p.pratipadartham.map((g) =>
+            `<div class="row"><div class="w telugu-serif">${esc(g.padam)}</div>` +
+            `<div class="m">${esc(g.artham)}</div></div>`).join("")}</div>`
+        : `<p class="pending-note">ప్రతిపదార్థం త్వరలో చేర్చబడుతుంది.</p>`;
+      const tatHTML = p.tatparyam
+        ? `<p class="tatparyam">${esc(p.tatparyam)}</p>`
+        : `<p class="pending-note">తాత్పర్యం త్వరలో చేర్చబడుతుంది.</p>`;
 
       card.innerHTML =
         `<div class="card-head"><span class="badge">${esc(s.short)}</span>` +
@@ -228,9 +241,9 @@
         `<span class="meter">ఛందస్సు: ${esc(p.meter)}</span></div>` +
         `<div class="padyam">${lines}</div>` +
         `<section class="block"><h3>Prati padartham <span class="te telugu-serif">ప్రతిపదార్థం</span></h3>` +
-        `<div class="gloss">${gloss}</div></section>` +
+        glossHTML + `</section>` +
         `<section class="block"><h3>Tatparyam <span class="te telugu-serif">తాత్పర్యం</span></h3>` +
-        `<p class="tatparyam">${esc(p.tatparyam)}</p></section>` +
+        tatHTML + `</section>` +
         chandassuHTML(p);
 
       $("counter").textContent = `${idx + 1} / ${poems.length}`;

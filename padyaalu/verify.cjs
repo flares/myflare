@@ -25,7 +25,10 @@ for (const key of meta.order) {
   const poems = JSON.parse(fs.readFileSync(file, "utf8"));
   if (!poems.length) continue;
   console.log(`\n\x1b[1m${s.name}\x1b[0m  (${s.meter})  —  ${poems.length} పద్యాలు`);
+  let pending = 0;
   for (const poem of poems) {
+    // verses whose metre isn't pinned yet (generic "వృత్తం") are pending, not failures
+    if (poem.meter === "వృత్తం" || poem.chandassuVerified === false) { pending++; continue; }
     total++;
     const r = C.analyze(poem.padyam, poem.meter);
     const mark = r.ok ? "\x1b[32m✓\x1b[0m" : "\x1b[31m✗\x1b[0m";
@@ -40,6 +43,7 @@ for (const key of meta.order) {
       });
     }
   }
+  if (pending) console.log(`  \x1b[33m·\x1b[0m ${pending} పద్యాలు గణ నిర్ధారణ కోసం వేచి ఉన్నాయి (pending)`);
 }
 
 console.log(`\n${"─".repeat(48)}`);

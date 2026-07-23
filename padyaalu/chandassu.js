@@ -62,7 +62,10 @@
         // consume leading conjunct: (virama consonant)*
         while (i < cps.length && cps[i] === VIRAMA) {
           s.chars.push(cps[i]); i++;
-          if (i < cps.length && isConsonant(cps[i])) { s.onset++; s.chars.push(cps[i]); i++; }
+          if (i < cps.length && isConsonant(cps[i])) {
+            if (cps[i] === 0x0c30) s.hasRvattu = true; // ra as a non-first cluster member (ర-వత్తు)
+            s.onset++; s.chars.push(cps[i]); i++;
+          }
           else { isCoda = true; break; }              // virama with nothing after → half consonant
         }
         if (isCoda) {
@@ -89,8 +92,16 @@
     }
     return syl.map((s, k) => {
       const next = syl[k + 1];
-      const guru = s.vowelLong || s.anusvara || s.visarga || s.coda > 0 || (next && next.onset >= 1);
-      return { text: String.fromCodePoint(...s.chars), weight: guru ? "G" : "L" };
+      const hard = s.vowelLong || s.anusvara || s.visarga || s.coda > 0;
+      const posGuru = !!(next && next.onset >= 1);
+      let weight = "L", flexible = false;
+      if (hard) weight = "G";
+      else if (posGuru) {
+        weight = "G";
+        // hrasva before a ర-వత్తు conjunct is only optionally guru (వైకల్పిక గురువు)
+        if (next.hasRvattu) flexible = true;
+      }
+      return { text: String.fromCodePoint(...s.chars), weight, flexible };
     });
   }
 
@@ -144,16 +155,33 @@
   const rep = (arr, n) => Array.from({ length: n }, () => arr);
 
   // ---- Metre definitions -------------------------------------------------
-  // Fixed vrttamulu: exact G/L pattern per paada.
-  const UTPALAMALA = ["bha", "ra", "na", "bha", "bha", "ra", "la", "ga"].map((g) => TRI[g]).join(""); // 20
-  const CHAMPAKAMALA = ["na", "ja", "bha", "ja", "ja", "ja", "ra"].map((g) => TRI[g]).join("");        // 21
+  // Fixed vrttamulu: exact gana sequence (hence exact G/L pattern) per paada.
+  const GANA_SEQ = {
+    "ఉత్పలమాల": ["bha", "ra", "na", "bha", "bha", "ra", "la", "ga"], // 20, yati 10
+    "చంపకమాల":  ["na", "ja", "bha", "ja", "ja", "ja", "ra"],          // 21, yati 11
+    "మత్తేభం":   ["sa", "bha", "ra", "na", "ma", "ya", "la", "ga"],    // 20, yati 14
+    "శార్దూలం":  ["ma", "sa", "ja", "sa", "ta", "ta", "ga"],           // 19, yati 13
+  };
+  const VRTTAS = Object.entries(GANA_SEQ).map(([name, seq]) => {
+    const groups = seq.map((g) => TRI[g]);
+    return { name, seq, groups, pattern: groups.join(""), names: groups.map((g) => TRI_NAME[g]) };
+  });
+  const UTPALAMALA = VRTTAS[0].pattern;
+  const CHAMPAKAMALA = VRTTAS[1].pattern;
 
-  function matchVrtta(gl, pattern) {
-    if (gl.length !== pattern.length) return null;
-    // all but last must match exactly; last is paadaanta-flexible
-    for (let k = 0; k < gl.length - 1; k++) if (gl[k] !== pattern[k]) return null;
-    // rebuild gana groups by walking the known trisyllabic layout
-    return pattern;
+  // Match a syllable list against an exact vrtta pattern. A syllable may match
+  // either weight when it is flexible (hrasva before ర-వత్తు) or paadaanta (last).
+  // On success, rewrites flexible/paadaanta weights to the pattern for display.
+  function matchVrtta(syls, pattern) {
+    if (syls.length !== pattern.length) return false;
+    for (let k = 0; k < syls.length; k++) {
+      if (syls[k].weight === pattern[k]) continue;
+      if (syls[k].flexible || k === syls.length - 1) continue;
+      return false;
+    }
+    for (let k = 0; k < syls.length; k++)
+      if (syls[k].flexible || k === syls.length - 1) syls[k].weight = pattern[k];
+    return true;
   }
 
   function ganaNamesFor(patternGroups) {
@@ -198,23 +226,35 @@
       }
       return out;
     },
-    "ఉత్పలమాల": (paadas) => vrttaAnalyze(paadas, UTPALAMALA,
-      ["bha", "ra", "na", "bha", "bha", "ra", "la", "ga"].map((g) => TRI[g])),
-    "చంపకమాల": (paadas) => vrttaAnalyze(paadas, CHAMPAKAMALA,
-      ["na", "ja", "bha", "ja", "ja", "ja", "ra"].map((g) => TRI[g])),
   };
   // metre-name aliases
   METRES["కంద"] = METRES["కంద పద్యం"];
-  METRES["ఉత్పలమాల / చంపకమాల"] = null; // resolved per-paada below
+  // one entry per vrtta: match each paada against that vrtta's exact pattern
+  for (const v of VRTTAS) {
+    METRES[v.name] = (paadas) => paadas.map((line) => oneVrtta(line, v));
+  }
 
-  function vrttaAnalyze(paadas, pattern, groups) {
-    return paadas.map((line) => {
-      const syls = splitSyllables(line);
-      const gl = glOf(syls);
-      const ok = matchVrtta(gl, pattern) != null;
-      return buildPaada(line, syls, gl, ok ? groups : null, ok ? ganaNamesFor(groups) : null,
-        "నిర్దిష్ట గణ క్రమం");
-    });
+  function oneVrtta(line, v) {
+    const syls = splitSyllables(line);
+    const ok = matchVrtta(syls, v.pattern);
+    const p = buildPaada(line, syls, glOf(syls), ok ? v.groups : null, ok ? v.names : null, v.name);
+    p.metre = v.name;
+    return p;
+  }
+
+  // Auto-detect: try every vrtta, return the analysis for the first that matches.
+  function detectVrtta(line) {
+    for (const v of VRTTAS) { const p = oneVrtta(line, v); if (p.ok) return p; }
+    const syls = splitSyllables(line);
+    const p = buildPaada(line, syls, glOf(syls), null, null, "గణ క్రమం సరిపోలలేదు");
+    p.metre = "?";
+    return p;
+  }
+
+  // Best single metre for a whole padyam (the vrtta all paadas share).
+  function detectMetre(paadas) {
+    for (const v of VRTTAS) if (paadas.every((l) => matchVrtta(splitSyllables(l), v.pattern))) return v.name;
+    return null;
   }
 
   function buildPaada(text, syls, gl, groups, names, note) {
@@ -247,16 +287,11 @@
    */
   function analyze(paadas, metre) {
     let fn = METRES[metre];
-    // Dasarathi-style: each paada may be utpalamaala OR champakamaala independently.
-    if (!fn && (metre === "ఉత్పలమాల / చంపకమాల" || metre === "వృత్తం")) {
-      const res = paadas.map((line) => {
-        const u = vrttaAnalyze([line], UTPALAMALA, ["bha", "ra", "na", "bha", "bha", "ra", "la", "ga"].map((g) => TRI[g]))[0];
-        if (u.ok) { u.metre = "ఉత్పలమాల"; return u; }
-        const c = vrttaAnalyze([line], CHAMPAKAMALA, ["na", "ja", "bha", "ja", "ja", "ja", "ra"].map((g) => TRI[g]))[0];
-        c.metre = c.ok ? "చంపకమాల" : "?";
-        return c;
-      });
-      return { metre, ok: res.every((p) => p.ok), paadas: res };
+    // Generic vrtta: auto-detect each paada's metre (utpala / champaka / mattebha / sardula).
+    if (!fn && (metre === "వృత్తం" || metre === "ఉత్పలమాల / చంపకమాల")) {
+      const res = paadas.map((line) => detectVrtta(line));
+      const names = [...new Set(res.map((p) => p.metre))];
+      return { metre: names.length === 1 ? names[0] : metre, ok: res.every((p) => p.ok), paadas: res };
     }
     if (!fn) {
       // unknown metre: still mark syllables, no gana grouping
@@ -270,5 +305,5 @@
     return { metre, ok: res.every((p) => p.ok), paadas: res };
   }
 
-  return { splitSyllables, analyze, GANA_NAME, SURYA, INDRA, C4, UTPALAMALA, CHAMPAKAMALA };
+  return { splitSyllables, analyze, detectMetre, GANA_NAME, SURYA, INDRA, C4, VRTTAS, UTPALAMALA, CHAMPAKAMALA };
 });

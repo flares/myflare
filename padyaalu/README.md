@@ -49,14 +49,17 @@ padyam by `chandassu.js`, so the data never drifts from the scansion.
   anusvāram/visargam) into aksharaalu.
 - **Laghu / guru** — a syllable is **guru** if: its vowel is deergham (long); it carries
   anusvāram (ం) or visargam (ః); it has a coda half-consonant (e.g. word-final న్); or it
-  is followed by a samyuktākṣaram (conjunct). Otherwise **laghu**. (Arasunna ఁ does not
-  force guru; paadaanta syllable is read flexibly.)
+  is followed by a samyuktākṣaram (conjunct). Otherwise **laghu**. Refinements:
+  arasunna (ఁ) does not force guru; the paadaanta syllable reads flexibly; and a hrasva
+  before a **ర-వత్తు conjunct** (ద్ర, త్ర, ప్ర, …) is only *optionally* guru
+  (వైకల్పిక గురువు), so it matches either weight.
 - **Gaṇa grouping & verification** —
   - **ఆటవెలది** (Vemana): odd paadas = 3 sūrya + 2 indra gaṇaalu; even paadas = 5 sūrya.
   - **కంద పద్యం** (Sumati): all caturmātra gaṇaalu (3 per odd paada, 5 per even), plus the
     positional rules (odd gaṇa ≠ ja; 6th gaṇa = ja or nala).
-  - **ఉత్పలమాల / చంపకమాల** (Dāśarathi): exact gaṇa-sequence (bha-ra-na-bha-bha-ra-la-ga /
-    na-ja-bha-ja-ja-ja-ra) match.
+  - **Vṛttamulu** (Dāśarathi): exact gaṇa-sequence match for **ఉత్పలమాల**,
+    **చంపకమాల**, **మత్తేభం**, and **శార్దూలం**, auto-detected per verse. Ingestion
+    splits each vṛtta into 4 metrical padas at true syllable boundaries.
 
 ### Run the verifier
 
@@ -81,30 +84,29 @@ python3 -m http.server        # then open http://localhost:8000/padyaalu/
 
 **Working app + verified engine.** Corpus:
 
-| Śatakam | Metre | Poems | Verified |
-|---|---|---|---|
-| Vemana (వేమన) | ఆటవెలది | 9 | ✓ all |
-| Sumati (సుమతీ) | కంద పద్యం | 8 | ✓ all |
-| Dāśarathi (దాశరథి) | ఉత్పలమాల / చంపకమాల | 0 | pending source |
+| Śatakam | Metre | Poems | Chandassu verified | Meanings |
+|---|---|---|---|---|
+| Vemana (వేమన) | ఆటవెలది | 9 | ✓ all 9 | ✓ all |
+| Sumati (సుమతీ) | కంద పద్యం | 8 | ✓ all 8 | ✓ all |
+| Dāśarathi (దాశరథి) | ఉత్పలమాల / చంపకమాల / మత్తేభం | 104 | 63 of 104 | 3 seeded, rest pending |
 
-Every poem above passes `verify.cjs`.
+**80 of 121 verses** currently pass `verify.cjs` (Vemana + Sumati fully; 63 Dāśarathi
+vṛttas). The other 41 Dāśarathi verses are marked `chandassuVerified: false` — the app
+still shows their syllable laghu/guru marks, just not a verified gaṇa split yet.
 
-> **On sourcing the texts.** The intended source (andhrabharati.com) and every other
-> external content site (Wikisource, Wikipedia, vignanam.org, archive.org, …) are
-> **blocked by this environment's network policy** — only package registries and
-> `raw.githubusercontent.com` are reachable, and no public repo/gist of these śatakams
-> could be located from here (GitHub search is also blocked). The verses above were
-> therefore **reproduced from memory and then filtered by the verifier** — several
-> misremembered lines were caught and dropped rather than shipped. This is a curated,
-> engine-checked subset, **not** the complete ~100-verse śatakams.
->
-> **Dāśarathi** is left empty on purpose: its metres are vṛttamulu (ఉత్పలమాల /
-> చంపకమాల), which the verifier matches by exact gaṇa pattern, and from-memory attempts
-> did not scan cleanly — so nothing was included rather than risk wrong text.
->
-> To complete the full corpus accurately, either point the project at a reachable source
-> (a GitHub repo/raw URL, since raw.githubusercontent.com works), paste the texts, or run
-> ingestion in an environment whose network policy allows the content sites.
+### Notes on the corpus
+
+- **Vemana & Sumati** were reproduced from memory and filtered by the verifier (several
+  misremembered lines were caught and dropped). Curated, engine-checked subsets — not the
+  full ~100-verse śatakams.
+- **Dāśarathi** — the complete 104-verse text was supplied and ingested. Ingestion splits
+  each verse into 4 metrical padas and auto-detects the vṛtta; 63 verify exactly. The
+  unverified 41 are mostly the longer 5-line vṛttas (mattebha/śārdūla layouts) and a few
+  verses with small transcription deviations in the supplied text — to be reconciled.
+- **Meanings** for Dāśarathi are the large remaining task: its verses are dense, ornate,
+  Sanskrit-compound-heavy Telugu. Three are seeded (verses 16, 24, 25) to establish the
+  pattern; the rest show a "త్వరలో" placeholder. External content sites remain blocked by
+  the environment network policy, so meanings are authored, not fetched.
 
 ## Planned next steps
 
