@@ -4,9 +4,15 @@ Sub-project of **myflare**. Tracks Indian mutual fund portfolios with live NAV d
 
 ## Requirements
 
-### Portfolios
-- Track **5 Indian mutual fund portfolios** (e.g., Retirement, Kids Education, Tax Saver, Wealth Builder, Emergency).
-- Provide an **"Add portfolio"** option to create new portfolios beyond the initial five.
+### People & portfolios
+- Portfolios belong to **people**, and each person can have **multiple portfolios** (two-level hierarchy: person → portfolios → funds).
+- Initial set — 5 portfolios across 4 people:
+  - **Manoj** — Retirement, Kids Education
+  - **Savarnika** — Main Portfolio
+  - **Nanna** — Retirement
+  - **Amma** — Exploratory
+- Provide an **"Add portfolio"** option (and the ability to introduce new people).
+- Mobile-first: the top of the page shows a **compact summary of every portfolio (grouped by person)** without much scrolling; details follow below.
 
 ### Holdings (per portfolio)
 Each entry the user adds consists of:
@@ -25,20 +31,73 @@ Each entry the user adds consists of:
 - Raw portfolio/fund data is persisted as an **encrypted blob** in a **Firebase** backend (Firestore or Realtime Database).
 - Encryption happens **client-side** before upload (e.g., AES-GCM via Web Crypto API with a user-supplied passphrase), so Firebase only ever stores ciphertext.
 
-## Current status
+## Current status — app is live
 
-**Frontend UI direction under review.** Three unwired sample pages (static HTML, sample data, no JavaScript/backend) are in [`mockups/`](mockups/):
+The app (**Option A** design, mobile-first) is wired and lives at [`index.html`](index.html) + [`app.js`](app.js) + [`styles.css`](styles.css). Pure static files — works on GitHub Pages, no build step.
 
-| Sample | File | Direction |
-|---|---|---|
-| Option A | [`mockups/option-a-cards.html`](mockups/option-a-cards.html) | Dashboard with summary stat tiles + portfolio cards grid |
-| Option B | [`mockups/option-b-ledger.html`](mockups/option-b-ledger.html) | Dense single-page ledger — all funds in one grouped table |
-| Option C | [`mockups/option-c-sidebar.html`](mockups/option-c-sidebar.html) | App-style dark UI — sidebar portfolio navigation + detail pane |
+### What works
+- **Vault**: on first use you choose a passphrase; all data is encrypted client-side (PBKDF2 → AES-GCM via Web Crypto) before storage. Unlock on each visit; 🔒 Lock button re-locks.
+- **Add portfolio**: two modes, switchable via tabs in the dialog:
+  - **Fill form** — owner (with autocomplete of existing people) + portfolio name + optional first fund.
+  - **Paste JSON** — paste a portfolio object or an array of them (e.g. transcribed from a CAMS/KFintech CAS statement) and it **adds** to your existing data, never replaces it. Funds can be given an `isin` instead of a scheme `code`; on import the app searches mfapi.in by name and auto-links any fund whose ISIN matches exactly — never a name-only guess, since a wrong code would silently show the wrong fund's live NAV. Unmatched funds show **"🔗 link fund"** instead of a price; tap the row, search, and pick the right scheme — units/buy NAV/buy date already entered are kept. See [JSON import shape](#json-import-shape) below.
+- **Fund dropdown**: typeahead search against `https://api.mfapi.in/mf/search?q=…` (free JSON API over AMFI data, open CORS). Picking a fund fetches its latest NAV; **Buy NAV defaults to the latest NAV** if left blank.
+- **Add funds on the fly**: every portfolio card has "+ Add fund". Units accept 3 decimal places; each fund takes an optional **buy date**, which drives **XIRR / CAGR** (annualised return) shown per fund, per portfolio, and overall. Tap a fund row to edit its units/buy NAV/buy date or remove it (edit dialog opens without stealing focus into a text box); delete whole portfolios from the card.
+- **Short display names**: long AMFI scheme names (e.g. "Aditya Birla Sun Life Nifty India Defence Index Fund-Direct Plan-Growth") are auto-abbreviated for the fund row ("ABSL Nifty India Defence Index") via a built-in AMC abbreviation table + boilerplate stripper (Direct/Regular/Plan/Growth/IDCW/…). The auto name is only a starting point — the **Display name** field (add or edit dialog) is editable, so you can rename any fund to whatever's recognisable to you; the full official name is always kept as a hover title and used in search.
+- **XIRR / 1D / 1W / 1M toggle**: a "Show" segmented control switches the change metric shown on *every* row at once — funds, portfolio badges, and person subtotals — not just one summary figure. **XIRR/CAGR is the default** (not absolute gain): each fund's annualised return from its buy date, portfolios and people show the same computed from their combined cashflows; a fund with no buy date falls back to its plain since-buy % until you set one. All three period views (1D/1W/1M) pull each held fund's historical NAV series (`api.mfapi.in/mf/{schemeCode}`, cached in memory for the session) and diff against the nearest prior trading day **relative to that fund's own latest known NAV date** — so "1D" always means "last published NAV vs. the trading day before it," never "vs. right now," which would be wrong if you haven't refreshed today. A "≈" prefix means history is still loading for some funds. All change percentages are shown to **two decimal places**.
+- **No cross-person total**: there is deliberately no combined "everyone's money" figure — summing different people's portfolios into one number isn't meaningful. Each portfolio, and each person's subtotal, stands on its own.
+- **NAV refresh**: `https://api.mfapi.in/mf/{schemeCode}/latest` per held fund — sits next to the Show toggle ("↻ Refresh NAV"), plus automatically on unlock when data is older than 6 h.
+- **Persistence**: the encrypted blob is always in `localStorage`; optionally synced to **Firebase** (Firestore) — newer copy wins on load.
+- **Stays unlocked**: after entering your passphrase once, the derived key is cached (non-extractable, in IndexedDB) for a **30-minute sliding session** — refreshing the page doesn't ask again. 🔒 Lock (top-right) ends the session immediately.
+- **Backup**: Settings → Export/Import JSON (decrypted, for your own safekeeping).
+- **Not pinch-zoomable** — the app is fixed-scale like a native app; pinch-to-zoom is disabled via the viewport meta tag.
+- **Layout**: "+ Add portfolio" lives at the bottom of the page (below all cards) since it's the least-frequent action; "↻ Refresh NAV" sits next to the Show toggle at the top, where the data it affects is read. Portfolio cards are visually raised — white background, soft shadow — against the page.
 
-Once one direction is approved, wiring proceeds: forms, NAV fetch, encryption, Firebase persistence.
+### Firebase setup (optional, for cross-device sync)
+1. Create a Firebase project → add a **Web app** → copy its config JSON.
+2. Enable **Authentication → Anonymous** sign-in.
+3. Create a **Firestore** database, with rules allowing signed-in access, e.g.
+   `allow read, write: if request.auth != null;` on `portfolio-tracker/vault`.
+4. Paste the config JSON into the app's **Settings** dialog.
+Only ciphertext ever reaches Firestore; the passphrase never leaves the device.
 
-## Planned next steps (after UI approval)
-1. Wire chosen mockup into the working app (vanilla JS or a light framework — TBD).
-2. NAV fetch layer with scheme-code lookup and daily-NAV caching.
-3. Client-side encryption (Web Crypto AES-GCM) + Firebase read/write of the blob.
-4. Add/edit/delete flows for portfolios and holdings.
+⚠️ There is **no passphrase recovery** — the encryption is only as good as that. Export a JSON backup now and then.
+
+### JSON import shape
+
+Used by Add portfolio → Paste JSON. A single object or an array of them:
+
+```json
+[
+  {
+    "owner": "Manoj",
+    "name": "CAS Import",
+    "funds": [
+      {
+        "isin": "INF209KC1183",
+        "name": "Aditya Birla Sun Life Nifty India Defence Index Fund - Direct Plan - Growth",
+        "shortName": "ABSL Nifty India Defence Index",
+        "units": 39394.089,
+        "buyNav": 10.1538,
+        "buyDate": null
+      }
+    ]
+  }
+]
+```
+
+`code` (mfapi.in scheme code) can be given directly if known; otherwise `isin` triggers auto-linking as
+described above. `buyNav` from a CAS statement is usually the **blended average cost** (Cost Value ÷ Unit
+Balance) since a folio is often built from several purchases — good enough for absolute gain, but only an
+approximation for XIRR if you then set a single `buyDate`, since the app models each fund as one lump buy.
+
+### Where holdings data comes from
+
+There's no API for an individual to pull their own holdings from CAMS/KFintech — the practical options:
+1. **Paste JSON** (above) — transcribe or convert a CAS statement by hand or with help, paste once.
+2. A future **CAS PDF import** (not built): CAMS/KFintech/MFCentral email a free password-protected PDF
+   (password is usually your PAN) with every holding across AMCs. Parsing it client-side with pdf.js — PDF and
+   password never leaving the browser — would be the natural next step if this becomes a repeated task, but
+   needs a real (redacted) sample PDF to build the parser against, not just screenshots.
+
+### Mockups (historical)
+The three UI directions reviewed before building are kept in [`mockups/`](mockups/): [Option A](mockups/option-a-cards.html) (chosen), [Option B](mockups/option-b-ledger.html), [Option C](mockups/option-c-sidebar.html).

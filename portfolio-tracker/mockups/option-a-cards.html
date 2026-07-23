@@ -10,7 +10,11 @@
     --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
     --grid: #e1e0d9; --border: rgba(11,11,11,0.10);
     --up: #006300; --down: #d03b3b; --accent: #2a78d6;
-    --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100; --s5: #e87ba4;
+    /* one colour per person */
+    --p1: #2a78d6; /* Manoj */
+    --p2: #eb6834; /* Savarnika */
+    --p3: #1baf7a; /* Nanna */
+    --p4: #eda100; /* Amma */
   }
   * { box-sizing: border-box; margin: 0; }
 
@@ -18,59 +22,76 @@
   body {
     font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
     background: var(--page); color: var(--ink);
-    padding: 1rem;
+    padding: 0.9rem;
     padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
   }
   .wrap { max-width: 1080px; margin: 0 auto; }
 
-  .topbar { margin-bottom: 1rem; }
   .titlerow { display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem; }
-  .titlerow h1 { font-size: 1.25rem; letter-spacing: -0.02em; }
-  .navdate { color: var(--muted); font-size: 0.75rem; white-space: nowrap; }
-  .actions { display: flex; gap: 0.6rem; margin-top: 0.75rem; }
+  .titlerow h1 { font-size: 1.15rem; letter-spacing: -0.02em; }
+  .navdate { color: var(--muted); font-size: 0.72rem; white-space: nowrap; }
+
+  .overall { display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; margin: 0.5rem 0 0.75rem; }
+  .overall .total { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.01em; }
+  .overall .delta { font-size: 0.85rem; font-weight: 650; }
+  .overall .today { font-size: 0.78rem; color: var(--muted); }
+  .up { color: var(--up); }
+  .down { color: var(--down); }
+
+  /* quick per-portfolio summary — the first screen */
+  .quick { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 0.35rem 0.9rem; }
+  .owner {
+    display: flex; align-items: center; gap: 0.45rem;
+    padding: 0.55rem 0 0.15rem; font-size: 0.72rem; font-weight: 650;
+    text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-2);
+  }
+  .owner .osum { margin-left: auto; font-weight: 500; text-transform: none; letter-spacing: 0; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; flex: none; }
+  .qrow {
+    display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
+    padding: 0.5rem 0; text-decoration: none; color: inherit;
+    border-bottom: 1px solid var(--grid); font-size: 0.9rem;
+  }
+  .qgroup:last-child .qrow:last-child { border-bottom: none; }
+  .qrow .pname { font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .qrow .num { font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--ink-2); }
+  .qrow .num b { font-weight: 650; color: var(--ink); margin-right: 0.5rem; }
+  .qrow .pct { font-weight: 650; font-size: 0.82rem; }
+
+  .actions { display: flex; gap: 0.6rem; margin: 0.75rem 0; }
   .btn {
-    flex: 1; font: inherit; font-size: 0.9rem; padding: 0.6rem 0.9rem; border-radius: 10px;
+    flex: 1; font: inherit; font-size: 0.88rem; padding: 0.55rem 0.9rem; border-radius: 10px;
     border: 1px solid var(--border); background: var(--surface); color: var(--ink);
     cursor: pointer; text-align: center;
   }
   .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
 
-  .tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem; }
-  .tile { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 0.85rem 1rem; }
-  .tile.hero { grid-column: 1 / -1; }
-  .tile .label { font-size: 0.75rem; color: var(--ink-2); margin-bottom: 0.3rem; }
-  .tile .value { font-size: 1.35rem; font-weight: 650; letter-spacing: -0.01em; }
-  .tile.hero .value { font-size: 1.9rem; }
-  .delta { font-size: 0.82rem; font-weight: 600; margin-top: 0.25rem; }
-  .delta.up { color: var(--up); }
-  .delta.down { color: var(--down); }
-
-  .alloc { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 0.85rem 1rem; margin-bottom: 1rem; }
+  .alloc { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 0.85rem 1rem; margin-bottom: 1.25rem; }
   .alloc .label { font-size: 0.75rem; color: var(--ink-2); margin-bottom: 0.6rem; }
   .bar { display: flex; height: 12px; border-radius: 4px; overflow: hidden; gap: 2px; background: var(--surface); }
   .bar span { display: block; height: 100%; }
   .legend { display: flex; flex-wrap: wrap; gap: 0.35rem 1rem; margin-top: 0.65rem; font-size: 0.78rem; color: var(--ink-2); }
   .legend i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 0.35rem; }
 
+  /* per-person detail sections */
+  .person { margin-bottom: 1.25rem; }
+  .person > h2 { display: flex; align-items: center; gap: 0.5rem; font-size: 1rem; margin-bottom: 0.6rem; }
+  .person > h2 .psum { margin-left: auto; font-size: 0.78rem; font-weight: 500; color: var(--muted); font-variant-numeric: tabular-nums; }
   .cards { display: grid; grid-template-columns: 1fr; gap: 0.75rem; }
   .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.1rem; }
   .card header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.65rem; }
-  .card header i { width: 9px; height: 9px; border-radius: 50%; flex: none; }
   .card header h2 { font-size: 0.95rem; margin-right: auto; line-height: 1.3; }
   .badge { font-size: 0.76rem; font-weight: 650; padding: 0.15rem 0.5rem; border-radius: 999px; border: 1px solid var(--border); white-space: nowrap; flex: none; }
-  .badge.up { color: var(--up); }
-  .badge.down { color: var(--down); }
   .card .money { display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; }
   .card .cur { font-size: 1.25rem; font-weight: 650; }
   .card .inv { font-size: 0.78rem; color: var(--muted); }
   .holdings { margin-top: 0.75rem; border-top: 1px solid var(--grid); padding-top: 0.55rem; font-size: 0.82rem; }
   .holdings div { display: flex; justify-content: space-between; gap: 1rem; padding: 0.25rem 0; color: var(--ink-2); }
   .holdings b { font-weight: 500; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .holdings .up { color: var(--up); font-variant-numeric: tabular-nums; white-space: nowrap; }
-  .holdings .down { color: var(--down); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .holdings span { font-variant-numeric: tabular-nums; white-space: nowrap; }
   .card.add {
     border-style: dashed; display: flex; align-items: center; justify-content: center;
-    color: var(--muted); min-height: 72px; cursor: pointer; font-size: 0.95rem;
+    color: var(--muted); min-height: 64px; cursor: pointer; font-size: 0.9rem;
   }
   .card.add:hover { color: var(--accent); border-color: var(--accent); }
   footer { margin-top: 1.5rem; color: var(--muted); font-size: 0.75rem; line-height: 1.5; }
@@ -79,23 +100,19 @@
   @media (min-width: 640px) {
     body { padding: 1.5rem; }
     .cards { grid-template-columns: repeat(2, 1fr); }
-    .card.add { min-height: 120px; }
-    .tiles { grid-template-columns: repeat(2, 1fr); }
+    .quick { padding: 0.35rem 1.2rem; }
   }
 
   /* ---------- desktop ≥ 1000px ---------- */
   @media (min-width: 1000px) {
-    .topbar { display: flex; align-items: center; gap: 1rem; }
-    .titlerow { margin-right: auto; gap: 1rem; }
     .titlerow h1 { font-size: 1.35rem; }
     .navdate { font-size: 0.82rem; }
-    .actions { margin-top: 0; }
+    .overall .total { font-size: 1.8rem; }
+    .top { display: flex; align-items: baseline; gap: 2rem; }
+    .quick { column-count: 2; column-gap: 3rem; padding: 0.5rem 1.4rem; }
+    .qgroup { break-inside: avoid; }
+    .actions { margin: 1rem 0; }
     .btn { flex: none; padding: 0.45rem 0.9rem; font-size: 0.85rem; }
-    .tiles { grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.25rem; }
-    .tile.hero { grid-column: auto; }
-    .tile.hero .value { font-size: 1.55rem; }
-    .tile .value { font-size: 1.55rem; }
-    .alloc { margin-bottom: 1.5rem; }
     .cards { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
   }
 </style>
@@ -103,108 +120,142 @@
 <body>
 <div class="wrap">
 
-  <div class="topbar">
-    <div class="titlerow">
-      <h1>Portfolio Tracker</h1>
-      <span class="navdate">NAV as of 21 Jul 2026</span>
-    </div>
-    <div class="actions">
-      <button class="btn">↻ Refresh NAV</button>
-      <button class="btn primary">+ Add portfolio</button>
-    </div>
+  <div class="titlerow">
+    <h1>Portfolio Tracker</h1>
+    <span class="navdate">NAV as of 21 Jul 2026</span>
   </div>
 
-  <div class="tiles">
-    <div class="tile hero">
-      <div class="label">Current value</div>
-      <div class="value">₹9,23,970</div>
-      <div class="delta up">▲ ₹3,880 today (+0.42%)</div>
+  <div class="overall">
+    <span class="total">₹9,23,970</span>
+    <span class="delta up">▲ ₹1,81,310 (+24.4%)</span>
+    <span class="today">today <span class="up">▲ +0.42%</span></span>
+  </div>
+
+  <!-- quick summary: every portfolio, grouped by person, on the first screen -->
+  <nav class="quick">
+    <div class="qgroup">
+      <div class="owner"><i class="dot" style="background:var(--p1)"></i>Manoj<span class="osum">₹3,86,260 · +27.8%</span></div>
+      <a class="qrow" href="#manoj-retirement">
+        <span class="pname">Retirement</span>
+        <span class="num"><b>₹2,44,530</b><span class="pct up">▲ 34.2%</span></span>
+      </a>
+      <a class="qrow" href="#manoj-kids">
+        <span class="pname">Kids Education</span>
+        <span class="num"><b>₹1,41,730</b><span class="pct up">▲ 18.1%</span></span>
+      </a>
     </div>
-    <div class="tile">
-      <div class="label">Invested</div>
-      <div class="value">₹7,42,660</div>
+    <div class="qgroup">
+      <div class="owner"><i class="dot" style="background:var(--p2)"></i>Savarnika<span class="osum">₹1,86,430 · +24.3%</span></div>
+      <a class="qrow" href="#savarnika-main">
+        <span class="pname">Main Portfolio</span>
+        <span class="num"><b>₹1,86,430</b><span class="pct up">▲ 24.3%</span></span>
+      </a>
     </div>
-    <div class="tile">
-      <div class="label">Overall gain</div>
-      <div class="value">₹1,81,310</div>
-      <div class="delta up">▲ +24.4%</div>
+    <div class="qgroup">
+      <div class="owner"><i class="dot" style="background:var(--p3)"></i>Nanna<span class="osum">₹2,68,960 · +27.8%</span></div>
+      <a class="qrow" href="#nanna-retirement">
+        <span class="pname">Retirement</span>
+        <span class="num"><b>₹2,68,960</b><span class="pct up">▲ 27.8%</span></span>
+      </a>
     </div>
-    <div class="tile">
-      <div class="label">Portfolios · Funds</div>
-      <div class="value">5 · 12</div>
+    <div class="qgroup">
+      <div class="owner"><i class="dot" style="background:var(--p4)"></i>Amma<span class="osum">₹82,320 · +2.9%</span></div>
+      <a class="qrow" href="#amma-exploratory">
+        <span class="pname">Exploratory</span>
+        <span class="num"><b>₹82,320</b><span class="pct up">▲ 2.9%</span></span>
+      </a>
     </div>
+  </nav>
+
+  <div class="actions">
+    <button class="btn">↻ Refresh NAV</button>
+    <button class="btn primary">+ Add portfolio</button>
   </div>
 
   <div class="alloc">
-    <div class="label">Allocation by portfolio (current value)</div>
+    <div class="label">Allocation by person (current value)</div>
     <div class="bar">
-      <span style="width:26.5%; background:var(--s1)"></span>
-      <span style="width:15.3%; background:var(--s2)"></span>
-      <span style="width:20.2%; background:var(--s3)"></span>
-      <span style="width:29.1%; background:var(--s4)"></span>
-      <span style="width:8.9%;  background:var(--s5)"></span>
+      <span style="width:41.8%; background:var(--p1)"></span>
+      <span style="width:20.2%; background:var(--p2)"></span>
+      <span style="width:29.1%; background:var(--p3)"></span>
+      <span style="width:8.9%;  background:var(--p4)"></span>
     </div>
     <div class="legend">
-      <span><i style="background:var(--s1)"></i>Manoj · Retirement 26.5%</span>
-      <span><i style="background:var(--s2)"></i>Kids Education 15.3%</span>
-      <span><i style="background:var(--s3)"></i>Savarnika · Main 20.2%</span>
-      <span><i style="background:var(--s4)"></i>Nanna · Retirement 29.1%</span>
-      <span><i style="background:var(--s5)"></i>Amma · Exploratory 8.9%</span>
+      <span><i style="background:var(--p1)"></i>Manoj 41.8%</span>
+      <span><i style="background:var(--p2)"></i>Savarnika 20.2%</span>
+      <span><i style="background:var(--p3)"></i>Nanna 29.1%</span>
+      <span><i style="background:var(--p4)"></i>Amma 8.9%</span>
     </div>
   </div>
 
-  <div class="cards">
-    <div class="card">
-      <header><i style="background:var(--s1)"></i><h2>Manoj Portfolio - Retirement</h2><span class="badge up">▲ 34.2%</span></header>
-      <div class="money"><span class="cur">₹2,44,530</span><span class="inv">invested ₹1,82,160</span></div>
-      <div class="holdings">
-        <div><b>Parag Parikh Flexi Cap</b><span class="up">▲ 40.0%</span></div>
-        <div><b>HDFC Index Nifty 50</b><span class="up">▲ 28.5%</span></div>
-        <div><b>SBI Small Cap</b><span class="up">▲ 33.7%</span></div>
+  <section class="person">
+    <h2><i class="dot" style="background:var(--p1)"></i>Manoj<span class="psum">2 portfolios · ₹3,86,260 · <span class="up">▲ 27.8%</span></span></h2>
+    <div class="cards">
+      <div class="card" id="manoj-retirement">
+        <header><h2>Retirement</h2><span class="badge up">▲ 34.2%</span></header>
+        <div class="money"><span class="cur">₹2,44,530</span><span class="inv">invested ₹1,82,160</span></div>
+        <div class="holdings">
+          <div><b>Parag Parikh Flexi Cap</b><span class="up">▲ 40.0%</span></div>
+          <div><b>HDFC Index Nifty 50</b><span class="up">▲ 28.5%</span></div>
+          <div><b>SBI Small Cap</b><span class="up">▲ 33.7%</span></div>
+        </div>
+      </div>
+      <div class="card" id="manoj-kids">
+        <header><h2>Kids Education</h2><span class="badge up">▲ 18.1%</span></header>
+        <div class="money"><span class="cur">₹1,41,730</span><span class="inv">invested ₹1,20,000</span></div>
+        <div class="holdings">
+          <div><b>Axis Bluechip</b><span class="up">▲ 18.2%</span></div>
+          <div><b>UTI Nifty Next 50 Index</b><span class="up">▲ 17.9%</span></div>
+        </div>
       </div>
     </div>
+  </section>
 
-    <div class="card">
-      <header><i style="background:var(--s2)"></i><h2>Kids Education</h2><span class="badge up">▲ 18.1%</span></header>
-      <div class="money"><span class="cur">₹1,41,730</span><span class="inv">invested ₹1,20,000</span></div>
-      <div class="holdings">
-        <div><b>Axis Bluechip</b><span class="up">▲ 18.2%</span></div>
-        <div><b>UTI Nifty Next 50 Index</b><span class="up">▲ 17.9%</span></div>
+  <section class="person">
+    <h2><i class="dot" style="background:var(--p2)"></i>Savarnika<span class="psum">1 portfolio · ₹1,86,430 · <span class="up">▲ 24.3%</span></span></h2>
+    <div class="cards">
+      <div class="card" id="savarnika-main">
+        <header><h2>Main Portfolio</h2><span class="badge up">▲ 24.3%</span></header>
+        <div class="money"><span class="cur">₹1,86,430</span><span class="inv">invested ₹1,50,000</span></div>
+        <div class="holdings">
+          <div><b>Mirae Asset Tax Saver</b><span class="up">▲ 24.3%</span></div>
+          <div><b>Quant ELSS Tax Saver</b><span class="up">▲ 24.2%</span></div>
+        </div>
       </div>
     </div>
+  </section>
 
-    <div class="card">
-      <header><i style="background:var(--s3)"></i><h2>Savarnika - Main Portfolio</h2><span class="badge up">▲ 24.3%</span></header>
-      <div class="money"><span class="cur">₹1,86,430</span><span class="inv">invested ₹1,50,000</span></div>
-      <div class="holdings">
-        <div><b>Mirae Asset Tax Saver</b><span class="up">▲ 24.3%</span></div>
-        <div><b>Quant ELSS Tax Saver</b><span class="up">▲ 24.2%</span></div>
+  <section class="person">
+    <h2><i class="dot" style="background:var(--p3)"></i>Nanna<span class="psum">1 portfolio · ₹2,68,960 · <span class="up">▲ 27.8%</span></span></h2>
+    <div class="cards">
+      <div class="card" id="nanna-retirement">
+        <header><h2>Retirement</h2><span class="badge up">▲ 27.8%</span></header>
+        <div class="money"><span class="cur">₹2,68,960</span><span class="inv">invested ₹2,10,500</span></div>
+        <div class="holdings">
+          <div><b>ICICI Pru Bluechip</b><span class="up">▲ 29.1%</span></div>
+          <div><b>Kotak Emerging Equity</b><span class="up">▲ 29.8%</span></div>
+          <div><b>Nippon India Growth</b><span class="up">▲ 24.7%</span></div>
+        </div>
       </div>
     </div>
+  </section>
 
-    <div class="card">
-      <header><i style="background:var(--s4)"></i><h2>Nanna - Retirement</h2><span class="badge up">▲ 27.8%</span></header>
-      <div class="money"><span class="cur">₹2,68,960</span><span class="inv">invested ₹2,10,500</span></div>
-      <div class="holdings">
-        <div><b>ICICI Pru Bluechip</b><span class="up">▲ 29.1%</span></div>
-        <div><b>Kotak Emerging Equity</b><span class="up">▲ 29.8%</span></div>
-        <div><b>Nippon India Growth</b><span class="up">▲ 24.7%</span></div>
+  <section class="person">
+    <h2><i class="dot" style="background:var(--p4)"></i>Amma<span class="psum">1 portfolio · ₹82,320 · <span class="up">▲ 2.9%</span></span></h2>
+    <div class="cards">
+      <div class="card" id="amma-exploratory">
+        <header><h2>Exploratory</h2><span class="badge up">▲ 2.9%</span></header>
+        <div class="money"><span class="cur">₹82,320</span><span class="inv">invested ₹80,000</span></div>
+        <div class="holdings">
+          <div><b>SBI Magnum Ultra Short</b><span class="up">▲ 5.4%</span></div>
+          <div><b>ICICI Pru Gilt</b><span class="down">▼ 1.9%</span></div>
+        </div>
       </div>
+      <div class="card add">+ Add portfolio</div>
     </div>
+  </section>
 
-    <div class="card">
-      <header><i style="background:var(--s5)"></i><h2>Amma - Exploratory</h2><span class="badge up">▲ 2.9%</span></header>
-      <div class="money"><span class="cur">₹82,320</span><span class="inv">invested ₹80,000</span></div>
-      <div class="holdings">
-        <div><b>SBI Magnum Ultra Short</b><span class="up">▲ 5.4%</span></div>
-        <div><b>ICICI Pru Gilt</b><span class="down">▼ 1.9%</span></div>
-      </div>
-    </div>
-
-    <div class="card add">+ Add portfolio</div>
-  </div>
-
-  <footer>Mockup — static sample data, no wiring. NAV source &amp; encrypted Firebase sync come after UI approval.</footer>
+  <footer>Mockup — static sample data, no wiring. Tapping a row in the top summary jumps to that portfolio's card. NAV source &amp; encrypted Firebase sync come after UI approval.</footer>
 </div>
 </body>
 </html>
