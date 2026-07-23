@@ -1,0 +1,195 @@
+/* ===================================================================
+   Forest Friends — kids' voice animal game
+   Pure CSS forest scene; animals are emoji, sounds are synthesized.
+   =================================================================== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: "Baloo 2", "Comic Sans MS", "Segoe UI Rounded", system-ui, sans-serif;
+  overflow: hidden;
+  background: #7ec8e3;
+  color: #123;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ----------------------------- SCENE ----------------------------- */
+.scene { position: fixed; inset: 0; overflow: hidden; }
+
+.sky {
+  position: absolute; inset: 0;
+  background: linear-gradient(#8fd3f4 0%, #a8e0f0 42%, #d6f2d0 60%, #cdeeb0 62%, #cdeeb0 100%);
+}
+.sun {
+  position: absolute; top: 4vh; left: 6vw; font-size: clamp(48px, 9vw, 110px);
+  filter: drop-shadow(0 0 18px rgba(255,220,80,.8));
+  animation: sunspin 40s linear infinite;
+}
+@keyframes sunspin { to { transform: rotate(360deg); } }
+
+.clouds { position: absolute; inset: 0; pointer-events: none; }
+.cloud { position: absolute; font-size: clamp(40px, 7vw, 84px); opacity: .95; }
+.c1 { top: 8vh;  left: -20%; animation: drift 38s linear infinite; }
+.c2 { top: 16vh; left: -30%; animation: drift 55s linear infinite; animation-delay: -12s; }
+.c3 { top: 5vh;  left: -25%; animation: drift 47s linear infinite; animation-delay: -30s; }
+@keyframes drift { to { transform: translateX(150vw); } }
+
+.hills {
+  position: absolute; left: 0; right: 0; bottom: 22vh; height: 26vh;
+  background:
+    radial-gradient(120% 100% at 20% 100%, #93d67a 0 40%, transparent 41%),
+    radial-gradient(120% 100% at 75% 100%, #7fc966 0 42%, transparent 43%);
+}
+.ground {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 26vh;
+  background: linear-gradient(#6ab04c, #4e8b36);
+  box-shadow: inset 0 6px 0 rgba(255,255,255,.18);
+}
+
+/* trees are emoji injected by JS into .treeline */
+.treeline {
+  position: absolute; left: 0; right: 0; bottom: 20vh; height: 18vh;
+  display: flex; align-items: flex-end; justify-content: space-around;
+  padding: 0 1vw; pointer-events: none; font-size: clamp(46px, 8vw, 100px);
+  line-height: 1;
+}
+.treeline span { filter: drop-shadow(0 6px 3px rgba(0,0,0,.12)); transform-origin: bottom center; }
+.treeline span:nth-child(odd)  { font-size: .82em; animation: sway 6s ease-in-out infinite; }
+.treeline span:nth-child(even) { animation: sway 7.5s ease-in-out infinite reverse; }
+@keyframes sway { 0%,100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
+
+/* ----------------------------- STAGE / ANIMALS ----------------------------- */
+.stage {
+  position: absolute; left: 0; right: 0; bottom: 3vh; height: 30vh;
+  z-index: 5;
+}
+.animal {
+  position: absolute; bottom: 0;
+  font-size: clamp(56px, 12vw, 150px);
+  line-height: 1; cursor: pointer;
+  filter: drop-shadow(0 10px 8px rgba(0,0,0,.22));
+  will-change: transform, opacity;
+}
+.animal .a-name {
+  position: absolute; left: 50%; bottom: -1.6em; transform: translateX(-50%);
+  font-size: .22em; background: rgba(255,255,255,.9); color: #234;
+  padding: .15em .6em; border-radius: 999px; white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0,0,0,.15);
+}
+/* entrance from the left or right, with a happy hop settle */
+@keyframes walkInLeft  { 0% { transform: translateX(-70vw) scaleX(1); } 100% { transform: translateX(0) scaleX(1); } }
+@keyframes walkInRight { 0% { transform: translateX(70vw) scaleX(-1); } 100% { transform: translateX(0) scaleX(-1); } }
+@keyframes idleHop     { 0%,100% { translate: 0 0; } 50% { translate: 0 -10px; } }
+.animal.from-left  { animation: walkInLeft .9s cubic-bezier(.2,.7,.3,1) both; }
+.animal.from-right { animation: walkInRight .9s cubic-bezier(.2,.7,.3,1) both; }
+.animal.settled    { animation: idleHop 2.4s ease-in-out infinite; }
+.animal.leaving-left  { animation: walkInLeft .8s ease-in reverse both; }
+.animal.leaving-right { animation: walkInRight .8s ease-in reverse both; }
+
+/* celebratory sparkle when a matching animal arrives */
+.sparkle {
+  position: absolute; z-index: 6; font-size: clamp(30px, 6vw, 64px);
+  pointer-events: none; animation: pop 1s ease-out forwards;
+}
+@keyframes pop { 0% { transform: scale(.3); opacity: 0; } 30% { opacity: 1; } 100% { transform: scale(1.6) translateY(-40px); opacity: 0; } }
+
+/* ----------------------------- LETTER CARD ----------------------------- */
+.letter-card {
+  position: absolute; right: 2.5vw; bottom: 4vh; z-index: 8;
+  width: clamp(96px, 15vw, 168px); aspect-ratio: 3/4;
+  background: linear-gradient(#fff, #fff5d6);
+  border: 5px solid #ffcf3f; border-radius: 18px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  box-shadow: 0 12px 26px rgba(0,0,0,.22); text-align: center;
+  transition: transform .2s;
+}
+.letter-card.bump { animation: bump .5s ease; }
+@keyframes bump { 0%,100% { transform: none; } 30% { transform: scale(1.12) rotate(-3deg); } }
+.letter-glyph { font-size: clamp(56px, 11vw, 120px); font-weight: 800; color: #ef6c3b; line-height: 1; }
+.letter-hint { font-size: clamp(11px, 1.6vw, 15px); color: #a06; font-weight: 700; margin-top: .3em; }
+
+/* ----------------------------- HEARD BUBBLE ----------------------------- */
+.heard-bubble {
+  position: absolute; left: 50%; top: 14vh; transform: translateX(-50%);
+  z-index: 9; background: rgba(255,255,255,.95); color: #234;
+  padding: .5em 1em; border-radius: 999px; font-size: clamp(16px, 3vw, 26px);
+  font-weight: 700; box-shadow: 0 6px 18px rgba(0,0,0,.18); max-width: 84vw;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.heard-bubble.err { color: #b23; }
+
+/* ----------------------------- TOP BAR ----------------------------- */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 20;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: .6rem; padding: .5rem .8rem; flex-wrap: wrap;
+  background: linear-gradient(rgba(0,0,0,.16), transparent);
+}
+.brand { display: flex; align-items: center; gap: .4rem; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,.35); }
+.brand-emoji { font-size: 1.6rem; }
+.brand-name { font-weight: 800; font-size: clamp(1rem, 2.6vw, 1.4rem); }
+.controls { display: flex; gap: .4rem; flex-wrap: wrap; }
+.btn {
+  font: inherit; font-weight: 700; font-size: clamp(.8rem, 1.8vw, 1rem);
+  border: 0; border-radius: 999px; padding: .5em .9em; cursor: pointer;
+  background: rgba(255,255,255,.92); color: #234; box-shadow: 0 3px 8px rgba(0,0,0,.18);
+  transition: transform .12s, background .12s;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: translateY(1px) scale(.98); }
+.btn-primary { background: #ffcf3f; }
+select.btn { -webkit-appearance: none; appearance: none; padding-right: 1.4em; }
+.btn-mic { display: inline-flex; align-items: center; gap: .5em; background: #fff; }
+.btn-mic[aria-pressed="true"] { background: #ff5a5a; color: #fff; }
+.mic-dot { width: .7em; height: .7em; border-radius: 50%; background: #ff5a5a; }
+.btn-mic[aria-pressed="true"] .mic-dot { background: #fff; animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .4; transform: scale(1.5); } }
+
+/* ----------------------------- INDEX BAR ----------------------------- */
+.index-bar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 15;
+  background: rgba(20,40,20,.72); backdrop-filter: blur(6px);
+  color: #fff; padding: .4rem .7rem .5rem;
+}
+.index-label { font-size: clamp(.75rem, 2vw, 1rem); margin-bottom: .35rem; opacity: .95; }
+.index-label b { color: #ffd257; font-size: 1.2em; }
+.index-tip { opacity: .8; font-size: .85em; }
+.index-row {
+  display: flex; gap: .5rem; overflow-x: auto; padding-bottom: .2rem;
+  scrollbar-width: thin;
+}
+.chip {
+  flex: 0 0 auto; display: flex; flex-direction: column; align-items: center;
+  gap: .1rem; background: rgba(255,255,255,.14); border: 2px solid transparent;
+  border-radius: 14px; padding: .35rem .6rem; cursor: pointer; min-width: 68px;
+  transition: transform .12s, background .12s, border-color .12s;
+}
+.chip:hover { background: rgba(255,255,255,.26); transform: translateY(-2px); }
+.chip.active { border-color: #ffd257; background: rgba(255,210,87,.25); }
+.chip-emoji { font-size: clamp(1.6rem, 4.5vw, 2.4rem); line-height: 1; }
+.chip-name { font-size: clamp(.62rem, 1.6vw, .8rem); font-weight: 700; }
+.chip-tel  { font-size: clamp(.55rem, 1.4vw, .7rem); opacity: .7; }
+
+/* ----------------------------- OVERLAY ----------------------------- */
+.overlay {
+  position: fixed; inset: 0; z-index: 50; display: grid; place-items: center;
+  background: rgba(0,0,0,.5); padding: 1rem;
+}
+.overlay-card {
+  position: relative; background: #fff; color: #234; border-radius: 22px;
+  padding: 1.6rem 1.4rem; max-width: 460px; width: 100%;
+  box-shadow: 0 20px 60px rgba(0,0,0,.4); max-height: 90vh; overflow: auto;
+}
+.overlay-card h2 { font-size: 1.5rem; margin-bottom: .8rem; }
+.overlay-card ol { margin: 0 0 .8rem 1.1rem; display: grid; gap: .45rem; line-height: 1.35; }
+.overlay-note { font-size: .85rem; color: #567; margin-bottom: 1rem; }
+.overlay-close {
+  position: absolute; top: .6rem; right: .6rem; border: 0; background: #eee;
+  width: 2rem; height: 2rem; border-radius: 50%; cursor: pointer; font-size: 1rem;
+}
+.overlay-card .btn-primary { width: 100%; padding: .7em; font-size: 1.05rem; }
+
+@media (max-width: 560px) {
+  .brand-name { display: none; }
+  .letter-card { bottom: 10vh; }
+}

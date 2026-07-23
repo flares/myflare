@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forest Friends — voice animal game for kids</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- ======================= FOREST SCENE ======================= -->
+  <div id="scene" class="scene">
+    <div class="sky"></div>
+    <div class="sun">🌞</div>
+    <div class="clouds">
+      <span class="cloud c1">☁️</span>
+      <span class="cloud c2">☁️</span>
+      <span class="cloud c3">☁️</span>
+    </div>
+    <div class="hills"></div>
+    <div class="treeline" id="treeline"></div>
+    <div class="ground"></div>
+
+    <!-- animals live here -->
+    <div id="stage" class="stage"></div>
+
+    <!-- big prompt letter, bottom-right -->
+    <div id="letterCard" class="letter-card" title="Say an animal that starts with this letter!">
+      <span id="letterGlyph" class="letter-glyph">A</span>
+      <span class="letter-hint">say an animal!</span>
+    </div>
+
+    <!-- floating speech bubble showing what was heard -->
+    <div id="heardBubble" class="heard-bubble" hidden></div>
+  </div>
+
+  <!-- ======================= TOP CONTROL BAR ======================= -->
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-emoji">🌲</span>
+      <span class="brand-name">Forest Friends</span>
+    </div>
+    <div class="controls">
+      <button id="micBtn" class="btn btn-mic" aria-pressed="false">
+        <span class="mic-dot"></span>
+        <span id="micLabel">Tap to talk</span>
+      </button>
+      <button id="musicBtn" class="btn" aria-pressed="false" title="Playful background music">🎵 Music</button>
+      <button id="newLetterBtn" class="btn" title="Show a new letter">🎲 New letter</button>
+      <button id="clearBtn" class="btn" title="Send everyone home">🧹 Clear</button>
+      <select id="langSelect" class="btn" title="Voice language">
+        <option value="en-IN">English (India)</option>
+        <option value="en-US">English (US)</option>
+        <option value="te-IN">తెలుగు Telugu</option>
+      </select>
+      <button id="helpBtn" class="btn" title="How to play">❔</button>
+    </div>
+  </header>
+
+  <!-- ======================= BOTTOM INDEX ROW ======================= -->
+  <footer class="index-bar">
+    <div class="index-label">
+      Animals for <b id="indexLetter">A</b>
+      <span class="index-tip">— say “<span id="indexExample">Ant</span> raa” or “<span id="indexExample2">Ant</span> enter”</span>
+    </div>
+    <div id="indexRow" class="index-row"><!-- animal chips injected here --></div>
+  </footer>
+
+  <!-- ======================= HELP OVERLAY ======================= -->
+  <div id="helpOverlay" class="overlay" hidden>
+    <div class="overlay-card">
+      <button id="helpClose" class="overlay-close" aria-label="Close">✕</button>
+      <h2>🌳 How to play</h2>
+      <ol>
+        <li>Tap <b>Tap to talk</b> and allow the microphone.</li>
+        <li>A letter appears in the bottom-right. The bottom row lists animals for that letter.</li>
+        <li>Say an animal and “come”: <b>“Bear enter”</b>, <b>“Bear come”</b>, or in Telugu <b>“Bear <i>raa</i>”</b> / <b>“ఎలుగుబంటి రా”</b>.</li>
+        <li>The animal walks in making its own sound! 🐻🔊</li>
+        <li>Say any animal you like — not only the letter's. To send one home say <b>“Lion go”</b>, <b>“Lion <i>po</i>”</b>, or <b>“Lion bye”</b>.</li>
+        <li>No microphone? Just <b>tap an animal</b> in the bottom row to bring it in.</li>
+      </ol>
+      <p class="overlay-note">Tip: works best in Chrome. Everything runs offline — the animals are emoji and every sound is made live in your browser (no downloads).</p>
+      <button id="helpStart" class="btn btn-primary">Let's play! 🎉</button>
+    </div>
+  </div>
+
+  <!-- data + engines (built as separate modules) -->
+  <script src="animals.js"></script>
+  <script src="audio.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
