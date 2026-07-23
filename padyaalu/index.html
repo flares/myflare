@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="te">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Padyaalu — myflare</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --page: #f9f9f7; --surface: #fcfcfb; --ink: #0b0b0b; --ink-2: #52514e;
+    --muted: #898781; --border: rgba(11,11,11,0.10); --accent: #a6641b;
+    --chip: rgba(11,11,11,0.04); --padyam-bg: rgba(166,100,27,0.05);
+    --guru: rgba(166,100,27,0.16); --laghu: rgba(11,11,11,0.05);
+    --ok: #2e7d32; --bad: #c0392b;
+    --runover: 2.4rem;   /* wrapped continuation lines indent to here */
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink-2: #c3c2b7;
+      --muted: #898781; --border: rgba(255,255,255,0.10); --accent: #e0a35c;
+      --chip: rgba(255,255,255,0.06); --padyam-bg: rgba(224,163,92,0.07);
+      --guru: rgba(224,163,92,0.22); --laghu: rgba(255,255,255,0.06);
+      --ok: #7cc47f; --bad: #e88b7d;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--page); color: var(--ink);
+    display: flex; flex-direction: column; min-height: 100vh;
+  }
+  .telugu-serif {
+    font-family: "Noto Serif Telugu", "Ramaraja", "Gautami", "Pothana2000",
+                 "Mandali", "Noto Sans Telugu", Georgia, serif;
+  }
+
+  /* ---- top bar ---- */
+  .topbar {
+    position: sticky; top: 0; z-index: 5;
+    background: color-mix(in srgb, var(--page) 88%, transparent);
+    backdrop-filter: blur(8px); border-bottom: 1px solid var(--border);
+    padding: 0.7rem 1.25rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1rem;
+  }
+  .brand { display: flex; align-items: baseline; gap: 0.55rem; margin-right: auto; }
+  .brand a { color: var(--muted); text-decoration: none; font-size: 0.8rem; }
+  .brand a:hover { color: var(--accent); }
+  .brand strong { font-size: 1.05rem; letter-spacing: -0.01em; }
+  .brand .te { color: var(--ink-2); font-size: 0.95rem; }
+  .filters { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .chip {
+    border: 1px solid var(--border); background: var(--chip); color: var(--ink-2);
+    border-radius: 999px; padding: 0.28rem 0.8rem; font-size: 0.82rem; cursor: pointer;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+  }
+  .chip:hover { border-color: var(--accent); color: var(--ink); }
+  .chip.active { border-color: var(--accent); color: var(--accent); background: var(--padyam-bg); font-weight: 600; }
+
+  /* ---- card ---- */
+  .stage { flex: 1; display: flex; justify-content: center; padding: 1.5rem 1.25rem 1rem; }
+  .card {
+    width: 100%; max-width: 680px; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 18px; padding: 2rem clamp(1.25rem, 5vw, 2.75rem) 2.25rem;
+    display: flex; flex-direction: column;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 12px 32px rgba(0,0,0,0.05);
+  }
+  .card-head { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem;
+    color: var(--muted); font-size: 0.8rem; margin-bottom: 1.5rem; }
+  .badge { color: var(--accent); border: 1px solid var(--accent); border-radius: 999px;
+    padding: 0.15rem 0.65rem; font-weight: 600; }
+  .card-head .meter { margin-left: auto; }
+
+  /* padyam: 4 paadas, wrapped continuation gets a hanging indent */
+  .padyam { background: var(--padyam-bg); border-radius: 14px; padding: 1.6rem 1.4rem;
+    display: grid; gap: 0.5rem; font-size: clamp(1.15rem, 3.5vw, 1.5rem); line-height: 1.7; }
+  .padyam .pline { padding-left: var(--runover); text-indent: calc(-1 * var(--runover)); font-weight: 500; }
+  .padyam .pline.makutam { color: var(--accent); margin-top: 0.25rem; }
+
+  section.block { margin-top: 1.75rem; }
+  section.block > h3 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--muted); margin-bottom: 0.75rem; display: flex; align-items: baseline; gap: 0.5rem; }
+  section.block > h3 .te { text-transform: none; letter-spacing: 0; color: var(--ink-2); font-size: 0.95rem; }
+  section.block > h3 .spacer { margin-left: auto; }
+  .verdict { font-size: 0.72rem; font-weight: 600; text-transform: none; letter-spacing: 0;
+    border-radius: 999px; padding: 0.1rem 0.55rem; border: 1px solid; }
+  .verdict.ok { color: var(--ok); border-color: var(--ok); }
+  .verdict.bad { color: var(--bad); border-color: var(--bad); }
+  .verdict.pending { color: var(--muted); border-color: var(--border); }
+  .pending-note { color: var(--muted); font-size: 0.92rem; font-style: italic; }
+  .gana.plain { border-color: transparent; padding: 0.15rem 0; }
+
+  .gloss { display: grid; gap: 0.1rem; }
+  .gloss .row { display: grid; grid-template-columns: minmax(9rem, 40%) 1fr; gap: 0.75rem;
+    padding: 0.5rem 0.2rem; border-bottom: 1px solid var(--border); }
+  .gloss .row:last-child { border-bottom: 0; }
+  .gloss .w { font-size: 1.02rem; }
+  .gloss .m { color: var(--ink-2); font-size: 0.95rem; align-self: center; }
+  .tatparyam { color: var(--ink-2); line-height: 1.7; font-size: 1rem; }
+
+  /* ---- chandassu breakdown ---- */
+  .chandassu { display: grid; gap: 0.85rem; }
+  .cpaada { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: flex-end; }
+  .gana { display: flex; flex-direction: column; align-items: center; gap: 0.15rem;
+    border: 1px solid var(--border); border-radius: 9px; padding: 0.35rem 0.4rem 0.3rem; }
+  .gana .syls { display: flex; gap: 0.15rem; }
+  .syl { position: relative; padding: 0.1rem 0.35rem 0.05rem; border-radius: 6px; font-size: 1.05rem;
+    display: flex; flex-direction: column; align-items: center; line-height: 1.25; }
+  .syl.G { background: var(--guru); }
+  .syl.L { background: var(--laghu); }
+  .syl .mark { font-size: 0.62rem; color: var(--muted); font-family: ui-monospace, monospace; }
+  .syl.G .mark { color: var(--accent); }
+  .gana .gname { font-size: 0.68rem; color: var(--muted); }
+  .cpaada.nomatch { color: var(--bad); }
+  .legend { color: var(--muted); font-size: 0.78rem; margin-top: 0.35rem; line-height: 1.5; }
+  .legend b { color: var(--ink-2); }
+
+  /* ---- nav ---- */
+  .nav { position: sticky; bottom: 0; background: color-mix(in srgb, var(--page) 88%, transparent);
+    backdrop-filter: blur(8px); border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center; gap: 1rem; padding: 0.75rem 1.25rem; }
+  .nav button { font: inherit; cursor: pointer; color: var(--ink); background: var(--surface);
+    border: 1px solid var(--border); border-radius: 10px; padding: 0.5rem 1.1rem;
+    transition: border-color 0.15s, color 0.15s; }
+  .nav button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+  .nav button:disabled { opacity: 0.4; cursor: default; }
+  .counter { color: var(--muted); font-size: 0.85rem; min-width: 5.5rem; text-align: center; }
+  .empty, .loading { color: var(--muted); text-align: center; padding: 3rem 1rem; line-height: 1.6; }
+  .empty code { background: var(--chip); padding: 0.1rem 0.4rem; border-radius: 5px; }
+  .settings-link {
+    color: var(--muted); text-decoration: none; font-size: 0.82rem; white-space: nowrap;
+    border: 1px solid var(--border); border-radius: 999px; padding: 0.28rem 0.7rem;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .settings-link:hover { color: var(--accent); border-color: var(--accent); }
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand">
+      <a href="../index.html">← myflare</a>
+      <strong>Padyaalu</strong>
+      <span class="te telugu-serif">పద్యాలు</span>
+    </div>
+    <div class="filters" id="filters"></div>
+    <a class="settings-link" href="settings.html" title="స్థితి &amp; ప్రణాళిక">స్థితి ⚙</a>
+  </div>
+
+  <main class="stage">
+    <article class="card" id="card"><p class="loading">లోడ్ అవుతోంది…</p></article>
+  </main>
+
+  <div class="nav">
+    <button id="prev">← ముందు</button>
+    <span class="counter" id="counter">— / —</span>
+    <button id="next">తరువాత →</button>
+  </div>
+
+  <script src="chandassu.js"></script>
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const esc = (s) => String(s).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+    let SATAKAMS = {}, ORDER = [], POEMS = [], filter = "all", idx = 0;
+
+    async function load() {
+      try {
+        // no-store so updated data files are never served stale from the browser cache
+        const opts = { cache: "no-store" };
+        const meta = await (await fetch("data/satakams.json", opts)).json();
+        SATAKAMS = meta.satakams; ORDER = meta.order;
+        const lists = await Promise.all(
+          ORDER.map((k) => fetch(SATAKAMS[k].file, opts).then((r) => r.json()).then((arr) =>
+            arr.map((p) => ({ ...p, satakam: k }))))
+        );
+        POEMS = lists.flat();
+        renderFilters(); renderCard();
+      } catch (e) {
+        $("card").innerHTML = `<p class="empty">డేటా లోడ్ కాలేదు.<br>` +
+          `ఈ పేజీని <code>file://</code> నుంచి తెరిస్తే బ్రౌజర్ JSON ఫైళ్లను fetch చేయనివ్వదు — ` +
+          `వెబ్ సర్వర్ ద్వారా తెరవండి (ఉదా. <code>python3 -m http.server</code>).<br><br>` +
+          `<small>${esc(e.message)}</small></p>`;
+        console.error(e);
+      }
+    }
+
+    const visible = () => (filter === "all" ? POEMS : POEMS.filter((p) => p.satakam === filter));
+
+    function renderFilters() {
+      const counts = {};
+      POEMS.forEach((p) => (counts[p.satakam] = (counts[p.satakam] || 0) + 1));
+      const tabs = [{ key: "all", label: "అన్నీ", n: POEMS.length }].concat(
+        ORDER.filter((k) => counts[k]).map((k) => ({ key: k, label: SATAKAMS[k].short, n: counts[k] })));
+      $("filters").innerHTML = tabs.map((t) =>
+        `<button class="chip${t.key === filter ? " active" : ""}" data-key="${t.key}">` +
+        `${esc(t.label)} <span style="opacity:.6">${t.n}</span></button>`).join("");
+      $("filters").querySelectorAll(".chip").forEach((b) =>
+        b.addEventListener("click", () => { filter = b.dataset.key; idx = 0; renderFilters(); renderCard(); }));
+    }
+
+    const sylSpan = (s) =>
+      `<span class="syl ${s.weight}">${esc(s.text)}<span class="mark">${s.weight === "G" ? "U" : "I"}</span></span>`;
+
+    function chandassuHTML(poem) {
+      if (!window.Chandassu) return "";
+      const a = Chandassu.analyze(poem.padyam, poem.meter);
+      // verified: show named gana boxes; else: show plain syllable weights per line (no red)
+      const verified = a.ok && a.paadas.every((p) => p.ganas);
+      const rows = a.paadas.map((p) => {
+        if (verified) {
+          const ganas = p.ganas.map((g) =>
+            `<div class="gana"><div class="syls">${g.syllables.map(sylSpan).join("")}</div>` +
+            `<div class="gname">${esc(g.name)}</div></div>`).join("");
+          return `<div class="cpaada">${ganas}</div>`;
+        }
+        return `<div class="cpaada"><div class="gana plain"><div class="syls">` +
+               `${p.syllables.map(sylSpan).join("")}</div></div></div>`;
+      }).join("");
+      const verdict = verified
+        ? `<span class="verdict ok">✓ ${esc(a.metre)} — సరిపోయింది</span>`
+        : `<span class="verdict pending">గణ విభజన త్వరలో</span>`;
+      const legend = verified
+        ? `పైన ప్రతి పెట్టె ఒక గణం; కింద గణం పేరు (${esc(a.metre)}).`
+        : `ప్రతి అక్షరం లఘువు/గురువుగా గుర్తించబడింది. గణ విభజన, నిర్ధారణ త్వరలో.`;
+      return `<section class="block"><h3>Chandassu <span class="te telugu-serif">ఛందస్సు</span>` +
+        `<span class="spacer"></span>${verdict}</h3><div class="chandassu">${rows}</div>` +
+        `<p class="legend"><b>U</b> = గురువు, <b>I</b> = లఘువు. ${legend}</p></section>`;
+    }
+
+    function renderCard() {
+      const poems = visible(), card = $("card");
+      if (!poems.length) { card.innerHTML = `<p class="empty">ఈ శతకానికి ఇంకా పద్యాలు చేర్చలేదు.</p>`;
+        $("counter").textContent = "0 / 0"; $("prev").disabled = $("next").disabled = true; return; }
+      idx = Math.max(0, Math.min(idx, poems.length - 1));
+      const p = poems[idx], s = SATAKAMS[p.satakam];
+
+      const lines = p.padyam.map((l, i) =>
+        `<div class="pline${i === p.padyam.length - 1 ? " makutam" : ""} telugu-serif">${esc(l)}</div>`).join("");
+
+      const glossHTML = (p.pratipadartham && p.pratipadartham.length)
+        ? `<div class="gloss">${p.pratipadartham.map((g) =>
+            `<div class="row"><div class="w telugu-serif">${esc(g.padam)}</div>` +
+            `<div class="m">${esc(g.artham)}</div></div>`).join("")}</div>`
+        : `<p class="pending-note">ప్రతిపదార్థం త్వరలో చేర్చబడుతుంది.</p>`;
+      const tatHTML = p.tatparyam
+        ? `<p class="tatparyam">${esc(p.tatparyam)}</p>`
+        : `<p class="pending-note">తాత్పర్యం త్వరలో చేర్చబడుతుంది.</p>`;
+
+      card.innerHTML =
+        `<div class="card-head"><span class="badge">${esc(s.short)}</span>` +
+        `<span>${esc(s.name)} · ${esc(s.poet)}</span>` +
+        `<span class="meter">ఛందస్సు: ${esc(p.meter)}</span></div>` +
+        `<div class="padyam">${lines}</div>` +
+        `<section class="block"><h3>Prati padartham <span class="te telugu-serif">ప్రతిపదార్థం</span></h3>` +
+        glossHTML + `</section>` +
+        `<section class="block"><h3>Tatparyam <span class="te telugu-serif">తాత్పర్యం</span></h3>` +
+        tatHTML + `</section>` +
+        chandassuHTML(p);
+
+      $("counter").textContent = `${idx + 1} / ${poems.length}`;
+      $("prev").disabled = idx === 0; $("next").disabled = idx === poems.length - 1;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function go(d) { const n = visible().length; if (!n) return; idx = Math.max(0, Math.min(idx + d, n - 1)); renderCard(); }
+    $("prev").addEventListener("click", () => go(-1));
+    $("next").addEventListener("click", () => go(1));
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") go(-1); else if (e.key === "ArrowRight") go(1); });
+
+    load();
+  </script>
+</body>
+</html>
