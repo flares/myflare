@@ -57,7 +57,17 @@
   var EXIT_WORDS  = ["exit","go","goes","going","out","leave","leaves","bye","goodbye",
                      "po","pommu","pomma","velli","vellu","vellipo","away","home"];
   var NUMBERS = { a:1, an:1, one:1, two:2, three:3, four:4, five:5, six:6, seven:7,
-                  eight:8, nine:9, ten:10, "1":1,"2":2,"3":3,"4":4,"5":5,"6":6,"7":7,"8":8,"9":9,"10":10 };
+                  eight:8, nine:9, ten:10, "1":1,"2":2,"3":3,"4":4,"5":5,"6":6,"7":7,"8":8,"9":9,"10":10,
+                  // common speech-to-text homophones for small numbers
+                  to:2, too:2, tu:2, for:4, fore:4, ate:8, won:1 };
+
+  // habitat -> where an animal roams. Fliers stay in the sky, swimmers in the
+  // pond, everyone else on the ground.
+  var AIR   = { bat:1, bee:1, eagle:1, owl:1, parrot:1, vulture:1, nightingale:1 };
+  var WATER = { alligator:1, crocodile:1, dolphin:1, duck:1, flamingo:1, frog:1, goose:1,
+                hippopotamus:1, jellyfish:1, newt:1, otter:1, penguin:1, swan:1, toad:1,
+                turtle:1, walrus:1, whale:1, xraytetra:1, yabby:1 };
+  function habitatOf(key) { return AIR[key] ? "air" : WATER[key] ? "water" : "land"; }
 
   // -------------------------------------------------------------------
   //  Spoken-word -> animal lookup (longest phrase wins)
@@ -195,35 +205,55 @@
     rafId = instances.length ? requestAnimationFrame(tick) : null;
   }
   function rand(a, b) { return a + Math.random() * (b - a); }
+  function sign() { return Math.random() < 0.5 ? -1 : 1; }
+
+  // the pond rectangle (fractions of the stage) — kept in sync with .pond in CSS
+  function pond() {
+    return { x0: stageW * 0.06, x1: stageW * 0.42, y0: stageH * 0.64, y1: stageH * 0.90 };
+  }
+  // vertical/horizontal roaming band for a habitat, given a scaled element size
+  function bandFor(hab, w, h) {
+    var maxTop = Math.max(8, stageH - h);
+    if (hab === "air")   return { x0: 0, x1: stageW - w, y0: stageH * 0.02, y1: Math.min(maxTop, stageH * 0.34) };
+    if (hab === "water") { var p = pond(); return { x0: p.x0, x1: Math.max(p.x0, p.x1 - w), y0: p.y0, y1: Math.min(maxTop, p.y1 - h * 0.2) }; }
+    return { x0: 0, x1: stageW - w, y0: Math.min(maxTop, stageH * 0.52), y1: maxTop };   // land
+  }
+  // roaming speed (px/s) by habitat
+  function speedFor(hab) {
+    if (hab === "air")   return { vx: stageW * rand(0.05, 0.12), vy: stageH * rand(0.04, 0.09) };
+    if (hab === "water") return { vx: stageW * rand(0.02, 0.05), vy: stageH * rand(0.02, 0.05) };
+    return { vx: stageW * rand(0.03, 0.09), vy: stageH * rand(0.015, 0.05) };            // land
+  }
 
   function update(dt, now) {
     for (var i = instances.length - 1; i >= 0; i--) {
       var it = instances[i];
-      if (it.entering) {
-        it.x += it.vx * dt;
-        if (it.x >= it.margin && it.x <= stageW - it.w - it.margin) {
-          it.entering = false; scheduleTurn(it, now);
-        }
-      } else if (it.leaving) {
-        it.x += it.vx * dt;
-        if (it.x < -it.w - 80 || it.x > stageW + 80) { removeInstance(i); continue; }
+      if (it.leaving) {
+        it.x += it.vx * dt; it.y += it.vy * dt;                 // drift while fading out
+      } else if (it.entering) {
+        it.x += it.vx * dt;                                     // walk/fly in horizontally
+        if (it.x >= it.xMin && it.x <= it.xMax) { it.entering = false; scheduleTurn(it, now); }
       } else {
         it.x += it.vx * dt;
-        if (it.x < it.margin) { it.x = it.margin; it.vx = Math.abs(it.vx); }
-        else if (it.x > stageW - it.w - it.margin) { it.x = stageW - it.w - it.margin; it.vx = -Math.abs(it.vx); }
+        if (it.x < it.xMin) { it.x = it.xMin; it.vx = Math.abs(it.vx); }
+        else if (it.x > it.xMax) { it.x = it.xMax; it.vx = -Math.abs(it.vx); }
+        it.y += it.vy * dt;
+        if (it.y < it.yMin) { it.y = it.yMin; it.vy = Math.abs(it.vy); }
+        else if (it.y > it.yMax) { it.y = it.yMax; it.vy = -Math.abs(it.vy); }
         if (now > it.nextTurn) scheduleTurn(it, now);
       }
-      var y = it.baseTop + Math.sin(now * 0.002 + it.phase) * it.amp;
+      var yb = it.y + Math.sin(now * 0.003 + it.phase) * it.bobAmp;
       var dir = it.vx > 0 ? -1 : 1;   // flip to face travel direction
-      it.el.style.transform = "translate(" + it.x.toFixed(1) + "px," + y.toFixed(1) + "px) " +
+      it.el.style.transform = "translate(" + it.x.toFixed(1) + "px," + yb.toFixed(1) + "px) " +
                               "scale(" + (dir * it.scale).toFixed(3) + "," + it.scale.toFixed(3) + ")";
-      it.el.style.zIndex = 100 + Math.round(it.baseTop);
+      it.el.style.zIndex = 100 + Math.round(it.y);   // lower on screen = nearer = in front
     }
   }
 
   function scheduleTurn(it, now) {
-    var speed = Math.max(24, stageW * rand(0.04, 0.10));  // px/s
-    it.vx = speed * (Math.random() < 0.5 ? -1 : 1);
+    var s = speedFor(it.hab);
+    it.vx = s.vx * sign();
+    it.vy = s.vy * sign();
     it.nextTurn = now + rand(1400, 4200);
   }
 
@@ -250,26 +280,38 @@
     stage.appendChild(el);
 
     var box = el.getBoundingClientRect();
-    var w = box.width || 90, h = box.height || 90;
-    var scale = rand(0.78, 1.08);
-    var side = Math.random() < 0.5 ? -1 : 1;   // -1 enters from left, 1 from right
-    var enterSpeed = Math.max(120, stageW * 0.35);
+    var scale = rand(0.85, 1.15);
+    var w = (box.width || 90) * scale, h = (box.height || 90) * scale;
+    var hab = habitatOf(a.key);
+    var band = bandFor(hab, w, h);
 
     var it = {
-      key: a.key, sound: a.sound, el: el, w: w * scale, h: h * scale,
-      x: side < 0 ? -(w * scale) - 40 : stageW + 40,
-      vx: side < 0 ? enterSpeed : -enterSpeed,
-      baseTop: rand(0, Math.max(8, stageH - h * scale)),
-      phase: rand(0, Math.PI * 2), amp: rand(5, 12), scale: scale,
-      margin: 4, entering: true, leaving: false, nextTurn: 0
+      key: a.key, sound: a.sound, el: el, w: w, h: h, hab: hab,
+      xMin: band.x0, xMax: Math.max(band.x0, band.x1),
+      yMin: band.y0, yMax: Math.max(band.y0, band.y1),
+      phase: rand(0, Math.PI * 2), bobAmp: hab === "land" ? rand(3, 7) : rand(6, 14),
+      scale: scale, vx: 0, vy: 0, entering: false, leaving: false, nextTurn: 0,
+      y: rand(band.y0, Math.max(band.y0, band.y1))
     };
+
+    if (hab === "water") {
+      // fish/ducks pop into the pond rather than walk across land
+      it.x = rand(it.xMin, it.xMax);
+      var sw = speedFor(hab); it.vx = sw.vx * sign(); it.vy = sw.vy * sign();
+    } else {
+      // land & air critters run/fly in from a random side
+      var side = sign();
+      var enterSpeed = Math.max(120, stageW * 0.4);
+      it.entering = true;
+      it.x = side < 0 ? -w - 40 : stageW + 40;
+      it.vx = side < 0 ? enterSpeed : -enterSpeed;
+    }
     instances.push(it);
 
     el.addEventListener("click", function () {
-      ensureAudio(); beginExit(it); advanceLetter();  // tap a critter to send it home
+      ensureAudio(); playSoundThrice(a.sound); sparkle(it);   // tap a critter to hear it
     });
 
-    playSound(a);
     sparkle(it);
     refreshChips();
     startLoop();
@@ -287,17 +329,20 @@
       made++;
     }
     showBubble((made > 1 ? made + " " : "") + a.name + (made > 1 ? "s" : "") + " coming in! " + a.emoji);
+    playSoundThrice(a.sound);   // hear the animal's voice three times as it arrives
     advanceLetter();
   }
 
   function beginExit(it) {
     if (it.leaving) return;
     it.leaving = true; it.entering = false;
-    var toLeft = it.x < stageW / 2;
-    it.vx = (toLeft ? -1 : 1) * Math.max(160, stageW * 0.5);
-    it.el.classList.add("bye");
+    it.el.classList.add("bye");       // fade + shrink out in place (works in any habitat)
     refreshChips();
     startLoop();
+    setTimeout(function () {
+      var idx = instances.indexOf(it);
+      if (idx >= 0) removeInstance(idx);
+    }, 480);
   }
 
   // exit up to n instances of a given animal key
@@ -338,7 +383,7 @@
       s.className = "sparkle";
       s.textContent = marks[i % marks.length];
       s.style.left = (it.x + it.w / 2 + rand(-20, 20)) + "px";
-      s.style.top = (it.baseTop - rand(4, 20)) + "px";
+      s.style.top = (it.y - rand(4, 20)) + "px";
       stage.appendChild(s);
       (function (s) { setTimeout(function () { if (s.parentNode) s.parentNode.removeChild(s); }, 1000); })(s);
     }
@@ -346,6 +391,13 @@
 
   function playSound(a) { if (AUDIO) try { AUDIO.playAnimal(a.sound || "generic"); } catch (e) {} }
   function playReject() { if (AUDIO) try { AUDIO.playAnimal("click"); } catch (e) {} }
+  // play a sound three times so the child hears the animal's voice clearly
+  function playSoundThrice(sound) {
+    if (!AUDIO) return;
+    for (var i = 0; i < 3; i++) (function (i) {
+      setTimeout(function () { try { AUDIO.playAnimal(sound || "generic"); } catch (e) {} }, i * 330);
+    })(i);
+  }
 
   function rejectWrongLetter(a) {
     letterCard.classList.remove("nope"); void letterCard.offsetWidth; letterCard.classList.add("nope");
@@ -387,6 +439,57 @@
     return null;
   }
 
+  // Levenshtein edit distance (small strings)
+  function lev(a, b) {
+    var m = a.length, n = b.length, i, j;
+    if (!m) return n; if (!n) return m;
+    var prev = [], cur = [];
+    for (j = 0; j <= n; j++) prev[j] = j;
+    for (i = 1; i <= m; i++) {
+      cur[0] = i;
+      for (j = 1; j <= n; j++) {
+        var cost = a.charCodeAt(i - 1) === b.charCodeAt(j - 1) ? 0 : 1;
+        cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + cost);
+      }
+      var t = prev; prev = cur; cur = t;
+    }
+    return prev[n];
+  }
+
+  // words that are never animal names (skip them when fuzzy-matching)
+  var STOP = {};
+  ENTER_WORDS.concat(EXIT_WORDS).forEach(function (w) { STOP[w] = 1; });
+  Object.keys(NUMBERS).forEach(function (w) { STOP[w] = 1; });
+  ["the","a","an","and","please","animal","let","come","in","out","some","my"].forEach(function (w) { STOP[w] = 1; });
+
+  // Fuzzy match against ONLY the current letter's animals — since calls are
+  // letter-gated, we can forgive mishearings like "wales" -> "whale".
+  function fuzzyForLetter(text) {
+    var cands = animalsForLetter(currentLetter);
+    if (!cands.length) return null;
+    var toks = text.trim().split(" ").filter(function (t) { return t.length >= 3 && !STOP[t]; });
+    if (!toks.length) return null;
+    var best = null, bestScore = 99;
+    cands.forEach(function (a) {
+      var phrases = [a.name, a.key, a.teluguRoman].concat(a.aliases || []);
+      phrases.forEach(function (p) {
+        p = norm(p);
+        if (!p || p.indexOf(" ") !== -1) return;   // single-word phrases only
+        toks.forEach(function (t) {
+          var d = lev(t, p);
+          var thresh = p.length <= 4 ? 1 : 2;       // allow more slack for longer names
+          if (d <= thresh) {
+            var score = d
+                      + Math.abs(t.length - p.length) * 0.3      // prefer similar length
+                      - (t.charAt(0) === p.charAt(0) ? 0.4 : 0);  // reward same first letter
+            if (score < bestScore) { bestScore = score; best = a; }
+          }
+        });
+      });
+    });
+    return best;
+  }
+
   function interpret(transcript) {
     var text = " " + norm(transcript) + " ";
 
@@ -395,6 +498,10 @@
     if (isExitAll(text)) { exitAll(); return true; }
 
     var found = findAnimal(text);
+
+    // no exact hit? forgive mishearings among the current letter's animals only
+    var fuzzy = false;
+    if (!found) { found = fuzzyForLetter(text); fuzzy = !!found; }
     if (!found) return false;
 
     var wantsExit = EXIT_WORDS.some(function (w) { return has(text, w); });
@@ -402,7 +509,8 @@
     var count = findCount(text);
 
     // the child may only call the animal that matches the shown letter
-    if (firstLetterOf(found) !== currentLetter) { rejectWrongLetter(found); return true; }
+    // (a fuzzy hit is already a current-letter animal, so it always passes)
+    if (!fuzzy && firstLetterOf(found) !== currentLetter) { rejectWrongLetter(found); return true; }
 
     if (wantsExit && !wantsEnter) exitByKey(found, count);
     else enterN(found, count);

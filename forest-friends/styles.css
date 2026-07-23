@@ -59,16 +59,31 @@ body {
 @keyframes sway { 0%,100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
 
 /* ----------------------------- STAGE / ANIMALS ----------------------------- */
+/* The stage is the whole playfield — animals roam sky-to-ground. Its top sits
+   just under the control bar; its bottom is set by JS to clear the index row. */
 .stage {
-  position: absolute; left: 0; right: 0; bottom: 3vh; height: 30vh;
+  position: absolute; left: 0; right: 0; top: 6.5vh; bottom: 3vh;
   z-index: 5;
+}
+/* the pond — water animals swim here (bounds kept in sync with pond() in game.js) */
+.pond {
+  position: absolute; left: 6%; width: 36%; top: 64%; height: 26%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 35%, #9fe4ff 0%, #57b9e6 55%, #2f8fc4 100%);
+  box-shadow: inset 0 6px 18px rgba(255,255,255,.5), inset 0 -10px 22px rgba(0,60,100,.35),
+              0 4px 10px rgba(0,0,0,.15);
+  z-index: 1; pointer-events: none;
+}
+.pond::after {   /* a little shine on the water */
+  content: ""; position: absolute; left: 16%; top: 18%; width: 40%; height: 22%;
+  border-radius: 50%; background: rgba(255,255,255,.35); filter: blur(2px);
 }
 /* Each animal is JS-driven: game.js sets transform every frame to make it
    roam. So keep transform free of CSS transitions/animations here — the
    pop-in and gentle waddle live on the inner .a-emoji instead. */
 .animal {
   position: absolute; left: 0; top: 0;
-  font-size: clamp(52px, 11vw, 140px);
+  font-size: clamp(66px, 13vw, 180px);
   line-height: 1; cursor: pointer;
   transform-origin: center center; will-change: transform;
 }

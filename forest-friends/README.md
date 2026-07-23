@@ -18,12 +18,14 @@ all in English **or** Telugu.
 3. Say the animal and "come":
    - English: **"Bear enter"**, **"Bear come"**
    - Telugu: **"Bear raa"**, **"పులి రా"** (*puli raa* — "tiger, come")
-4. It runs in from a random side with a sparkle and its own sound, then **roams
-   the forest continuously**. 🎉
-5. **Summon it again and again** — several copies of the same animal roam together
-   ("Lion enter, Lion enter, Lion enter" → three lions). The chip shows a live
-   count badge.
-6. Send some home by name with an optional number: **"Lion exit"** (one) or
+4. It runs, flies, or swims in with a sparkle and its own sound (played **three
+   times** so you hear the voice clearly), then **roams the whole forest** — birds
+   in the sky, fish and ducks in the pond, everyone else on the ground. 🎉
+   After each animal a **new letter** appears automatically.
+5. **Tap any animal** to hear its sound again. 🔊
+6. Bring in a **whole family at once** with a number: **"3 lions enter"** (up to
+   five) — they all roam together. The chip shows a live count badge.
+7. Send some home by name with an optional number: **"Lion exit"** (one) or
    **"5 lion exit"** (up to five). *po* / *go* / *bye* / *velli* all work.
 7. **Special commands (work on any letter):**
    - **"exit all animals"** / "clear all" / "send everyone home" — empties the forest.
@@ -48,13 +50,32 @@ Counts are capped at **5** per spoken command, and the forest holds at most
 name (script **and** romanized), likely mis-hearings, and simple plurals, so
 "elephant", "elephants", "enugu", and "ఏనుగు" all summon the same friend.
 
-## How animals move
+### Forgiving speech ("2 whales" heard as "to Wales")
 
-Once summoned, every animal is driven by a single `requestAnimationFrame` loop
-(`game.js`): it walks in from off-screen, then wanders left/right with a gentle
-waddle and bob, turning at random intervals and bouncing off the edges. Each
-instance has its own speed, size (a little depth variation), and phase, so a herd
-never marches in lockstep. Sending one home just steers it off the nearest edge.
+Speech recognition mangles kids' voices constantly. Because a call is always
+**gated to the current letter** (a small set of animals), we can afford to be
+generous: if no exact name matches, the transcript is fuzzy-matched (Levenshtein
+distance, biased toward the same first letter and similar length) against **only
+the current letter's animals**. So on letter **W**, "wales" → **Whale**, "beer"
+→ **Bear**, "kangaru" → **Kangaroo**. Common number homophones are handled too:
+*to/too* → 2, *for* → 4, *ate* → 8. This can't leak across letters, so a
+mis-hearing only ever picks a same-letter animal.
+
+## How animals move — habitats
+
+Every animal is driven by a single `requestAnimationFrame` loop (`game.js`) that
+moves it in 2-D and bounces it off the bounds of its **habitat band**:
+
+| Habitat | Where they roam | Examples |
+|---|---|---|
+| 🐦 Air | the upper sky | bat, bee, eagle, owl, parrot, vulture, nightingale |
+| 🐠 Water | inside the pond | whale, dolphin, frog, turtle, duck, penguin, crab-like yabby … |
+| 🐾 Land | the ground | lion, elephant, bear, zebra, and everyone else |
+
+Land and air animals run/fly in from a random side; water animals pop into the
+pond. Each instance has its own speed, size, phase and bob, so a herd never
+marches in lockstep. Tapping an animal replays its sound; sending one home fades
+it out where it stands.
 
 ## Design notes — "publicly available assets"
 
