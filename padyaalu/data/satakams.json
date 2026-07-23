@@ -7,6 +7,8 @@
       "poet": "వేమన",
       "meter": "ఆటవెలది",
       "makutam": "విశ్వదాభిరామ వినుర వేమ",
+      "prefix": "VM",
+      "hue": 28,
       "file": "data/vemana.json"
     },
     "sumati": {
@@ -15,6 +17,8 @@
       "poet": "బద్దెన",
       "meter": "కంద పద్యం",
       "makutam": "… వినురా సుమతీ",
+      "prefix": "SM",
+      "hue": 205,
       "file": "data/sumati.json"
     },
     "dasarathi": {
@@ -23,6 +27,8 @@
       "poet": "కంచెర్ల గోపన్న (భద్రాచల రామదాసు)",
       "meter": "ఉత్పలమాల / చంపకమాల / మత్తేభం",
       "makutam": "దాశరథీ కరుణాపయోనిధీ",
+      "prefix": "DS",
+      "hue": 280,
       "file": "data/dasarathi.json"
     }
   }
