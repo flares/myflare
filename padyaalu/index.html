@@ -156,10 +156,12 @@
 
     async function load() {
       try {
-        const meta = await (await fetch("data/satakams.json")).json();
+        // no-store so updated data files are never served stale from the browser cache
+        const opts = { cache: "no-store" };
+        const meta = await (await fetch("data/satakams.json", opts)).json();
         SATAKAMS = meta.satakams; ORDER = meta.order;
         const lists = await Promise.all(
-          ORDER.map((k) => fetch(SATAKAMS[k].file).then((r) => r.json()).then((arr) =>
+          ORDER.map((k) => fetch(SATAKAMS[k].file, opts).then((r) => r.json()).then((arr) =>
             arr.map((p) => ({ ...p, satakam: k }))))
         );
         POEMS = lists.flat();
