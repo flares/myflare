@@ -8,6 +8,8 @@ all in English **or** Telugu.
 
 > Part of [myflare](../). Static, offline, GitHub-Pages friendly — open
 > `index.html` and play.
+>
+> Planned future ideas live in [`ROADMAP.md`](ROADMAP.md).
 
 ## How to play
 
