@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Wallet</title>
+<meta name="color-scheme" content="dark light">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="privacyveil" id="privacyVeil"></div>
+
+<div class="wrap">
+
+  <div class="titlerow">
+    <h1>Wallet</h1>
+    <span class="titleright">
+      <span class="synctick" id="syncStatus"></span>
+      <button class="tbtn" data-action="settings" title="Settings" aria-label="Settings">⚙</button>
+      <button class="tbtn" data-action="lock" title="Lock" aria-label="Lock">🔒</button>
+    </span>
+  </div>
+
+  <div class="filterrow" id="filterRow">
+    <button class="chip active" data-filter="all">All</button>
+    <button class="chip" data-filter="id">🪪 ID</button>
+    <button class="chip" data-filter="credit">💳 Credit</button>
+    <button class="chip" data-filter="debit">💳 Debit</button>
+    <button class="chip" data-filter="balance">🏦 Balance</button>
+    <button class="chip" data-filter="other">🗂️ Other</button>
+  </div>
+
+  <div id="app"><!-- deck rendered by app.js --></div>
+
+  <footer>
+    Cards are AES-GCM encrypted with your passphrase before they ever touch storage — locally and (if configured) in Firebase. The passphrase never leaves this device.
+    · <a href="../index.html">myflare home</a>
+  </footer>
+</div>
+
+<!-- unlock / create vault -->
+<dialog id="dlgVault">
+  <form method="dialog" class="modal" id="frmVault">
+    <h2 id="vaultTitle">Unlock</h2>
+    <p class="hint" id="vaultHint"></p>
+    <label>Passphrase
+      <input type="password" id="vaultPass" autocomplete="current-password" required minlength="6">
+    </label>
+    <label id="vaultPass2Row" hidden>Confirm passphrase
+      <input type="password" id="vaultPass2" autocomplete="new-password" minlength="6">
+    </label>
+    <p class="err" id="vaultErr"></p>
+    <div class="modalactions">
+      <button class="btn primary" value="ok" id="vaultGo">Unlock</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- add-card wizard -->
+<dialog id="dlgAdd" class="fulldlg">
+  <div class="modal wizard" id="wizard">
+
+    <div class="wizstep" id="stepSource">
+      <h2>Add a card</h2>
+      <p class="hint">Photograph an ID, credit/debit card, or balance/passbook page. It's cropped and encrypted on this device — nothing leaves it unless you enable Firebase sync.</p>
+      <div class="sourcepick">
+        <label class="srcbtn">
+          <input type="file" id="fileCamera" accept="image/*" capture="environment" hidden>
+          <span class="srcicon">📷</span><span>Take photo</span>
+        </label>
+        <label class="srcbtn">
+          <input type="file" id="fileGallery" accept="image/*" hidden>
+          <span class="srcicon">🖼️</span><span>Choose from gallery</span>
+        </label>
+      </div>
+      <div class="modalactions">
+        <button type="button" class="btn" data-action="cancel-wizard">Cancel</button>
+      </div>
+    </div>
+
+    <div class="wizstep" id="stepCrop" hidden>
+      <h2>Straighten &amp; crop</h2>
+      <p class="hint">Drag the four corners onto the edges of the card.</p>
+      <div class="cropstage" id="cropStage">
+        <canvas id="cropCanvas"></canvas>
+        <svg id="cropOverlay"></svg>
+      </div>
+      <div class="modalactions">
+        <button type="button" class="btn" data-action="rotate-src">⟳ Rotate</button>
+        <span class="spacer"></span>
+        <button type="button" class="btn" data-action="cancel-wizard">Cancel</button>
+        <button type="button" class="btn primary" data-action="do-warp">Next</button>
+      </div>
+    </div>
+
+    <div class="wizstep" id="stepTouchup" hidden>
+      <h2>Touch up</h2>
+      <p class="hint">Optional — brush over numbers you'd rather blackout (e.g. CVV) before saving.</p>
+      <div class="touchstage">
+        <canvas id="touchCanvas"></canvas>
+      </div>
+      <div class="brushrow">
+        <span class="hint">Brush</span>
+        <button type="button" class="chip brushsize active" data-size="14">S</button>
+        <button type="button" class="chip brushsize" data-size="26">M</button>
+        <button type="button" class="chip brushsize" data-size="42">L</button>
+        <span class="spacer"></span>
+        <button type="button" class="btn sm" data-action="undo-stroke">Undo</button>
+      </div>
+      <div class="modalactions">
+        <button type="button" class="btn" data-action="cancel-wizard">Cancel</button>
+        <button type="button" class="btn primary" data-action="to-details">Next</button>
+      </div>
+    </div>
+
+    <div class="wizstep" id="stepDetails" hidden>
+      <h2>Card details</h2>
+      <div class="detailpreview" id="detailPreview"></div>
+      <label>Label
+        <input type="text" id="cardLabel" placeholder="e.g. HDFC Millennia" maxlength="60">
+      </label>
+      <label>Category</label>
+      <div class="catpick" id="catPick">
+        <button type="button" class="catbtn" data-cat="id"><span>🪪</span>ID</button>
+        <button type="button" class="catbtn" data-cat="credit"><span>💳</span>Credit</button>
+        <button type="button" class="catbtn" data-cat="debit"><span>💳</span>Debit</button>
+        <button type="button" class="catbtn" data-cat="balance"><span>🏦</span>Balance</button>
+        <button type="button" class="catbtn" data-cat="other"><span>🗂️</span>Other</button>
+      </div>
+      <label>Note <span class="hint">(optional — avoid full numbers/CVV)</span>
+        <input type="text" id="cardNote" placeholder="e.g. expires 09/28, last 4: 4821" maxlength="80">
+      </label>
+      <p class="err" id="detailsErr"></p>
+      <div class="modalactions">
+        <button type="button" class="btn" data-action="back-touchup">Back</button>
+        <button type="button" class="btn primary" id="btnSaveCard">Save card</button>
+      </div>
+    </div>
+
+  </div>
+</dialog>
+
+<!-- fullscreen card viewer -->
+<dialog id="dlgView" class="fulldlg">
+  <div class="viewer" id="viewer">
+    <div class="viewertop">
+      <button class="tbtn" data-action="close-viewer">✕</button>
+      <span class="viewerlabel" id="viewerLabel"></span>
+      <button class="tbtn" data-action="edit-card">Edit</button>
+    </div>
+    <div class="viewerstage">
+      <img id="viewerImg" alt="">
+    </div>
+    <div class="viewernote" id="viewerNote"></div>
+  </div>
+</dialog>
+
+<!-- edit card details -->
+<dialog id="dlgEdit">
+  <form method="dialog" class="modal" id="frmEdit">
+    <h2>Edit card</h2>
+    <label>Label
+      <input type="text" id="editLabel" maxlength="60">
+    </label>
+    <label>Category</label>
+    <div class="catpick" id="editCatPick">
+      <button type="button" class="catbtn" data-cat="id"><span>🪪</span>ID</button>
+      <button type="button" class="catbtn" data-cat="credit"><span>💳</span>Credit</button>
+      <button type="button" class="catbtn" data-cat="debit"><span>💳</span>Debit</button>
+      <button type="button" class="catbtn" data-cat="balance"><span>🏦</span>Balance</button>
+      <button type="button" class="catbtn" data-cat="other"><span>🗂️</span>Other</button>
+    </div>
+    <label>Note
+      <input type="text" id="editNote" maxlength="80">
+    </label>
+    <div class="modalactions">
+      <button type="button" class="btn remove" id="btnDeleteCard">Delete</button>
+      <button type="button" class="btn" data-close>Cancel</button>
+      <button class="btn primary" value="ok">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- settings -->
+<dialog id="dlgSettings">
+  <form method="dialog" class="modal" id="frmSettings">
+    <h2>Settings</h2>
+    <fieldset>
+      <legend>Firebase sync <span class="hint">(optional)</span></legend>
+      <p class="hint">Paste your Firebase web-app config (JSON). Requires a Firebase project with
+      <b>Anonymous auth</b> enabled and a Firestore database. Only encrypted ciphertext is ever uploaded.</p>
+      <textarea id="fbConfig" rows="5" placeholder='{"apiKey":"...","authDomain":"...","projectId":"..."}'></textarea>
+      <p class="hint" id="fbStatus"></p>
+    </fieldset>
+    <fieldset>
+      <legend>Backup</legend>
+      <div class="modalactions" style="justify-content:flex-start">
+        <button type="button" class="btn" id="btnExport">Export JSON</button>
+        <button type="button" class="btn" id="btnImport">Import JSON</button>
+        <input type="file" id="fileImport" accept="application/json" hidden>
+      </div>
+    </fieldset>
+    <p class="err" id="settingsErr"></p>
+    <div class="modalactions">
+      <button type="button" class="btn" data-close>Close</button>
+      <button class="btn primary" value="ok">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="app.js"></script>
+</body>
+</html>
