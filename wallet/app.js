@@ -35,6 +35,7 @@ let wizOcrText = '';
 let wizCategory = null;
 let wizBrushSize = 14;
 let wizUndoStack = [];
+let wizBrushUsed = false;
 let wizTarget = { cardId: null, side: 'front' }; // where finishSide() writes its result
 let dragCorner = -1;
 let painting = false;
@@ -760,13 +761,22 @@ async function handleFile(file) {
 $('#fileCamera').addEventListener('change', e => { handleFile(e.target.files[0]); e.target.value = ''; });
 $('#fileGallery').addEventListener('change', e => { handleFile(e.target.files[0]); e.target.value = ''; });
 
+// Fits a box of natural size (iw,ih) within the space actually available on screen — the step's
+// own width, and a fraction of the viewport height — so a tall portrait photo can never balloon
+// past what's visible (which used to push the Next/Cancel buttons off-screen with no way to
+// scroll to them).
+function fitStageBox(stepEl, iw, ih, maxHFrac) {
+  const availW = stepEl.getBoundingClientRect().width || window.innerWidth;
+  const availH = window.innerHeight * maxHFrac;
+  const scale = Math.min(availW / iw, availH / ih);
+  return { cssW: iw * scale, cssH: ih * scale };
+}
 function setupCropStage() {
   const iw = wizSrcImage.naturalWidth || wizSrcImage.width, ih = wizSrcImage.naturalHeight || wizSrcImage.height;
   const stage = $('#cropStage');
-  stage.style.aspectRatio = `${iw} / ${ih}`;
-  requestAnimationFrame(() => requestAnimationFrame(() => {
-    const rect = stage.getBoundingClientRect();
-    const cssW = rect.width, cssH = rect.height;
+  requestAnimationFrame(() => {
+    const { cssW, cssH } = fitStageBox($('#stepCrop'), iw, ih, 0.42);
+    stage.style.width = cssW + 'px'; stage.style.height = cssH + 'px';
     const canvas = $('#cropCanvas');
     const dpr = window.devicePixelRatio || 1;
     canvas.width = Math.round(cssW * dpr); canvas.height = Math.round(cssH * dpr);
@@ -781,7 +791,7 @@ function setupCropStage() {
       : defaultInsetQuad(cssW, cssH);
     $('#cropOverlay').setAttribute('viewBox', `0 0 ${cssW} ${cssH}`);
     drawQuadOverlay();
-  }));
+  });
 }
 function runAutoDetect() {
   if (!wizSrcImage || !wizFit) return;
@@ -829,15 +839,26 @@ function doWarp() {
 function setupTouchStage() {
   const canvas = $('#touchCanvas');
   canvas.width = wizWarped.width; canvas.height = wizWarped.height;
-  canvas.parentElement.style.aspectRatio = `${wizWarped.width} / ${wizWarped.height}`;
+  const stage = canvas.parentElement;
+  requestAnimationFrame(() => {
+    const { cssW, cssH } = fitStageBox($('#stepTouchup'), wizWarped.width, wizWarped.height, 0.42);
+    stage.style.width = cssW + 'px'; stage.style.height = cssH + 'px';
+  });
   const ctx = canvas.getContext('2d');
   ctx.drawImage(wizWarped, 0, 0);
   wizUndoStack = [];
+  wizBrushUsed = false;
+  updateTouchupCTA();
+}
+function updateTouchupCTA() {
+  const btn = document.querySelector('#stepTouchup [data-action="to-details"]');
+  if (btn) btn.textContent = wizBrushUsed ? 'Next' : 'Skip';
 }
 (function wireBrushOnce() {
   const canvas = document.getElementById('touchCanvas');
   canvas.addEventListener('pointerdown', e => {
     painting = true; canvas.setPointerCapture(e.pointerId);
+    wizBrushUsed = true; updateTouchupCTA();
     const ctx = canvas.getContext('2d');
     wizUndoStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
     if (wizUndoStack.length > 12) wizUndoStack.shift();
@@ -861,6 +882,7 @@ function undoStroke() {
   const canvas = $('#touchCanvas');
   const img = wizUndoStack.pop();
   if (img) canvas.getContext('2d').putImageData(img, 0, 0);
+  if (!wizUndoStack.length) { wizBrushUsed = false; updateTouchupCTA(); }
 }
 
 function updateDetailPreview() {
