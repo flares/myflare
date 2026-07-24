@@ -105,7 +105,10 @@ dialog {
   max-width: min(420px, 92vw); width: 100%;
 }
 dialog::backdrop { background: rgba(0,0,0,0.55); backdrop-filter: blur(2px); }
-dialog.fulldlg { max-width: 100vw; width: 100vw; height: 100vh; max-height: 100vh; border-radius: 0; }
+dialog.fulldlg {
+  max-width: 100vw; width: 100vw; height: 100vh; max-height: 100vh; border-radius: 0;
+  overflow-y: auto; -webkit-overflow-scrolling: touch;
+}
 .modal { padding: 1.1rem 1.2rem 1.2rem; display: flex; flex-direction: column; gap: 0.7rem; }
 .modal h2 { font-size: 1.05rem; }
 .modal label { display: flex; flex-direction: column; gap: 0.3rem; font-size: 0.82rem; color: var(--ink-2); }
@@ -142,10 +145,11 @@ dialog.fulldlg { max-width: 100vw; width: 100vw; height: 100vh; max-height: 100v
 .srcicon { font-size: 2rem; }
 
 .cropstage, .touchstage {
-  position: relative; width: 100%; aspect-ratio: 4/3; background: #000; border-radius: 12px; overflow: hidden;
+  position: relative; max-width: 100%; margin: 0 auto; background: #000; border-radius: 12px; overflow: hidden;
   touch-action: none;
 }
 .cropstage canvas, .touchstage canvas { width: 100%; height: 100%; display: block; }
+.wizstep h2 { display: flex; align-items: baseline; gap: 0.4rem; }
 #cropOverlay { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
 #cropOverlay .handle { fill: var(--accent); stroke: #fff; stroke-width: 2; cursor: grab; }
 #cropOverlay .quadline { fill: rgba(91,140,255,0.18); stroke: var(--accent); stroke-width: 2; }
