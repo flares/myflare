@@ -14,13 +14,18 @@
   }
 }
 * { box-sizing: border-box; margin: 0; -webkit-tap-highlight-color: transparent; }
+/* Several elements toggle the `hidden` attribute via JS while also having a class that sets
+   `display` (flex/grid/etc). Since author rules beat the UA [hidden]{display:none} rule at equal
+   specificity, those elements would otherwise stay visible — this blanket rule guarantees hidden
+   always wins, regardless of what else targets the element now or later. */
+[hidden] { display: none !important; }
 body {
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
   background: var(--page); color: var(--ink);
   padding: 0.9rem; padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
   overflow-x: clip; min-height: 100vh;
 }
-.wrap { max-width: 520px; margin: 0 auto; }
+.wrap { max-width: 760px; margin: 0 auto; }
 
 .privacyveil {
   position: fixed; inset: 0; z-index: 9999; backdrop-filter: blur(24px);
@@ -50,11 +55,22 @@ body {
 footer { margin-top: 1.5rem; color: var(--muted); font-size: 0.72rem; line-height: 1.5; text-align: center; }
 footer a { color: var(--muted); }
 
+/* ---------------- groups (ID cards / bank cards, side by side) ---------------- */
+.groups { display: flex; flex-direction: column; gap: 2.2rem; margin-top: 0.5rem; }
+@media (min-width: 720px) {
+  .groups.has-two { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem 2rem; align-items: start; }
+}
+.grouphead { display: flex; align-items: center; gap: 0.5rem; font-size: 1.05rem; font-weight: 700; margin-bottom: 0.3rem; }
+.grouphead .gcount { margin-left: auto; font-size: 0.78rem; font-weight: 500; color: var(--muted); }
+
 /* ---------------- deck / cardholder ---------------- */
-.deckwrap { position: relative; padding: 2.2rem 0 1rem; touch-action: pan-y; }
+.deckwrap { position: relative; padding: 2.4rem 0 1rem; touch-action: pan-y; }
 .deck {
-  position: relative; height: 232px; margin: 0 auto; max-width: 360px;
+  position: relative; height: 320px; margin: 0 auto; max-width: 460px;
   perspective: 900px;
+}
+@media (min-width: 720px) {
+  .groups.has-two .deck { height: 280px; max-width: 100%; }
 }
 .walletcard {
   position: absolute; inset: 0; border-radius: 16px; overflow: hidden;
@@ -70,7 +86,8 @@ footer a { color: var(--muted); }
   color: #fff; pointer-events: none;
 }
 .walletcard .clabel { font-size: 0.86rem; font-weight: 650; line-height: 1.2; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
-.walletcard .cmeta { display: flex; align-items: center; gap: 0.35rem; margin-top: 0.15rem; font-size: 0.68rem; opacity: 0.85; }
+.walletcard .cmeta { display: flex; align-items: center; gap: 0.35rem; margin-top: 0.15rem; font-size: 0.68rem; opacity: 0.85; flex-wrap: wrap; }
+.walletcard .ctag { font-weight: 600; opacity: 0.9; }
 .walletcard .cbadge {
   display: inline-flex; align-items: center; gap: 0.25rem; font-weight: 650; padding: 0.05rem 0.4rem;
   border-radius: 999px; font-size: 0.65rem; color: #0b0c10; flex: none;
@@ -113,6 +130,7 @@ dialog.fulldlg {
 .modal h2 { font-size: 1.05rem; }
 .modal label { display: flex; flex-direction: column; gap: 0.3rem; font-size: 0.82rem; color: var(--ink-2); }
 .modal label.checkrow { flex-direction: row; align-items: center; gap: 0.5rem; font-size: 0.82rem; }
+.fieldrow { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; }
 .modal input[type=text], .modal input[type=password], .modal textarea, .modal select {
   font: inherit; font-size: 0.95rem; padding: 0.55rem 0.65rem; border-radius: 9px;
   border: 1px solid var(--border); background: var(--surface-2); color: var(--ink);
@@ -135,7 +153,6 @@ dialog.fulldlg {
 /* ---------------- add-card wizard ---------------- */
 .wizard { min-height: 100%; }
 .wizstep { display: flex; flex-direction: column; gap: 0.75rem; }
-.wizstep[hidden] { display: none; }
 .sourcepick { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 0.5rem 0; }
 .srcbtn {
   display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
@@ -176,14 +193,41 @@ dialog.fulldlg {
 .viewer { display: flex; flex-direction: column; height: 100%; background: #05060a; color: #fff; }
 .viewertop { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem; padding-top: calc(0.75rem + env(safe-area-inset-top)); }
 .viewerlabel { font-weight: 650; font-size: 0.95rem; }
-.viewerstage { position: relative; flex: 1; display: flex; align-items: center; justify-content: center; padding: 0.5rem 1rem; overflow: auto; }
-.viewerstage img { max-width: 100%; max-height: 100%; border-radius: 14px; box-shadow: 0 12px 40px rgba(0,0,0,0.5); transition: opacity 0.16s ease; }
-.viewernote { text-align: center; color: #b9bbc2; font-size: 0.82rem; padding: 0.5rem 1rem calc(1rem + env(safe-area-inset-bottom)); }
-.fliptbtn {
-  position: absolute; bottom: 0.75rem; left: 50%; transform: translateX(-50%);
-  border: 1px solid rgba(255,255,255,0.25); background: rgba(0,0,0,0.5); color: #fff;
-  border-radius: 999px; padding: 0.4rem 0.9rem; font: inherit; font-size: 0.8rem; cursor: pointer;
+.viewerstage {
+  position: relative; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 0.9rem; padding: 0.5rem 1rem; overflow: auto;
 }
+.viewerstage.side { flex-direction: row; align-items: stretch; }
+.viewerpane { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; min-width: 0; min-height: 0; flex: 1 1 0; max-width: 100%; }
+.viewerpane img { max-width: 100%; max-height: 42vh; border-radius: 14px; box-shadow: 0 12px 40px rgba(0,0,0,0.5); object-fit: contain; }
+.viewerstage.side .viewerpane img { max-height: 62vh; }
+.panetools { display: flex; align-items: center; gap: 0.5rem; }
+.panetools .sidelabel { font-size: 0.72rem; color: #9a9daa; text-transform: uppercase; letter-spacing: 0.04em; }
+.sharebtn {
+  border: 1px solid rgba(255,255,255,0.25); background: rgba(0,0,0,0.5); color: #fff;
+  border-radius: 999px; padding: 0.3rem 0.7rem; font: inherit; font-size: 0.76rem; cursor: pointer;
+}
+.viewernumber {
+  display: flex; align-items: center; justify-content: center; gap: 0.6rem; padding: 0 1rem 0.5rem;
+}
+.viewernumber code {
+  font-size: 0.95rem; letter-spacing: 0.03em; background: rgba(255,255,255,0.08); padding: 0.3rem 0.6rem; border-radius: 8px;
+}
+.viewernote { text-align: center; color: #b9bbc2; font-size: 0.82rem; padding: 0.5rem 1rem calc(1rem + env(safe-area-inset-bottom)); }
+
+/* ---------------- ID x people matrix ---------------- */
+#idMatrixSection { margin-top: 2.2rem; }
+.matrixhead { display: flex; align-items: center; gap: 0.5rem; font-size: 1.05rem; font-weight: 700; margin-bottom: 0.6rem; }
+.matrixscroll { overflow-x: auto; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
+table.matrix { border-collapse: collapse; width: 100%; font-size: 0.82rem; }
+table.matrix th, table.matrix td { padding: 0.55rem 0.85rem; text-align: center; border-bottom: 1px solid var(--border); white-space: nowrap; }
+table.matrix tr:last-child td { border-bottom: none; }
+table.matrix th { color: var(--ink-2); font-weight: 650; }
+table.matrix th:first-child, table.matrix td:first-child {
+  text-align: left; position: sticky; left: 0; background: var(--surface); font-weight: 600;
+}
+table.matrix .tick { color: var(--cat-balance); font-weight: 700; font-size: 0.95rem; }
+table.matrix .na { color: var(--muted); }
 
 /* toast */
 .toast {
