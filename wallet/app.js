@@ -18,9 +18,11 @@ const CATS = {
 let cryptoKey = null;       // AES-GCM key (in memory only) — null unless the wallet has been locked at least once and is currently unlocked
 let vaultEncrypted = false; // true once the user has ever set a passphrase
 let vaultUnlocked = false;  // true once the deck is usable (unencrypted-by-default, or unlocked)
-let cards = [];              // decrypted/plain, in-memory: {id, label, category, note, image, imageBack, ocrText, createdAt, updatedAt}
-let activeIndex = 0;
-let filter = 'all';
+let cards = [];              // decrypted/plain, in-memory: {id, label, category, tag, person, cardNumber, note, orientation, image, imageBack, ocrText, createdAt, updatedAt}
+let activeIndexes = { id: 0, bank: 0 }; // per-group active card index (ID cards / bank cards decks)
+let activeDrag = null;       // shared pointer-drag state across whichever deck is being touched
+let filter = 'all';          // category filter chip
+let personFilter = 'all';    // person filter chip
 let fbase = null;            // set once Firebase is connected
 let justAddedCardId = null;  // drives the "deal-in" entrance animation
 
@@ -30,6 +32,7 @@ let wizFit = null;           // {scale, dx, dy, iw, ih, cssW, cssH}
 let wizQuad = null;          // 4 {x,y} corners, CSS-px space of the crop stage
 let wizWarped = null;        // canvas after perspective warp
 let wizFinalDataURL = null;  // pending front image (new-card flow)
+let wizFinalOrientation = 'landscape'; // orientation of the pending front image
 let wizBackDataURL = null;   // pending back image (new-card flow)
 let wizOcrText = '';
 let wizCategory = null;
@@ -42,13 +45,13 @@ let painting = false;
 
 let editCategory = null;
 let currentViewCardId = null;
-let viewerShowingBack = false;
 
 /* ================= tiny helpers ================= */
 const $ = (sel, el = document) => el.querySelector(sel);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
 const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+const normalizeTag = raw => (raw || '').trim().replace(/^@+/, '').toLowerCase();
 
 function toast(msg) {
   let el = $('.toast');
@@ -224,7 +227,7 @@ async function syncCardsWithRemote() {
     for (const rr of remoteRecs) { const lr = localById.get(rr.id); if (!lr || rr.updatedAt > lr.updatedAt) await cardPut(rr); }
     for (const lr of localRecs) { const rr = remoteById.get(lr.id); if (lr.enc && (!rr || lr.updatedAt > rr.updatedAt)) pushCardRemote(lr); }
     await loadCardsFromLocal();
-    renderDeck();
+    refreshUI();
   } catch (e) { console.warn(e); }
 }
 
@@ -385,17 +388,16 @@ function parseCardText(text) {
   } else if (/ACCOUNT NUMBER|\bIFSC\b|BALANCE|PASSBOOK|STATEMENT/.test(upper)) {
     category = 'balance';
   }
-  let note = '';
+  let cardNumber = '';
   const numMatch = text.match(/\b(?:\d[ -]?){9,19}\b/g);
   if (numMatch && numMatch.length) {
     const raw = numMatch.sort((a, b) => b.replace(/\D/g, '').length - a.replace(/\D/g, '').length)[0];
-    const digits = raw.replace(/\D/g, '');
-    note = `•••• ${digits.slice(-4)}`;
+    cardNumber = raw.replace(/\s+/g, ' ').trim();
   }
   const lines = text.split(/\n+/).map(l => l.trim()).filter(Boolean);
   const bankLine = lines.find(l => /[A-Za-z]{3,}/.test(l) && l.length < 30 && !/\d{6,}/.test(l));
   const label = bankLine ? bankLine.replace(/[^A-Za-z0-9 .&'-]/g, '').trim().slice(0, 40) : '';
-  return { category, note, label };
+  return { category, cardNumber, label };
 }
 async function autoOCR() {
   const statusEl = $('#ocrStatus');
@@ -406,7 +408,7 @@ async function autoOCR() {
     if (!text.trim()) { statusEl.textContent = ''; return; }
     const parsed = parseCardText(text);
     if (parsed.label && !$('#cardLabel').value.trim()) $('#cardLabel').value = parsed.label;
-    if (parsed.note && !$('#cardNote').value.trim()) $('#cardNote').value = parsed.note;
+    if (parsed.cardNumber && !$('#cardNumber').value.trim()) $('#cardNumber').value = parsed.cardNumber;
     if (parsed.category && !wizCategory) {
       wizCategory = parsed.category;
       [...$('#catPick').children].forEach(b => b.classList.toggle('active', b.dataset.cat === parsed.category));
@@ -496,7 +498,7 @@ async function reencryptAllCardsLocally() {
 async function afterUnlock() {
   vaultUnlocked = true;
   await loadCardsFromLocal();
-  renderDeck();
+  refreshUI();
   updateLockIcon();
   if (fbase) syncCardsWithRemote();
 }
@@ -509,7 +511,7 @@ async function loadCardsFromLocal() {
   }
   decoded.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
   cards = decoded;
-  activeIndex = Math.max(0, cards.length - 1);
+  activeIndexes = { id: cards.length, bank: cards.length }; // clamped per-group when rendered
 }
 function showLockedScreen() {
   vaultUnlocked = false; cards = [];
@@ -517,6 +519,8 @@ function showLockedScreen() {
     <div class="modalactions" style="justify-content:center;margin-top:1rem">
       <button class="btn primary" data-action="lock">Unlock</button>
     </div></div>`;
+  $('#personFilterRow').innerHTML = ''; $('#personFilterRow').hidden = true;
+  $('#idMatrixSection').innerHTML = '';
   updateLockIcon();
 }
 function updateLockIcon() {
@@ -535,52 +539,129 @@ async function onLockButtonClick() {
   openVaultDialog(false);
 }
 
-/* ================= deck (cardholder) rendering ================= */
-function currentCards() { return filter === 'all' ? cards : cards.filter(c => c.category === filter); }
+/* ================= filters, datalists, deck (cardholder) rendering ================= */
+function matchesPerson(c) { return personFilter === 'all' || (c.person || '') === personFilter; }
+function idCardsList() { return cards.filter(c => c.category === 'id' && matchesPerson(c)); }
+function bankCardsList() { return cards.filter(c => c.category !== 'id' && (filter === 'all' || c.category === filter) && matchesPerson(c)); }
 function updateFilterChips() { [...$('#filterRow').children].forEach(b => b.classList.toggle('active', b.dataset.filter === filter)); }
+
+function refreshDatalists() {
+  const persons = [...new Set(cards.map(c => c.person).filter(Boolean))].sort();
+  $('#personList').innerHTML = persons.map(p => `<option value="${esc(p)}">`).join('');
+  const tags = [...new Set(cards.map(c => c.tag).filter(Boolean))].sort();
+  $('#tagList').innerHTML = tags.map(t => `<option value="@${esc(t)}">`).join('');
+}
+function renderPersonFilterRow() {
+  const persons = [...new Set(cards.map(c => c.person).filter(Boolean))].sort();
+  const row = $('#personFilterRow');
+  if (!persons.length) { row.innerHTML = ''; row.hidden = true; return; }
+  if (personFilter !== 'all' && !persons.includes(personFilter)) personFilter = 'all';
+  row.hidden = false;
+  row.innerHTML = `<button class="chip ${personFilter === 'all' ? 'active' : ''}" data-personfilter="all">👤 All people</button>` +
+    persons.map(p => `<button class="chip ${personFilter === p ? 'active' : ''}" data-personfilter="${esc(p)}">${esc(p)}</button>`).join('');
+}
+function renderIdMatrix() {
+  const section = $('#idMatrixSection');
+  const idCards = cards.filter(c => c.category === 'id');
+  if (!idCards.length) { section.innerHTML = ''; return; }
+  const persons = [...new Set(idCards.map(c => c.person || 'Unassigned'))].sort();
+  const rowsMap = new Map();
+  for (const c of idCards) {
+    const rowKey = c.tag ? '@' + c.tag : (c.label || 'Untitled');
+    const person = c.person || 'Unassigned';
+    if (!rowsMap.has(rowKey)) rowsMap.set(rowKey, new Set());
+    rowsMap.get(rowKey).add(person);
+  }
+  const rows = [...rowsMap.keys()].sort();
+  const thead = `<tr><th>ID type</th>${persons.map(p => `<th>${esc(p)}</th>`).join('')}</tr>`;
+  const tbody = rows.map(r => {
+    const set = rowsMap.get(r);
+    return `<tr><td>${esc(r)}</td>${persons.map(p => `<td>${set.has(p) ? '<span class="tick">✓</span>' : '<span class="na">–</span>'}</td>`).join('')}</tr>`;
+  }).join('');
+  section.innerHTML = `<div class="matrixhead">🗂️ ID cards by person</div>
+    <div class="matrixscroll"><table class="matrix"><thead>${thead}</thead><tbody>${tbody}</tbody></table></div>`;
+}
+function refreshUI() {
+  refreshDatalists();
+  renderPersonFilterRow();
+  renderGroups();
+}
 
 function cardHTML(c, i) {
   const cat = CATS[c.category] || CATS.other;
+  const metaBits = [`<span class="cbadge" style="background:${cat.color}">${cat.icon} ${cat.label}</span>`];
+  if (c.tag) metaBits.push(`<span class="ctag">@${esc(c.tag)}</span>`);
+  if (c.person) metaBits.push(esc(c.person));
+  if (c.note) metaBits.push(esc(c.note));
   return `<div class="walletcard" data-id="${c.id}" data-idx="${i}">
     <img src="${c.image}" alt="">
     ${c.imageBack ? '<span class="hasback" title="Has a back photo">⧉</span>' : ''}
     <div class="scrim">
       <div class="clabel">${esc(c.label || 'Untitled')}</div>
-      <div class="cmeta"><span class="cbadge" style="background:${cat.color}">${cat.icon} ${cat.label}</span>${c.note ? ' · ' + esc(c.note) : ''}</div>
+      <div class="cmeta">${metaBits.join(' · ')}</div>
     </div>
   </div>`;
 }
-function renderDeck() {
-  const list = currentCards();
-  const appEl = $('#app');
+function groupSectionHTML(group, icon, title, list, emptyMsg) {
   if (!list.length) {
+    return `<section class="group"><div class="grouphead">${icon} ${title} <span class="gcount">0</span></div>
+      <div class="empty" style="padding:1.5rem 1rem;"><p>${esc(emptyMsg)}</p></div></section>`;
+  }
+  let ai = activeIndexes[group] || 0;
+  if (ai >= list.length) ai = list.length - 1;
+  if (ai < 0) ai = 0;
+  activeIndexes[group] = ai;
+  const slots = list.length;
+  const items = list.map((c, i) => cardHTML(c, i)).join('') +
+    `<div class="walletcard blank" data-idx="${slots}" data-blank="1"><span class="plus">+</span><span>Add card</span></div>`;
+  return `<section class="group">
+    <div class="grouphead">${icon} ${title} <span class="gcount">${list.length}</span></div>
+    <div class="deckwrap">
+      <div class="deck" id="deck-${group}" data-group="${group}">${items}</div>
+      <div class="deckdots">${list.map((_, i) => `<span class="${i === ai ? 'active' : ''}"></span>`).join('')}</div>
+      <div class="deckhint">${list.length > 1 ? 'Swipe, or tap a card to bring it forward' : ''}</div>
+    </div>
+  </section>`;
+}
+function renderGroups() {
+  const appEl = $('#app');
+  if (!cards.length) {
     appEl.innerHTML = `<div class="empty"><div class="plus">🪪</div><p>No cards yet.</p>
       <div class="modalactions" style="justify-content:center;margin-top:1rem">
         <button class="btn primary" data-action="add-card">+ Add your first card</button>
       </div></div>`;
+    renderIdMatrix();
     return;
   }
-  if (activeIndex >= list.length) activeIndex = list.length - 1;
-  if (activeIndex < 0) activeIndex = 0;
-  const slots = list.length;
-  const items = list.map((c, i) => cardHTML(c, i)).join('') +
-    `<div class="walletcard blank" data-idx="${slots}" data-blank="1"><span class="plus">+</span><span>Add card</span></div>`;
-  appEl.innerHTML = `
-    <div class="deckwrap">
-      <div class="deck" id="deckEl">${items}</div>
-      <div class="deckdots">${list.map((_, i) => `<span class="${i === activeIndex ? 'active' : ''}"></span>`).join('')}</div>
-      <div class="deckhint">${list.length > 1 ? 'Swipe, or tap a card to bring it forward' : ''}</div>
-    </div>`;
-  appEl._list = list;
+  const idList = idCardsList();
+  const bankList = bankCardsList();
+  const showId = filter === 'all' || filter === 'id';
+  const showBank = filter === 'all' || filter !== 'id';
+  const sections = [];
+  if (showId) sections.push(groupSectionHTML('id', '🪪', 'ID Cards', idList, 'No ID cards yet.'));
+  if (showBank) sections.push(groupSectionHTML('bank', '💳', 'Bank Cards', bankList, 'No bank cards yet.'));
+  if (!sections.length) { appEl.innerHTML = `<div class="empty"><p>No cards match this filter.</p></div>`; renderIdMatrix(); return; }
+  appEl.innerHTML = `<div class="groups${sections.length > 1 ? ' has-two' : ''}">${sections.join('')}</div>`;
+  const idDeckEl = document.getElementById('deck-id'); if (idDeckEl) idDeckEl._list = idList;
+  const bankDeckEl = document.getElementById('deck-bank'); if (bankDeckEl) bankDeckEl._list = bankList;
+
   const enterId = justAddedCardId; justAddedCardId = null;
-  if (enterId && list.some(c => c.id === enterId)) animateEntrance(enterId);
-  else positionDeck();
+  let animatedGroup = null;
+  if (enterId) {
+    const el = appEl.querySelector(`.walletcard[data-id="${enterId}"]`);
+    if (el) { const deckEl = el.closest('.deck'); animatedGroup = deckEl ? deckEl.dataset.group : null; animateEntrance(enterId); }
+  }
+  if (animatedGroup !== 'id') positionDeckGroup('id');
+  if (animatedGroup !== 'bank') positionDeckGroup('bank');
+
+  renderIdMatrix();
 }
-function positionDeck() {
-  const deckEl = $('#deckEl'); if (!deckEl) return;
+function positionDeckGroup(group) {
+  const deckEl = document.getElementById('deck-' + group); if (!deckEl) return;
+  const ai = activeIndexes[group] || 0;
   [...deckEl.children].forEach(el => {
     const idx = Number(el.dataset.idx);
-    const off = idx - activeIndex;
+    const off = idx - ai;
     const a = Math.min(Math.abs(off), 4);
     const tx = off === 0 ? 0 : (off > 0 ? 1 : -1) * (18 + a * 14);
     const scale = 1 - a * 0.055;
@@ -590,99 +671,137 @@ function positionDeck() {
     el.style.opacity = a > 4 ? 0 : String(1 - a * 0.12);
     el.style.filter = off === 0 ? 'none' : `brightness(${1 - a * 0.08})`;
   });
-  [...$('#app').querySelectorAll('.deckdots span')].forEach((d, i) => d.classList.toggle('active', i === activeIndex));
+  const dotsEl = deckEl.closest('.deckwrap') ? deckEl.closest('.deckwrap').querySelector('.deckdots') : null;
+  if (dotsEl) [...dotsEl.children].forEach((d, i) => d.classList.toggle('active', i === ai));
 }
 function animateEntrance(id) {
-  const deckEl = $('#deckEl');
-  const el = deckEl && deckEl.querySelector(`[data-id="${id}"]`);
-  if (!el) { positionDeck(); return; }
+  const deckEl = document.querySelector(`.walletcard[data-id="${id}"]`);
+  const el = deckEl; // the card element itself
+  if (!el) return;
+  const parentDeck = el.closest('.deck');
+  const group = parentDeck ? parentDeck.dataset.group : null;
   el.style.transition = 'none';
   el.style.transform = 'translateY(170px) scale(0.55) rotate(20deg)';
   el.style.opacity = '0';
   void el.offsetWidth; // force layout so the "from" state actually paints before we animate
-  const others = [...deckEl.children].filter(c => c !== el);
+  const others = parentDeck ? [...parentDeck.children].filter(c => c !== el) : [];
   others.forEach(o => o.classList.add('shuffle'));
   requestAnimationFrame(() => {
     el.style.transition = '';
-    positionDeck();
+    if (group) positionDeckGroup(group);
     setTimeout(() => others.forEach(o => o.classList.remove('shuffle')), 420);
   });
 }
 (function wireDeckPointerOnce() {
   document.addEventListener('pointerdown', e => {
-    const deckEl = $('#deckEl'); if (!deckEl || !deckEl.contains(e.target)) return;
+    const deckEl = e.target.closest('.deck'); if (!deckEl) return;
     const card = e.target.closest('.walletcard'); if (!card) return;
+    const group = deckEl.dataset.group;
     const idx = Number(card.dataset.idx);
-    deckEl._drag = { x: e.clientX, y: e.clientY, moved: false, idx, isActive: idx === activeIndex };
+    activeDrag = { deckEl, group, x: e.clientX, y: e.clientY, moved: false, idx, isActive: idx === (activeIndexes[group] || 0) };
   });
   document.addEventListener('pointermove', e => {
-    const deckEl = $('#deckEl'); if (!deckEl || !deckEl._drag) return;
-    const d = deckEl._drag;
+    if (!activeDrag) return;
+    const d = activeDrag;
     const dx = e.clientX - d.x, dy = e.clientY - d.y;
     if (!d.moved && (Math.abs(dx) > 8 || Math.abs(dy) > 8)) d.moved = true;
     if (!d.moved || !d.isActive) return;
-    const activeEl = deckEl.querySelector(`.walletcard[data-idx="${activeIndex}"]`);
+    const activeEl = d.deckEl.querySelector(`.walletcard[data-idx="${activeIndexes[d.group] || 0}"]`);
     if (!activeEl) return;
     activeEl.style.transition = 'none';
     const rot = Math.max(-14, Math.min(14, dx / 12));
     activeEl.style.transform = `translateX(${dx}px) rotate(${rot}deg)`;
   });
   document.addEventListener('pointerup', e => {
-    const deckEl = $('#deckEl'); if (!deckEl || !deckEl._drag) return;
-    const drag = deckEl._drag; deckEl._drag = null;
-    const activeEl = deckEl.querySelector(`.walletcard[data-idx="${activeIndex}"]`);
+    if (!activeDrag) return;
+    const d = activeDrag; activeDrag = null;
+    const ai = activeIndexes[d.group] || 0;
+    const activeEl = d.deckEl.querySelector(`.walletcard[data-idx="${ai}"]`);
     if (activeEl) activeEl.style.transition = '';
-    const dx = e.clientX - drag.x;
-    const list = $('#app')._list || [];
+    const dx = e.clientX - d.x;
+    const list = d.deckEl._list || [];
     const maxIdx = list.length + 1; // + the trailing blank "add card" slot
     if (Math.abs(dx) > 45) {
-      activeIndex = Math.max(0, Math.min(maxIdx - 1, activeIndex + (dx < 0 ? 1 : -1)));
-    } else if (!drag.moved) {
-      if (drag.idx === activeIndex) {
-        if (drag.idx === list.length) openAddWizard();
-        else openViewer(list[drag.idx]);
+      activeIndexes[d.group] = Math.max(0, Math.min(maxIdx - 1, ai + (dx < 0 ? 1 : -1)));
+    } else if (!d.moved) {
+      if (d.idx === ai) {
+        if (d.idx === list.length) openAddWizard(d.group === 'id' ? 'id' : null);
+        else openViewer(list[d.idx]);
       } else {
-        activeIndex = drag.idx;
+        activeIndexes[d.group] = d.idx;
       }
     }
-    positionDeck();
+    positionDeckGroup(d.group);
   });
   document.addEventListener('pointercancel', () => {
-    const deckEl = $('#deckEl'); if (!deckEl) return;
-    deckEl._drag = null;
-    positionDeck();
+    if (!activeDrag) return;
+    const d = activeDrag; activeDrag = null;
+    positionDeckGroup(d.group);
   });
 })();
 
 /* ================= fullscreen viewer ================= */
+// A landscape card's front+back stack one below another (uses screen height well); a portrait
+// card's sit side by side (uses screen width well) — matches how you'd naturally lay two photos
+// out on a table.
+function viewerPaneHTML(src, label, side) {
+  return `<div class="viewerpane">
+    <img src="${src}" alt="">
+    <div class="panetools">${label ? `<span class="sidelabel">${esc(label)}</span>` : ''}<button class="sharebtn" data-share="${side}">📤 Share</button></div>
+  </div>`;
+}
 function openViewer(card) {
   currentViewCardId = card.id;
-  viewerShowingBack = false;
   const cat = CATS[card.category] || CATS.other;
-  $('#viewerImg').src = card.image;
   $('#viewerLabel').textContent = `${cat.icon} ${card.label || 'Untitled'}`;
-  $('#viewerNote').textContent = card.note || '';
-  $('#btnFlip').hidden = !card.imageBack;
-  $('#btnFlip').textContent = '⟳ Flip to back';
+  const stage = $('#viewerStage');
+  const isSide = !!card.imageBack && card.orientation === 'portrait';
+  stage.className = 'viewerstage' + (isSide ? ' side' : '');
+  let html = viewerPaneHTML(card.image, card.imageBack ? 'Front' : '', 'front');
+  if (card.imageBack) html += viewerPaneHTML(card.imageBack, 'Back', 'back');
+  stage.innerHTML = html;
+  if (card.cardNumber) { $('#viewerNumberRow').hidden = false; $('#viewerNumber').textContent = card.cardNumber; }
+  else { $('#viewerNumberRow').hidden = true; }
+  const bits = [];
+  if (card.person) bits.push('👤 ' + card.person);
+  if (card.tag) bits.push('@' + card.tag);
+  if (card.note) bits.push(card.note);
+  $('#viewerNote').textContent = bits.join(' · ');
   $('#dlgView').showModal();
 }
-function flipCard() {
+async function copyCardNumber() {
   const card = cards.find(c => c.id === currentViewCardId);
-  if (!card || !card.imageBack) return;
-  const img = $('#viewerImg');
-  img.style.opacity = '0';
-  setTimeout(() => {
-    viewerShowingBack = !viewerShowingBack;
-    img.src = viewerShowingBack ? card.imageBack : card.image;
-    $('#btnFlip').textContent = viewerShowingBack ? '⟳ Flip to front' : '⟳ Flip to back';
-    img.style.opacity = '1';
-  }, 160);
+  if (!card || !card.cardNumber) return;
+  try { await navigator.clipboard.writeText(card.cardNumber); toast('Copied'); }
+  catch (e) { console.warn(e); toast('Could not copy — select the text manually'); }
+}
+async function shareCardPhoto(isBack) {
+  const card = cards.find(c => c.id === currentViewCardId);
+  if (!card) return;
+  const dataURL = isBack ? card.imageBack : card.image;
+  if (!dataURL) return;
+  const filename = `${(card.label || 'card').replace(/[^a-z0-9]+/gi, '-').toLowerCase()}-${isBack ? 'back' : 'front'}.jpg`;
+  try {
+    const blob = await (await fetch(dataURL)).blob();
+    const file = new File([blob], filename, { type: blob.type || 'image/jpeg' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({ files: [file], title: card.label || 'Card' });
+      return;
+    }
+  } catch (e) {
+    if (e && e.name === 'AbortError') return;
+    console.warn('share failed, falling back to download', e);
+  }
+  const a = document.createElement('a'); a.href = dataURL; a.download = filename; a.click();
 }
 function openEditFromViewer() {
   const card = cards.find(c => c.id === currentViewCardId);
   if (!card) return;
   $('#editLabel').value = card.label || '';
   $('#editNote').value = card.note || '';
+  $('#editPerson').value = card.person || '';
+  $('#editTag').value = card.tag ? '@' + card.tag : '';
+  $('#editNumber').value = card.cardNumber || '';
   editCategory = card.category;
   [...$('#editCatPick').children].forEach(b => b.classList.toggle('active', b.dataset.cat === editCategory));
   $('#dlgView').close();
@@ -695,11 +814,14 @@ $('#frmEdit').addEventListener('submit', async e => {
   try {
     card.label = $('#editLabel').value.trim() || 'Untitled';
     card.note = $('#editNote').value.trim();
+    card.person = $('#editPerson').value.trim();
+    card.tag = normalizeTag($('#editTag').value);
+    card.cardNumber = $('#editNumber').value.trim();
     card.category = editCategory || card.category;
     card.updatedAt = Date.now();
     await persistCard(card);
     $('#dlgEdit').close();
-    renderDeck();
+    refreshUI();
     toast('Saved');
   } catch (err) { console.error(err); toast('Could not save — see console for details'); }
 });
@@ -711,7 +833,7 @@ $('#btnDeleteCard').addEventListener('click', async () => {
   await cardDelete(card.id);
   deleteCardRemote(card.id);
   $('#dlgEdit').close();
-  renderDeck();
+  refreshUI();
   toast('Card deleted');
 });
 async function persistCard(card) {
@@ -736,14 +858,17 @@ function startRetake(cardId, side) {
 function showStep(id) {
   [...$('#wizard').children].forEach(s => s.hidden = s.id !== id);
 }
-function openAddWizard() {
+function openAddWizard(presetCategory) {
   wizTarget = { cardId: null, side: 'front' };
   wizSrcImage = null; wizQuad = null; wizWarped = null; wizFinalDataURL = null; wizBackDataURL = null;
-  wizOcrText = ''; wizCategory = null; wizUndoStack = [];
+  wizFinalOrientation = 'landscape';
+  wizOcrText = ''; wizCategory = presetCategory || null; wizUndoStack = [];
   $('#sourceTitle').textContent = 'Add a card';
   $('#sourceHint').textContent = "Photograph an ID, credit/debit card, or balance/passbook page. It's cropped and processed on this device.";
-  $('#cardLabel').value = ''; $('#cardNote').value = ''; $('#detailsErr').textContent = ''; $('#ocrStatus').textContent = '';
-  [...$('#catPick').children].forEach(b => b.classList.remove('active'));
+  $('#cardLabel').value = ''; $('#cardNote').value = ''; $('#cardNumber').value = '';
+  $('#cardPerson').value = ''; $('#cardTag').value = '';
+  $('#detailsErr').textContent = ''; $('#ocrStatus').textContent = '';
+  [...$('#catPick').children].forEach(b => b.classList.toggle('active', b.dataset.cat === wizCategory));
   updateBackSlot();
   showStep('stepSource');
   $('#dlgAdd').showModal();
@@ -902,10 +1027,13 @@ async function finishSide() {
     try {
       const card = cards.find(c => c.id === wizTarget.cardId);
       if (card) {
-        if (wizTarget.side === 'front') card.image = dataURL; else card.imageBack = dataURL;
+        if (wizTarget.side === 'front') {
+          card.image = dataURL;
+          card.orientation = wizWarped.width >= wizWarped.height ? 'landscape' : 'portrait';
+        } else card.imageBack = dataURL;
         card.updatedAt = Date.now();
         await persistCard(card);
-        renderDeck();
+        refreshUI();
         toast(wizTarget.side === 'front' ? 'Front photo updated' : 'Back photo saved');
       }
     } catch (err) { console.error(err); toast('Could not save that photo'); }
@@ -919,6 +1047,7 @@ async function finishSide() {
     return;
   }
   wizFinalDataURL = dataURL;
+  wizFinalOrientation = wizWarped.width >= wizWarped.height ? 'landscape' : 'portrait';
   updateDetailPreview();
   showStep('stepDetails');
   autoOCR();
@@ -938,18 +1067,25 @@ $('#btnSaveCard').addEventListener('click', async () => {
   try {
     const label = $('#cardLabel').value.trim() || 'Untitled';
     const note = $('#cardNote').value.trim();
+    const person = $('#cardPerson').value.trim();
+    const tag = normalizeTag($('#cardTag').value);
+    const cardNumber = $('#cardNumber').value.trim();
     const createdAt = new Date().toISOString();
-    const plain = { label, category: wizCategory, note, image: wizFinalDataURL, imageBack: wizBackDataURL || null, ocrText: wizOcrText || '', createdAt };
+    const plain = {
+      label, category: wizCategory, tag, person, cardNumber, note, orientation: wizFinalOrientation,
+      image: wizFinalDataURL, imageBack: wizBackDataURL || null, ocrText: wizOcrText || '', createdAt,
+    };
     const packed = await packCard(plain);
     const rec = { id: uid(), updatedAt: Date.now(), ...packed };
     await cardPut(rec);
     cards.push({ id: rec.id, updatedAt: rec.updatedAt, ...plain });
     pushCardRemote(rec);
     filter = 'all'; updateFilterChips();
+    personFilter = 'all';
     justAddedCardId = rec.id;
-    activeIndex = currentCards().length - 1;
+    activeIndexes[plain.category === 'id' ? 'id' : 'bank'] = Number.MAX_SAFE_INTEGER; // clamped to last on render
     closeWizard();
-    renderDeck();
+    refreshUI();
     toast('Card saved');
   } catch (err) {
     console.error('save card failed', err);
@@ -1029,7 +1165,9 @@ $('#fileImport').addEventListener('change', async e => {
       const id = uid();
       const plain = {
         label: c.label || 'Untitled', category: CATS[c.category] ? c.category : 'other',
-        note: c.note || '', image: c.image, imageBack: c.imageBack || null, ocrText: c.ocrText || '',
+        tag: normalizeTag(c.tag), person: c.person || '', cardNumber: c.cardNumber || '',
+        note: c.note || '', orientation: c.orientation === 'portrait' ? 'portrait' : 'landscape',
+        image: c.image, imageBack: c.imageBack || null, ocrText: c.ocrText || '',
         createdAt: c.createdAt || new Date().toISOString(),
       };
       const packed = await packCard(plain);
@@ -1040,7 +1178,7 @@ $('#fileImport').addEventListener('change', async e => {
     }
     cards.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
     $('#dlgSettings').close();
-    renderDeck();
+    refreshUI();
     toast(`Imported ${incoming.length} card(s)`);
   } catch (err) { console.warn(err); toast('Could not read that backup file (wrong passphrase?)'); }
 });
@@ -1051,7 +1189,13 @@ document.addEventListener('click', e => {
   if (closeBtn) { closeBtn.closest('dialog').close(); return; }
 
   const filterChip = e.target.closest('#filterRow .chip');
-  if (filterChip) { filter = filterChip.dataset.filter; updateFilterChips(); activeIndex = 0; renderDeck(); return; }
+  if (filterChip) { filter = filterChip.dataset.filter; updateFilterChips(); renderGroups(); return; }
+
+  const personChip = e.target.closest('#personFilterRow .chip');
+  if (personChip) { personFilter = personChip.dataset.personfilter; renderPersonFilterRow(); renderGroups(); return; }
+
+  const shareBtn = e.target.closest('.sharebtn');
+  if (shareBtn) { shareCardPhoto(shareBtn.dataset.share === 'back'); return; }
 
   const catBtn = e.target.closest('.catbtn');
   if (catBtn) {
@@ -1082,7 +1226,7 @@ document.addEventListener('click', e => {
     case 'back-touchup': showStep('stepTouchup'); break;
     case 'close-viewer': $('#dlgView').close(); break;
     case 'edit-card': openEditFromViewer(); break;
-    case 'flip-card': flipCard(); break;
+    case 'copy-number': copyCardNumber(); break;
     case 'retake-front': startRetake(currentViewCardId, 'front'); break;
     case 'retake-back': startRetake(currentViewCardId, 'back'); break;
   }

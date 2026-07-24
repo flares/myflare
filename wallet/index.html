@@ -10,6 +10,9 @@
 <body>
 <div class="privacyveil" id="privacyVeil"></div>
 
+<datalist id="personList"></datalist>
+<datalist id="tagList"></datalist>
+
 <div class="wrap">
 
   <div class="titlerow">
@@ -29,8 +32,11 @@
     <button class="chip" data-filter="balance">🏦 Balance</button>
     <button class="chip" data-filter="other">🗂️ Other</button>
   </div>
+  <div class="filterrow" id="personFilterRow"><!-- built by app.js from cards' person names --></div>
 
-  <div id="app"><!-- deck rendered by app.js --></div>
+  <div id="app"><!-- deck groups rendered by app.js --></div>
+
+  <div id="idMatrixSection"><!-- ID-cards x people matrix, rendered by app.js --></div>
 
   <footer id="footerNote">
     Cards stay in this browser's storage. Tap 🔒 any time to set a passphrase — everything is then AES-GCM
@@ -126,6 +132,14 @@
         <button type="button" class="btn sm" data-action="add-back">+ Add back photo</button>
       </div>
 
+      <div class="fieldrow">
+        <label>Person
+          <input type="text" id="cardPerson" list="personList" placeholder="e.g. Manoj" maxlength="40">
+        </label>
+        <label>Tag <span class="hint">(optional)</span>
+          <input type="text" id="cardTag" list="tagList" placeholder="e.g. @aadhar" maxlength="30">
+        </label>
+      </div>
       <label>Label
         <input type="text" id="cardLabel" placeholder="e.g. HDFC Millennia" maxlength="60">
       </label>
@@ -137,8 +151,11 @@
         <button type="button" class="catbtn" data-cat="balance"><span>🏦</span>Balance</button>
         <button type="button" class="catbtn" data-cat="other"><span>🗂️</span>Other</button>
       </div>
+      <label>Card / ID number <span class="hint">(optional — shown with a copy button)</span>
+        <input type="text" id="cardNumber" placeholder="e.g. 4111 2222 3333 4444" maxlength="40">
+      </label>
       <label>Note <span class="hint">(optional)</span>
-        <input type="text" id="cardNote" placeholder="e.g. expires 09/28, last 4: 4821" maxlength="80">
+        <input type="text" id="cardNote" placeholder="e.g. expires 09/28" maxlength="80">
       </label>
       <p class="err" id="detailsErr"></p>
       <div class="modalactions">
@@ -158,9 +175,10 @@
       <span class="viewerlabel" id="viewerLabel"></span>
       <button class="tbtn" data-action="edit-card">Edit</button>
     </div>
-    <div class="viewerstage">
-      <img id="viewerImg" alt="">
-      <button class="fliptbtn" id="btnFlip" data-action="flip-card" hidden>⟳ Flip</button>
+    <div class="viewerstage" id="viewerStage"><!-- front/back images built by app.js --></div>
+    <div class="viewernumber" id="viewerNumberRow" hidden>
+      <code id="viewerNumber"></code>
+      <button class="tbtn" data-action="copy-number">📋 Copy</button>
     </div>
     <div class="viewernote" id="viewerNote"></div>
   </div>
@@ -174,6 +192,14 @@
       <button type="button" class="btn sm" data-action="retake-front">🔄 Retake front</button>
       <button type="button" class="btn sm" data-action="retake-back">➕ Back photo</button>
     </div>
+    <div class="fieldrow">
+      <label>Person
+        <input type="text" id="editPerson" list="personList" maxlength="40">
+      </label>
+      <label>Tag <span class="hint">(optional)</span>
+        <input type="text" id="editTag" list="tagList" placeholder="e.g. @aadhar" maxlength="30">
+      </label>
+    </div>
     <label>Label
       <input type="text" id="editLabel" maxlength="60">
     </label>
@@ -185,6 +211,9 @@
       <button type="button" class="catbtn" data-cat="balance"><span>🏦</span>Balance</button>
       <button type="button" class="catbtn" data-cat="other"><span>🗂️</span>Other</button>
     </div>
+    <label>Card / ID number <span class="hint">(optional)</span>
+      <input type="text" id="editNumber" maxlength="40">
+    </label>
     <label>Note
       <input type="text" id="editNote" maxlength="80">
     </label>
