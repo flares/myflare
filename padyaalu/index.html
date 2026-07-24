@@ -2,8 +2,8 @@
 <html lang="te">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Padyaalu — myflare</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Padyaalu — పద్యాలు</title>
 <style>
   :root {
     color-scheme: light dark;
@@ -11,8 +11,8 @@
     --muted: #898781; --border: rgba(11,11,11,0.10); --accent: #a6641b;
     --chip: rgba(11,11,11,0.04); --padyam-bg: rgba(166,100,27,0.05);
     --guru: rgba(166,100,27,0.16); --laghu: rgba(11,11,11,0.05);
-    --ok: #2e7d32; --bad: #c0392b;
-    --runover: 2.4rem;   /* wrapped continuation lines indent to here */
+    --ok: #2e7d32; --panel: rgba(46,125,50,0.06);
+    --runover: 2.2rem;
   }
   @media (prefers-color-scheme: dark) {
     :root {
@@ -20,251 +20,424 @@
       --muted: #898781; --border: rgba(255,255,255,0.10); --accent: #e0a35c;
       --chip: rgba(255,255,255,0.06); --padyam-bg: rgba(224,163,92,0.07);
       --guru: rgba(224,163,92,0.22); --laghu: rgba(255,255,255,0.06);
-      --ok: #7cc47f; --bad: #e88b7d;
+      --ok: #7cc47f; --panel: rgba(124,196,127,0.08);
     }
   }
   * { box-sizing: border-box; margin: 0; }
-  html, body { height: 100%; }
-  body {
-    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-    background: var(--page); color: var(--ink);
-    display: flex; flex-direction: column; min-height: 100vh;
-  }
-  .telugu-serif {
-    font-family: "Noto Serif Telugu", "Ramaraja", "Gautami", "Pothana2000",
-                 "Mandali", "Noto Sans Telugu", Georgia, serif;
-  }
+  html, body { min-height: 100%; }
+  body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--page); color: var(--ink); touch-action: manipulation; -webkit-text-size-adjust: 100%; }
+  .telugu-serif { font-family: "Noto Serif Telugu", "Ramaraja", "Gautami", "Pothana2000", "Mandali", "Noto Sans Telugu", Georgia, serif; }
+  .view[hidden] { display: none !important; }
 
-  /* ---- top bar ---- */
-  .topbar {
-    position: sticky; top: 0; z-index: 5;
-    background: color-mix(in srgb, var(--page) 88%, transparent);
-    backdrop-filter: blur(8px); border-bottom: 1px solid var(--border);
-    padding: 0.7rem 1.25rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1rem;
+  .icon-btn {
+    display: grid; place-items: center; width: 2.3rem; height: 2.3rem; border-radius: 50%;
+    background: var(--surface); border: 1px solid var(--border); color: var(--ink-2);
+    font-size: 1rem; cursor: pointer; text-decoration: none; transition: border-color .15s, color .15s;
   }
-  .brand { display: flex; align-items: baseline; gap: 0.55rem; margin-right: auto; }
-  .brand a { color: var(--muted); text-decoration: none; font-size: 0.8rem; }
-  .brand a:hover { color: var(--accent); }
-  .brand strong { font-size: 1.05rem; letter-spacing: -0.01em; }
-  .brand .te { color: var(--ink-2); font-size: 0.95rem; }
-  .filters { display: flex; flex-wrap: wrap; gap: 0.4rem; }
-  .chip {
-    border: 1px solid var(--border); background: var(--chip); color: var(--ink-2);
-    border-radius: 999px; padding: 0.28rem 0.8rem; font-size: 0.82rem; cursor: pointer;
-    transition: border-color 0.15s, color 0.15s, background 0.15s;
-  }
-  .chip:hover { border-color: var(--accent); color: var(--ink); }
-  .chip.active { border-color: var(--accent); color: var(--accent); background: var(--padyam-bg); font-weight: 600; }
+  .icon-btn:hover { border-color: var(--accent); color: var(--accent); }
 
-  /* ---- card ---- */
-  .stage { flex: 1; display: flex; justify-content: center; padding: 1.5rem 1.25rem 1rem; }
+  /* ================= HOME (bubbles) ================= */
+  #home { min-height: 100vh; display: flex; flex-direction: column; padding: 1.1rem 1.25rem 2rem; }
+  .home-top { display: flex; align-items: center; gap: 0.75rem; }
+  .home-title { margin-right: auto; display: flex; align-items: baseline; gap: 0.55rem; }
+  .home-title b { font-size: 1.5rem; letter-spacing: -0.01em; }
+  .home-title small { color: var(--muted); font-size: 0.85rem; }
+  .home-sub { color: var(--ink-2); text-align: center; margin: 0.5rem 0 0; font-size: 0.9rem; }
+  .bubbles {
+    flex: 1; display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+    gap: clamp(1rem, 4vw, 2.6rem); padding: 1.5rem 0;
+  }
+  .bubble {
+    position: relative; border: none; cursor: pointer; color: #fff; text-align: center;
+    width: clamp(128px, 30vw, 176px); aspect-ratio: 1; border-radius: 50%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.15rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.18), inset 0 2px 6px rgba(255,255,255,0.25);
+    animation: bob 5s ease-in-out infinite; transition: transform .18s ease;
+  }
+  .bubble:hover, .bubble:focus-visible { transform: scale(1.06); outline: none; }
+  .bubble.empty { opacity: 0.45; cursor: default; filter: grayscale(0.35); animation: none; }
+  .bubble.empty:hover { transform: none; }
+  .bubble .bname { font-size: clamp(1.2rem, 4.5vw, 1.7rem); font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,0.25); }
+  .bubble .bcount { font-size: 0.82rem; opacity: 0.92; }
+  .bubble .bpoet { font-size: 0.72rem; opacity: 0.8; max-width: 80%; }
+  @keyframes bob { 0%,100% { translate: 0 0; } 50% { translate: 0 -12px; } }
+  @media (prefers-reduced-motion: reduce) { .bubble { animation: none; } }
+  .random-btn {
+    align-self: center; margin-top: 1rem; font: inherit; cursor: pointer; color: var(--ink);
+    background: var(--surface); border: 1px solid var(--border); border-radius: 999px;
+    padding: 0.7rem 1.5rem; font-size: 0.95rem; transition: border-color .15s, color .15s;
+  }
+  .random-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ================= READER ================= */
+  #reader { min-height: 100vh; display: flex; flex-direction: column; }
+  .corner { position: fixed; top: 0.9rem; z-index: 20; }
+  .corner.left { left: 0.9rem; } .corner.right { right: 0.9rem; display: flex; gap: 0.5rem; }
+  .stage { flex: 1; display: flex; justify-content: center; padding: 1.25rem 1rem 1rem; }
   .card {
-    width: 100%; max-width: 680px; background: var(--surface); border: 1px solid var(--border);
-    border-radius: 18px; padding: 2rem clamp(1.25rem, 5vw, 2.75rem) 2.25rem;
+    width: min(1180px, 95vw); background: var(--surface); border: 1px solid var(--border);
+    border-radius: 18px; padding: 1.6rem clamp(1.1rem, 3vw, 2.4rem) 2rem;
     display: flex; flex-direction: column;
     box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 12px 32px rgba(0,0,0,0.05);
   }
-  .card-head { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem;
-    color: var(--muted); font-size: 0.8rem; margin-bottom: 1.5rem; }
-  .badge { color: var(--accent); border: 1px solid var(--accent); border-radius: 999px;
-    padding: 0.15rem 0.65rem; font-weight: 600; }
+  .card-head { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.8rem; color: var(--muted); font-size: 0.8rem; margin-bottom: 1.25rem; }
+  .code { color: var(--accent); border: 1px solid var(--accent); border-radius: 8px; padding: 0.12rem 0.55rem; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: 0.02em; }
   .card-head .meter { margin-left: auto; }
 
-  /* padyam: 4 paadas, wrapped continuation gets a hanging indent */
-  .padyam { background: var(--padyam-bg); border-radius: 14px; padding: 1.6rem 1.4rem;
-    display: grid; gap: 0.5rem; font-size: clamp(1.15rem, 3.5vw, 1.5rem); line-height: 1.7; }
-  .padyam .pline { padding-left: var(--runover); text-indent: calc(-1 * var(--runover)); font-weight: 500; }
-  .padyam .pline.makutam { color: var(--accent); margin-top: 0.25rem; }
+  .padyam {
+    background: var(--padyam-bg); border-radius: 14px; padding: 1.5rem clamp(1rem, 3vw, 2rem);
+    display: grid; gap: 0.5rem; text-align: center;
+    font-size: clamp(1.08rem, 0.7rem + 1.15vw, 1.5rem); line-height: 1.7;
+  }
+  .padyam .pline { font-weight: 500; padding-left: var(--runover); text-indent: calc(-1 * var(--runover)); }
+  .padyam .pline.makutam { color: var(--accent); margin-top: 0.2rem; }
 
-  section.block { margin-top: 1.75rem; }
-  section.block > h3 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em;
-    color: var(--muted); margin-bottom: 0.75rem; display: flex; align-items: baseline; gap: 0.5rem; }
+  .inner { max-width: 880px; width: 100%; margin: 0 auto; }
+  section.block { margin-top: 1.6rem; }
+  section.block > h3 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 0.7rem; display: flex; align-items: baseline; gap: 0.5rem; }
   section.block > h3 .te { text-transform: none; letter-spacing: 0; color: var(--ink-2); font-size: 0.95rem; }
   section.block > h3 .spacer { margin-left: auto; }
-  .verdict { font-size: 0.72rem; font-weight: 600; text-transform: none; letter-spacing: 0;
-    border-radius: 999px; padding: 0.1rem 0.55rem; border: 1px solid; }
-  .verdict.ok { color: var(--ok); border-color: var(--ok); }
-  .verdict.bad { color: var(--bad); border-color: var(--bad); }
-  .verdict.pending { color: var(--muted); border-color: var(--border); }
-  .pending-note { color: var(--muted); font-size: 0.92rem; font-style: italic; }
-  .gana.plain { border-color: transparent; padding: 0.15rem 0; }
-
   .gloss { display: grid; gap: 0.1rem; }
-  .gloss .row { display: grid; grid-template-columns: minmax(9rem, 40%) 1fr; gap: 0.75rem;
-    padding: 0.5rem 0.2rem; border-bottom: 1px solid var(--border); }
+  .gloss .row { display: grid; grid-template-columns: minmax(9rem, 38%) 1fr; gap: 0.75rem; padding: 0.5rem 0.2rem; border-bottom: 1px solid var(--border); }
   .gloss .row:last-child { border-bottom: 0; }
-  .gloss .w { font-size: 1.02rem; }
-  .gloss .m { color: var(--ink-2); font-size: 0.95rem; align-self: center; }
+  .gloss .w { font-size: 1.02rem; } .gloss .m { color: var(--ink-2); font-size: 0.95rem; align-self: center; }
   .tatparyam { color: var(--ink-2); line-height: 1.7; font-size: 1rem; }
+  .pending-note { color: var(--muted); font-size: 0.92rem; font-style: italic; }
 
-  /* ---- chandassu breakdown ---- */
-  .chandassu { display: grid; gap: 0.85rem; }
-  .cpaada { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: flex-end; }
-  .gana { display: flex; flex-direction: column; align-items: center; gap: 0.15rem;
-    border: 1px solid var(--border); border-radius: 9px; padding: 0.35rem 0.4rem 0.3rem; }
-  .gana .syls { display: flex; gap: 0.15rem; }
-  .syl { position: relative; padding: 0.1rem 0.35rem 0.05rem; border-radius: 6px; font-size: 1.05rem;
-    display: flex; flex-direction: column; align-items: center; line-height: 1.25; }
-  .syl.G { background: var(--guru); }
-  .syl.L { background: var(--laghu); }
+  /* chandassu */
+  .chandassu { display: grid; gap: 0.8rem; max-width: 100%; }
+  .cpaada { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: flex-end; max-width: 100%; }
+  .gana { display: flex; flex-direction: column; align-items: center; gap: 0.15rem; border: 1px solid var(--border); border-radius: 9px; padding: 0.35rem 0.4rem 0.3rem; max-width: 100%; }
+  .gana.plain { border-color: transparent; padding: 0.15rem 0; }
+  .gana .syls { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.15rem; max-width: 100%; }
+  .syl { padding: 0.1rem 0.35rem 0.05rem; border-radius: 6px; font-size: 1.02rem; display: flex; flex-direction: column; align-items: center; line-height: 1.25; }
+  .syl.G { background: var(--guru); } .syl.L { background: var(--laghu); }
   .syl .mark { font-size: 0.62rem; color: var(--muted); font-family: ui-monospace, monospace; }
   .syl.G .mark { color: var(--accent); }
   .gana .gname { font-size: 0.68rem; color: var(--muted); }
-  .cpaada.nomatch { color: var(--bad); }
   .legend { color: var(--muted); font-size: 0.78rem; margin-top: 0.35rem; line-height: 1.5; }
   .legend b { color: var(--ink-2); }
 
-  /* ---- nav ---- */
-  .nav { position: sticky; bottom: 0; background: color-mix(in srgb, var(--page) 88%, transparent);
-    backdrop-filter: blur(8px); border-top: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: center; gap: 1rem; padding: 0.75rem 1.25rem; }
-  .nav button { font: inherit; cursor: pointer; color: var(--ink); background: var(--surface);
-    border: 1px solid var(--border); border-radius: 10px; padding: 0.5rem 1.1rem;
-    transition: border-color 0.15s, color 0.15s; }
+  /* verdict badge → opens a popup */
+  button.verdict { font: inherit; cursor: pointer; }
+  .verdict.ok { font-size: 0.74rem; font-weight: 600; color: var(--ok); background: var(--panel);
+    border: 1px solid var(--ok); border-radius: 999px; padding: 0.16rem 0.7rem; margin-left: auto;
+    display: inline-flex; align-items: center; gap: 0.3rem; }
+  .verdict.ok:hover { background: color-mix(in srgb, var(--ok) 16%, transparent); }
+  .verdict.pending { font-size: 0.74rem; font-weight: 600; color: var(--muted); border: 1px solid var(--border); border-radius: 999px; padding: 0.16rem 0.7rem; margin-left: auto; }
+  /* explanation popup */
+  #explain-overlay { position: fixed; inset: 0; z-index: 45; background: rgba(0,0,0,0.4); backdrop-filter: blur(3px); display: flex; justify-content: center; align-items: flex-start; padding: 6vh 1rem 2rem; }
+  #explain-overlay[hidden] { display: none !important; }
+  .explain-box { position: relative; width: 100%; max-width: 680px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem 1.4rem 1.3rem; box-shadow: 0 20px 60px rgba(0,0,0,0.35); max-height: 84vh; overflow-y: auto; }
+  .explain-close { position: absolute; top: 0.8rem; right: 0.8rem; }
+  .explain { font-size: 0.95rem; line-height: 1.65; }
+  .explain-box .explain { padding-right: 1.6rem; }
+  .explain h4 { font-size: 0.85rem; margin: 0 0 0.4rem; }
+  .explain .rules { margin: 0 0 0.8rem; padding-left: 1.1rem; color: var(--ink-2); }
+  .explain .rules li { margin: 0.15rem 0; }
+  .explain .rules b { color: var(--ink); }
+  .proof { display: grid; gap: 0.35rem; }
+  .proof-row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: baseline; padding: 0.35rem 0; border-bottom: 1px dashed var(--border); }
+  .proof-row:last-child { border-bottom: 0; }
+  .proof-row .pi { color: var(--muted); font-size: 0.78rem; min-width: 4.5rem; }
+  .proof-row .pg { color: var(--ink); }
+  .proof-row .pg .gp { color: var(--accent); font-family: ui-monospace, monospace; font-size: 0.82em; }
+  .proof-row .pg .ty { color: var(--muted); font-size: 0.78em; }
+  .proof-row .pn { color: var(--ok); font-size: 0.8rem; margin-left: auto; }
+
+  .nav { position: sticky; bottom: 0; background: color-mix(in srgb, var(--page) 88%, transparent); backdrop-filter: blur(8px); border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: center; gap: 0.7rem; padding: 0.7rem 1rem; }
+  .nav button { font: inherit; cursor: pointer; color: var(--ink); background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 0.5rem 1rem; transition: border-color .15s, color .15s; }
   .nav button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
   .nav button:disabled { opacity: 0.4; cursor: default; }
-  .counter { color: var(--muted); font-size: 0.85rem; min-width: 5.5rem; text-align: center; }
-  .empty, .loading { color: var(--muted); text-align: center; padding: 3rem 1rem; line-height: 1.6; }
+  .nav .random-nav { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 40%, var(--border)); }
+  .counter { color: var(--muted); font-size: 0.85rem; min-width: 5rem; text-align: center; }
+
+  /* ================= SEARCH ================= */
+  #search-overlay { position: fixed; inset: 0; z-index: 40; background: rgba(0,0,0,0.35); backdrop-filter: blur(3px); display: flex; justify-content: center; align-items: flex-start; padding: 8vh 1rem 2rem; }
+  #search-overlay[hidden] { display: none; }
+  .search-box { width: 100%; max-width: 620px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1rem; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+  .search-row { display: flex; gap: 0.6rem; }
+  #search-input { flex: 1; font: inherit; font-size: 1rem; padding: 0.6rem 0.8rem; border-radius: 10px; border: 1px solid var(--border); background: var(--page); color: var(--ink); }
+  #search-input:focus { outline: none; border-color: var(--accent); }
+  #search-results { margin-top: 0.7rem; max-height: 55vh; overflow-y: auto; display: grid; gap: 0.25rem; }
+  .sres { display: flex; gap: 0.6rem; align-items: baseline; text-align: left; width: 100%; font: inherit; cursor: pointer; background: none; border: 1px solid transparent; border-radius: 10px; padding: 0.5rem 0.6rem; color: inherit; }
+  .sres:hover { background: var(--chip); border-color: var(--border); }
+  .sres .rc { color: var(--accent); font-weight: 700; font-size: 0.8rem; min-width: 3.2rem; font-variant-numeric: tabular-nums; }
+  .sres .rt { color: var(--ink-2); font-size: 0.92rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sres .rs { color: var(--muted); font-size: 0.72rem; margin-left: auto; white-space: nowrap; }
+  .search-hint { color: var(--muted); font-size: 0.8rem; margin-top: 0.5rem; }
+
+  .loading, .empty { color: var(--muted); text-align: center; padding: 3rem 1rem; line-height: 1.6; }
   .empty code { background: var(--chip); padding: 0.1rem 0.4rem; border-radius: 5px; }
-  .settings-link {
-    color: var(--muted); text-decoration: none; font-size: 0.82rem; white-space: nowrap;
-    border: 1px solid var(--border); border-radius: 999px; padding: 0.28rem 0.7rem;
-    transition: border-color 0.15s, color 0.15s;
-  }
-  .settings-link:hover { color: var(--accent); border-color: var(--accent); }
 </style>
 </head>
 <body>
-  <div class="topbar">
-    <div class="brand">
-      <a href="../index.html">← myflare</a>
-      <strong>Padyaalu</strong>
-      <span class="te telugu-serif">పద్యాలు</span>
+  <!-- ============ HOME ============ -->
+  <section id="home" class="view">
+    <div class="home-top">
+      <div class="home-title"><b class="telugu-serif">పద్యాలు</b> <small>Padyaalu</small></div>
+      <button class="icon-btn" id="home-search" title="వెతుకు (search)">🔍</button>
+      <a class="icon-btn" href="settings.html" title="స్థితి & ప్రణాళిక">⚙</a>
     </div>
-    <div class="filters" id="filters"></div>
-    <a class="settings-link" href="settings.html" title="స్థితి &amp; ప్రణాళిక">స్థితి ⚙</a>
+    <p class="home-sub">శతకాన్ని ఎంచుకోండి — లేదా కింద యాదృచ్ఛిక పద్యం</p>
+    <div class="bubbles" id="bubbles"><p class="loading">లోడ్ అవుతోంది…</p></div>
+    <button class="random-btn" id="home-random">🎲 యాదృచ్ఛిక పద్యం · Random</button>
+  </section>
+
+  <!-- ============ READER ============ -->
+  <section id="reader" class="view" hidden>
+    <button class="icon-btn corner left" id="to-home" title="శతకాలు (home)">☰</button>
+    <div class="corner right">
+      <button class="icon-btn" id="reader-search" title="వెతుకు">🔍</button>
+    </div>
+    <main class="stage"><article class="card" id="card"></article></main>
+    <div class="nav">
+      <button id="prev">← ముందు</button>
+      <button id="reader-random" class="random-nav">🎲 యాదృచ్ఛికం</button>
+      <span class="counter" id="counter">— / —</span>
+      <button id="next">తరువాత →</button>
+    </div>
+  </section>
+
+  <!-- ============ CHANDASSU EXPLANATION POPUP ============ -->
+  <div id="explain-overlay" hidden>
+    <div class="explain-box">
+      <button class="icon-btn explain-close" onclick="closeExplain()" title="మూసివేయి">✕</button>
+      <div id="explain-content"></div>
+    </div>
   </div>
 
-  <main class="stage">
-    <article class="card" id="card"><p class="loading">లోడ్ అవుతోంది…</p></article>
-  </main>
-
-  <div class="nav">
-    <button id="prev">← ముందు</button>
-    <span class="counter" id="counter">— / —</span>
-    <button id="next">తరువాత →</button>
+  <!-- ============ SEARCH ============ -->
+  <div id="search-overlay" hidden>
+    <div class="search-box">
+      <div class="search-row">
+        <input id="search-input" placeholder="కోడ్ (ఉదా. DS104) లేదా పదం వెతకండి…" autocomplete="off">
+        <button class="icon-btn" id="search-close" title="మూసివేయి">✕</button>
+      </div>
+      <div id="search-results"></div>
+      <p class="search-hint">కోడ్ (VM3, SM5, DS104), పద్య పాఠం, లేదా తాత్పర్యం ద్వారా వెతకవచ్చు.</p>
+    </div>
   </div>
 
   <script src="chandassu.js"></script>
   <script>
     const $ = (id) => document.getElementById(id);
     const esc = (s) => String(s).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
-    let SATAKAMS = {}, ORDER = [], POEMS = [], filter = "all", idx = 0;
+    const glUI = (s) => s.replace(/G/g, "U").replace(/L/g, "I");
+    let SATAKAMS = {}, ORDER = [], POEMS = [], filter = "all", idx = 0, currentExplain = null;
 
     async function load() {
       try {
-        // no-store so updated data files are never served stale from the browser cache
         const opts = { cache: "no-store" };
         const meta = await (await fetch("data/satakams.json", opts)).json();
         SATAKAMS = meta.satakams; ORDER = meta.order;
-        const lists = await Promise.all(
-          ORDER.map((k) => fetch(SATAKAMS[k].file, opts).then((r) => r.json()).then((arr) =>
-            arr.map((p) => ({ ...p, satakam: k }))))
-        );
+        const lists = await Promise.all(ORDER.map((k) =>
+          fetch(SATAKAMS[k].file, opts).then((r) => r.json()).then((arr) =>
+            arr.map((p) => ({ ...p, satakam: k, code: (SATAKAMS[k].prefix || "?") + p.number })))));
         POEMS = lists.flat();
-        renderFilters(); renderCard();
+        renderBubbles();
       } catch (e) {
-        $("card").innerHTML = `<p class="empty">డేటా లోడ్ కాలేదు.<br>` +
-          `ఈ పేజీని <code>file://</code> నుంచి తెరిస్తే బ్రౌజర్ JSON ఫైళ్లను fetch చేయనివ్వదు — ` +
-          `వెబ్ సర్వర్ ద్వారా తెరవండి (ఉదా. <code>python3 -m http.server</code>).<br><br>` +
-          `<small>${esc(e.message)}</small></p>`;
-        console.error(e);
+        $("bubbles").innerHTML = `<p class="empty">డేటా లోడ్ కాలేదు — వెబ్ సర్వర్ ద్వారా తెరవండి ` +
+          `(<code>python3 -m http.server</code>).<br><small>${esc(e.message)}</small></p>`;
       }
     }
 
-    const visible = () => (filter === "all" ? POEMS : POEMS.filter((p) => p.satakam === filter));
-
-    function renderFilters() {
+    /* ---------- home ---------- */
+    function renderBubbles() {
       const counts = {};
       POEMS.forEach((p) => (counts[p.satakam] = (counts[p.satakam] || 0) + 1));
-      const tabs = [{ key: "all", label: "అన్నీ", n: POEMS.length }].concat(
-        ORDER.filter((k) => counts[k]).map((k) => ({ key: k, label: SATAKAMS[k].short, n: counts[k] })));
-      $("filters").innerHTML = tabs.map((t) =>
-        `<button class="chip${t.key === filter ? " active" : ""}" data-key="${t.key}">` +
-        `${esc(t.label)} <span style="opacity:.6">${t.n}</span></button>`).join("");
-      $("filters").querySelectorAll(".chip").forEach((b) =>
-        b.addEventListener("click", () => { filter = b.dataset.key; idx = 0; renderFilters(); renderCard(); }));
-    }
-
-    const sylSpan = (s) =>
-      `<span class="syl ${s.weight}">${esc(s.text)}<span class="mark">${s.weight === "G" ? "U" : "I"}</span></span>`;
-
-    function chandassuHTML(poem) {
-      if (!window.Chandassu) return "";
-      const a = Chandassu.analyze(poem.padyam, poem.meter);
-      // verified: show named gana boxes; else: show plain syllable weights per line (no red)
-      const verified = a.ok && a.paadas.every((p) => p.ganas);
-      const rows = a.paadas.map((p) => {
-        if (verified) {
-          const ganas = p.ganas.map((g) =>
-            `<div class="gana"><div class="syls">${g.syllables.map(sylSpan).join("")}</div>` +
-            `<div class="gname">${esc(g.name)}</div></div>`).join("");
-          return `<div class="cpaada">${ganas}</div>`;
-        }
-        return `<div class="cpaada"><div class="gana plain"><div class="syls">` +
-               `${p.syllables.map(sylSpan).join("")}</div></div></div>`;
+      $("bubbles").innerHTML = ORDER.map((k, i) => {
+        const s = SATAKAMS[k], h = s.hue ?? (i * 90), n = counts[k] || 0, empty = n === 0;
+        const bg = `radial-gradient(circle at 32% 28%, hsl(${h} 68% 58%), hsl(${h} 62% 40%))`;
+        const offset = i % 2 ? "margin-top:2.4rem" : "";
+        return `<button class="bubble${empty ? " empty" : ""}" data-key="${k}"${empty ? " disabled" : ""} ` +
+          `style="background:${bg};${offset};animation-delay:${(i % 5) * 0.6}s">` +
+          `<span class="bname telugu-serif">${esc(s.short)}</span>` +
+          `<span class="bcount">${empty ? "త్వరలో" : n + " పద్యాలు"}</span>` +
+          `<span class="bpoet">${esc((s.poet || "").split("(")[0].trim())}</span></button>`;
       }).join("");
-      const verdict = verified
-        ? `<span class="verdict ok">✓ ${esc(a.metre)} — సరిపోయింది</span>`
-        : `<span class="verdict pending">గణ విభజన త్వరలో</span>`;
-      const legend = verified
-        ? `పైన ప్రతి పెట్టె ఒక గణం; కింద గణం పేరు (${esc(a.metre)}).`
-        : `ప్రతి అక్షరం లఘువు/గురువుగా గుర్తించబడింది. గణ విభజన, నిర్ధారణ త్వరలో.`;
-      return `<section class="block"><h3>Chandassu <span class="te telugu-serif">ఛందస్సు</span>` +
-        `<span class="spacer"></span>${verdict}</h3><div class="chandassu">${rows}</div>` +
-        `<p class="legend"><b>U</b> = గురువు, <b>I</b> = లఘువు. ${legend}</p></section>`;
+      $("bubbles").querySelectorAll(".bubble:not(.empty)").forEach((b) =>
+        b.addEventListener("click", () => openSatakam(b.dataset.key)));
     }
 
+    /* ---------- navigation between views ---------- */
+    function showView(name) {
+      $("home").hidden = name !== "home";
+      $("reader").hidden = name !== "reader";
+    }
+    function openSatakam(key) { filter = key; idx = 0; showView("reader"); renderCard(); }
+    function openPoem(p) { filter = "all"; idx = POEMS.indexOf(p); showView("reader"); renderCard(); }
+    // home random → across ALL satakams
+    function openRandom() { filter = "all"; showView("reader"); idx = Math.floor(Math.random() * POEMS.length); renderCard(); }
+    // reader random → stays within the current scope (a picked satakam, or all)
+    function readerRandom() { const n = visible().length; if (!n) return; idx = Math.floor(Math.random() * n); renderCard(); }
+    function openExplain() { if (!currentExplain) return; $("explain-content").innerHTML = currentExplain; $("explain-overlay").hidden = false; }
+    function closeExplain() { $("explain-overlay").hidden = true; }
+    const visible = () => (filter === "all" ? POEMS : POEMS.filter((p) => p.satakam === filter));
+
+    /* ---------- reader card ---------- */
     function renderCard() {
       const poems = visible(), card = $("card");
-      if (!poems.length) { card.innerHTML = `<p class="empty">ఈ శతకానికి ఇంకా పద్యాలు చేర్చలేదు.</p>`;
-        $("counter").textContent = "0 / 0"; $("prev").disabled = $("next").disabled = true; return; }
+      if (!poems.length) { card.innerHTML = `<p class="empty">పద్యాలు లేవు.</p>`; return; }
       idx = Math.max(0, Math.min(idx, poems.length - 1));
       const p = poems[idx], s = SATAKAMS[p.satakam];
 
       const lines = p.padyam.map((l, i) =>
         `<div class="pline${i === p.padyam.length - 1 ? " makutam" : ""} telugu-serif">${esc(l)}</div>`).join("");
-
       const glossHTML = (p.pratipadartham && p.pratipadartham.length)
         ? `<div class="gloss">${p.pratipadartham.map((g) =>
-            `<div class="row"><div class="w telugu-serif">${esc(g.padam)}</div>` +
-            `<div class="m">${esc(g.artham)}</div></div>`).join("")}</div>`
-        : `<p class="pending-note">ప్రతిపదార్థం త్వరలో చేర్చబడుతుంది.</p>`;
-      const tatHTML = p.tatparyam
-        ? `<p class="tatparyam">${esc(p.tatparyam)}</p>`
-        : `<p class="pending-note">తాత్పర్యం త్వరలో చేర్చబడుతుంది.</p>`;
+            `<div class="row"><div class="w telugu-serif">${esc(g.padam)}</div><div class="m">${esc(g.artham)}</div></div>`).join("")}</div>`
+        : `<p class="pending-note">ప్రతిపదార్థం త్వరలో.</p>`;
+      const tatHTML = p.tatparyam ? `<p class="tatparyam">${esc(p.tatparyam)}</p>` : `<p class="pending-note">తాత్పర్యం త్వరలో.</p>`;
 
       card.innerHTML =
-        `<div class="card-head"><span class="badge">${esc(s.short)}</span>` +
+        `<div class="card-head"><span class="code">${esc(p.code)}</span>` +
         `<span>${esc(s.name)} · ${esc(s.poet)}</span>` +
         `<span class="meter">ఛందస్సు: ${esc(p.meter)}</span></div>` +
         `<div class="padyam">${lines}</div>` +
-        `<section class="block"><h3>Prati padartham <span class="te telugu-serif">ప్రతిపదార్థం</span></h3>` +
-        glossHTML + `</section>` +
-        `<section class="block"><h3>Tatparyam <span class="te telugu-serif">తాత్పర్యం</span></h3>` +
-        tatHTML + `</section>` +
-        chandassuHTML(p);
+        `<div class="inner">` +
+          `<section class="block"><h3>Prati padartham <span class="te telugu-serif">ప్రతిపదార్థం</span></h3>${glossHTML}</section>` +
+          `<section class="block"><h3>Tatparyam <span class="te telugu-serif">తాత్పర్యం</span></h3>${tatHTML}</section>` +
+          chandassuHTML(p) +
+        `</div>`;
 
       $("counter").textContent = `${idx + 1} / ${poems.length}`;
       $("prev").disabled = idx === 0; $("next").disabled = idx === poems.length - 1;
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
+    const sylSpan = (s) => `<span class="syl ${s.weight}">${esc(s.text)}<span class="mark">${s.weight === "G" ? "U" : "I"}</span></span>`;
+
+    function chandassuHTML(poem) {
+      if (!window.Chandassu) return "";
+      const a = Chandassu.analyze(poem.padyam, poem.meter);
+      const verified = a.ok && a.paadas.every((p) => p.ganas);
+      const rows = a.paadas.map((p) => {
+        if (verified) {
+          const ganas = p.ganas.map((g) =>
+            `<div class="gana"><div class="syls">${g.syllables.map(sylSpan).join("")}</div><div class="gname">${esc(g.name)}</div></div>`).join("");
+          return `<div class="cpaada">${ganas}</div>`;
+        }
+        return `<div class="cpaada"><div class="gana plain"><div class="syls">${p.syllables.map(sylSpan).join("")}</div></div></div>`;
+      }).join("");
+
+      currentExplain = verified ? explainMetre(poem, a) : null;
+      const verdict = verified
+        ? `<button type="button" class="verdict ok" onclick="openExplain()">✓ ${esc(a.metre)} — నిరూపితం · వివరణ ⓘ</button>`
+        : `<span class="verdict pending">గణ విభజన త్వరలో</span>`;
+      const legend = verified
+        ? `పైన ప్రతి పెట్టె ఒక గణం; కింద గణం పేరు. ✓ బ్యాడ్జ్ నొక్కితే ఈ ఛందస్సు నియమాలు ఎలా పాటించబడ్డాయో వివరణ పాప్‌అప్‌లో చూడవచ్చు.`
+        : `ప్రతి అక్షరం లఘువు/గురువుగా గుర్తించబడింది; గణ విభజన త్వరలో.`;
+      return `<section class="block"><h3>Chandassu <span class="te telugu-serif">ఛందస్సు</span><span class="spacer"></span>${verdict}</h3>` +
+        `<div class="chandassu">${rows}</div><p class="legend"><b>U</b> = గురువు, <b>I</b> = లఘువు. ${legend}</p></section>`;
+    }
+
+    /* ---------- the "why is this valid?" explanation ---------- */
+    const VRTTA = {
+      "ఉత్పలమాల": { aksh: 20, seq: ["భ","ర","న","భ","భ","ర","ల","గ"], yati: 10 },
+      "చంపకమాల": { aksh: 21, seq: ["న","జ","భ","జ","జ","జ","ర"], yati: 11 },
+      "మత్తేభం":   { aksh: 20, seq: ["స","భ","ర","న","మ","య","ల","గ"], yati: 14 },
+      "శార్దూలం":  { aksh: 19, seq: ["మ","స","జ","స","త","త","గ"], yati: 13 },
+    };
+    const LG_NOTE = `<b>గురువు (U):</b> అక్షరంలో దీర్ఘం (ఆ, ఈ…) ఉంటే; సున్న (ం)/విసర్గ (ః) ఉంటే; ` +
+      `ఒత్తు/సంయుక్తాక్షరం ముందు ఉంటే. <b>లఘువు (I):</b> మిగతా హ్రస్వ అక్షరాలు.`;
+    const classify = (gl) => Chandassu.SURYA.includes(gl) ? "సూర్య" : Chandassu.INDRA.includes(gl) ? "ఇంద్ర" : "";
+
+    function explainMetre(poem, a) {
+      const proof = (rowFn) => `<div class="proof">${a.paadas.map(rowFn).join("")}</div>`;
+      const ganaStr = (p, withType) => p.ganas.map((g) =>
+        `${g.name}<span class="gp">(${glUI(g.gl)})</span>${withType ? `<span class="ty"> ${classify(g.gl)}</span>` : ""}`).join(" ");
+
+      if (poem.meter === "ఆటవెలది") {
+        return `<div class="explain"><h4>ఆటవెలది — ఉపజాతి (మాత్రా ఛందస్సు)</h4>` +
+          `<ul class="rules">` +
+          `<li><b>బేసి పాదాలు (1, 3):</b> 3 సూర్య గణాలు + 2 ఇంద్ర గణాలు.</li>` +
+          `<li><b>సరి పాదాలు (2, 4):</b> 5 సూర్య గణాలు.</li>` +
+          `<li><b>సూర్య గణాలు:</b> న (I I I), గల (U I). <b>ఇంద్ర గణాలు:</b> నల, నగ, సల, భ, ర, త.</li>` +
+          `<li>${LG_NOTE}</li></ul>` +
+          `<div class="proof">${a.paadas.map((p, i) => {
+            const need = i % 2 === 0 ? "3 సూర్య + 2 ఇంద్ర" : "5 సూర్య";
+            return `<div class="proof-row"><span class="pi">పాదం ${i + 1}</span><span class="pg">${ganaStr(p, true)}</span><span class="pn">${need} ✓</span></div>`;
+          }).join("")}</div></div>`;
+      }
+      if (poem.meter === "కంద పద్యం" || poem.meter === "కంద") {
+        const g6 = [(a.paadas[0].ganas || []).concat(a.paadas[1].ganas || [])[5],
+                    (a.paadas[2].ganas || []).concat(a.paadas[3].ganas || [])[5]].filter(Boolean);
+        return `<div class="explain"><h4>కంద పద్యం — జాతి (చతుర్మాత్రా గణాలు)</h4>` +
+          `<ul class="rules">` +
+          `<li>అన్నీ <b>చతుర్మాత్రా</b> (4-మాత్ర) గణాలు: గగ, భ, జ, స, నల.</li>` +
+          `<li><b>1, 3 పాదాలు</b> — 3 గణాలు; <b>2, 4 పాదాలు</b> — 5 గణాలు.</li>` +
+          `<li><b>బేసి స్థానంలో</b> (1, 3, 5, 7) జ గణం రాకూడదు.</li>` +
+          `<li><b>6వ గణం</b> జ గణం లేదా నల గణం అయి ఉండాలి.</li>` +
+          `<li>ప్రతి భాగం (అర్ధం) <b>గురువుతో</b> ముగియాలి.</li></ul>` +
+          `<div class="proof">${a.paadas.map((p, i) =>
+            `<div class="proof-row"><span class="pi">పాదం ${i + 1}</span><span class="pg">${ganaStr(p)}</span><span class="pn">${p.ganas.length} గణాలు ✓</span></div>`).join("")}` +
+          (g6.length ? `<div class="proof-row"><span class="pi">6వ గణం</span><span class="pg">${g6.map((g) => g.name + `<span class="gp">(${glUI(g.gl)})</span>`).join(", ")}</span><span class="pn">జ / నల ✓</span></div>` : "") +
+          `</div></div>`;
+      }
+      // vrttamulu
+      const v = VRTTA[a.metre];
+      if (!v) return `<div class="explain">ఈ ఛందస్సుకు వివరణ త్వరలో.</div>`;
+      return `<div class="explain"><h4>${esc(a.metre)} — వృత్తం (అక్షర ఛందస్సు)</h4>` +
+        `<ul class="rules">` +
+        `<li>ప్రతి పాదంలో సరిగ్గా <b>${v.aksh} అక్షరాలు</b>, స్థిర గురు-లఘు క్రమంలో.</li>` +
+        `<li><b>గణ క్రమం:</b> ${v.seq.join(" - ")} &nbsp;(${v.seq.map((n) => n).join("")}).</li>` +
+        `<li><b>యతి</b> ${v.yati}వ అక్షరం వద్ద (పఠన విరామం).</li>` +
+        `<li>${LG_NOTE}</li></ul>` +
+        `<div class="proof">${a.paadas.map((p, i) =>
+          `<div class="proof-row"><span class="pi">పాదం ${i + 1}</span><span class="pg">${ganaStr(p)}</span><span class="pn">${p.syllables.length} అక్షరాలు ✓</span></div>`).join("")}` +
+        `</div><p class="legend" style="margin-top:.6rem">నాలుగు పాదాల్లోనూ గణ క్రమం ${v.seq.join("-")} గా సరిపోవడం వల్ల ఇది ${esc(a.metre)}గా నిర్ధారితమైంది.</p></div>`;
+    }
+
+    /* ---------- prev/next ---------- */
     function go(d) { const n = visible().length; if (!n) return; idx = Math.max(0, Math.min(idx + d, n - 1)); renderCard(); }
+
+    /* ---------- search ---------- */
+    function openSearch() { $("search-overlay").hidden = false; $("search-input").value = ""; $("search-results").innerHTML = ""; $("search-input").focus(); }
+    function closeSearch() { $("search-overlay").hidden = true; }
+    function runSearch(q) {
+      q = q.trim(); if (!q) { $("search-results").innerHTML = ""; return; }
+      const codeM = q.match(/^([A-Za-z]{2})\s*0*(\d+)$/);
+      let hits;
+      if (codeM) {
+        const pre = codeM[1].toUpperCase(), num = codeM[2];
+        hits = POEMS.filter((p) => p.code.toUpperCase() === pre + num);
+        if (!hits.length) hits = POEMS.filter((p) => p.code.toUpperCase().startsWith(pre) && p.number.toString().startsWith(num));
+      } else {
+        const ql = q.toLowerCase();
+        hits = POEMS.filter((p) =>
+          p.padyam.some((l) => l.includes(q)) ||
+          (p.tatparyam && p.tatparyam.includes(q)) ||
+          (p.pratipadartham || []).some((g) => g.padam.includes(q) || g.artham.includes(q)) ||
+          p.code.toLowerCase().includes(ql));
+      }
+      $("search-results").innerHTML = hits.slice(0, 60).map((p) =>
+        `<button class="sres" data-code="${esc(p.code)}"><span class="rc">${esc(p.code)}</span>` +
+        `<span class="rt telugu-serif">${esc(p.padyam[0])}</span>` +
+        `<span class="rs">${esc(SATAKAMS[p.satakam].short)}</span></button>`).join("") ||
+        `<p class="search-hint">సరిపోలిక లేదు.</p>`;
+      $("search-results").querySelectorAll(".sres").forEach((b) => b.addEventListener("click", () => {
+        const p = POEMS.find((x) => x.code === b.dataset.code);
+        if (p) { closeSearch(); openPoem(p); }
+      }));
+    }
+
+    /* ---------- wiring ---------- */
+    $("home-random").addEventListener("click", openRandom);
+    $("reader-random").addEventListener("click", readerRandom);
+    $("to-home").addEventListener("click", () => showView("home"));
     $("prev").addEventListener("click", () => go(-1));
     $("next").addEventListener("click", () => go(1));
+    $("home-search").addEventListener("click", openSearch);
+    $("reader-search").addEventListener("click", openSearch);
+    $("search-close").addEventListener("click", closeSearch);
+    $("search-input").addEventListener("input", (e) => runSearch(e.target.value));
     document.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowLeft") go(-1); else if (e.key === "ArrowRight") go(1); });
+      if (e.key === "Escape") { closeSearch(); closeExplain(); return; }
+      if (!$("search-overlay").hidden || !$("explain-overlay").hidden) return;
+      if (!$("reader").hidden) { if (e.key === "ArrowLeft") go(-1); else if (e.key === "ArrowRight") go(1); }
+    });
+    $("explain-overlay").addEventListener("click", (e) => { if (e.target.id === "explain-overlay") closeExplain(); });
 
     load();
   </script>

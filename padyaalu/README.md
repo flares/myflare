@@ -112,13 +112,21 @@ python3 -m http.server        # then open http://localhost:8000/padyaalu/
 
 | Śatakam | Metre | Poems | Chandassu verified | Meanings |
 |---|---|---|---|---|
-| Vemana (వేమన) | ఆటవెలది | 9 | ✓ all 9 | ✓ all |
-| Sumati (సుమతీ) | కంద పద్యం | 8 | ✓ all 8 | ✓ all |
-| Dāśarathi (దాశరథి) | ఉత్పలమాల / చంపకమాల / మత్తేభం | 104 | 63 of 104 | 3 seeded, rest pending |
+| Vemana (వేమన) | ఆటవెలది | 114 | 90 of 114 | tātparyam (from PDF) |
+| Sumati (సుమతీ) | కంద పద్యం | 100 | 39 of 100 | tātparyam (from PDF) |
+| Dāśarathi (దాశరథి) | ఉత్పలమాల / చంపకమాల / మత్తేభం | 104 | 63 of 104 | prati + tātparyam |
+| Bhāskara, Kṛṣṇa, Kumāra, Kāḷahastīśvara | — | 0 | — | placeholder bubbles ("త్వరలో") |
 
-**80 of 121 verses** currently pass `verify.cjs` (Vemana + Sumati fully; 63 Dāśarathi
-vṛttas). The other 41 Dāśarathi verses are marked `chandassuVerified: false` — the app
-still shows their syllable laghu/guru marks, just not a verified gaṇa split yet.
+**318 padyaalu** total. `verify.cjs` confirms every verse marked verified actually scans
+(192 verified across the three); the rest are `chandassuVerified: false` and shown with
+syllable laghu/guru marks but no gaṇa split.
+
+**Vemana & Sumati** were **OCR-transcribed from user-supplied PDFs** (legacy-font Telugu,
+rendered to page images and read by parallel vision subagents), with the PDF's tātparyam
+per verse. The verifier caught the imperfect transcriptions: verses that don't scan
+(24 Vemana, 61 Sumati) have subtle vision-OCR slips — usually a missed vowel-length
+(hrasva/deergham) — and are flagged for proof-reading. Prati padārtham for these two is
+pending (the PDFs give tātparyam only).
 
 ### Notes on the corpus
 
@@ -129,10 +137,11 @@ still shows their syllable laghu/guru marks, just not a verified gaṇa split ye
   each verse into 4 metrical padas and auto-detects the vṛtta; 63 verify exactly. The
   unverified 41 are mostly the longer 5-line vṛttas (mattebha/śārdūla layouts) and a few
   verses with small transcription deviations in the supplied text — to be reconciled.
-- **Meanings** for Dāśarathi are the large remaining task: its verses are dense, ornate,
-  Sanskrit-compound-heavy Telugu. Three are seeded (verses 16, 24, 25) to establish the
-  pattern; the rest show a "త్వరలో" placeholder. External content sites remain blocked by
-  the environment network policy, so meanings are authored, not fetched.
+- **Meanings** — all 104 Dāśarathi verses now have Telugu prati padārtham + tātparyam.
+  Verses 16, 24, 25 were authored by hand; the other 101 were **drafted by parallel
+  Sonnet subagents** (10 verses each) and merged after JSON validation. Dāśarathi is
+  dense, ornate, Sanskrit-compound-heavy — treat these AI drafts as a strong first pass
+  worth a scholarly proof-read, not final authority.
 
 ## Planned next steps
 
