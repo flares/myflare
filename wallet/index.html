@@ -32,13 +32,14 @@
 
   <div id="app"><!-- deck rendered by app.js --></div>
 
-  <footer>
-    Cards are AES-GCM encrypted with your passphrase before they ever touch storage — locally and (if configured) in Firebase. The passphrase never leaves this device.
+  <footer id="footerNote">
+    Cards stay in this browser's storage. Tap 🔒 any time to set a passphrase — everything is then AES-GCM
+    encrypted before it touches storage, locally and (if configured) in Firebase.
     · <a href="../index.html">myflare home</a>
   </footer>
 </div>
 
-<!-- unlock / create vault -->
+<!-- unlock / set-passphrase -->
 <dialog id="dlgVault">
   <form method="dialog" class="modal" id="frmVault">
     <h2 id="vaultTitle">Unlock</h2>
@@ -51,6 +52,7 @@
     </label>
     <p class="err" id="vaultErr"></p>
     <div class="modalactions">
+      <button type="button" class="btn" id="vaultCancel" data-close hidden>Cancel</button>
       <button class="btn primary" value="ok" id="vaultGo">Unlock</button>
     </div>
   </form>
@@ -61,8 +63,8 @@
   <div class="modal wizard" id="wizard">
 
     <div class="wizstep" id="stepSource">
-      <h2>Add a card</h2>
-      <p class="hint">Photograph an ID, credit/debit card, or balance/passbook page. It's cropped and encrypted on this device — nothing leaves it unless you enable Firebase sync.</p>
+      <h2 id="sourceTitle">Add a card</h2>
+      <p class="hint" id="sourceHint">Photograph an ID, credit/debit card, or balance/passbook page. It's cropped and processed on this device.</p>
       <div class="sourcepick">
         <label class="srcbtn">
           <input type="file" id="fileCamera" accept="image/*" capture="environment" hidden>
@@ -80,13 +82,14 @@
 
     <div class="wizstep" id="stepCrop" hidden>
       <h2>Straighten &amp; crop</h2>
-      <p class="hint">Drag the four corners onto the edges of the card.</p>
+      <p class="hint">Corners are auto-detected — drag any that need adjusting.</p>
       <div class="cropstage" id="cropStage">
         <canvas id="cropCanvas"></canvas>
         <svg id="cropOverlay"></svg>
       </div>
       <div class="modalactions">
         <button type="button" class="btn" data-action="rotate-src">⟳ Rotate</button>
+        <button type="button" class="btn" data-action="auto-detect">🔍 Auto-detect</button>
         <span class="spacer"></span>
         <button type="button" class="btn" data-action="cancel-wizard">Cancel</button>
         <button type="button" class="btn primary" data-action="do-warp">Next</button>
@@ -116,6 +119,13 @@
     <div class="wizstep" id="stepDetails" hidden>
       <h2>Card details</h2>
       <div class="detailpreview" id="detailPreview"></div>
+      <p class="hint ocrstatus" id="ocrStatus"></p>
+
+      <div class="backslot" id="backSlot">
+        <div class="backthumb" id="backThumb">No back photo yet</div>
+        <button type="button" class="btn sm" data-action="add-back">+ Add back photo</button>
+      </div>
+
       <label>Label
         <input type="text" id="cardLabel" placeholder="e.g. HDFC Millennia" maxlength="60">
       </label>
@@ -127,7 +137,7 @@
         <button type="button" class="catbtn" data-cat="balance"><span>🏦</span>Balance</button>
         <button type="button" class="catbtn" data-cat="other"><span>🗂️</span>Other</button>
       </div>
-      <label>Note <span class="hint">(optional — avoid full numbers/CVV)</span>
+      <label>Note <span class="hint">(optional)</span>
         <input type="text" id="cardNote" placeholder="e.g. expires 09/28, last 4: 4821" maxlength="80">
       </label>
       <p class="err" id="detailsErr"></p>
@@ -150,6 +160,7 @@
     </div>
     <div class="viewerstage">
       <img id="viewerImg" alt="">
+      <button class="fliptbtn" id="btnFlip" data-action="flip-card" hidden>⟳ Flip</button>
     </div>
     <div class="viewernote" id="viewerNote"></div>
   </div>
@@ -159,6 +170,10 @@
 <dialog id="dlgEdit">
   <form method="dialog" class="modal" id="frmEdit">
     <h2>Edit card</h2>
+    <div class="modalactions" style="justify-content:flex-start">
+      <button type="button" class="btn sm" data-action="retake-front">🔄 Retake front</button>
+      <button type="button" class="btn sm" data-action="retake-back">➕ Back photo</button>
+    </div>
     <label>Label
       <input type="text" id="editLabel" maxlength="60">
     </label>
@@ -188,12 +203,14 @@
     <fieldset>
       <legend>Firebase sync <span class="hint">(optional)</span></legend>
       <p class="hint">Paste your Firebase web-app config (JSON). Requires a Firebase project with
-      <b>Anonymous auth</b> enabled and a Firestore database. Only encrypted ciphertext is ever uploaded.</p>
+      <b>Anonymous auth</b> enabled and a Firestore database. Only encrypted ciphertext is ever uploaded —
+      sync stays off until your wallet is locked with a passphrase.</p>
       <textarea id="fbConfig" rows="5" placeholder='{"apiKey":"...","authDomain":"...","projectId":"..."}'></textarea>
       <p class="hint" id="fbStatus"></p>
     </fieldset>
     <fieldset>
       <legend>Backup</legend>
+      <label class="checkrow"><input type="checkbox" id="exportEncrypt"> Encrypt this backup with a passphrase</label>
       <div class="modalactions" style="justify-content:flex-start">
         <button type="button" class="btn" id="btnExport">Export JSON</button>
         <button type="button" class="btn" id="btnImport">Import JSON</button>
