@@ -63,11 +63,11 @@ footer a { color: var(--muted); }
   cursor: pointer; background: var(--surface-2);
   will-change: transform;
 }
-.walletcard img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+.walletcard img { width: 100%; height: 100%; object-fit: contain; display: block; pointer-events: none; background: var(--surface-2); }
 .walletcard .scrim {
   position: absolute; left: 0; right: 0; bottom: 0; padding: 0.6rem 0.75rem 0.55rem;
   background: linear-gradient(to top, rgba(0,0,0,0.72), rgba(0,0,0,0));
-  color: #fff;
+  color: #fff; pointer-events: none;
 }
 .walletcard .clabel { font-size: 0.86rem; font-weight: 650; line-height: 1.2; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
 .walletcard .cmeta { display: flex; align-items: center; gap: 0.35rem; margin-top: 0.15rem; font-size: 0.68rem; opacity: 0.85; }
@@ -75,17 +75,25 @@ footer a { color: var(--muted); }
   display: inline-flex; align-items: center; gap: 0.25rem; font-weight: 650; padding: 0.05rem 0.4rem;
   border-radius: 999px; font-size: 0.65rem; color: #0b0c10; flex: none;
 }
+.walletcard .hasback {
+  position: absolute; top: 0.5rem; right: 0.5rem; width: 22px; height: 22px; border-radius: 50%;
+  background: rgba(0,0,0,0.55); color: #fff; font-size: 0.75rem; display: flex; align-items: center;
+  justify-content: center; pointer-events: none;
+}
 .walletcard.blank {
   display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 0.4rem;
   border: 1.5px dashed var(--border); box-shadow: none; color: var(--muted);
 }
 .walletcard.blank .plus { font-size: 2rem; line-height: 1; }
 
+@keyframes cardPulse { 0%, 100% { filter: brightness(1); } 40% { filter: brightness(1.3); } }
+.walletcard.shuffle { animation: cardPulse 0.4s ease; }
+
 .deckhint {
   text-align: center; color: var(--muted); font-size: 0.75rem; margin-top: 0.6rem;
 }
 .deckdots { display: flex; justify-content: center; gap: 0.3rem; margin-top: 0.7rem; }
-.deckdots span { width: 6px; height: 6px; border-radius: 50%; background: var(--border); }
+.deckdots span { width: 6px; height: 6px; border-radius: 50%; background: var(--border); transition: background 0.2s; }
 .deckdots span.active { background: var(--accent); }
 
 .empty { text-align: center; padding: 3rem 1rem; color: var(--muted); }
@@ -101,13 +109,15 @@ dialog.fulldlg { max-width: 100vw; width: 100vw; height: 100vh; max-height: 100v
 .modal { padding: 1.1rem 1.2rem 1.2rem; display: flex; flex-direction: column; gap: 0.7rem; }
 .modal h2 { font-size: 1.05rem; }
 .modal label { display: flex; flex-direction: column; gap: 0.3rem; font-size: 0.82rem; color: var(--ink-2); }
+.modal label.checkrow { flex-direction: row; align-items: center; gap: 0.5rem; font-size: 0.82rem; }
 .modal input[type=text], .modal input[type=password], .modal textarea, .modal select {
   font: inherit; font-size: 0.95rem; padding: 0.55rem 0.65rem; border-radius: 9px;
   border: 1px solid var(--border); background: var(--surface-2); color: var(--ink);
 }
 .hint { color: var(--muted); font-size: 0.78rem; line-height: 1.4; }
+.ocrstatus { min-height: 1.1em; }
 .err { color: var(--danger); font-size: 0.82rem; min-height: 1em; }
-.modalactions { display: flex; gap: 0.6rem; margin-top: 0.3rem; align-items: center; }
+.modalactions { display: flex; gap: 0.6rem; margin-top: 0.3rem; align-items: center; flex-wrap: wrap; }
 .modalactions .spacer { flex: 1; }
 .btn {
   font: inherit; font-size: 0.88rem; padding: 0.55rem 0.9rem; border-radius: 10px;
@@ -144,7 +154,11 @@ dialog.fulldlg { max-width: 100vw; width: 100vw; height: 100vh; max-height: 100v
 .chip.brushsize { padding: 0.3rem 0.6rem; }
 
 .detailpreview { display: flex; justify-content: center; margin-bottom: 0.2rem; }
-.detailpreview img { width: 220px; border-radius: 10px; box-shadow: 0 6px 18px rgba(0,0,0,0.3); }
+.detailpreview img { max-width: 220px; max-height: 220px; border-radius: 10px; box-shadow: 0 6px 18px rgba(0,0,0,0.3); }
+
+.backslot { display: flex; align-items: center; gap: 0.6rem; background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 0.5rem 0.6rem; }
+.backthumb { flex: 1; font-size: 0.78rem; color: var(--muted); display: flex; align-items: center; gap: 0.5rem; }
+.backthumb img { width: 44px; height: 28px; object-fit: contain; border-radius: 4px; background: var(--surface); }
 
 .catpick { display: flex; gap: 0.4rem; flex-wrap: wrap; }
 .catbtn {
@@ -158,9 +172,14 @@ dialog.fulldlg { max-width: 100vw; width: 100vw; height: 100vh; max-height: 100v
 .viewer { display: flex; flex-direction: column; height: 100%; background: #05060a; color: #fff; }
 .viewertop { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem; padding-top: calc(0.75rem + env(safe-area-inset-top)); }
 .viewerlabel { font-weight: 650; font-size: 0.95rem; }
-.viewerstage { flex: 1; display: flex; align-items: center; justify-content: center; padding: 0.5rem 1rem; overflow: auto; }
-.viewerstage img { max-width: 100%; max-height: 100%; border-radius: 14px; box-shadow: 0 12px 40px rgba(0,0,0,0.5); }
+.viewerstage { position: relative; flex: 1; display: flex; align-items: center; justify-content: center; padding: 0.5rem 1rem; overflow: auto; }
+.viewerstage img { max-width: 100%; max-height: 100%; border-radius: 14px; box-shadow: 0 12px 40px rgba(0,0,0,0.5); transition: opacity 0.16s ease; }
 .viewernote { text-align: center; color: #b9bbc2; font-size: 0.82rem; padding: 0.5rem 1rem calc(1rem + env(safe-area-inset-bottom)); }
+.fliptbtn {
+  position: absolute; bottom: 0.75rem; left: 50%; transform: translateX(-50%);
+  border: 1px solid rgba(255,255,255,0.25); background: rgba(0,0,0,0.5); color: #fff;
+  border-radius: 999px; padding: 0.4rem 0.9rem; font: inherit; font-size: 0.8rem; cursor: pointer;
+}
 
 /* toast */
 .toast {
