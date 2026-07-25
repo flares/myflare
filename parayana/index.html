@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0d0d0d">
+<title>Parayana Tracker</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="om" aria-hidden="true">🕉</div>
+    <h1>Lalitha Sahasranama<br>Parayana</h1>
+    <p class="teluguline">శ్రీ లలితా సహస్రనామ పారాయణం</p>
+    <p class="range" id="range"></p>
+    <a class="stotram-link" href="https://vignanam.org/telugu/sree-lalita-sahasra-nama-stotram.html" target="_blank" rel="noopener">📜 Read the stotram</a>
+  </header>
+
+  <div class="divider" aria-hidden="true">◆ ❁ ◆</div>
+
+  <div class="weekdays" id="weekdays"></div>
+  <div class="calendar" id="calendar"><!-- rendered by app.js --></div>
+
+  <p class="hint">Tap a day to add a parayana · long-press to reset it</p>
+
+  <div class="spacer"></div>
+
+  <footer>
+    <a href="../index.html">myflare home</a>
+  </footer>
+</div>
+
+<div class="totalbar" id="totalbar">
+  <div class="totalrow">
+    <div class="totalnum"><span id="totalCount">0</span><span class="goal"> / 41</span></div>
+    <div class="totallabel" id="totalLabel">parayanas so far</div>
+  </div>
+  <div class="progress"><div class="progressfill" id="progressFill"></div></div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
