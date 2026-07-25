@@ -9,6 +9,7 @@ Personal web interface — a hub page (`index.html`) linking to individual sub-p
 | Portfolio Tracker | [`portfolio-tracker/`](portfolio-tracker/) | Live — encrypted MF portfolio tracker; see [`portfolio-tracker/README.md`](portfolio-tracker/README.md) |
 | Padyaalu | [`padyaalu/`](padyaalu/) | Working reading app with seed corpus — see [`padyaalu/README.md`](padyaalu/README.md) |
 | Forest Friends | [`forest-friends/`](forest-friends/) | Voice-controlled kids' animal game (English & Telugu) — see [`forest-friends/README.md`](forest-friends/README.md) |
+| Parayana Tracker | [`parayana/`](parayana/) | Lalitha Sahasranama Parayana tally — see [`parayana/README.md`](parayana/README.md) |
 
 ## Structure
 
@@ -33,4 +34,9 @@ forest-friends/
   animals.js            ← animal dataset (emoji, Telugu names, aliases, sound)
   audio.js              ← Web Audio synthesized sounds + background music
   game.js               ← voice recognition, command parsing, game core
+parayana/
+  README.md             ← project spec & config notes
+  index.html            ← calendar markup + sticky total bar
+  app.js                ← calendar generation, tap/long-press, localStorage persistence
+  styles.css            ← mobile-first styling, green shading scale
 ```

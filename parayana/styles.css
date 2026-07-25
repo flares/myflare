@@ -1,0 +1,122 @@
+:root {
+  color-scheme: light dark;
+  --page: #f9f9f7; --surface: #fcfcfb; --card-bg: #ffffff;
+  --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
+  --border: rgba(11,11,11,0.10); --grid: #e1e0d9;
+  --accent: #2a78d6;
+  --done-1: #cdeee0; --done-2: #8fdcb8; --done-3: #3fbf88; --done-4: #1a9c67; --done-5: #0f7a4e;
+  --done-ink: #ffffff;
+  --today-ring: #2a78d6;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page: #0d0d0d; --surface: #1a1a19; --card-bg: #1f1f1e;
+    --ink: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
+    --border: rgba(255,255,255,0.10); --grid: #2a2a28;
+    --accent: #3987e5;
+    --done-1: #12351f; --done-2: #175733; --done-3: #1c8752; --done-4: #22a862; --done-5: #2fc678;
+    --today-ring: #3987e5;
+  }
+}
+
+* { box-sizing: border-box; margin: 0; }
+html, body {
+  height: 100%;
+  overscroll-behavior-y: contain;
+  touch-action: pan-y;
+}
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: var(--page); color: var(--ink);
+  display: flex; justify-content: center;
+  -webkit-text-size-adjust: 100%;
+}
+
+.wrap {
+  width: 100%; max-width: 430px;
+  padding: calc(1rem + env(safe-area-inset-top)) 1rem 0;
+  padding-bottom: calc(6.5rem + env(safe-area-inset-bottom));
+  display: flex; flex-direction: column;
+}
+
+header { text-align: center; margin-bottom: 0.9rem; }
+header h1 { font-size: 1.3rem; font-weight: 700; letter-spacing: -0.01em; line-height: 1.25; }
+.range { color: var(--muted); font-size: 0.8rem; margin-top: 0.4rem; }
+
+.weekdays {
+  display: grid; grid-template-columns: repeat(7, 1fr);
+  gap: 0.4rem; margin-bottom: 0.4rem;
+}
+.weekdays span {
+  text-align: center; font-size: 0.7rem; font-weight: 600;
+  color: var(--muted); text-transform: uppercase; letter-spacing: 0.03em;
+}
+
+.calendar {
+  display: grid; grid-template-columns: repeat(7, 1fr);
+  gap: 0.4rem;
+}
+
+.day {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  border-radius: 10px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  color: var(--ink);
+  cursor: pointer;
+  user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
+  touch-action: manipulation;
+  transition: background-color 0.15s ease, transform 0.08s ease;
+}
+.day:active { transform: scale(0.94); }
+.day .dnum { font-size: 0.92rem; font-weight: 600; }
+.day .dcount {
+  font-size: 0.68rem; font-weight: 700; margin-top: 0.15rem;
+  opacity: 0.85;
+}
+.day.empty { visibility: hidden; }
+
+.day.today { box-shadow: inset 0 0 0 2px var(--today-ring); }
+
+.day.lvl-1 { background: var(--done-1); }
+.day.lvl-2 { background: var(--done-2); color: var(--done-ink); }
+.day.lvl-3 { background: var(--done-3); color: var(--done-ink); }
+.day.lvl-4 { background: var(--done-4); color: var(--done-ink); }
+.day.lvl-5 { background: var(--done-5); color: var(--done-ink); }
+.day.lvl-2 .dcount, .day.lvl-3 .dcount, .day.lvl-4 .dcount, .day.lvl-5 .dcount { opacity: 0.95; }
+
+.hint { text-align: center; color: var(--muted); font-size: 0.75rem; margin-top: 0.9rem; }
+
+.spacer { flex: 1; }
+
+footer { text-align: center; margin-top: 1.5rem; padding-bottom: 0.5rem; }
+footer a { color: var(--muted); font-size: 0.75rem; text-decoration: none; }
+
+.totalbar {
+  position: fixed; left: 0; right: 0; bottom: 0;
+  display: flex; justify-content: center;
+  background: linear-gradient(to top, var(--page) 70%, transparent);
+  padding: 1.1rem 1rem calc(0.9rem + env(safe-area-inset-bottom));
+  pointer-events: none;
+}
+.totalbar > * { pointer-events: auto; }
+.totalrow {
+  width: 100%; max-width: 430px; margin: 0 auto;
+  display: flex; align-items: baseline; justify-content: center; gap: 0.5rem; flex-wrap: wrap;
+}
+.totalnum { font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.totalnum .goal { font-size: 1.1rem; font-weight: 600; color: var(--muted); }
+.totallabel { font-size: 0.8rem; color: var(--ink-2); text-align: center; white-space: nowrap; }
+.progress {
+  width: 100%; max-width: 430px; margin: 0.5rem auto 0;
+  height: 8px; border-radius: 999px; background: var(--grid); overflow: hidden;
+}
+.progressfill {
+  height: 100%; border-radius: 999px;
+  background: linear-gradient(90deg, var(--done-3), var(--done-5));
+  width: 0%;
+  transition: width 0.3s ease;
+}
+.totalbar.complete .totalnum { color: var(--done-4); }
