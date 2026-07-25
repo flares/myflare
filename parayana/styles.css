@@ -6,7 +6,8 @@
   --accent: #2a78d6;
   --done-1: #cdeee0; --done-2: #8fdcb8; --done-3: #3fbf88; --done-4: #1a9c67; --done-5: #0f7a4e;
   --done-ink: #ffffff;
-  --today-ring: #2a78d6;
+  --maroon: #8c1d3b; --gold: #b8860b;
+  --today-ring: var(--gold);
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -15,7 +16,8 @@
     --border: rgba(255,255,255,0.10); --grid: #2a2a28;
     --accent: #3987e5;
     --done-1: #12351f; --done-2: #175733; --done-3: #1c8752; --done-4: #22a862; --done-5: #2fc678;
-    --today-ring: #3987e5;
+    --maroon: #e0748e; --gold: #d9a940;
+    --today-ring: var(--gold);
   }
 }
 
@@ -39,9 +41,22 @@ body {
   display: flex; flex-direction: column;
 }
 
-header { text-align: center; margin-bottom: 0.9rem; }
+header { text-align: center; margin-bottom: 0.4rem; }
+.om { font-size: 1.5rem; color: var(--gold); margin-bottom: 0.2rem; }
 header h1 { font-size: 1.3rem; font-weight: 700; letter-spacing: -0.01em; line-height: 1.25; }
+.teluguline { color: var(--maroon); font-size: 0.95rem; font-weight: 600; margin-top: 0.3rem; }
 .range { color: var(--muted); font-size: 0.8rem; margin-top: 0.4rem; }
+.stotram-link {
+  display: inline-block; margin-top: 0.6rem;
+  font-size: 0.78rem; font-weight: 600; color: var(--maroon);
+  text-decoration: none; border-bottom: 1px dotted var(--maroon); padding-bottom: 1px;
+}
+
+.divider {
+  text-align: center; color: var(--gold);
+  font-size: 0.75rem; letter-spacing: 0.5rem;
+  margin: 0.9rem 0 1.1rem; opacity: 0.85;
+}
 
 .weekdays {
   display: grid; grid-template-columns: repeat(7, 1fr);
@@ -119,4 +134,6 @@ footer a { color: var(--muted); font-size: 0.75rem; text-decoration: none; }
   width: 0%;
   transition: width 0.3s ease;
 }
-.totalbar.complete .totalnum { color: var(--done-4); }
+.totalbar.complete .totalnum { color: var(--gold); }
+.totalbar.complete .totallabel { color: var(--maroon); font-weight: 600; }
+.totalbar.complete .progressfill { background: linear-gradient(90deg, var(--gold), var(--maroon)); }

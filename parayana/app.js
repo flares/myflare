@@ -2,7 +2,7 @@
   'use strict';
 
   // ---- config ----
-  var START_DATE = '2026-07-18'; // YYYY-MM-DD, local
+  var START_DATE = '2026-07-17'; // YYYY-MM-DD, local
   var DAYS = 24;                 // span shown on the calendar
   var GOAL = 41;                 // total parayanas to complete
   var STORAGE_KEY = 'parayana.counts.v1';
