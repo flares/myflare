@@ -10,6 +10,7 @@ Personal web interface — a hub page (`index.html`) linking to individual sub-p
 | Padyaalu | [`padyaalu/`](padyaalu/) | Working reading app with seed corpus — see [`padyaalu/README.md`](padyaalu/README.md) |
 | Forest Friends | [`forest-friends/`](forest-friends/) | Voice-controlled kids' animal game (English & Telugu) — see [`forest-friends/README.md`](forest-friends/README.md) |
 | Parayana Tracker | [`parayana/`](parayana/) | Lalitha Sahasranama Parayana tally — see [`parayana/README.md`](parayana/README.md) |
+| Wallet | [`wallet/`](wallet/) | Encrypted digital cardholder — capture, crop & store ID/credit/debit cards as images — see [`wallet/README.md`](wallet/README.md) |
 
 ## Structure
 
@@ -39,4 +40,9 @@ parayana/
   index.html            ← calendar markup + sticky total bar
   app.js                ← calendar generation, tap/long-press, localStorage persistence
   styles.css            ← mobile-first styling, green shading scale
+wallet/
+  README.md             ← project spec & design notes
+  index.html            ← deck view, add-card wizard, viewer, dialogs
+  app.js                ← crypto, storage, perspective-crop warp, deck logic
+  styles.css            ← cardholder deck, crop/brush stages, dialogs
 ```
