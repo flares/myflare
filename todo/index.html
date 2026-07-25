@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>myflare — todo</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --page: #f9f9f7;
+    --surface: #fcfcfb;
+    --ink: #0b0b0b;
+    --ink-2: #52514e;
+    --muted: #898781;
+    --border: rgba(11,11,11,0.10);
+    --accent: #2a78d6;
+    --idea: #8a6d00;
+    --planning: #a8501a;
+    --promoted: #1c7a3d;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page: #0d0d0d;
+      --surface: #1a1a19;
+      --ink: #ffffff;
+      --ink-2: #c3c2b7;
+      --muted: #898781;
+      --border: rgba(255,255,255,0.10);
+      --accent: #3987e5;
+      --idea: #e0b400;
+      --planning: #e5793a;
+      --promoted: #3fb96c;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--page);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 6vh 1.5rem 3rem;
+  }
+  header { text-align: center; margin-bottom: 2rem; max-width: 560px; }
+  a.back {
+    display: inline-block;
+    margin-bottom: 1.25rem;
+    font-size: 0.85rem;
+    color: var(--ink-2);
+    text-decoration: none;
+  }
+  a.back:hover { color: var(--accent); }
+  h1 { font-size: 2rem; font-weight: 700; letter-spacing: -0.02em; }
+  header p { color: var(--ink-2); margin-top: 0.5rem; }
+  main { width: 100%; max-width: 640px; display: grid; gap: 0.85rem; }
+  .item {
+    display: block;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.1rem 1.4rem;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .item:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .item-top { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
+  .item h2 { font-size: 1.02rem; font-weight: 600; }
+  .item p { color: var(--ink-2); font-size: 0.88rem; margin-top: 0.35rem; }
+  .status {
+    display: inline-block;
+    flex-shrink: 0;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.15rem 0.6rem;
+    white-space: nowrap;
+  }
+  .status.idea { color: var(--idea); }
+  .status.planning { color: var(--planning); }
+  .status.promoted { color: var(--promoted); }
+  .legend {
+    display: flex;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 1.5rem;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  .legend span.dot { display: inline-block; width: 0.5rem; height: 0.5rem; border-radius: 50%; margin-right: 0.35rem; }
+  .dot.idea { background: var(--idea); }
+  .dot.planning { background: var(--planning); }
+  .dot.promoted { background: var(--promoted); }
+  footer { margin-top: auto; padding-top: 3rem; color: var(--muted); font-size: 0.8rem; }
+</style>
+</head>
+<body>
+  <header>
+    <a class="back" href="../index.html">&larr; myflare</a>
+    <h1>Todo</h1>
+    <p>Ideas waiting to become sub-projects. Idea → Planning → Promoted.</p>
+  </header>
+  <main>
+    <a class="item" href="notes/lalitha-sahasranamam.md">
+      <div class="item-top">
+        <h2>Lalitha Sahasranamam breakdown and image generation</h2>
+        <span class="status idea">Idea</span>
+      </div>
+      <p>Break down each of the 1000 names individually and generate an accompanying image.</p>
+    </a>
+    <a class="item" href="notes/ashtavadhanam-collection.md">
+      <div class="item-top">
+        <h2>Ashtavadhanam's collection</h2>
+        <span class="status idea">Idea</span>
+      </div>
+      <p>Collect and archive Ashtavadhanam performances and compositions.</p>
+    </a>
+    <a class="item" href="notes/padyaalu-special-collection.md">
+      <div class="item-top">
+        <h2>Special padyaala collection</h2>
+        <span class="status idea">Idea</span>
+      </div>
+      <p>Curation and creation of a special padyaalu collection, beyond the existing satakaalu.</p>
+    </a>
+    <a class="item" href="notes/family-tree.md">
+      <div class="item-top">
+        <h2>Family tree</h2>
+        <span class="status idea">Idea</span>
+      </div>
+      <p>Build and maintain a navigable family tree.</p>
+    </a>
+    <a class="item" href="notes/journal.md">
+      <div class="item-top">
+        <h2>Journal</h2>
+        <span class="status idea">Idea</span>
+      </div>
+      <p>Not an online project — formalize a journaling practice and start it.</p>
+    </a>
+    <a class="item" href="notes/math-conjecture.md">
+      <div class="item-top">
+        <h2>Math conjecture understanding</h2>
+        <span class="status idea">Idea</span>
+      </div>
+      <p>Revisit a conjecture whose reasoning has fallen apart; find where and why.</p>
+    </a>
+    <a class="item" href="notes/financial-tracker.md">
+      <div class="item-top">
+        <h2>Financial Tracker</h2>
+        <span class="status idea">Idea</span>
+      </div>
+      <p>Broader personal finances beyond mutual fund portfolios.</p>
+    </a>
+    <a class="item" href="notes/rubber-band-game.md">
+      <div class="item-top">
+        <h2>Rubber band game</h2>
+        <span class="status idea">Idea</span>
+      </div>
+      <p>Game concept not yet fleshed out.</p>
+    </a>
+  </main>
+  <div class="legend">
+    <span><span class="dot idea"></span>Idea — logged, not yet planned</span>
+    <span><span class="dot planning"></span>Planning — spec taking shape under todo/</span>
+    <span><span class="dot promoted"></span>Promoted — became its own sub-project</span>
+  </div>
+  <footer>myflare · todo / planning board</footer>
+</body>
+</html>

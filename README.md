@@ -12,10 +12,21 @@ Personal web interface — a hub page (`index.html`) linking to individual sub-p
 | Parayana Tracker | [`parayana/`](parayana/) | Lalitha Sahasranama Parayana tally — see [`parayana/README.md`](parayana/README.md) |
 | Wallet | [`wallet/`](wallet/) | Encrypted digital cardholder — capture, crop & store ID/credit/debit cards as images — see [`wallet/README.md`](wallet/README.md) |
 
+## Todo / planning
+
+New ideas are logged on the [todo board](todo/index.html) (linked from the home
+page) and go through a planning phase — tracked in [`todo/`](todo/) — before
+being promoted into their own sub-project folder above. See
+[`todo/README.md`](todo/README.md) for the workflow.
+
 ## Structure
 
 ```
-index.html              ← main hub page with links to sub-projects
+index.html              ← main hub page with links to sub-projects, incl. Todo
+todo/
+  README.md             ← idea → planning → promotion workflow
+  index.html            ← todo/status board
+  notes/                ← one planning note per idea (pre-promotion)
 portfolio-tracker/
   README.md             ← project spec, feature list & Firebase setup
   index.html            ← the app (static, GitHub Pages friendly)
