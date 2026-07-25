@@ -19,15 +19,14 @@ const CATS = {
 /* ================= state ================= */
 let cryptoKey = null;       // AES-GCM key (in memory only) — null unless the wallet has been locked at least once and is currently unlocked
 let vaultEncrypted = false; // true once the user has ever set a passphrase
-let vaultUnlocked = false;  // true once the deck is usable (unencrypted-by-default, or unlocked)
-let cards = [];              // decrypted/plain, in-memory: {id, label, category, tag, person, cardNumber, note, orientation, image, imageBack, ocrText, createdAt, updatedAt}
-let activeIndexes = { id: 0, bank: 0 }; // per-group active card index (ID cards / bank cards decks)
-let activeDrag = null;       // shared pointer-drag state across whichever deck is being touched
-let personFilter = 'all';    // person filter chip
+let vaultUnlocked = false;  // true once the tables are usable (unencrypted-by-default, or unlocked)
+let cards = [];               // decrypted/plain, in-memory: {id, category, ...}; category 'notes' holds {person, kv} instead of a photo
+let personFilter = 'all';    // person filter / column-highlight
 let personAvatars = JSON.parse(localStorage.getItem(LS_AVATARS) || '{}'); // person name -> chosen emoji
 let avatarEditPerson = null; // person currently targeted by the avatar picker dialog
+let notesEditPerson = null;  // person currently targeted by the notes editor dialog
+let notesEditKV = [];        // working copy of that person's key/value rows while the dialog is open
 let fbase = null;            // set once Firebase is connected
-let justAddedCardId = null;  // drives the "deal-in" entrance animation
 
 /* wizard (add-card / retake) state */
 let wizSrcImage = null;      // <img> or <canvas> being cropped
@@ -251,31 +250,62 @@ function rotateImage90(img) {
   ctx.translate(h, 0); ctx.rotate(Math.PI / 2); ctx.drawImage(img, 0, 0, w, h);
   return c;
 }
-// Maps source triangle -> destination triangle with a 2D affine transform (Canvas2D has no true
-// projective transform), then clips to the destination triangle before drawing. Two triangles
-// covering the quad approximate a full perspective warp — the standard trick for "unwarping" a
-// photographed rectangle back to straight with only Canvas2D.
-function affineTri(ctx, img, src, dst) {
-  const [s0, s1, s2] = src, [d0, d1, d2] = dst;
-  const denom = s0.x * (s1.y - s2.y) + s1.x * (s2.y - s0.y) + s2.x * (s0.y - s1.y);
-  const a = (d0.x * (s1.y - s2.y) + d1.x * (s2.y - s0.y) + d2.x * (s0.y - s1.y)) / denom;
-  const c = (d0.x * (s2.x - s1.x) + d1.x * (s0.x - s2.x) + d2.x * (s1.x - s0.x)) / denom;
-  const e = (d0.x * (s1.x * s2.y - s2.x * s1.y) + d1.x * (s2.x * s0.y - s0.x * s2.y) + d2.x * (s0.x * s1.y - s1.x * s0.y)) / denom;
-  const b = (d0.y * (s1.y - s2.y) + d1.y * (s2.y - s0.y) + d2.y * (s0.y - s1.y)) / denom;
-  const d = (d0.y * (s2.x - s1.x) + d1.y * (s0.x - s2.x) + d2.y * (s1.x - s0.x)) / denom;
-  const f = (d0.y * (s1.x * s2.y - s2.x * s1.y) + d1.y * (s2.x * s0.y - s0.x * s2.y) + d2.y * (s0.x * s1.y - s1.x * s0.y)) / denom;
-  ctx.save();
-  ctx.beginPath(); ctx.moveTo(d0.x, d0.y); ctx.lineTo(d1.x, d1.y); ctx.lineTo(d2.x, d2.y); ctx.closePath(); ctx.clip();
-  ctx.setTransform(a, b, c, d, e, f);
-  ctx.drawImage(img, 0, 0);
-  ctx.restore();
+// Square-to-quad projective mapping (Heckbert): given where the unit square's four corners
+// (0,0),(1,0),(1,1),(0,1) land, returns a function from any (u,v) in that square to the matching
+// point in the quad. Used below with (u,v) = normalized destination-rectangle coordinates and the
+// quad = the marked source corners, which gives a true perspective "unwarp" with Canvas2D (which
+// has no native projective transform) — unlike a two-triangle affine approximation, there's no
+// seam, because every destination pixel is sampled independently rather than one flat transform
+// per half of the quad.
+function quadProjector(quad) {
+  const [{ x: x0, y: y0 }, { x: x1, y: y1 }, { x: x2, y: y2 }, { x: x3, y: y3 }] = quad; // tl, tr, br, bl
+  const dx1 = x1 - x2, dx2 = x3 - x2, dx3 = x0 - x1 + x2 - x3;
+  const dy1 = y1 - y2, dy2 = y3 - y2, dy3 = y0 - y1 + y2 - y3;
+  let g = 0, h = 0;
+  if (Math.abs(dx3) > 1e-9 || Math.abs(dy3) > 1e-9) {
+    const denom = dx1 * dy2 - dx2 * dy1;
+    g = (dx3 * dy2 - dx2 * dy3) / denom;
+    h = (dx1 * dy3 - dx3 * dy1) / denom;
+  }
+  const a = x1 - x0 + g * x1, b = x3 - x0 + h * x3, c = x0;
+  const d = y1 - y0 + g * y1, e = y3 - y0 + h * y3, f = y0;
+  return (u, v) => {
+    const w = g * u + h * v + 1;
+    return { x: (a * u + b * v + c) / w, y: (d * u + e * v + f) / w };
+  };
 }
 function warpQuadToRect(img, quad, destW, destH) {
+  const iw = img.naturalWidth || img.width, ih = img.naturalHeight || img.height;
+  const srcCanvas = document.createElement('canvas'); srcCanvas.width = iw; srcCanvas.height = ih;
+  const sctx = srcCanvas.getContext('2d', { willReadFrequently: true });
+  sctx.drawImage(img, 0, 0, iw, ih);
+  const src = sctx.getImageData(0, 0, iw, ih).data;
+
+  const project = quadProjector(quad);
   const out = document.createElement('canvas'); out.width = destW; out.height = destH;
-  const ctx = out.getContext('2d'); ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
-  const [tl, tr, br, bl] = quad;
-  affineTri(ctx, img, [tl, tr, bl], [{ x: 0, y: 0 }, { x: destW, y: 0 }, { x: 0, y: destH }]);
-  affineTri(ctx, img, [tr, br, bl], [{ x: destW, y: 0 }, { x: destW, y: destH }, { x: 0, y: destH }]);
+  const octx = out.getContext('2d');
+  const outImg = octx.createImageData(destW, destH);
+  const dst = outImg.data;
+
+  for (let y = 0; y < destH; y++) {
+    const v = (y + 0.5) / destH;
+    for (let x = 0; x < destW; x++) {
+      const u = (x + 0.5) / destW;
+      const { x: sx, y: sy } = project(u, v);
+      if (sx < 0 || sy < 0 || sx > iw - 1 || sy > ih - 1) continue; // stays transparent
+      const sx0 = Math.floor(sx), sy0 = Math.floor(sy);
+      const sx1 = Math.min(sx0 + 1, iw - 1), sy1 = Math.min(sy0 + 1, ih - 1);
+      const fx = sx - sx0, fy = sy - sy0;
+      const i00 = (sy0 * iw + sx0) * 4, i10 = (sy0 * iw + sx1) * 4, i01 = (sy1 * iw + sx0) * 4, i11 = (sy1 * iw + sx1) * 4;
+      const di = (y * destW + x) * 4;
+      for (let ch = 0; ch < 4; ch++) {
+        const top = src[i00 + ch] + (src[i10 + ch] - src[i00 + ch]) * fx;
+        const bot = src[i01 + ch] + (src[i11 + ch] - src[i01 + ch]) * fx;
+        dst[di + ch] = top + (bot - top) * fy;
+      }
+    }
+  }
+  octx.putImageData(outImg, 0, 0);
   return out;
 }
 // Picks a landscape or portrait output canvas to match the shape of the marked quad, so a
@@ -514,16 +544,17 @@ async function loadCardsFromLocal() {
   }
   decoded.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
   cards = decoded;
-  activeIndexes = { id: cards.length, bank: cards.length }; // clamped per-group when rendered
 }
 function showLockedScreen() {
   vaultUnlocked = false; cards = [];
-  $('#app').innerHTML = `<div class="empty"><div class="plus">🔒</div><p>Wallet is locked.</p>
+  $('#idMatrixSection').innerHTML = ''; $('#bankMatrixSection').innerHTML = '';
+  const empty = $('#tablesEmpty');
+  empty.hidden = false;
+  empty.innerHTML = `<div class="plus">🔒</div><p>Wallet is locked.</p>
     <div class="modalactions" style="justify-content:center;margin-top:1rem">
       <button class="btn primary" data-action="lock">Unlock</button>
-    </div></div>`;
+    </div>`;
   $('#personFilterRow').innerHTML = ''; $('#personFilterRow').hidden = true;
-  $('#idMatrixSection').innerHTML = '';
   updateLockIcon();
 }
 function updateLockIcon() {
@@ -542,11 +573,7 @@ async function onLockButtonClick() {
   openVaultDialog(false);
 }
 
-/* ================= filters, datalists, deck (cardholder) rendering ================= */
-function matchesPerson(c) { return personFilter === 'all' || (c.person || '') === personFilter; }
-function idCardsList() { return cards.filter(c => c.category === 'id' && matchesPerson(c)); }
-function bankCardsList() { return cards.filter(c => c.category !== 'id' && matchesPerson(c)); }
-
+/* ================= filters, datalists, matrix-table rendering ================= */
 function refreshDatalists() {
   const persons = [...new Set(cards.map(c => c.person).filter(Boolean))].sort();
   $('#personList').innerHTML = persons.map(p => `<option value="${esc(p)}">`).join('');
@@ -569,8 +596,20 @@ function openAvatarPicker(person) {
   $('#dlgAvatar').showModal();
 }
 
+// Real names only — used for the avatar row and for deciding which table column to highlight.
+function namedPersons() { return [...new Set(cards.map(c => c.person).filter(Boolean))].sort(); }
+// Table columns: named persons plus a trailing "Unassigned" bucket if any card has no person set.
+function tableColumns() {
+  const cols = namedPersons();
+  return cards.some(c => !c.person && c.category !== 'notes') ? [...cols, 'Unassigned'] : cols;
+}
+function colCls(p) {
+  if (personFilter === 'all') return '';
+  return p === personFilter ? ' class="colhi"' : ' class="coldim"';
+}
+
 function renderPersonFilterRow() {
-  const persons = [...new Set(cards.map(c => c.person).filter(Boolean))].sort();
+  const persons = namedPersons();
   const row = $('#personFilterRow');
   if (!persons.length) { row.innerHTML = ''; row.hidden = true; return; }
   if (personFilter !== 'all' && !persons.includes(personFilter)) personFilter = 'all';
@@ -587,190 +626,137 @@ function renderPersonFilterRow() {
   row.innerHTML = allChip + chips;
 }
 
-function renderIdMatrix() {
-  const section = $('#idMatrixSection');
-  const idCards = cards.filter(c => c.category === 'id');
-  if (!idCards.length) { section.innerHTML = ''; return; }
-  const persons = [...new Set(idCards.map(c => c.person || 'Unassigned'))].sort();
+/* ---- per-person notes: free-form key/value reminders, stored as a category:'notes' pseudo-card
+   so they ride the same encrypt-at-rest / Firebase-sync path as everything else ---- */
+function personNotesRecord(person) { return cards.find(c => c.category === 'notes' && c.person === person); }
+function notesRowHTML(persons) {
+  const cells = persons.map(p => {
+    const rec = personNotesRecord(p);
+    const has = !!(rec && rec.kv && rec.kv.length);
+    return `<td${colCls(p)}><button type="button" class="matrixtick notesbtn${has ? ' has' : ''}" data-notes-person="${esc(p)}" aria-label="${has ? 'Edit' : 'Add'} notes for ${esc(p)}">${has ? '📝' : '+'}</button></td>`;
+  }).join('');
+  return `<tr class="notesrow"><th scope="row">📝 Notes</th>${cells}</tr>`;
+}
+function openNotesEditor(person) {
+  notesEditPerson = person;
+  const rec = personNotesRecord(person);
+  notesEditKV = rec && rec.kv && rec.kv.length ? rec.kv.map(x => ({ k: x.k || '', v: x.v || '' })) : [{ k: '', v: '' }];
+  $('#notesPersonName').textContent = 'for ' + person;
+  renderNotesEditor();
+  $('#dlgNotes').showModal();
+}
+function renderNotesEditor() {
+  $('#notesRows').innerHTML = notesEditKV.map((kv, i) => `
+    <div class="noterow" data-i="${i}">
+      <input type="text" class="notekey" placeholder="Label, e.g. Locker no." value="${esc(kv.k)}" maxlength="40">
+      <input type="text" class="noteval" placeholder="Value" value="${esc(kv.v)}" maxlength="80">
+      <button type="button" class="noterm" data-action="remove-note-row" aria-label="Remove field">✕</button>
+    </div>`).join('');
+}
+async function saveNotesEditor() {
+  const kv = notesEditKV.map(x => ({ k: x.k.trim(), v: x.v.trim() })).filter(x => x.k || x.v);
+  const existing = personNotesRecord(notesEditPerson);
+  if (!kv.length) {
+    if (existing) {
+      cards = cards.filter(c => c.id !== existing.id);
+      await cardDelete(existing.id);
+      deleteCardRemote(existing.id);
+    }
+  } else if (existing) {
+    existing.kv = kv;
+    existing.updatedAt = Date.now();
+    await persistCard(existing);
+  } else {
+    const rec = { id: uid(), category: 'notes', person: notesEditPerson, kv, createdAt: new Date().toISOString(), updatedAt: Date.now() };
+    cards.push(rec);
+    await persistCard(rec);
+  }
+  $('#dlgNotes').close();
+  refreshUI();
+  toast('Notes saved');
+}
+
+function buildCardRowsMap(list) {
   const rowsMap = new Map(); // rowKey -> Map(person -> card), last card added wins if duplicates
-  for (const c of idCards) {
+  for (const c of list) {
     const rowKey = c.tag ? '@' + c.tag : (c.label || 'Untitled');
     const person = c.person || 'Unassigned';
     if (!rowsMap.has(rowKey)) rowsMap.set(rowKey, new Map());
     rowsMap.get(rowKey).set(person, c);
   }
-  const rows = [...rowsMap.keys()].sort();
-  const thead = `<tr><th>ID type</th>${persons.map(p => `<th>${esc(p)}</th>`).join('')}</tr>`;
-  const tbody = rows.map(r => {
+  return rowsMap;
+}
+function renderIdMatrix() {
+  const section = $('#idMatrixSection');
+  const persons = tableColumns();
+  const idCards = cards.filter(c => c.category === 'id');
+  const rowsMap = buildCardRowsMap(idCards);
+  const rowKeys = [...rowsMap.keys()].sort();
+  const thead = `<tr><th>ID type</th>${persons.map(p => `<th${colCls(p)}>${esc(p)}</th>`).join('')}</tr>`;
+  const typeRows = rowKeys.map(r => {
     const byPerson = rowsMap.get(r);
     const cells = persons.map(p => {
       const card = byPerson.get(p);
       return card
-        ? `<td><button type="button" class="matrixtick" data-card-id="${card.id}" aria-label="Open ${esc(r)} for ${esc(p)}">✓</button></td>`
-        : `<td><span class="na">–</span></td>`;
+        ? `<td${colCls(p)}><button type="button" class="matrixtick" data-card-id="${card.id}" aria-label="Open ${esc(r)} for ${esc(p)}">✓</button></td>`
+        : `<td${colCls(p)}><span class="na">–</span></td>`;
     }).join('');
     return `<tr><th scope="row">${esc(r)}</th>${cells}</tr>`;
   }).join('');
-  section.innerHTML = `<div class="matrixhead">🗂️ ID cards by person</div>
+  section.innerHTML = `<div class="matrixhead">🪪 ID cards by person</div>
+    <p class="hint">Tap a ✓ to open that card, or 📝 to edit that person's notes.</p>
+    <div class="matrixscroll"><table class="matrix"><thead>${thead}</thead><tbody>${notesRowHTML(persons)}${typeRows}</tbody></table></div>`;
+}
+function renderBankMatrix() {
+  const section = $('#bankMatrixSection');
+  const persons = tableColumns();
+  const bankCards = cards.filter(c => c.category !== 'id' && c.category !== 'notes');
+  if (!bankCards.length) { section.innerHTML = ''; return; }
+  const rowsMap = new Map(); // rowKey -> { label, byPerson }
+  for (const c of bankCards) {
+    const cat = CATS[c.category] || CATS.other;
+    const rowKey = c.tag ? '@' + c.tag : (c.label || 'Untitled');
+    const rowLabel = `${cat.icon} ${c.tag ? '@' + esc(c.tag) : esc(c.label || 'Untitled')}`;
+    const person = c.person || 'Unassigned';
+    if (!rowsMap.has(rowKey)) rowsMap.set(rowKey, { label: rowLabel, byPerson: new Map() });
+    rowsMap.get(rowKey).byPerson.set(person, c);
+  }
+  const rowKeys = [...rowsMap.keys()].sort();
+  const thead = `<tr><th>Card</th>${persons.map(p => `<th${colCls(p)}>${esc(p)}</th>`).join('')}</tr>`;
+  const tbody = rowKeys.map(r => {
+    const { label, byPerson } = rowsMap.get(r);
+    const cells = persons.map(p => {
+      const card = byPerson.get(p);
+      return card
+        ? `<td${colCls(p)}><button type="button" class="matrixtick" data-card-id="${card.id}" aria-label="Open ${label} for ${esc(p)}">✓</button></td>`
+        : `<td${colCls(p)}><span class="na">–</span></td>`;
+    }).join('');
+    return `<tr><th scope="row">${label}</th>${cells}</tr>`;
+  }).join('');
+  section.innerHTML = `<div class="matrixhead">💳 Bank cards by person</div>
     <p class="hint">Tap a ✓ to open that card.</p>
     <div class="matrixscroll"><table class="matrix"><thead>${thead}</thead><tbody>${tbody}</tbody></table></div>`;
+}
+function renderTables() {
+  const empty = $('#tablesEmpty');
+  if (!cards.length) {
+    empty.hidden = false;
+    empty.innerHTML = `<div class="plus">🪪</div><p>No cards yet.</p>
+      <div class="modalactions" style="justify-content:center;margin-top:1rem">
+        <button class="btn primary" data-action="add-card">+ Add your first card</button>
+      </div>`;
+    $('#idMatrixSection').innerHTML = ''; $('#bankMatrixSection').innerHTML = '';
+    return;
+  }
+  empty.hidden = true;
+  renderIdMatrix();
+  renderBankMatrix();
 }
 function refreshUI() {
   refreshDatalists();
   renderPersonFilterRow();
-  renderGroups();
+  renderTables();
 }
-
-function cardHTML(c, i) {
-  const cat = CATS[c.category] || CATS.other;
-  const metaBits = [`<span class="cbadge" style="background:${cat.color}">${cat.icon} ${cat.label}</span>`];
-  if (c.tag) metaBits.push(`<span class="ctag">@${esc(c.tag)}</span>`);
-  if (c.person) metaBits.push(esc(c.person));
-  if (c.note) metaBits.push(esc(c.note));
-  return `<div class="walletcard" data-id="${c.id}" data-idx="${i}">
-    <img src="${c.image}" alt="">
-    ${c.imageBack ? '<span class="hasback" title="Has a back photo">⧉</span>' : ''}
-    <div class="scrim">
-      <div class="clabel">${esc(c.label || 'Untitled')}</div>
-      <div class="cmeta">${metaBits.join(' · ')}</div>
-    </div>
-  </div>`;
-}
-function groupSectionHTML(group, icon, title, list, emptyMsg) {
-  if (!list.length) {
-    return `<section class="group"><div class="grouphead">${icon} ${title} <span class="gcount">0</span></div>
-      <div class="empty" style="padding:1.5rem 1rem;"><p>${esc(emptyMsg)}</p></div></section>`;
-  }
-  let ai = activeIndexes[group] || 0;
-  if (ai >= list.length) ai = list.length - 1;
-  if (ai < 0) ai = 0;
-  activeIndexes[group] = ai;
-  const slots = list.length;
-  const items = list.map((c, i) => cardHTML(c, i)).join('') +
-    `<div class="walletcard blank" data-idx="${slots}" data-blank="1"><span class="plus">+</span><span>Add card</span></div>`;
-  return `<section class="group">
-    <div class="grouphead">${icon} ${title} <span class="gcount">${list.length}</span></div>
-    <div class="deckwrap">
-      <div class="deck" id="deck-${group}" data-group="${group}">${items}</div>
-      <div class="deckdots">${list.map((_, i) => `<span class="${i === ai ? 'active' : ''}"></span>`).join('')}</div>
-      <div class="deckhint">${list.length > 1 ? 'Swipe, or tap a card to bring it forward' : ''}</div>
-    </div>
-  </section>`;
-}
-function renderGroups() {
-  const appEl = $('#app');
-  if (!cards.length) {
-    appEl.innerHTML = `<div class="empty"><div class="plus">🪪</div><p>No cards yet.</p>
-      <div class="modalactions" style="justify-content:center;margin-top:1rem">
-        <button class="btn primary" data-action="add-card">+ Add your first card</button>
-      </div></div>`;
-    renderIdMatrix();
-    return;
-  }
-  const idList = idCardsList();
-  const bankList = bankCardsList();
-  const sections = [
-    groupSectionHTML('id', '🪪', 'ID Cards', idList, 'No ID cards yet.'),
-    groupSectionHTML('bank', '💳', 'Bank Cards', bankList, 'No bank cards yet.'),
-  ];
-  appEl.innerHTML = `<div class="groups has-two">${sections.join('')}</div>`;
-  const idDeckEl = document.getElementById('deck-id'); if (idDeckEl) idDeckEl._list = idList;
-  const bankDeckEl = document.getElementById('deck-bank'); if (bankDeckEl) bankDeckEl._list = bankList;
-
-  const enterId = justAddedCardId; justAddedCardId = null;
-  let animatedGroup = null;
-  if (enterId) {
-    const el = appEl.querySelector(`.walletcard[data-id="${enterId}"]`);
-    if (el) { const deckEl = el.closest('.deck'); animatedGroup = deckEl ? deckEl.dataset.group : null; animateEntrance(enterId); }
-  }
-  if (animatedGroup !== 'id') positionDeckGroup('id');
-  if (animatedGroup !== 'bank') positionDeckGroup('bank');
-
-  renderIdMatrix();
-}
-function positionDeckGroup(group) {
-  const deckEl = document.getElementById('deck-' + group); if (!deckEl) return;
-  const ai = activeIndexes[group] || 0;
-  [...deckEl.children].forEach(el => {
-    const idx = Number(el.dataset.idx);
-    const off = idx - ai;
-    const a = Math.min(Math.abs(off), 4);
-    const tx = off === 0 ? 0 : (off > 0 ? 1 : -1) * (18 + a * 14);
-    const scale = 1 - a * 0.055;
-    const rot = Math.max(-8, Math.min(8, off * 4));
-    el.style.transform = `translateX(${tx}px) scale(${scale}) rotate(${off === 0 ? 0 : rot}deg)`;
-    el.style.zIndex = off === 0 ? 100 : 100 - a;
-    el.style.opacity = a > 4 ? 0 : String(1 - a * 0.12);
-    el.style.filter = off === 0 ? 'none' : `brightness(${1 - a * 0.08})`;
-  });
-  const dotsEl = deckEl.closest('.deckwrap') ? deckEl.closest('.deckwrap').querySelector('.deckdots') : null;
-  if (dotsEl) [...dotsEl.children].forEach((d, i) => d.classList.toggle('active', i === ai));
-}
-function animateEntrance(id) {
-  const deckEl = document.querySelector(`.walletcard[data-id="${id}"]`);
-  const el = deckEl; // the card element itself
-  if (!el) return;
-  const parentDeck = el.closest('.deck');
-  const group = parentDeck ? parentDeck.dataset.group : null;
-  el.style.transition = 'none';
-  el.style.transform = 'translateY(170px) scale(0.55) rotate(20deg)';
-  el.style.opacity = '0';
-  void el.offsetWidth; // force layout so the "from" state actually paints before we animate
-  const others = parentDeck ? [...parentDeck.children].filter(c => c !== el) : [];
-  others.forEach(o => o.classList.add('shuffle'));
-  requestAnimationFrame(() => {
-    el.style.transition = '';
-    if (group) positionDeckGroup(group);
-    setTimeout(() => others.forEach(o => o.classList.remove('shuffle')), 420);
-  });
-}
-(function wireDeckPointerOnce() {
-  document.addEventListener('pointerdown', e => {
-    const deckEl = e.target.closest('.deck'); if (!deckEl) return;
-    const card = e.target.closest('.walletcard'); if (!card) return;
-    const group = deckEl.dataset.group;
-    const idx = Number(card.dataset.idx);
-    activeDrag = { deckEl, group, x: e.clientX, y: e.clientY, moved: false, idx, isActive: idx === (activeIndexes[group] || 0) };
-  });
-  document.addEventListener('pointermove', e => {
-    if (!activeDrag) return;
-    const d = activeDrag;
-    const dx = e.clientX - d.x, dy = e.clientY - d.y;
-    if (!d.moved && (Math.abs(dx) > 8 || Math.abs(dy) > 8)) d.moved = true;
-    if (!d.moved || !d.isActive) return;
-    const activeEl = d.deckEl.querySelector(`.walletcard[data-idx="${activeIndexes[d.group] || 0}"]`);
-    if (!activeEl) return;
-    activeEl.style.transition = 'none';
-    const rot = Math.max(-14, Math.min(14, dx / 12));
-    activeEl.style.transform = `translateX(${dx}px) rotate(${rot}deg)`;
-  });
-  document.addEventListener('pointerup', e => {
-    if (!activeDrag) return;
-    const d = activeDrag; activeDrag = null;
-    const ai = activeIndexes[d.group] || 0;
-    const activeEl = d.deckEl.querySelector(`.walletcard[data-idx="${ai}"]`);
-    if (activeEl) activeEl.style.transition = '';
-    const dx = e.clientX - d.x;
-    const list = d.deckEl._list || [];
-    const maxIdx = list.length + 1; // + the trailing blank "add card" slot
-    if (Math.abs(dx) > 45) {
-      activeIndexes[d.group] = Math.max(0, Math.min(maxIdx - 1, ai + (dx < 0 ? 1 : -1)));
-    } else if (!d.moved) {
-      if (d.idx === ai) {
-        if (d.idx === list.length) openAddWizard(d.group === 'id' ? 'id' : null);
-        else openViewer(list[d.idx]);
-      } else {
-        activeIndexes[d.group] = d.idx;
-      }
-    }
-    positionDeckGroup(d.group);
-  });
-  document.addEventListener('pointercancel', () => {
-    if (!activeDrag) return;
-    const d = activeDrag; activeDrag = null;
-    positionDeckGroup(d.group);
-  });
-})();
 
 /* ================= fullscreen viewer ================= */
 // A landscape card's front+back stack one below another (uses screen height well); a portrait
@@ -826,6 +812,24 @@ async function shareCardPhoto(isBack) {
   }
   const a = document.createElement('a'); a.href = dataURL; a.download = filename; a.click();
 }
+function updateEditPhotoTiles(card) {
+  $('#editFrontImg').innerHTML = `<img src="${card.image}" alt="">`;
+  const hasBack = !!card.imageBack;
+  $('#editBackImg').innerHTML = hasBack ? `<img src="${card.imageBack}" alt="">` : '<span class="phototile-placeholder">+</span>';
+  $('#editBackActionBtn').textContent = hasBack ? '🔄 Retake' : '+ Add back';
+  $('#editBackRemoveBtn').hidden = !hasBack;
+}
+async function removeBackPhoto() {
+  const card = cards.find(c => c.id === currentViewCardId);
+  if (!card || !card.imageBack) return;
+  if (!confirm('Remove the back photo for this card?')) return;
+  card.imageBack = null;
+  card.updatedAt = Date.now();
+  await persistCard(card);
+  updateEditPhotoTiles(card);
+  refreshUI();
+  toast('Back photo removed');
+}
 function openEditFromViewer() {
   const card = cards.find(c => c.id === currentViewCardId);
   if (!card) return;
@@ -836,6 +840,7 @@ function openEditFromViewer() {
   $('#editNumber').value = card.cardNumber || '';
   editCategory = card.category;
   [...$('#editCatPick').children].forEach(b => b.classList.toggle('active', b.dataset.cat === editCategory));
+  updateEditPhotoTiles(card);
   $('#dlgView').close();
   $('#dlgEdit').showModal();
 }
@@ -890,18 +895,18 @@ function startRetake(cardId, side) {
 function showStep(id) {
   [...$('#wizard').children].forEach(s => s.hidden = s.id !== id);
 }
-function openAddWizard(presetCategory) {
+function openAddWizard() {
   wizTarget = { cardId: null, side: 'front' };
   wizSrcImage = null; wizQuad = null; wizWarped = null; wizFinalDataURL = null; wizBackDataURL = null;
   wizFinalOrientation = 'landscape';
-  wizOcrText = ''; wizCategory = presetCategory || null; wizUndoStack = [];
+  wizOcrText = ''; wizCategory = null; wizUndoStack = [];
   $('#sourceTitle').textContent = 'Add a card';
   $('#sourceHint').textContent = "Photograph an ID, credit/debit card, or balance/passbook page. It's cropped and processed on this device.";
   $('#cardLabel').value = ''; $('#cardNote').value = ''; $('#cardNumber').value = '';
   $('#cardPerson').value = ''; $('#cardTag').value = '';
   $('#detailsErr').textContent = ''; $('#ocrStatus').textContent = '';
   [...$('#catPick').children].forEach(b => b.classList.toggle('active', b.dataset.cat === wizCategory));
-  updateBackSlot();
+  updateWizPhotoTiles();
   showStep('stepSource');
   $('#dlgAdd').showModal();
 }
@@ -1042,15 +1047,12 @@ function undoStroke() {
   if (!wizUndoStack.length) { wizBrushUsed = false; updateTouchupCTA(); }
 }
 
-function updateDetailPreview() {
-  $('#detailPreview').innerHTML = `<img src="${wizFinalDataURL}" alt="">`;
-}
-function updateBackSlot() {
-  const thumb = $('#backThumb');
-  thumb.innerHTML = wizBackDataURL
-    ? `<img src="${wizBackDataURL}" alt=""><span>Back photo added</span>`
-    : 'No back photo yet';
-  $('#backSlot').querySelector('[data-action="add-back"]').textContent = wizBackDataURL ? 'Retake back photo' : '+ Add back photo';
+function updateWizPhotoTiles() {
+  $('#wizFrontImg').innerHTML = wizFinalDataURL ? `<img src="${wizFinalDataURL}" alt="">` : '';
+  const hasBack = !!wizBackDataURL;
+  $('#wizBackImg').innerHTML = hasBack ? `<img src="${wizBackDataURL}" alt="">` : '<span class="phototile-placeholder">+</span>';
+  $('#wizBackActionBtn').textContent = hasBack ? '🔄 Retake back' : '+ Add back';
+  $('#wizBackRemoveBtn').hidden = !hasBack;
 }
 // Called after the touchup step, for whichever side/target is currently active.
 async function finishSide() {
@@ -1074,13 +1076,13 @@ async function finishSide() {
   }
   if (wizTarget.side === 'back') {
     wizBackDataURL = dataURL;
-    updateBackSlot();
+    updateWizPhotoTiles();
     showStep('stepDetails');
     return;
   }
   wizFinalDataURL = dataURL;
   wizFinalOrientation = wizWarped.width >= wizWarped.height ? 'landscape' : 'portrait';
-  updateDetailPreview();
+  updateWizPhotoTiles();
   showStep('stepDetails');
   autoOCR();
 }
@@ -1089,6 +1091,13 @@ function startAddBack() {
   wizSrcImage = null; wizQuad = null; wizWarped = null;
   $('#sourceTitle').textContent = 'Add back photo';
   $('#sourceHint').textContent = 'Photograph the back of the same card.';
+  showStep('stepSource');
+}
+function startRetakeFrontInWizard() {
+  wizTarget = { cardId: null, side: 'front' };
+  wizSrcImage = null; wizQuad = null; wizWarped = null;
+  $('#sourceTitle').textContent = 'Retake front photo';
+  $('#sourceHint').textContent = 'Retake the front photo for this card.';
   showStep('stepSource');
 }
 
@@ -1113,8 +1122,6 @@ $('#btnSaveCard').addEventListener('click', async () => {
     cards.push({ id: rec.id, updatedAt: rec.updatedAt, ...plain });
     pushCardRemote(rec);
     personFilter = 'all';
-    justAddedCardId = rec.id;
-    activeIndexes[plain.category === 'id' ? 'id' : 'bank'] = Number.MAX_SAFE_INTEGER; // clamped to last on render
     closeWizard();
     refreshUI();
     toast('Card saved');
@@ -1232,14 +1239,17 @@ document.addEventListener('click', e => {
   }
 
   const personChip = e.target.closest('#personFilterRow .avatarblob');
-  if (personChip) { personFilter = personChip.dataset.personfilter; renderPersonFilterRow(); renderGroups(); return; }
+  if (personChip) { personFilter = personChip.dataset.personfilter; renderPersonFilterRow(); renderTables(); return; }
 
-  const matrixTick = e.target.closest('.matrixtick');
+  const matrixTick = e.target.closest('.matrixtick[data-card-id]');
   if (matrixTick) {
     const card = cards.find(c => c.id === matrixTick.dataset.cardId);
     if (card) openViewer(card);
     return;
   }
+
+  const notesBtn = e.target.closest('.matrixtick[data-notes-person]');
+  if (notesBtn) { openNotesEditor(notesBtn.dataset.notesPerson); return; }
 
   const shareBtn = e.target.closest('.sharebtn');
   if (shareBtn) { shareCardPhoto(shareBtn.dataset.share === 'back'); return; }
@@ -1270,13 +1280,32 @@ document.addEventListener('click', e => {
     case 'undo-stroke': undoStroke(); break;
     case 'to-details': finishSide(); break;
     case 'add-back': startAddBack(); break;
+    case 'remove-back-wiz': wizBackDataURL = null; updateWizPhotoTiles(); break;
+    case 'retake-front-wiz': startRetakeFrontInWizard(); break;
     case 'back-touchup': showStep('stepTouchup'); break;
     case 'close-viewer': $('#dlgView').close(); break;
     case 'edit-card': openEditFromViewer(); break;
     case 'copy-number': copyCardNumber(); break;
     case 'retake-front': startRetake(currentViewCardId, 'front'); break;
     case 'retake-back': startRetake(currentViewCardId, 'back'); break;
+    case 'remove-back': removeBackPhoto(); break;
+    case 'add-note-row': notesEditKV.push({ k: '', v: '' }); renderNotesEditor(); break;
+    case 'remove-note-row': {
+      const row = actionEl.closest('.noterow');
+      notesEditKV.splice(Number(row.dataset.i), 1);
+      if (!notesEditKV.length) notesEditKV.push({ k: '', v: '' });
+      renderNotesEditor();
+      break;
+    }
+    case 'save-notes': saveNotesEditor(); break;
   }
+});
+
+$('#notesRows').addEventListener('input', e => {
+  const row = e.target.closest('.noterow'); if (!row) return;
+  const i = Number(row.dataset.i);
+  if (e.target.classList.contains('notekey')) notesEditKV[i].k = e.target.value;
+  else if (e.target.classList.contains('noteval')) notesEditKV[i].v = e.target.value;
 });
 
 /* ================= privacy veil (hide thumbnails when backgrounded) ================= */
