@@ -24,15 +24,7 @@
     </span>
   </div>
 
-  <div class="filterrow" id="filterRow">
-    <button class="chip active" data-filter="all">All</button>
-    <button class="chip" data-filter="id">🪪 ID</button>
-    <button class="chip" data-filter="credit">💳 Credit</button>
-    <button class="chip" data-filter="debit">💳 Debit</button>
-    <button class="chip" data-filter="balance">🏦 Balance</button>
-    <button class="chip" data-filter="other">🗂️ Other</button>
-  </div>
-  <div class="filterrow" id="personFilterRow"><!-- built by app.js from cards' person names --></div>
+  <div class="personrow" id="personFilterRow"><!-- built by app.js from cards' person names --></div>
 
   <div id="app"><!-- deck groups rendered by app.js --></div>
 
@@ -44,6 +36,8 @@
     · <a href="../index.html">myflare home</a>
   </footer>
 </div>
+
+<button class="fab" data-action="add-card" aria-label="Add card" title="Add card">+</button>
 
 <!-- unlock / set-passphrase -->
 <dialog id="dlgVault">
@@ -252,6 +246,18 @@
       <button class="btn primary" value="ok">Save</button>
     </div>
   </form>
+</dialog>
+
+<!-- avatar picker -->
+<dialog id="dlgAvatar">
+  <div class="modal">
+    <h2>Choose avatar</h2>
+    <p class="hint" id="avatarPersonName"></p>
+    <div class="emojigrid" id="emojiGrid"><!-- built by app.js --></div>
+    <div class="modalactions">
+      <button type="button" class="btn" data-close>Done</button>
+    </div>
+  </div>
 </dialog>
 
 <script src="app.js"></script>

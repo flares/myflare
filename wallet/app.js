@@ -2,6 +2,8 @@
 
 /* ================= constants ================= */
 const LS_FB = 'wallet.firebase.config';
+const LS_AVATARS = 'wallet.personAvatars';
+const AVATAR_EMOJIS = ['👶','🧒','👦','👧','🧑','👨','👩','🧔','🧕','👱','👴','👵','🧓','👨‍🦰','👩‍🦰','👨‍🦱','👩‍🦱','👨‍🦳','👩‍🦳','🧑‍🦲'];
 const PBKDF2_ITERS = 310000;
 const SESSION_MS = 30 * 60 * 1000; // stay unlocked for 30 min (sliding)
 const CARD_LONG = 900, CARD_SHORT = 568; // ISO/IEC 7810 ID-1 ratio (~1.586); orientation picked per card
@@ -21,8 +23,9 @@ let vaultUnlocked = false;  // true once the deck is usable (unencrypted-by-defa
 let cards = [];              // decrypted/plain, in-memory: {id, label, category, tag, person, cardNumber, note, orientation, image, imageBack, ocrText, createdAt, updatedAt}
 let activeIndexes = { id: 0, bank: 0 }; // per-group active card index (ID cards / bank cards decks)
 let activeDrag = null;       // shared pointer-drag state across whichever deck is being touched
-let filter = 'all';          // category filter chip
 let personFilter = 'all';    // person filter chip
+let personAvatars = JSON.parse(localStorage.getItem(LS_AVATARS) || '{}'); // person name -> chosen emoji
+let avatarEditPerson = null; // person currently targeted by the avatar picker dialog
 let fbase = null;            // set once Firebase is connected
 let justAddedCardId = null;  // drives the "deal-in" entrance animation
 
@@ -542,8 +545,7 @@ async function onLockButtonClick() {
 /* ================= filters, datalists, deck (cardholder) rendering ================= */
 function matchesPerson(c) { return personFilter === 'all' || (c.person || '') === personFilter; }
 function idCardsList() { return cards.filter(c => c.category === 'id' && matchesPerson(c)); }
-function bankCardsList() { return cards.filter(c => c.category !== 'id' && (filter === 'all' || c.category === filter) && matchesPerson(c)); }
-function updateFilterChips() { [...$('#filterRow').children].forEach(b => b.classList.toggle('active', b.dataset.filter === filter)); }
+function bankCardsList() { return cards.filter(c => c.category !== 'id' && matchesPerson(c)); }
 
 function refreshDatalists() {
   const persons = [...new Set(cards.map(c => c.person).filter(Boolean))].sort();
@@ -551,34 +553,66 @@ function refreshDatalists() {
   const tags = [...new Set(cards.map(c => c.tag).filter(Boolean))].sort();
   $('#tagList').innerHTML = tags.map(t => `<option value="@${esc(t)}">`).join('');
 }
+
+/* ---- person avatars: a chosen emoji per person, persisted; a stable default until chosen ---- */
+function defaultAvatarFor(name) {
+  let h = 0; for (const ch of name) h = (h * 31 + ch.charCodeAt(0)) | 0;
+  return AVATAR_EMOJIS[Math.abs(h) % AVATAR_EMOJIS.length];
+}
+function personAvatar(name) { return personAvatars[name] || defaultAvatarFor(name); }
+function openAvatarPicker(person) {
+  avatarEditPerson = person;
+  $('#avatarPersonName').textContent = person;
+  const current = personAvatar(person);
+  $('#emojiGrid').innerHTML = AVATAR_EMOJIS.map(em =>
+    `<button type="button" class="emojibtn ${em === current ? 'active' : ''}" data-emoji="${em}">${em}</button>`).join('');
+  $('#dlgAvatar').showModal();
+}
+
 function renderPersonFilterRow() {
   const persons = [...new Set(cards.map(c => c.person).filter(Boolean))].sort();
   const row = $('#personFilterRow');
   if (!persons.length) { row.innerHTML = ''; row.hidden = true; return; }
   if (personFilter !== 'all' && !persons.includes(personFilter)) personFilter = 'all';
   row.hidden = false;
-  row.innerHTML = `<button class="chip ${personFilter === 'all' ? 'active' : ''}" data-personfilter="all">👤 All people</button>` +
-    persons.map(p => `<button class="chip ${personFilter === p ? 'active' : ''}" data-personfilter="${esc(p)}">${esc(p)}</button>`).join('');
+  const allChip = `<div class="avatarchip">
+    <button type="button" class="avatarblob all ${personFilter === 'all' ? 'active' : ''}" data-personfilter="all" aria-label="All people">👥</button>
+    <span class="avatarname">All</span>
+  </div>`;
+  const chips = persons.map(p => `<div class="avatarchip">
+    <button type="button" class="avatarblob ${personFilter === p ? 'active' : ''}" data-personfilter="${esc(p)}" aria-label="${esc(p)}">${personAvatar(p)}</button>
+    <button type="button" class="avataredit" data-editavatar="${esc(p)}" aria-label="Change avatar for ${esc(p)}">✏️</button>
+    <span class="avatarname">${esc(p)}</span>
+  </div>`).join('');
+  row.innerHTML = allChip + chips;
 }
+
 function renderIdMatrix() {
   const section = $('#idMatrixSection');
   const idCards = cards.filter(c => c.category === 'id');
   if (!idCards.length) { section.innerHTML = ''; return; }
   const persons = [...new Set(idCards.map(c => c.person || 'Unassigned'))].sort();
-  const rowsMap = new Map();
+  const rowsMap = new Map(); // rowKey -> Map(person -> card), last card added wins if duplicates
   for (const c of idCards) {
     const rowKey = c.tag ? '@' + c.tag : (c.label || 'Untitled');
     const person = c.person || 'Unassigned';
-    if (!rowsMap.has(rowKey)) rowsMap.set(rowKey, new Set());
-    rowsMap.get(rowKey).add(person);
+    if (!rowsMap.has(rowKey)) rowsMap.set(rowKey, new Map());
+    rowsMap.get(rowKey).set(person, c);
   }
   const rows = [...rowsMap.keys()].sort();
   const thead = `<tr><th>ID type</th>${persons.map(p => `<th>${esc(p)}</th>`).join('')}</tr>`;
   const tbody = rows.map(r => {
-    const set = rowsMap.get(r);
-    return `<tr><td>${esc(r)}</td>${persons.map(p => `<td>${set.has(p) ? '<span class="tick">✓</span>' : '<span class="na">–</span>'}</td>`).join('')}</tr>`;
+    const byPerson = rowsMap.get(r);
+    const cells = persons.map(p => {
+      const card = byPerson.get(p);
+      return card
+        ? `<td><button type="button" class="matrixtick" data-card-id="${card.id}" aria-label="Open ${esc(r)} for ${esc(p)}">✓</button></td>`
+        : `<td><span class="na">–</span></td>`;
+    }).join('');
+    return `<tr><th scope="row">${esc(r)}</th>${cells}</tr>`;
   }).join('');
   section.innerHTML = `<div class="matrixhead">🗂️ ID cards by person</div>
+    <p class="hint">Tap a ✓ to open that card.</p>
     <div class="matrixscroll"><table class="matrix"><thead>${thead}</thead><tbody>${tbody}</tbody></table></div>`;
 }
 function refreshUI() {
@@ -635,13 +669,11 @@ function renderGroups() {
   }
   const idList = idCardsList();
   const bankList = bankCardsList();
-  const showId = filter === 'all' || filter === 'id';
-  const showBank = filter === 'all' || filter !== 'id';
-  const sections = [];
-  if (showId) sections.push(groupSectionHTML('id', '🪪', 'ID Cards', idList, 'No ID cards yet.'));
-  if (showBank) sections.push(groupSectionHTML('bank', '💳', 'Bank Cards', bankList, 'No bank cards yet.'));
-  if (!sections.length) { appEl.innerHTML = `<div class="empty"><p>No cards match this filter.</p></div>`; renderIdMatrix(); return; }
-  appEl.innerHTML = `<div class="groups${sections.length > 1 ? ' has-two' : ''}">${sections.join('')}</div>`;
+  const sections = [
+    groupSectionHTML('id', '🪪', 'ID Cards', idList, 'No ID cards yet.'),
+    groupSectionHTML('bank', '💳', 'Bank Cards', bankList, 'No bank cards yet.'),
+  ];
+  appEl.innerHTML = `<div class="groups has-two">${sections.join('')}</div>`;
   const idDeckEl = document.getElementById('deck-id'); if (idDeckEl) idDeckEl._list = idList;
   const bankDeckEl = document.getElementById('deck-bank'); if (bankDeckEl) bankDeckEl._list = bankList;
 
@@ -1080,7 +1112,6 @@ $('#btnSaveCard').addEventListener('click', async () => {
     await cardPut(rec);
     cards.push({ id: rec.id, updatedAt: rec.updatedAt, ...plain });
     pushCardRemote(rec);
-    filter = 'all'; updateFilterChips();
     personFilter = 'all';
     justAddedCardId = rec.id;
     activeIndexes[plain.category === 'id' ? 'id' : 'bank'] = Number.MAX_SAFE_INTEGER; // clamped to last on render
@@ -1188,11 +1219,27 @@ document.addEventListener('click', e => {
   const closeBtn = e.target.closest('[data-close]');
   if (closeBtn) { closeBtn.closest('dialog').close(); return; }
 
-  const filterChip = e.target.closest('#filterRow .chip');
-  if (filterChip) { filter = filterChip.dataset.filter; updateFilterChips(); renderGroups(); return; }
+  const editAvatarBtn = e.target.closest('[data-editavatar]');
+  if (editAvatarBtn) { openAvatarPicker(editAvatarBtn.dataset.editavatar); return; }
 
-  const personChip = e.target.closest('#personFilterRow .chip');
+  const emojiBtn = e.target.closest('.emojibtn');
+  if (emojiBtn) {
+    personAvatars[avatarEditPerson] = emojiBtn.dataset.emoji;
+    localStorage.setItem(LS_AVATARS, JSON.stringify(personAvatars));
+    $('#dlgAvatar').close();
+    renderPersonFilterRow();
+    return;
+  }
+
+  const personChip = e.target.closest('#personFilterRow .avatarblob');
   if (personChip) { personFilter = personChip.dataset.personfilter; renderPersonFilterRow(); renderGroups(); return; }
+
+  const matrixTick = e.target.closest('.matrixtick');
+  if (matrixTick) {
+    const card = cards.find(c => c.id === matrixTick.dataset.cardId);
+    if (card) openViewer(card);
+    return;
+  }
 
   const shareBtn = e.target.closest('.sharebtn');
   if (shareBtn) { shareCardPhoto(shareBtn.dataset.share === 'back'); return; }

@@ -26,9 +26,13 @@ swipeable stack that feels like flipping through a real wallet.
   same kind of document across people.
 - **ID cards and bank cards, side by side**: the home page splits into two decks — ID Cards and
   Bank Cards — shown side by side on wider screens and stacked on phones, each independently
-  swipeable, plus a filter row for person on top of the existing category filter.
-- **ID coverage table**: a table below the decks lists ID types (by tag) as rows and people as
-  columns, with a ✓/– for who has which — a quick way to see who's still missing an ID on file.
+  swipeable. A row of circular per-person avatars (tap ✏️ to pick their emoji) filters both decks
+  by person; there is no category-level filter.
+- **ID coverage table**: a clean, sticky-header table below the decks lists ID types (by tag) as
+  rows and people as columns. Tap a ✓ to jump straight to that card's fullscreen view — a quick
+  way to both see and open who's missing what.
+- **Floating add button**: a `+` FAB pinned to the bottom-right corner opens the add-card wizard
+  from anywhere, without hunting through the deck for the blank "Add card" slot.
 - **Cardholder feel**: cards render as a bigger, fanned, swipeable deck with a "deal-in" entrance
   animation and live drag-follow on swipe. Tap a card to bring it forward, tap again for a
   fullscreen view.
@@ -63,14 +67,18 @@ Static, no build step, GitHub Pages friendly: [`index.html`](index.html) + [`app
 - **OCR**: dynamically loads Tesseract.js from a CDN only when a photo is captured (never on page
   load), runs in the background with a timeout, and fails silently (never blocks Save) if
   unavailable — e.g. offline.
-- **Two decks, ID and Bank**: the home page always splits cards into an "🪪 ID Cards" deck and a
-  "💳 Bank Cards" deck (credit/debit/balance/other), each independently swipeable with its own
-  "deal-in" entrance animation, live drag-follow, and blank "+ Add card" slot. Category filter
-  chips narrow to one deck at a time; a person filter row (built from names you've used) narrows
-  both. Portrait and landscape cards both render correctly (`object-fit: contain`, never
-  stretched).
-- **ID × people matrix**: below the decks, a table of every distinct ID tag (rows) against every
-  distinct person (columns) with a ✓ where that person has that document on file.
+- **Two decks, ID and Bank**: the home page always shows both an "🪪 ID Cards" deck and a
+  "💳 Bank Cards" deck (credit/debit/balance/other together), each independently swipeable with its
+  own "deal-in" entrance animation, live drag-follow, and blank "+ Add card" slot. A row of
+  circular person avatars (built from names you've used) narrows both decks at once; there's no
+  separate category filter. Portrait and landscape cards both render correctly (`object-fit:
+  contain`, never stretched).
+- **Person avatars**: each person in the filter row gets an emoji avatar — a stable default picked
+  from their name, or your own choice via the small ✏️ button on their circle, saved per person in
+  `localStorage` (`wallet.personAvatars`).
+- **ID × people matrix**: below the decks, a sticky-header table of every distinct ID tag (rows)
+  against every distinct person (columns), with a tappable ✓ that opens that exact card in the
+  fullscreen viewer (and a plain – where they don't have it on file).
 - **Firebase sync (optional)**: only ever engages once the wallet is encrypted — nothing
   plaintext is pushed. Each card is its own encrypted Firestore document (`wallet_cards/{id}`),
   plus one small `wallet_meta/main` doc holding the salt/canary, so adding one card only uploads
