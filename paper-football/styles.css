@@ -68,6 +68,7 @@ body {
   -webkit-user-select: none;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
   position: relative;
 }
 
@@ -272,13 +273,20 @@ body[data-screen="game"]  #screen-game  { display: flex; }
 
 /* ------------------------------------------------------------ game screen */
 
-#screen-game {
-  flex-direction: column;
+/* Landscape phones have far more spare width than height, and the pitch is
+   height-starved in a three-band stack. Putting the hand in a right-hand rail
+   hands the board the full column height and makes it ~25% larger. */
+body[data-screen="game"] #screen-game {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto minmax(0, 1fr);
   height: 100dvh;
 }
 
 .hud {
-  flex: 0 0 38px;
+  grid-column: 1 / -1;
+  grid-row: 1;
+  height: 38px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -332,8 +340,10 @@ body[data-screen="game"]  #screen-game  { display: flex; }
 .icon-btn:active { transform: scale(.92); }
 
 .board-wrap {
-  flex: 1;
+  grid-column: 1;
+  grid-row: 2;
   min-height: 0;
+  min-width: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -348,14 +358,18 @@ body[data-screen="game"]  #screen-game  { display: flex; }
 }
 
 .hand {
-  flex: 0 0 76px;
+  grid-column: 2;
+  grid-row: 2;
+  width: clamp(84px, 13vw, 108px);
+  min-height: 0;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
   justify-content: center;
-  gap: clamp(6px, 2vw, 14px);
-  padding: 4px 10px;
+  gap: clamp(4px, 1.2vh, 10px);
+  padding: 6px 8px;
   background: var(--surface);
-  border-top: 1px solid var(--border);
+  border-left: 1px solid var(--border);
   transition: background-color .2s ease;
 }
 .hand.p1 { background: color-mix(in srgb, var(--p1) 14%, var(--surface)); }
@@ -389,14 +403,14 @@ body[data-screen="game"]  #screen-game  { display: flex; }
 
 .pf-card--sm {
   flex: 1 1 0;
-  max-width: 120px;
-  height: 100%;
+  min-height: 0;
+  width: 100%;
   padding: 4px 4px 3px;
   border-width: 1.5px;
   gap: 2px;
 }
-.pf-card--sm .pf-card-grid { width: 100%; max-width: 42px; }
-.pf-card--sm .pf-card-name { font-size: .56rem; line-height: 1; }
+.pf-card--sm .pf-card-grid { width: auto; height: 100%; max-height: 52px; flex: 1 1 auto; min-height: 0; }
+.pf-card--sm .pf-card-name { font-size: .58rem; line-height: 1; flex: 0 0 auto; }
 
 .pf-card-grid { display: block; }
 

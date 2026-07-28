@@ -14,7 +14,7 @@
   var CELL = 60;
   var GOAL_DEPTH = 70;   // room the goal net protrudes beyond the goal line
   var GOAL_MARGIN = 34;  // extra breathing room beyond the goal for badges/nets
-  var PAD_Y = 46;        // top/bottom padding beyond the outer node rows
+  var PAD_Y = 34;        // top/bottom padding beyond the outer node rows
 
   var REDUCED_MOTION = false;
   try {
@@ -33,6 +33,7 @@
       layerDead, layerTrail, layerFx, layerHighlight, layerBall;
 
   var ballOuter, ballSpin, ballScale, shadowEl;
+  var ballTapHandler = null;
   var netLeft, netRight, flashLeft, flashRight;
 
   // ---- small helpers --------------------------------------------------
@@ -214,7 +215,8 @@
 
     // Corner arcs.
     var cornerR = Math.min(CELL * 0.32, 18);
-    [[0, 0, 0, 90], [w, 0, 90, 180], [0, h, 270, 360], [w, h, 180, 270]].forEach(function (c) {
+    // Each quarter-arc must sweep *into* the pitch from its corner.
+    [[0, 0, 90, 180], [w, 0, 180, 270], [0, h, 0, 90], [w, h, 270, 360]].forEach(function (c) {
       g.appendChild(svgEl('path', { d: describeArc(c[0], c[1], cornerR, c[2], c[3]) }));
     });
 
@@ -374,6 +376,21 @@
     ballScale.appendChild(ballBody);
     ballSpin.appendChild(ballScale);
     ballOuter.appendChild(ballSpin);
+
+    // Generous invisible tap target riding along with the ball, outside the
+    // spin/scale groups so it never rotates or squashes.
+    var ballHit = svgEl('circle', {
+      cx: 0, cy: 0, r: Math.max(CELL * 0.42, 26),
+      fill: 'rgba(0,0,0,0)', 'class': 'pf-ball-hit'
+    });
+    ballHit.style.cursor = 'pointer';
+    ballHit.style.pointerEvents = 'auto';
+    ballHit.addEventListener('pointerdown', function (ev) {
+      ev.preventDefault();
+      if (ballTapHandler) ballTapHandler();
+    });
+    ballOuter.appendChild(ballHit);
+
     g.appendChild(ballOuter);
 
     return g;
@@ -534,7 +551,11 @@
 
       var duration = 180 + 45 * dist;
       var dir = (to.col - from.col) >= 0 ? 1 : -1;
-      var liftMax = 0.35 * CELL * dist;
+      // The arc peaks over the midpoint of the segment. Clamp the lift to the
+      // headroom actually available above it, so a skim along the top row
+      // stays inside the viewBox instead of clipping through the top edge.
+      var headroom = (fromY + toY) / 2 - (-PAD_Y) - CELL * 0.27 - 4;
+      var liftMax = Math.max(0, Math.min(0.35 * CELL * dist, headroom));
       var start = null;
 
       function frame(now) {
@@ -606,7 +627,10 @@
   function highlight(nodes, player, onPick) {
     clearHighlight();
     var color = playerColor(player);
-    var hitR = Math.max(CELL * 0.42, 24);
+    // Half a cell: the largest radius that stays tangent (never overlapping)
+    // for the closest simultaneously-highlighted pair a single card can
+    // produce (adjacent destinations 1 cell apart, e.g. Sprint's [1,0]/[2,0]).
+    var hitR = CELL * 0.5;
     var ringR = Math.min(CELL * 0.24, 16);
 
     nodes.forEach(function (n) {
@@ -667,12 +691,20 @@
     }, dur);
   }
 
+  // README §1.3 step 2 — tapping the ball itself reverts to the full union of
+  // destinations. The ball is inside PFBoard's SVG, so the tap target lives
+  // here and game.js just registers an intent handler.
+  function onBallTap(handler) {
+    ballTapHandler = typeof handler === 'function' ? handler : null;
+  }
+
   window.PFBoard = {
     init: init,
     place: place,
     move: move,
     highlight: highlight,
     clearHighlight: clearHighlight,
-    goalCelebrate: goalCelebrate
+    goalCelebrate: goalCelebrate,
+    onBallTap: onBallTap
   };
 })();

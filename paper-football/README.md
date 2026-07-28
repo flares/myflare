@@ -143,26 +143,30 @@ project's visual contract.
 
 ### 3.1 Layout
 
-Three stacked bands filling the viewport exactly — no page scroll, ever:
+A CSS grid filling the viewport exactly — no page scroll, ever:
 
 ```
 ┌──────────────────────────────────────────────┐
-│ HUD bar   turn pill · move count · ⟳ restart │  ~38px
-├──────────────────────────────────────────────┤
-│                                              │
-│              THE PITCH (SVG)                 │  flex: 1
-│                                              │
-├──────────────────────────────────────────────┤
-│   [card] [card] [card]   ← active hand only  │  ~76px
-└──────────────────────────────────────────────┘
+│ HUD bar   turn pill · move count · ⟳ restart │  38px
+├───────────────────────────────────┬──────────┤
+│                                   │  [card]  │
+│          THE PITCH (SVG)          │  [card]  │  1fr
+│                                   │  [card]  │
+└───────────────────────────────────┴──────────┘
+                                     84–108px
 ```
 
+- The hand is a **right-hand rail, not a bottom strip.** A landscape phone has
+  far more spare width than height, and the pitch is height-constrained; giving
+  the board the full column height instead of sharing it with a card strip
+  makes the pitch roughly 25% larger. Do not move the hand back to the bottom
+  without re-measuring the board.
 - The pitch is a single `<svg>` with a `viewBox` and
-  `preserveAspectRatio="xMidYMid meet"`, so it scales to whatever the middle
-  band gives it and never overflows.
-- The **active player's three cards only** are shown in the bottom strip,
-  tinted with that player's colour. The strip's background colour is the
-  clearest signal of whose turn it is.
+  `preserveAspectRatio="xMidYMid meet"`, so it scales to whatever the grid cell
+  gives it and never overflows.
+- The **active player's three cards only** are shown in the rail, tinted with
+  that player's colour. The rail's background colour is the clearest signal of
+  whose turn it is.
 - Portrait orientation shows a full-screen **"Rotate your device"** overlay with
   a rotating-phone glyph; the game is not playable until the device is
   landscape.
@@ -204,6 +208,9 @@ Three stacked bands filling the viewport exactly — no page scroll, ever:
   - The ball follows the straight line to its destination **plus a parabolic
     arc**: it lifts up to `0.35 × cellSize × distance` at the midpoint, and the
     shadow beneath it shrinks and fades as the ball rises, then snaps back.
+  - The lift is **clamped to the headroom above the segment's midpoint**, so a
+    skim along the top row flattens out instead of clipping through the top of
+    the `viewBox`. Arcs stay full-height in open play, where they are visible.
   - It **spins** — `360° × distance` of rotation over the flight, direction
     following the sign of `dx`.
   - On landing: a 90ms squash-and-stretch (scale `1.18, 0.86` → `1, 1`) and a
@@ -220,9 +227,14 @@ Three stacked bands filling the viewport exactly — no page scroll, ever:
   drawn *under* the trail lines so the line reads as continuous. They fade in
   over 200ms as the ball leaves.
 - **Highlights**: legal destinations get a pulsing ring in the active player's
-  colour (1.6s ease-in-out, scale `1 → 1.15`, opacity `.9 → .45`) over a
-  translucent filled disc. Tap target is ≥ 44px regardless of drawn size — an
-  invisible hit circle sits over every node.
+  colour (1.6s ease-in-out, scale `1 → 1.15`, opacity `1 → .45`) over a
+  translucent filled disc. An invisible hit circle sits over every highlighted
+  node, sized at half a cell — the largest radius that never overlaps its
+  neighbour, since cards can highlight two adjacent nodes at once. That works
+  out around 36px across on 7 × 15 and 29px on 9 × 15; the 44px ideal is not
+  reachable at nine rows without hit targets colliding.
+- The **ball carries its own tap target** (`.pf-ball-hit`), which is how
+  "tap the ball to see every move" is wired — `PFBoard.onBallTap(fn)`.
 - Illegal nodes are never highlighted and never show an error state; they are
   simply inert.
 

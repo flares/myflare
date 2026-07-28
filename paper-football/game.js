@@ -251,10 +251,19 @@
     });
   }
 
-  // Tapping a card narrows the highlight to that card's destinations;
-  // tapping the *active* card again (there being no exposed "ball tapped"
-  // hook in PFBoard — see report) drops the filter and returns to the
-  // turn-start union, matching README §1.3 step 2's ball-tap behaviour.
+  // Tapping the ball (README §1.3 step 2) drops any card filter and shows the
+  // union of every destination across the hand. Tapping the *active* card
+  // again does the same thing.
+  PFBoard.onBallTap(function () {
+    if (state.locked || document.body.dataset.screen !== 'game') return;
+    if (!state.turnLegal) return;
+    state.activeCardId = null;
+    renderHand();
+    PFBoard.clearHighlight();
+    PFBoard.highlight(state.turnLegal.union, state.turn, onPick);
+  });
+
+  // Tapping a card narrows the highlight to that card's destinations.
   handEl.addEventListener('click', function (e) {
     if (state.locked) return;
     var cardEl = e.target.closest('.pf-card');
