@@ -12,6 +12,7 @@ Personal web interface — a hub page (`index.html`) linking to individual sub-p
 | Parayana Tracker | [`parayana/`](parayana/) | Lalitha Sahasranama Parayana tally — see [`parayana/README.md`](parayana/README.md) |
 | Wallet | [`wallet/`](wallet/) | Encrypted digital cardholder — capture, crop & store ID/credit/debit cards as images — see [`wallet/README.md`](wallet/README.md) |
 | Kalpavriksha | [`kalpavriksha/`](kalpavriksha/) | Tap-to-grow tree PWA, one leaf and one “Sri Rama” per tap — see [`kalpavriksha/README.md`](kalpavriksha/README.md) |
+| Paper Football | [`paper-football/`](paper-football/) | Two-player landscape pitch game with drafted movement cards — see [`paper-football/README.md`](paper-football/README.md) |
 
 ## Todo / planning
 
@@ -68,4 +69,11 @@ kalpavriksha/
   app.js                ← tap → leaf → sound → tally; dialog & copy
   sw.js  manifest.webmanifest  icons/   ← PWA shell
   audio/                ← drop sri-rama.mp3 here
+paper-football/
+  README.md             ← rules, card deck & design brief (read before any change)
+  index.html            ← start / draft / game screens + pitch SVG shell
+  styles.css            ← layout, pitch chrome, cards, overlays, dark mode
+  cards.js              ← 12-card movement deck & card mini-grid renderer
+  board.js              ← pitch, goals & lattice drawing, ball flight, trail
+  game.js               ← state machine, legal moves, win detection
 ```
