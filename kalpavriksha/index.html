@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<title>Kalpavriksha</title>
+<meta name="description" content="A tree that grows a leaf every time you tap it.">
+<meta name="theme-color" content="#eaf1e8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#070d0b" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <canvas id="stage"></canvas>
+
+  <button id="detailsBtn" type="button" aria-haspopup="dialog">Details</button>
+
+  <dialog id="detailsDlg" aria-labelledby="dlgTitle">
+    <div class="dlg-head">
+      <h2 id="dlgTitle">Growth</h2>
+      <button id="closeBtn" class="icon-btn" type="button" aria-label="Close">&#10005;</button>
+    </div>
+
+    <p class="total"><span id="totalNum">0</span><span class="total-unit">leaves</span></p>
+
+    <div class="daylist" id="dayList"></div>
+
+    <div class="dlg-actions">
+      <button id="copyBtn" class="copy-btn" type="button">Copy</button>
+    </div>
+
+    <a class="home-link" href="../index.html">myflare home</a>
+  </dialog>
+
+  <script src="store.js"></script>
+  <script src="audio.js"></script>
+  <script src="tree.js"></script>
+  <script src="render.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

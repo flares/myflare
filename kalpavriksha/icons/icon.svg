@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <radialGradient id="sky" cx="50%" cy="86%" r="82%">
+      <stop offset="0%" stop-color="#12301f"/>
+      <stop offset="60%" stop-color="#0a1a13"/>
+      <stop offset="100%" stop-color="#050d09"/>
+    </radialGradient>
+    <linearGradient id="bark" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#3a2a1e"/>
+      <stop offset="100%" stop-color="#6a5038"/>
+    </linearGradient>
+    <radialGradient id="canopy" cx="38%" cy="32%" r="72%">
+      <stop offset="0%" stop-color="#57c47f"/>
+      <stop offset="45%" stop-color="#2f8f57"/>
+      <stop offset="100%" stop-color="#12643c"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="512" height="512" fill="url(#sky)"/>
+
+  <g stroke="url(#bark)" stroke-linecap="round" fill="none">
+    <path d="M256 470 L256 300" stroke-width="30"/>
+    <path d="M256 348 L182 268" stroke-width="18"/>
+    <path d="M256 336 L332 256" stroke-width="18"/>
+    <path d="M256 300 L250 214" stroke-width="15"/>
+    <path d="M182 268 L142 214" stroke-width="10"/>
+    <path d="M332 256 L376 208" stroke-width="10"/>
+    <path d="M250 214 L206 168" stroke-width="8"/>
+    <path d="M250 214 L300 166" stroke-width="8"/>
+  </g>
+
+  <g fill="url(#canopy)">
+    <circle cx="256" cy="176" r="104"/>
+    <circle cx="158" cy="216" r="70"/>
+    <circle cx="358" cy="212" r="72"/>
+    <circle cx="204" cy="140" r="60"/>
+    <circle cx="316" cy="142" r="58"/>
+  </g>
+
+  <g fill="#6fd898" opacity="0.55">
+    <circle cx="206" cy="132" r="30"/>
+    <circle cx="300" cy="152" r="24"/>
+    <circle cx="152" cy="200" r="20"/>
+  </g>
+</svg>

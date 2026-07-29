@@ -33,5 +33,6 @@ Each subproject is self-contained and unrelated to the others. When working on o
 | Padyaalu | `padyaalu/` | Telugu satakaalu reading app with chandassu (prosody) engine |
 | Forest Friends | `forest-friends/` | Voice-controlled kids' animal game (English & Telugu) |
 | Parayana Tracker | `parayana/` | Tap-a-day calendar counter for Lalitha Sahasranama Parayana, goal-tracked to 41 |
+| Kalpavriksha | `kalpavriksha/` | Tap-to-grow full-page tree PWA — one leaf and one "Sri Rama" per tap |
 
 Keep this table (and the root `README.md` table/`Structure` block) in sync whenever a subproject is added, renamed, or removed.
