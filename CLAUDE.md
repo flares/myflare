@@ -10,6 +10,11 @@ Each subproject is self-contained and unrelated to the others. When working on o
 - Do **not** read other subprojects' files. They have their own data, their own conventions, and are irrelevant to the task at hand — reading them burns context for no benefit.
 - Each subproject's own `README.md` (inside its folder) has the full spec/status for that subproject — that single file is the only context needed to work on it, beyond the code itself.
 
+## Git workflow
+
+- **Always commit to the `playground` remote branch.** All work — new subprojects, fixes, experiments — goes onto `playground` and is pushed there.
+- **Never create a project-specific sub-branch on the remote.** No `claude/<subproject>-...`, no `feature/<subproject>`, no per-subproject branches of any kind get pushed. `playground` is the single shared working branch; `main` is the release branch that `playground` merges into.
+
 ## Adding a new subproject
 
 1. Create `<name>/` at the repo root containing at minimum an `index.html` and a `README.md`, plus whatever JS/CSS it needs. Static only — no build step, no bundler, no shared dependencies between subprojects. Must work as a plain file served from GitHub Pages.
