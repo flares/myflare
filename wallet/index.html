@@ -24,19 +24,15 @@
     </span>
   </div>
 
-  <div class="filterrow" id="filterRow">
-    <button class="chip active" data-filter="all">All</button>
-    <button class="chip" data-filter="id">🪪 ID</button>
-    <button class="chip" data-filter="credit">💳 Credit</button>
-    <button class="chip" data-filter="debit">💳 Debit</button>
-    <button class="chip" data-filter="balance">🏦 Balance</button>
-    <button class="chip" data-filter="other">🗂️ Other</button>
+  <button type="button" class="addcardbtn" data-action="add-card">➕ Add a card</button>
+
+  <div class="personrow" id="personFilterRow"><!-- built by app.js from cards' person names --></div>
+
+  <div id="tables">
+    <div class="empty" id="tablesEmpty" hidden></div>
+    <div class="matrixsection" id="idMatrixSection"></div>
+    <div class="matrixsection" id="bankMatrixSection"></div>
   </div>
-  <div class="filterrow" id="personFilterRow"><!-- built by app.js from cards' person names --></div>
-
-  <div id="app"><!-- deck groups rendered by app.js --></div>
-
-  <div id="idMatrixSection"><!-- ID-cards x people matrix, rendered by app.js --></div>
 
   <footer id="footerNote">
     Cards stay in this browser's storage. Tap 🔒 any time to set a passphrase — everything is then AES-GCM
@@ -124,12 +120,22 @@
 
     <div class="wizstep" id="stepDetails" hidden>
       <h2>Card details</h2>
-      <div class="detailpreview" id="detailPreview"></div>
       <p class="hint ocrstatus" id="ocrStatus"></p>
 
-      <div class="backslot" id="backSlot">
-        <div class="backthumb" id="backThumb">No back photo yet</div>
-        <button type="button" class="btn sm" data-action="add-back">+ Add back photo</button>
+      <div class="photorow">
+        <div class="phototile">
+          <div class="phototile-img" id="wizFrontImg"></div>
+          <span class="phototile-label">Front</span>
+          <button type="button" class="phototile-action" data-action="retake-front-wiz">🔄 Retake</button>
+        </div>
+        <div class="phototile" id="wizBackTile">
+          <div class="phototile-img" id="wizBackImg"><span class="phototile-placeholder">+</span></div>
+          <span class="phototile-label">Back</span>
+          <div class="phototile-actions">
+            <button type="button" class="phototile-action" id="wizBackActionBtn" data-action="add-back">+ Add back</button>
+            <button type="button" class="phototile-action remove" id="wizBackRemoveBtn" data-action="remove-back-wiz" hidden>✕ Remove</button>
+          </div>
+        </div>
       </div>
 
       <div class="fieldrow">
@@ -188,9 +194,20 @@
 <dialog id="dlgEdit">
   <form method="dialog" class="modal" id="frmEdit">
     <h2>Edit card</h2>
-    <div class="modalactions" style="justify-content:flex-start">
-      <button type="button" class="btn sm" data-action="retake-front">🔄 Retake front</button>
-      <button type="button" class="btn sm" data-action="retake-back">➕ Back photo</button>
+    <div class="photorow">
+      <div class="phototile">
+        <div class="phototile-img" id="editFrontImg"></div>
+        <span class="phototile-label">Front</span>
+        <button type="button" class="phototile-action" data-action="retake-front">🔄 Retake</button>
+      </div>
+      <div class="phototile" id="editBackTile">
+        <div class="phototile-img" id="editBackImg"></div>
+        <span class="phototile-label">Back</span>
+        <div class="phototile-actions">
+          <button type="button" class="phototile-action" id="editBackActionBtn" data-action="retake-back">+ Add back</button>
+          <button type="button" class="phototile-action remove" id="editBackRemoveBtn" data-action="remove-back" hidden>✕ Remove</button>
+        </div>
+      </div>
     </div>
     <div class="fieldrow">
       <label>Person
@@ -252,6 +269,35 @@
       <button class="btn primary" value="ok">Save</button>
     </div>
   </form>
+</dialog>
+
+<!-- avatar picker -->
+<dialog id="dlgAvatar">
+  <div class="modal">
+    <h2>Choose avatar</h2>
+    <p class="hint" id="avatarPersonName"></p>
+    <div class="emojigrid" id="emojiGrid"><!-- built by app.js --></div>
+    <div class="modalactions">
+      <button type="button" class="btn" data-close>Done</button>
+    </div>
+  </div>
+</dialog>
+
+<!-- per-person notes (key/value reminders) -->
+<dialog id="dlgNotes">
+  <div class="modal">
+    <h2>Notes <span class="hint" id="notesPersonName"></span></h2>
+    <p class="hint">Free-form reminders for this person — locker numbers, policy numbers, anything worth
+      keeping handy.</p>
+    <div class="noterows" id="notesRows"><!-- built by app.js --></div>
+    <div class="modalactions" style="justify-content:flex-start">
+      <button type="button" class="btn sm" data-action="add-note-row">+ Add field</button>
+    </div>
+    <div class="modalactions">
+      <button type="button" class="btn" data-close>Cancel</button>
+      <button type="button" class="btn primary" data-action="save-notes">Save</button>
+    </div>
+  </div>
 </dialog>
 
 <script src="app.js"></script>
