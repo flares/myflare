@@ -1,6 +1,6 @@
 {
   "$schema": "../schema/kriti.schema.json",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "updated": "2026-07-30",
   "records": [
     {
@@ -183,7 +183,33 @@
         "concert-staple"
       ],
       "sahityam": null,
-      "pratipadartham": null
+      "pratipadartham": [
+        {
+          "word": "అనుపమ",
+          "meaning_telugu": "సాటిలేని",
+          "meaning": "incomparable"
+        },
+        {
+          "word": "గుణాంబుధి",
+          "meaning_telugu": "సుగుణముల సముద్రమా",
+          "meaning": "O ocean of (virtuous) qualities"
+        },
+        {
+          "word": "శ్రీరామా",
+          "meaning_telugu": "ఓ శ్రీరామా",
+          "meaning": "O Sri Rama"
+        },
+        {
+          "word": "నీవే",
+          "meaning_telugu": "నీవు మాత్రమే",
+          "meaning": "you alone"
+        },
+        {
+          "word": "గతి",
+          "meaning_telugu": "దిక్కు, ఆశ్రయము",
+          "meaning": "refuge, final resort"
+        }
+      ]
     },
     {
       "id": 7,
@@ -241,8 +267,57 @@
         "concert-staple",
         "beginner-friendly"
       ],
-      "sahityam": null,
-      "pratipadartham": null
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "బంటు రీతి కొలు స్వామి నీవే మనసుకు తెలిసి",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "రోమాంచమను ఘన కంచుకము\nరామ భక్తుడను ముద్ర బిళ్ళయు\nరామ నామమను వర ఖడ్గమివి\nరాజిల్లు నయ్య త్యాగరాజునికే",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "బంటు",
+          "meaning_telugu": "సేవకుడు, భటుడు",
+          "meaning": "servant, soldier"
+        },
+        {
+          "word": "రీతి",
+          "meaning_telugu": "విధముగా",
+          "meaning": "in the manner of"
+        },
+        {
+          "word": "కొలు",
+          "meaning_telugu": "సేవలో ఉంచుకొనుము",
+          "meaning": "employ (me) in service"
+        },
+        {
+          "word": "స్వామి",
+          "meaning_telugu": "ఓ ప్రభూ",
+          "meaning": "O Lord"
+        },
+        {
+          "word": "నీవే",
+          "meaning_telugu": "నీవు మాత్రమే",
+          "meaning": "you alone"
+        },
+        {
+          "word": "మనసుకు",
+          "meaning_telugu": "మనస్సునకు",
+          "meaning": "to the mind"
+        },
+        {
+          "word": "తెలిసి",
+          "meaning_telugu": "తెలిసికొని",
+          "meaning": "having understood"
+        }
+      ]
     },
     {
       "id": 9,
@@ -391,8 +466,48 @@
         "concert-staple",
         "rakti-raga"
       ],
-      "sahityam": null,
-      "pratipadartham": null
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "బ్రోవ భారమా రఘురామ నాకు",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "శ్రీ వాసుదేవ అండకోట్ల కుక్షిని యుంచుకోలేదా నన్ను",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "కలశాంబుధిలో దయతో అమరులకై అడిగాక గోపికలకై కొండ లెత్తలేదా కరుణాకర త్యాగరాజుని",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "బ్రోవ",
+          "meaning_telugu": "కాపాడుట",
+          "meaning": "to protect"
+        },
+        {
+          "word": "భారమా",
+          "meaning_telugu": "భారముగా ఉన్నదా",
+          "meaning": "is it a burden"
+        },
+        {
+          "word": "రఘురామ",
+          "meaning_telugu": "రఘువంశపు రాముడా",
+          "meaning": "O Rama of the Raghu dynasty"
+        },
+        {
+          "word": "నాకు",
+          "meaning_telugu": "నా కొరకు",
+          "meaning": "for me"
+        }
+      ]
     },
     {
       "id": 14,
@@ -421,8 +536,48 @@
         "concert-staple",
         "beginner-friendly"
       ],
-      "sahityam": null,
-      "pratipadartham": null
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "చక్కని రాజ మార్గము ఉండగ స్వామి",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "చిక్కని పాలు మీగడ యుండగ\nచీయని గంగా సాగర మేల",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "కంటికి సుందరతరమగు రూపమే\nముక్కంటి నోట చెలఁగెడు నామమే\nత్యాగరాజింటనే నెలకొన్నది దైవమే",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "చక్కని",
+          "meaning_telugu": "అందమైన",
+          "meaning": "beautiful, fine"
+        },
+        {
+          "word": "రాజ మార్గము",
+          "meaning_telugu": "రాజమార్గము, రహదారి",
+          "meaning": "royal road, highway"
+        },
+        {
+          "word": "ఉండగ",
+          "meaning_telugu": "ఉండగా, కలిగి ఉండగా",
+          "meaning": "while there exists"
+        },
+        {
+          "word": "స్వామి",
+          "meaning_telugu": "ఓ ప్రభూ",
+          "meaning": "O Lord"
+        }
+      ]
     },
     {
       "id": 15,
@@ -596,7 +751,28 @@
         "rakti-raga"
       ],
       "sahityam": null,
-      "pratipadartham": null
+      "pratipadartham": [
+        {
+          "word": "దాచుకోవలెనా",
+          "meaning_telugu": "దాచుకోవాలా, మరుగుపరచవలెనా",
+          "meaning": "must (it/this) be hidden away?"
+        },
+        {
+          "word": "దయలేని",
+          "meaning_telugu": "దయ లేని, కరుణ లేని",
+          "meaning": "lacking compassion"
+        },
+        {
+          "word": "వారి",
+          "meaning_telugu": "వారి యొక్క",
+          "meaning": "of those (people)"
+        },
+        {
+          "word": "తోడ",
+          "meaning_telugu": "తోడుగా, తోపాటు",
+          "meaning": "along with"
+        }
+      ]
     },
     {
       "id": 21,
@@ -656,8 +832,48 @@
       "tags": [
         "concert-staple"
       ],
-      "sahityam": null,
-      "pratipadartham": null
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "దాశరథీ నీ ఋణము తీర్చుకో లేక",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "ఆశ తీర దూర దేశములను ప్రకాశింపజేసిన రసిక శిరోమణి",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "భక్తి లేని కవిజాల వరేణ్యులు భావమెరుగలేరని కలిలోన జని భుక్తి ముక్తి కల్గుననీ కీర్తనములు బోధించిన త్యాగరాజ కరార్చిత",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "దాశరథీ",
+          "meaning_telugu": "దశరథుని కుమారుడా",
+          "meaning": "O son of Dasaratha (Rama)"
+        },
+        {
+          "word": "నీ",
+          "meaning_telugu": "నీయొక్క",
+          "meaning": "your"
+        },
+        {
+          "word": "ఋణము",
+          "meaning_telugu": "అప్పు",
+          "meaning": "debt"
+        },
+        {
+          "word": "తీర్చుకో లేక",
+          "meaning_telugu": "తీర్చుకొనలేక",
+          "meaning": "being unable to repay"
+        }
+      ]
     },
     {
       "id": 23,
@@ -712,13 +928,34 @@
       },
       "difficulty": 3,
       "popularity": 4,
-      "confidence": "high",
-      "notes": null,
+      "confidence": "medium",
+      "notes": "The \"sudhāmbudhi candra\" phrasing in this pallavi also appears in a differently attributed composition — the wording needs checking against a printed edition.",
       "tags": [
         "concert-staple"
       ],
       "sahityam": null,
-      "pratipadartham": null
+      "pratipadartham": [
+        {
+          "word": "దినమణి",
+          "meaning_telugu": "సూర్యుడు",
+          "meaning": "the sun"
+        },
+        {
+          "word": "వంశ",
+          "meaning_telugu": "వంశము, కులము",
+          "meaning": "dynasty, lineage"
+        },
+        {
+          "word": "సుధాంబుధి",
+          "meaning_telugu": "అమృత సముద్రము",
+          "meaning": "ocean of nectar"
+        },
+        {
+          "word": "చంద్ర",
+          "meaning_telugu": "చంద్రుడు",
+          "meaning": "moon (i.e. the moon risen from that ocean)"
+        }
+      ]
     },
     {
       "id": 25,
@@ -747,8 +984,42 @@
         "concert-staple",
         "beginner-friendly"
       ],
-      "sahityam": null,
-      "pratipadartham": null
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "దొరకునా ఇటువంటి సేవా శ్రీరామా",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "దొరుకునా అల్ప తప మొనరించిన భూసుర వరులకునైన సురులకైన",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "దొరకునా",
+          "meaning_telugu": "లభించునా",
+          "meaning": "will [it] be obtained"
+        },
+        {
+          "word": "ఇటువంటి",
+          "meaning_telugu": "ఈ విధమైన",
+          "meaning": "such, of this kind"
+        },
+        {
+          "word": "సేవా",
+          "meaning_telugu": "సేవించు అవకాశము",
+          "meaning": "opportunity to serve"
+        },
+        {
+          "word": "శ్రీరామా",
+          "meaning_telugu": "శ్రీరాముడా",
+          "meaning": "O Sri Rama"
+        }
+      ]
     },
     {
       "id": 26,
@@ -812,7 +1083,28 @@
         "concert-staple"
       ],
       "sahityam": null,
-      "pratipadartham": null
+      "pratipadartham": [
+        {
+          "word": "దుడుకుగల",
+          "meaning_telugu": "మొండితనము గల, తొందరపాటు గల",
+          "meaning": "the one (me) who is impudent/rash"
+        },
+        {
+          "word": "నన్నే",
+          "meaning_telugu": "నన్ను మాత్రమే",
+          "meaning": "me alone"
+        },
+        {
+          "word": "దొర కొడుకు",
+          "meaning_telugu": "రాజకుమారుడు (రాముడు)",
+          "meaning": "the king's son (Rama)"
+        },
+        {
+          "word": "బ్రోచురా",
+          "meaning_telugu": "కాపాడడా, రక్షించడా",
+          "meaning": "will (he) not protect (me)?"
+        }
+      ]
     },
     {
       "id": 28,
@@ -895,12 +1187,33 @@
       "difficulty": 3,
       "popularity": 4,
       "confidence": "medium",
-      "notes": null,
+      "notes": "Independently flagged twice: the commonly documented setting is Tōḍi, not Kharaharapriyā as recorded here.",
       "tags": [
         "concert-staple"
       ],
       "sahityam": null,
-      "pratipadartham": null
+      "pratipadartham": [
+        {
+          "word": "ఏమి జేసితేనేమి",
+          "meaning_telugu": "ఏమి చేసినా ఏమి ప్రయోజనము",
+          "meaning": "what does it matter, whatever one does"
+        },
+        {
+          "word": "మనసుకు",
+          "meaning_telugu": "మనసునకు",
+          "meaning": "to the mind"
+        },
+        {
+          "word": "నిర్మలత్వము",
+          "meaning_telugu": "స్వచ్ఛత, పరిశుద్ధత",
+          "meaning": "purity, clarity"
+        },
+        {
+          "word": "లేక",
+          "meaning_telugu": "లేకుండా",
+          "meaning": "without, lacking"
+        }
+      ]
     },
     {
       "id": 31,
@@ -931,8 +1244,42 @@
         "ghana-raga-pancharatna",
         "concert-staple"
       ],
-      "sahityam": null,
-      "pratipadartham": null
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "ఎందరో మహానుభావులు అందరికీ వందనములు",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "చందురు వర్ణుని అందచందమును\nహృదయారవిందమున జూచి బ్రహ్మానందమనుభవించు\nవారెందరో మహానుభావులు అందరికీ వందనములు",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "ఎందరో",
+          "meaning_telugu": "ఎంతమందో, అసంఖ్యాకముగా",
+          "meaning": "how many, countless"
+        },
+        {
+          "word": "మహానుభావులు",
+          "meaning_telugu": "గొప్ప పుణ్యాత్ములు, గొప్పవారు",
+          "meaning": "great/noble souls"
+        },
+        {
+          "word": "అందరికీ",
+          "meaning_telugu": "అందరికి కూడా",
+          "meaning": "to all of them"
+        },
+        {
+          "word": "వందనములు",
+          "meaning_telugu": "నమస్కారములు",
+          "meaning": "salutations"
+        }
+      ]
     },
     {
       "id": 32,
@@ -989,8 +1336,48 @@
       "tags": [
         "concert-staple"
       ],
-      "sahityam": null,
-      "pratipadartham": null
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "ఎందుకూ పెద్దల మాటలు వినక",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "అందరివలె దాటిదాటి వదరితి అందరాని పండాయే గదరా",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "వేద శాస్త్ర పురాణ తత్త్వార్థము దెలిసి భేద రహిత వేదాంతమును దెలిసి నాద విద్య మర్మంబులను దెలిసి నాథ త్యాగరాజనుత నిజముగా",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "ఎందుకూ",
+          "meaning_telugu": "ఎందుకని (నొక్కి పలుకుట)",
+          "meaning": "why (emphatic)"
+        },
+        {
+          "word": "పెద్దల",
+          "meaning_telugu": "పెద్దలైనవారి",
+          "meaning": "of the elders/wise ones"
+        },
+        {
+          "word": "మాటలు",
+          "meaning_telugu": "మాటలను",
+          "meaning": "words"
+        },
+        {
+          "word": "వినక",
+          "meaning_telugu": "వినకుండా",
+          "meaning": "without heeding"
+        }
+      ]
     },
     {
       "id": 34,
@@ -1130,13 +1517,34 @@
       },
       "difficulty": 3,
       "popularity": 4,
-      "confidence": "high",
-      "notes": null,
+      "confidence": "medium",
+      "notes": "Documented versions of this pallavi do not carry the trailing \"manasā\" recorded here.",
       "tags": [
         "concert-staple"
       ],
       "sahityam": null,
-      "pratipadartham": null
+      "pratipadartham": [
+        {
+          "word": "ఏవరి",
+          "meaning_telugu": "ఎవరియొక్క",
+          "meaning": "whose"
+        },
+        {
+          "word": "మాట",
+          "meaning_telugu": "మాటను",
+          "meaning": "word, speech"
+        },
+        {
+          "word": "విన్నవేమిరా",
+          "meaning_telugu": "వినితివా ఏమిటి",
+          "meaning": "did you go and listen to (rhetorical)"
+        },
+        {
+          "word": "మనసా",
+          "meaning_telugu": "ఓ మనసా",
+          "meaning": "O mind"
+        }
+      ]
     },
     {
       "id": 39,
@@ -1254,13 +1662,29 @@
       },
       "difficulty": 3,
       "popularity": 4,
-      "confidence": "high",
-      "notes": "Popular Venkatesa kriti associated with Tirumala.",
+      "confidence": "medium",
+      "notes": "Popular Venkatesa kriti associated with Tirumala. Published sources for this kṛti address Rāma on the hill rather than Veṅkaṭaramaṇa, which would also move the deity and kṣētra attribution — verify before relying on the Tirupati grouping.",
       "tags": [
         "kshetra-kriti"
       ],
       "sahityam": null,
-      "pratipadartham": null
+      "pratipadartham": [
+        {
+          "word": "గిరిపై",
+          "meaning_telugu": "కొండపైన",
+          "meaning": "on the hill"
+        },
+        {
+          "word": "నెలకొన్న",
+          "meaning_telugu": "స్థిరముగా వెలసిన",
+          "meaning": "who is established/residing"
+        },
+        {
+          "word": "వేంకటరమణుని",
+          "meaning_telugu": "వేంకటాద్రి రమణుని (శ్రీవేంకటేశ్వరుని)",
+          "meaning": "of Venkataramana, the Lord of the Venkata hill"
+        }
+      ]
     },
     {
       "id": 43,
@@ -1352,8 +1776,43 @@
       "tags": [
         "concert-staple"
       ],
-      "sahityam": null,
-      "pratipadartham": null
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "హెచ్చరికగా రారా రామ",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "పచ్చవిల్తుని గన్న పాలిత సురేంద్ర",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "కనకమయమౌ మకుట కాంతి మెరయగను ఘనమైన కుండల యుగంబులు గదలగను ఘనమైన నూపుర యుగంబు ఘల్లలను సనకాదులెల్ల కని సంతసిల్లగును",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "హెచ్చరికగా",
+          "meaning_telugu": "అప్రమత్తముగా, జాగరూకతతో",
+          "meaning": "attentively, with due ceremony"
+        },
+        {
+          "word": "రారా",
+          "meaning_telugu": "రమ్ము",
+          "meaning": "come!"
+        },
+        {
+          "word": "రామ",
+          "meaning_telugu": "ఓ రామా",
+          "meaning": "O Rama"
+        }
+      ]
     },
     {
       "id": 46,
@@ -1443,8 +1902,43 @@
         "beginner-friendly",
         "concert-staple"
       ],
-      "sahityam": null,
-      "pratipadartham": null
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "ఇంతకన్నానందమేమి రామ నామము",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "సంత జనులకెల్ల సమ్మతియైయుండు కాని",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "ఆడుచు నాదమున పాడుచు ఎదుట రావేడుచు మనసున కూడియుండుట చాలు",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "ఇంతకన్న",
+          "meaning_telugu": "దీనికంటె",
+          "meaning": "more than this"
+        },
+        {
+          "word": "ఆనందమేమి",
+          "meaning_telugu": "ఎక్కువ ఆనందము ఏముంటుంది",
+          "meaning": "what greater joy is there"
+        },
+        {
+          "word": "రామ నామము",
+          "meaning_telugu": "రాముని పేరు",
+          "meaning": "the name of Rama"
+        }
+      ]
     },
     {
       "id": 49,
@@ -1476,8 +1970,42 @@
         "concert-staple",
         "sanskrit-kriti"
       ],
-      "sahityam": null,
-      "pratipadartham": null
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "జగదానందకారక జయ జానకీ ప్రాణనాయక",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "గగనాధిప సత్కులజ రాజరాజేశ్వర\nసుగుణాకర సురసేవ్య భవ్యదాయక సదా సకల జగదానందకారక",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "జగదానందకారక",
+          "meaning_telugu": "జగత్తుకు ఆనందము కలిగించువాడా",
+          "meaning": "O bestower of bliss to the universe"
+        },
+        {
+          "word": "జయ",
+          "meaning_telugu": "విజయము కలవాడా (జయము వహించు)",
+          "meaning": "victorious one, hail"
+        },
+        {
+          "word": "జానకీ",
+          "meaning_telugu": "సీత",
+          "meaning": "Janaki (Sita)"
+        },
+        {
+          "word": "ప్రాణనాయక",
+          "meaning_telugu": "ప్రాణములకు నాయకుడు, ప్రాణేశ్వరుడు",
+          "meaning": "lord of (her) life-breath"
+        }
+      ]
     },
     {
       "id": 50,
@@ -1506,8 +2034,53 @@
         "concert-staple",
         "rakti-raga"
       ],
-      "sahityam": null,
-      "pratipadartham": null
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "జ్ఞానమొసగ రాదా నీ దయ రామా",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "నీ నామముచే నా మది నిర్మలమైనది",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "పరమాత్ముడు జీవాత్ముడు పదునాలుగు లోకములు నర కిన్నర కింపురుషులు నారదాది మునులు పరిపూర్ణ నిష్కళంక నిరవధి సుఖదాయక వర త్యాగరాజార్చిత వరము తానానే",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "జ్ఞానము",
+          "meaning_telugu": "తెలివి, ఆత్మజ్ఞానము",
+          "meaning": "wisdom, self-knowledge"
+        },
+        {
+          "word": "ఒసగ రాదా",
+          "meaning_telugu": "ఇవ్వరాదా",
+          "meaning": "won't you bestow"
+        },
+        {
+          "word": "నీ",
+          "meaning_telugu": "నీయొక్క",
+          "meaning": "your"
+        },
+        {
+          "word": "దయ",
+          "meaning_telugu": "కరుణ",
+          "meaning": "grace, mercy"
+        },
+        {
+          "word": "రామా",
+          "meaning_telugu": "ఓ రామా",
+          "meaning": "O Rama"
+        }
+      ]
     },
     {
       "id": 51,
@@ -1570,8 +2143,43 @@
         "concert-staple",
         "rakti-raga"
       ],
-      "sahityam": null,
-      "pratipadartham": null
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "కద్దనువారికి కద్దనుకో లేక",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "అద్దంపు చెక్కిల్లచే ముద్దుగారు మోము జూడ బుద్ధి గలిగినట్టి మా వద్ద రావదేమిరా",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "నిద్దుర నిరాకరించి ముద్దుగా తంబుర పట్టి శుద్ధమైన మనసుచే సుస్వరముతో బద్దు తప్పక భజియించే భక్త పాలనము సేయు తద్దయ శాలివి నీవే త్యాగరాజ సన్నుత",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "కద్దనువారికి",
+          "meaning_telugu": "దేవుడు కలడు అని చెప్పువారికి",
+          "meaning": "to those who say 'He (God) exists'"
+        },
+        {
+          "word": "కద్దనుకో",
+          "meaning_telugu": "అట్లు అనుకొనుటకు",
+          "meaning": "to accept/consider it so"
+        },
+        {
+          "word": "లేక",
+          "meaning_telugu": "లేకపోతే, లేకుండా",
+          "meaning": "or not, being unable"
+        }
+      ]
     },
     {
       "id": 53,
@@ -1634,7 +2242,28 @@
         "concert-staple"
       ],
       "sahityam": null,
-      "pratipadartham": null
+      "pratipadartham": [
+        {
+          "word": "కనకన",
+          "meaning_telugu": "ధగధగా మెరయుచున్న",
+          "meaning": "brightly glowing/dazzling"
+        },
+        {
+          "word": "రుచిరా",
+          "meaning_telugu": "అందముగా ఉన్నదానా",
+          "meaning": "O brilliant/beautiful one"
+        },
+        {
+          "word": "కనకవసన",
+          "meaning_telugu": "బంగారు వస్త్రము ధరించినవాడా",
+          "meaning": "O one clad in golden garments"
+        },
+        {
+          "word": "నిన్ను",
+          "meaning_telugu": "నిన్ను (ద్వితీయా విభక్తి)",
+          "meaning": "you (object)"
+        }
+      ]
     },
     {
       "id": 55,
@@ -1718,14 +2347,25 @@
       },
       "difficulty": 3,
       "popularity": 4,
-      "confidence": "high",
-      "notes": null,
+      "confidence": "medium",
+      "notes": "Two distinct kṛtis share this title in different rāgas; the Bhairavi attribution here could not be isolated from the other with confidence.",
       "tags": [
         "concert-staple",
         "rakti-raga"
       ],
       "sahityam": null,
-      "pratipadartham": null
+      "pratipadartham": [
+        {
+          "word": "కొలువైయున్నాడే",
+          "meaning_telugu": "సభలో కొలువుదీరి ఉన్నాడే",
+          "meaning": "is holding court, is seated in royal assembly"
+        },
+        {
+          "word": "రాముడు",
+          "meaning_telugu": "శ్రీరాముడు",
+          "meaning": "Rama"
+        }
+      ]
     },
     {
       "id": 58,
@@ -1755,7 +2395,28 @@
         "rakti-raga"
       ],
       "sahityam": null,
-      "pratipadartham": null
+      "pratipadartham": [
+        {
+          "word": "కొలువు",
+          "meaning_telugu": "రాజసభ, సేవ",
+          "meaning": "royal court, service"
+        },
+        {
+          "word": "అమరెగదా",
+          "meaning_telugu": "తగియుండదా, ఏర్పడదా",
+          "meaning": "would it not be fitting/established"
+        },
+        {
+          "word": "వినావే",
+          "meaning_telugu": "వినవా, వినుటలేదా",
+          "meaning": "do you not hear"
+        },
+        {
+          "word": "రామ",
+          "meaning_telugu": "ఓ రామా",
+          "meaning": "O Rama"
+        }
+      ]
     },
     {
       "id": 59,
@@ -1943,8 +2604,48 @@
         "concert-staple",
         "ramayana-narrative"
       ],
-      "sahityam": null,
-      "pratipadartham": null
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "మా జానకి చెట్టబట్టి బ్రహ్మాస్త్రము వేసి",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "రాజరాజవర రాజీవాక్ష విను రావణాదియని రాజిల్లు కీర్తియు",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "కానకేగి యాజ్ఞ మీరక మాయాకర మునిచి శిఖి చెంతనే యుండి దానవుని వెంటనే చని యశోకటని మూలనుండి వాని మాటలకు గోపగించి కంట విధియించకనే యుండి శ్రీ నాయక యశము నీకే కల్గజేయ లేదా త్యాగరాజ పరిపాల",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "మా జానకి",
+          "meaning_telugu": "మన జానకిదేవి (సీత)",
+          "meaning": "our Janaki (Sita)"
+        },
+        {
+          "word": "చెట్టబట్టి",
+          "meaning_telugu": "చేయిపట్టి (వివాహమాడి)",
+          "meaning": "having taken her hand (in marriage)"
+        },
+        {
+          "word": "బ్రహ్మాస్త్రము",
+          "meaning_telugu": "బ్రహ్మదేవుని అస్త్రము",
+          "meaning": "the Brahma-weapon"
+        },
+        {
+          "word": "వేసి",
+          "meaning_telugu": "ప్రయోగించి",
+          "meaning": "having released/cast"
+        }
+      ]
     },
     {
       "id": 65,
@@ -2001,8 +2702,53 @@
       "tags": [
         "concert-staple"
       ],
-      "sahityam": null,
-      "pratipadartham": null
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "మనసు స్వాధీనమైన వానికి దుష్కరంబేదిది",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "తనువు తాను గాదని యెంచువానికి తపము చేయునేల దశరథ బాల",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "అన్ని నీవనుచు యెంచిన వానికి ఆశ్రమ భేదములేల కన్నుగట్టు మాయలని యెంచు వానికి కాంతల భ్రమలేల దశరథ బాల",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "మనసు",
+          "meaning_telugu": "మనస్సు",
+          "meaning": "the mind"
+        },
+        {
+          "word": "స్వాధీనమైన",
+          "meaning_telugu": "తన అధీనములో ఉన్న",
+          "meaning": "that has come under one's own control"
+        },
+        {
+          "word": "వానికి",
+          "meaning_telugu": "ఆ వ్యక్తికి",
+          "meaning": "to that person"
+        },
+        {
+          "word": "దుష్కరంబు",
+          "meaning_telugu": "కష్టసాధ్యమైనది",
+          "meaning": "a difficult task"
+        },
+        {
+          "word": "ఏదిది",
+          "meaning_telugu": "ఏమి మిగిలియున్నది",
+          "meaning": "what is left/what remains"
+        }
+      ]
     },
     {
       "id": 67,
@@ -2089,8 +2835,43 @@
         "concert-staple",
         "rare-raga"
       ],
-      "sahityam": null,
-      "pratipadartham": null
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "మరుగేలరా ఓ రాఘవా",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "మరుగేల చరాచర రూప పరాత్పర సూర్య సుధాకర లోచన",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "అన్ని నీవనుచు అంతరంగమున తిన్నగా వెతగి తెలుసుకొంటిన్నయ్య నిన్నే గాని మదినెన్న జాలనొరుల నన్ను బ్రోవవయ్య త్యాగరాజ నుత",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "మరుగేలరా",
+          "meaning_telugu": "ఎందుకు మరుగవుతావు (దాగుతావు)",
+          "meaning": "why do you hide/conceal yourself"
+        },
+        {
+          "word": "ఓ",
+          "meaning_telugu": "సంబోధన అవ్యయము",
+          "meaning": "oh (vocative particle)"
+        },
+        {
+          "word": "రాఘవా",
+          "meaning_telugu": "రఘువంశపు రాముడా",
+          "meaning": "O Raghava, descendant of Raghu (Rama)"
+        }
+      ]
     },
     {
       "id": 70,
@@ -2178,7 +2959,23 @@
         "nada-upasana"
       ],
       "sahityam": null,
-      "pratipadartham": null
+      "pratipadartham": [
+        {
+          "word": "మోక్షము",
+          "meaning_telugu": "ముక్తి, విడుదల",
+          "meaning": "liberation"
+        },
+        {
+          "word": "గలదా",
+          "meaning_telugu": "ఉన్నదా",
+          "meaning": "is there (any)?"
+        },
+        {
+          "word": "భువిలో",
+          "meaning_telugu": "ఈ లోకములో",
+          "meaning": "in this world"
+        }
+      ]
     },
     {
       "id": 73,
@@ -2230,13 +3027,49 @@
       },
       "difficulty": 3,
       "popularity": 4,
-      "confidence": "high",
-      "notes": null,
+      "confidence": "medium",
+      "notes": "The well-sourced Bilahari kṛti opening with these words continues differently from the pallavi recorded here — the second half of the line needs checking against a printed edition.",
       "tags": [
         "concert-staple"
       ],
       "sahityam": null,
-      "pratipadartham": null
+      "pratipadartham": [
+        {
+          "word": "నా",
+          "meaning_telugu": "నాయొక్క",
+          "meaning": "my"
+        },
+        {
+          "word": "జీవాధార",
+          "meaning_telugu": "జీవితమునకు ఆధారమైనవాడా",
+          "meaning": "O support/sustainer of my life"
+        },
+        {
+          "word": "నాపై",
+          "meaning_telugu": "నా మీద",
+          "meaning": "upon me, towards me"
+        },
+        {
+          "word": "నీకు",
+          "meaning_telugu": "నీకు",
+          "meaning": "to you"
+        },
+        {
+          "word": "ఇంత",
+          "meaning_telugu": "ఇంతమాత్రము",
+          "meaning": "this much"
+        },
+        {
+          "word": "పరాకు",
+          "meaning_telugu": "నిర్లక్ష్యము, అశ్రద్ధ",
+          "meaning": "indifference, neglect"
+        },
+        {
+          "word": "ఏలరా",
+          "meaning_telugu": "ఎందుకురా",
+          "meaning": "why, oh why"
+        }
+      ]
     },
     {
       "id": 75,
@@ -2380,7 +3213,28 @@
         "beginner-friendly"
       ],
       "sahityam": null,
-      "pratipadartham": null
+      "pratipadartham": [
+        {
+          "word": "నగుమోము",
+          "meaning_telugu": "చిరునవ్వు గల ముఖము",
+          "meaning": "smiling face"
+        },
+        {
+          "word": "గలవాని",
+          "meaning_telugu": "కలిగియున్నవాని",
+          "meaning": "of the one who possesses"
+        },
+        {
+          "word": "నా మనోహరుని",
+          "meaning_telugu": "నా మనసును హరించువానిని",
+          "meaning": "my heart-stealer, my beloved"
+        },
+        {
+          "word": "జూచి",
+          "meaning_telugu": "చూసి",
+          "meaning": "having seen"
+        }
+      ]
     },
     {
       "id": 80,
@@ -2441,8 +3295,48 @@
         "concert-staple",
         "beginner-friendly"
       ],
-      "sahityam": null,
-      "pratipadartham": null
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "నన్ను పాలింప నడచి వచ్చితివో",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "వనజ నయన మోమును జూచుట జీవనమని\nనెనరున మనసు మర్మము తెలిసి",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "సురపతి నీలమణి నిభ తనువుతో ఉరమున\nముత్యపు సరుల చయముతో కరమున శర\nకోదండ కాంతితో ధరణి తనయతో త్యాగరాజార్చిత",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "నన్ను",
+          "meaning_telugu": "నన్ను",
+          "meaning": "me"
+        },
+        {
+          "word": "పాలింప",
+          "meaning_telugu": "రక్షించుటకు, పోషించుటకు",
+          "meaning": "to protect, to nurture"
+        },
+        {
+          "word": "నడచి",
+          "meaning_telugu": "నడిచి",
+          "meaning": "having walked"
+        },
+        {
+          "word": "వచ్చితివో",
+          "meaning_telugu": "వచ్చితివా",
+          "meaning": "did you come?"
+        }
+      ]
     },
     {
       "id": 82,
@@ -2471,8 +3365,43 @@
         "concert-staple",
         "rakti-raga"
       ],
-      "sahityam": null,
-      "pratipadartham": null
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "నన్ను విడచి కదలకురా",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "నిన్ను బాసి అరనిమిషం ఓర్వనురా",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "తరముకాని ఎండవేళ కల్పతరు నీడ\nదొరికినట్లాయెనీ వేళ",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "నన్ను",
+          "meaning_telugu": "నన్ను",
+          "meaning": "me"
+        },
+        {
+          "word": "విడచి",
+          "meaning_telugu": "వదిలి",
+          "meaning": "having abandoned, having left"
+        },
+        {
+          "word": "కదలకురా",
+          "meaning_telugu": "కదలకుమురా",
+          "meaning": "don't move away"
+        }
+      ]
     },
     {
       "id": 83,
@@ -2652,7 +3581,33 @@
         "biographical"
       ],
       "sahityam": null,
-      "pratipadartham": null
+      "pratipadartham": [
+        {
+          "word": "నిధి",
+          "meaning_telugu": "సంపద, ధనము",
+          "meaning": "treasure, wealth"
+        },
+        {
+          "word": "చాల",
+          "meaning_telugu": "మిక్కిలి",
+          "meaning": "greatly, very much"
+        },
+        {
+          "word": "సుఖమా",
+          "meaning_telugu": "సుఖమునిచ్చునా",
+          "meaning": "is it happiness?"
+        },
+        {
+          "word": "రాముని సన్నిధి",
+          "meaning_telugu": "రాముని సమీపము",
+          "meaning": "the presence of Rama"
+        },
+        {
+          "word": "సేవ",
+          "meaning_telugu": "సేవించుట",
+          "meaning": "service, worship"
+        }
+      ]
     },
     {
       "id": 89,
@@ -2713,7 +3668,28 @@
         "kshetra-kriti"
       ],
       "sahityam": null,
-      "pratipadartham": null
+      "pratipadartham": [
+        {
+          "word": "ఓ",
+          "meaning_telugu": "సంబోధన",
+          "meaning": "O (vocative)"
+        },
+        {
+          "word": "రంగశాయీ",
+          "meaning_telugu": "శ్రీరంగమున శయనించువాడా (విష్ణువు)",
+          "meaning": "O one reclining at Sri Ranga (Vishnu)"
+        },
+        {
+          "word": "పిలిచితే",
+          "meaning_telugu": "పిలిచినట్లయితే",
+          "meaning": "if (I) call"
+        },
+        {
+          "word": "రంగ",
+          "meaning_telugu": "ఓ రంగా (సంబోధన)",
+          "meaning": "O Ranga"
+        }
+      ]
     },
     {
       "id": 91,
@@ -2867,8 +3843,58 @@
         "concert-staple",
         "nada-upasana"
       ],
-      "sahityam": null,
-      "pratipadartham": null
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "రాగసుధారస పానము జేసి రాజిల్లవే ఓ మనసా",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "యాగ యోగ త్యాగ భోగ ఫలమొసంగే",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "సదాశివమయమగు నాదోంకార స్వరవిదులు\nజీవన్ముక్తులని త్యాగరాజు తెలియు",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "రాగసుధారస",
+          "meaning_telugu": "రాగము యొక్క అమృతరసము",
+          "meaning": "the nectar-essence of melody (rāga)"
+        },
+        {
+          "word": "పానము",
+          "meaning_telugu": "తాగుట",
+          "meaning": "drinking"
+        },
+        {
+          "word": "జేసి",
+          "meaning_telugu": "చేసి",
+          "meaning": "having done"
+        },
+        {
+          "word": "రాజిల్లవే",
+          "meaning_telugu": "ప్రకాశించుము",
+          "meaning": "shine forth!"
+        },
+        {
+          "word": "ఓ",
+          "meaning_telugu": "ఓ",
+          "meaning": "oh (vocative)"
+        },
+        {
+          "word": "మనసా",
+          "meaning_telugu": "ఓ మనసా",
+          "meaning": "O mind"
+        }
+      ]
     },
     {
       "id": 96,
@@ -2891,13 +3917,49 @@
       },
       "difficulty": 3,
       "popularity": 4,
-      "confidence": "high",
-      "notes": "A frequently performed kriti in the compact pentatonic-flavoured raga Hamsanadam.",
+      "confidence": "medium",
+      "notes": "A frequently performed kriti in the compact pentatonic-flavoured raga Hamsanadam. The well-sourced Haṃsadhvani kṛti opening \"Raghunāyaka\" continues differently from the pallavi recorded here; the remainder of the line is unconfirmed.",
       "tags": [
         "concert-staple"
       ],
       "sahityam": null,
-      "pratipadartham": null
+      "pratipadartham": [
+        {
+          "word": "రఘునాయక",
+          "meaning_telugu": "రఘువంశ నాయకుడా",
+          "meaning": "O Lord of the Raghu dynasty"
+        },
+        {
+          "word": "నన్ను",
+          "meaning_telugu": "నన్ను",
+          "meaning": "me"
+        },
+        {
+          "word": "బ్రోవ",
+          "meaning_telugu": "రక్షించుటకు",
+          "meaning": "to protect"
+        },
+        {
+          "word": "నా",
+          "meaning_telugu": "నాయొక్క",
+          "meaning": "my"
+        },
+        {
+          "word": "యెద",
+          "meaning_telugu": "హృదయము",
+          "meaning": "heart"
+        },
+        {
+          "word": "దీనుడను",
+          "meaning_telugu": "దీనస్థితిలో ఉన్నవాడను",
+          "meaning": "I am pitiable, wretched"
+        },
+        {
+          "word": "ఇక",
+          "meaning_telugu": "ఇప్పుడు",
+          "meaning": "now, henceforth"
+        }
+      ]
     },
     {
       "id": 97,
@@ -3017,8 +4079,53 @@
         "concert-staple",
         "beginner-friendly"
       ],
-      "sahityam": null,
-      "pratipadartham": null
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "రామ కథా సుధా రస పానము",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "భామామణి జానకి సౌమిత్రి భరతాదులతో\nభూమి వెలయు సీత",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "ధర్మాద్దఖిల ఫలదమే మనసా ధైర్యానంద\nసౌఖ్య నికేతనమే కర్మ బంధ జ్వలనాబ్ధి\nనావమే కలిహరమే త్యాగరాజ వినుతుడగు",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "రామ",
+          "meaning_telugu": "రాముని",
+          "meaning": "of Rama"
+        },
+        {
+          "word": "కథా",
+          "meaning_telugu": "కథ",
+          "meaning": "the story"
+        },
+        {
+          "word": "సుధా",
+          "meaning_telugu": "అమృతము",
+          "meaning": "nectar"
+        },
+        {
+          "word": "రస",
+          "meaning_telugu": "రసము",
+          "meaning": "essence, juice"
+        },
+        {
+          "word": "పానము",
+          "meaning_telugu": "తాగుట",
+          "meaning": "drinking"
+        }
+      ]
     },
     {
       "id": 101,
@@ -3078,7 +4185,33 @@
         "concert-staple"
       ],
       "sahityam": null,
-      "pratipadartham": null
+      "pratipadartham": [
+        {
+          "word": "రామ",
+          "meaning_telugu": "ఓ రామా",
+          "meaning": "O Rama"
+        },
+        {
+          "word": "నీ సమానము",
+          "meaning_telugu": "నీకు సాటి",
+          "meaning": "your equal"
+        },
+        {
+          "word": "ఎవరు",
+          "meaning_telugu": "ఎవరు కలరు",
+          "meaning": "who is (there)"
+        },
+        {
+          "word": "రఘువంశ",
+          "meaning_telugu": "రఘు వంశము యొక్క",
+          "meaning": "of the Raghu dynasty"
+        },
+        {
+          "word": "సుధాంబుధి చంద్ర",
+          "meaning_telugu": "అమృత సముద్రమునకు చంద్రుని వంటివాడా",
+          "meaning": "O moon to the nectar-ocean (of the Raghu lineage)"
+        }
+      ]
     },
     {
       "id": 103,
@@ -3169,8 +4302,32 @@
         "ghana-raga-pancharatna",
         "concert-staple"
       ],
-      "sahityam": null,
-      "pratipadartham": null
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "సాధించెనే ఓ మనసా",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "బోధించిన సన్మార్గవచనముల\nబొంకు జేసి తా బట్టినపట్టు సాధించెనే ఓ మనసా",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "సాధించెనే",
+          "meaning_telugu": "సాధించినాడు కదా, నెరవేర్చుకొన్నాడు",
+          "meaning": "has (he) accomplished it, indeed!"
+        },
+        {
+          "word": "ఓ మనసా",
+          "meaning_telugu": "ఓ మనస్సా",
+          "meaning": "O mind"
+        }
+      ]
     },
     {
       "id": 106,
@@ -3200,8 +4357,42 @@
         "beginner-friendly",
         "sanskrit-kriti"
       ],
-      "sahityam": null,
-      "pratipadartham": null
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "సామజ వర గమన సాధు హృత్ సారసాబ్జ పాలిత",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "సామనిగమజ సుధామయ గానవిచక్షణ\nగుణశీల దయాలవాల మాంపాలయ",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "సామజ వర గమన",
+          "meaning_telugu": "శ్రేష్ఠమైన గజగమనము గలవాడా",
+          "meaning": "O one whose gait is like the finest of elephants"
+        },
+        {
+          "word": "సాధు హృత్",
+          "meaning_telugu": "సజ్జనుల హృదయము",
+          "meaning": "the hearts of the virtuous"
+        },
+        {
+          "word": "సారసాబ్జ",
+          "meaning_telugu": "పద్మము వంటి",
+          "meaning": "lotus (heart)"
+        },
+        {
+          "word": "పాలిత",
+          "meaning_telugu": "పాలింపబడిన, నివసించు",
+          "meaning": "cherished/dwelt in (by whom)"
+        }
+      ]
     },
     {
       "id": 107,
@@ -3291,8 +4482,58 @@
       "tags": [
         "concert-staple"
       ],
-      "sahityam": null,
-      "pratipadartham": null
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "సారస సామ దాన భేద దండ చతుర",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "పరమ శంభవాగ్రేసరుడు పలుకు రావణుడు\nతెలియలేక పోయె",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "హితవు మాటలెంతో బాగ పల్కితివి సతముగా\nఅయోధ్య నిచ్చెనంటివి నత సహోదరుని\nరాజుజేసి రాజ హతముజేసితివి త్యాగరాజ నుత",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "సారస",
+          "meaning_telugu": "నేర్పరి, సున్నితమైన",
+          "meaning": "skilled, elegant"
+        },
+        {
+          "word": "సామ",
+          "meaning_telugu": "సామోపాయము (సముదాయించుట)",
+          "meaning": "conciliation (one of the four political means)"
+        },
+        {
+          "word": "దాన",
+          "meaning_telugu": "దానోపాయము",
+          "meaning": "gift, bribery"
+        },
+        {
+          "word": "భేద",
+          "meaning_telugu": "భేదోపాయము",
+          "meaning": "sowing discord"
+        },
+        {
+          "word": "దండ",
+          "meaning_telugu": "దండోపాయము",
+          "meaning": "punishment"
+        },
+        {
+          "word": "చతుర",
+          "meaning_telugu": "నేర్పరి",
+          "meaning": "expert, adept"
+        }
+      ]
     },
     {
       "id": 110,
@@ -3323,8 +4564,53 @@
         "beginner-friendly",
         "concert-staple"
       ],
-      "sahityam": null,
-      "pratipadartham": null
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "సీతమ్మ మాయమ్మ శ్రీరాముడు మా తండ్రి",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "వాతాత్మజ సౌమిత్రి వైనతేయ రిపుమర్దన\nధాతా భరతాదులు సోదరులు మాకు ఓ మనసా",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "పరమేశ వశిష్ఠ పరాశర నారద శౌనక శుక\nసురపతి గౌతమ లంబోదర గుహ సనకాదులు\nధర నిజ భాగవతాగ్రేసరులెవ్వరో వారెల్లను\nవర త్యాగరాజునికి పరమ బాంధవులు మనసా",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "సీతమ్మ",
+          "meaning_telugu": "సీతాదేవి",
+          "meaning": "Mother Sita"
+        },
+        {
+          "word": "మాయమ్మ",
+          "meaning_telugu": "నా తల్లి",
+          "meaning": "my mother"
+        },
+        {
+          "word": "శ్రీరాముడు",
+          "meaning_telugu": "శ్రీరాముడు",
+          "meaning": "Sri Rama"
+        },
+        {
+          "word": "మా",
+          "meaning_telugu": "మాయొక్క",
+          "meaning": "our"
+        },
+        {
+          "word": "తండ్రి",
+          "meaning_telugu": "తండ్రి",
+          "meaning": "father"
+        }
+      ]
     },
     {
       "id": 111,
@@ -3386,8 +4672,53 @@
         "beginner-friendly",
         "nada-upasana"
       ],
-      "sahityam": null,
-      "pratipadartham": null
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "శోభిల్లు సప్తస్వర సుందరుల భజింపవే మనసా",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "నాభి హృత్ కంఠ రసన నాసాదులయందు",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "ధర ఋగ్ సామాదులలో వర గాయత్రి హృదయమున\nసుర భూసుర మానసమున శుభ త్యాగరాజుని ఎద",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "శోభిల్లు",
+          "meaning_telugu": "ప్రకాశించు",
+          "meaning": "shining, resplendent"
+        },
+        {
+          "word": "సప్తస్వర",
+          "meaning_telugu": "ఏడు స్వరములు",
+          "meaning": "the seven musical notes"
+        },
+        {
+          "word": "సుందరుల",
+          "meaning_telugu": "అందమైనవారిని",
+          "meaning": "the beautiful ones"
+        },
+        {
+          "word": "భజింపవే",
+          "meaning_telugu": "కొలువుము",
+          "meaning": "worship!"
+        },
+        {
+          "word": "మనసా",
+          "meaning_telugu": "ఓ మనసా",
+          "meaning": "O mind"
+        }
+      ]
     },
     {
       "id": 113,
@@ -3505,8 +4836,53 @@
         "concert-staple",
         "nada-upasana"
       ],
-      "sahityam": null,
-      "pratipadartham": null
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "శ్రీ నారద నాద సరసీరుహ భృంగ",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "దీన మాన రక్షక జగదీశ భేషంకేశ",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "వేద జనితవర వీణా వాదన తత్వజ్ఞ ఖేదకర\nత్రితాప రహిత ఖేచర వినుత యాదవ కులాప్త\nసదా మోద హృదయ మునివర్య శ్రీద త్యాగరాజ\nవినుత శ్రీకర మాం పాలయ",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "శ్రీ",
+          "meaning_telugu": "శ్రీ",
+          "meaning": "an honorific prefix"
+        },
+        {
+          "word": "నారద",
+          "meaning_telugu": "నారద మహర్షి",
+          "meaning": "sage Narada"
+        },
+        {
+          "word": "నాద",
+          "meaning_telugu": "నాదము",
+          "meaning": "of sound/music"
+        },
+        {
+          "word": "సరసీరుహ",
+          "meaning_telugu": "పద్మము",
+          "meaning": "lotus"
+        },
+        {
+          "word": "భృంగ",
+          "meaning_telugu": "తుమ్మెద",
+          "meaning": "bee, bumblebee (one who hovers over)"
+        }
+      ]
     },
     {
       "id": 117,
@@ -3598,36 +4974,6 @@
     },
     {
       "id": 120,
-      "slug": "sri-subrahmanyaya-namaste",
-      "title": "Śrī Subrahmaṇyāya Namastē",
-      "title_telugu": "శ్రీ సుబ్రహ్మణ్యాయ నమస్తే",
-      "raga": "Kāmbhōji",
-      "raga_slug": "kambhoji",
-      "tala": "Rupaka",
-      "language": "Sanskrit",
-      "pallavi": "Śrī subrahmaṇyāya namastē namastē manasija",
-      "pallavi_telugu": "శ్రీ సుబ్రహ్మణ్యాయ నమస్తే నమస్తే మనసిజ",
-      "meaning": "Salutations to Subrahmanya — one of Tyagaraja's handful of Sanskrit kritis on a deity other than Rama.",
-      "deity": "Subrahmanya",
-      "groups": [],
-      "kshetra": null,
-      "structure": {
-        "anupallavi": true,
-        "charanams": 1
-      },
-      "difficulty": 4,
-      "popularity": 4,
-      "confidence": "high",
-      "notes": "A substantial Kāmbhōji piece; often taken as the main item, with the anupallavi's madhyama-kāla passage as the highlight.",
-      "tags": [
-        "concert-staple",
-        "sanskrit-kriti"
-      ],
-      "sahityam": null,
-      "pratipadartham": null
-    },
-    {
-      "id": 121,
       "slug": "sringarinchukoni-vedaliri",
       "title": "Śṛṅgārin̄cukoni Vedalirī",
       "title_telugu": "శృంగారించుకొని వెడలిరీ",
@@ -3659,7 +5005,7 @@
       "pratipadartham": null
     },
     {
-      "id": 122,
+      "id": 121,
       "slug": "sujana-jivana",
       "title": "Sujana Jīvana",
       "title_telugu": "సుజన జీవన",
@@ -3684,11 +5030,46 @@
       "tags": [
         "concert-staple"
       ],
-      "sahityam": null,
-      "pratipadartham": null
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "సుజన జీవన రామ",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "భుజగ భూషణార్చిత బుధ జనావనత అజవందిత\nశ్రిత చందన దశ తురంగ మామవ",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "చారు నేత్ర శ్రీ కళత్ర శ్రీ రమ్య గాత్ర తారక నామ\nసుచరిత్ర దశరథ పుత్ర తారకాది పానన ధర్మ\nపాలక తారయ రఘువర నిర్మల త్యాగరాజ సన్నుత",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "సుజన",
+          "meaning_telugu": "మంచివారి",
+          "meaning": "of good people"
+        },
+        {
+          "word": "జీవన",
+          "meaning_telugu": "జీవనాధారము",
+          "meaning": "life, sustenance"
+        },
+        {
+          "word": "రామ",
+          "meaning_telugu": "ఓ రామ",
+          "meaning": "O Rama"
+        }
+      ]
     },
     {
-      "id": 123,
+      "id": 122,
       "slug": "sundara-dasaratha-nandana",
       "title": "Sundara Daśaratha Nandana Vandanamu",
       "title_telugu": "సుందర దశరథ నందన వందనము",
@@ -3721,7 +5102,7 @@
       "pratipadartham": null
     },
     {
-      "id": 124,
+      "id": 123,
       "slug": "sundaratara-deham",
       "title": "Sundarataraṁ Dēhaṁ",
       "title_telugu": "సుందరతరం దేహం",
@@ -3750,7 +5131,7 @@
       "pratipadartham": null
     },
     {
-      "id": 125,
+      "id": 124,
       "slug": "sundareswaruni",
       "title": "Sundarēśvaruni",
       "title_telugu": "సుందరేశ్వరుని",
@@ -3782,7 +5163,7 @@
       "pratipadartham": null
     },
     {
-      "id": 126,
+      "id": 125,
       "slug": "sundari-nannindarilo",
       "title": "Sundari Nannindarilō",
       "title_telugu": "సుందరి నన్నిందరిలో",
@@ -3814,7 +5195,7 @@
       "pratipadartham": null
     },
     {
-      "id": 127,
+      "id": 126,
       "slug": "sundari-nee-divya-roopamu",
       "title": "Sundari Nī Divya Rūpamunu",
       "title_telugu": "సుందరి నీ దివ్య రూపమును",
@@ -3846,7 +5227,7 @@
       "pratipadartham": null
     },
     {
-      "id": 128,
+      "id": 127,
       "slug": "sundari-ninnu-varnimpa",
       "title": "Sundari Ninnu Varṇimpa",
       "title_telugu": "సుందరి నిన్ను వర్ణింప",
@@ -3878,7 +5259,7 @@
       "pratipadartham": null
     },
     {
-      "id": 129,
+      "id": 128,
       "slug": "teliyaleru-rama",
       "title": "Teliyalēru Rāma",
       "title_telugu": "తెలియలేరు రామ",
@@ -3904,11 +5285,45 @@
         "concert-staple",
         "rare-raga"
       ],
-      "sahityam": null,
-      "pratipadartham": null
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "తెలియలేరు రామ భక్తి మార్గమును",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "ఇలనంతట తిరుగుచును కలవరించేరు కాని",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "తెలియలేరు",
+          "meaning_telugu": "తెలుసుకొనలేరు",
+          "meaning": "they do not understand"
+        },
+        {
+          "word": "రామ",
+          "meaning_telugu": "ఓ రామ",
+          "meaning": "O Rama"
+        },
+        {
+          "word": "భక్తి",
+          "meaning_telugu": "భక్తి",
+          "meaning": "devotion"
+        },
+        {
+          "word": "మార్గమును",
+          "meaning_telugu": "మార్గమును",
+          "meaning": "the path"
+        }
+      ]
     },
     {
-      "id": 130,
+      "id": 129,
       "slug": "tera-tiyagarada",
       "title": "Tera Tīyagarādā",
       "title_telugu": "తెర తీయగరాదా",
@@ -3935,11 +5350,51 @@
       "tags": [
         "kshetra-kriti"
       ],
-      "sahityam": null,
-      "pratipadartham": null
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "తెర తీయగరాదా లోని తిరుపతి వేంకటరమణ",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "పరమ పురుష ధర్మాది మోక్షముల పారదోలుచున్నది\nనా లోని",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "మత్స్యము ఆకలికొని కాలముచే మగ్నమైన\nరీతినున్నది అచ్చమైన దీప సన్నిధిని మరుగు\nఅడ్డబడి చెరచినట్టున్నది",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "తెర",
+          "meaning_telugu": "తెరను",
+          "meaning": "the curtain"
+        },
+        {
+          "word": "తీయగరాదా",
+          "meaning_telugu": "తీయలేవా",
+          "meaning": "can you not remove?"
+        },
+        {
+          "word": "లోని",
+          "meaning_telugu": "లోపలనున్న",
+          "meaning": "within"
+        },
+        {
+          "word": "తిరుపతి వేంకటరమణ",
+          "meaning_telugu": "తిరుపతి వేంకటరమణుడు",
+          "meaning": "Lord Venkataramana of Tirupati"
+        }
+      ]
     },
     {
-      "id": 131,
+      "id": 130,
       "slug": "undedi-ramudokkadu",
       "title": "Uṇḍēdi Rāmuḍokaḍu",
       "title_telugu": "ఉండేది రాముడొక్కడు",
@@ -3966,7 +5421,7 @@
       "pratipadartham": null
     },
     {
-      "id": 132,
+      "id": 131,
       "slug": "upacharamu-chesevaramu",
       "title": "Upachāramu Chēsēvāramu",
       "title_telugu": "ఉపచారము చేసేవారము",
@@ -3995,7 +5450,7 @@
       "pratipadartham": null
     },
     {
-      "id": 133,
+      "id": 132,
       "slug": "vaddayundede",
       "title": "Vaddayuṇḍēdē",
       "title_telugu": "వద్దయుండేదే",
@@ -4027,7 +5482,7 @@
       "pratipadartham": null
     },
     {
-      "id": 134,
+      "id": 133,
       "slug": "vandanamu-raghunandana",
       "title": "Vandanamu Raghunandana",
       "title_telugu": "వందనము రఘునందన",
@@ -4053,11 +5508,51 @@
         "concert-staple",
         "rakti-raga"
       ],
-      "sahityam": null,
-      "pratipadartham": null
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "వందనము రఘునందన సేతు బంధన",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "శ్రీధామా నాతో వాదమా నే భేదమా ఇది మోదమా రామ",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "శ్రీరామ హృచ్చరమా బ్రోవ భారమా రాయబారమా రామ",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "వందనము",
+          "meaning_telugu": "నమస్కారము",
+          "meaning": "salutations"
+        },
+        {
+          "word": "రఘునందన",
+          "meaning_telugu": "రఘువంశసంతోషకరుడా",
+          "meaning": "O joy of the Raghu clan"
+        },
+        {
+          "word": "సేతు",
+          "meaning_telugu": "సేతువును",
+          "meaning": "the bridge/causeway"
+        },
+        {
+          "word": "బంధన",
+          "meaning_telugu": "కట్టినవాడా",
+          "meaning": "the one who built/bound"
+        }
+      ]
     },
     {
-      "id": 135,
+      "id": 134,
       "slug": "vara-lila-gana-lola",
       "title": "Vara Līla Gāna Lōla",
       "title_telugu": "వర లీలా గాన లోల",
@@ -4086,7 +5581,7 @@
       "pratipadartham": null
     },
     {
-      "id": 136,
+      "id": 135,
       "slug": "vaaridhi-neeku",
       "title": "Vāridhi Nīku",
       "title_telugu": "వారిధి నీకు",
@@ -4118,7 +5613,7 @@
       "pratipadartham": null
     },
     {
-      "id": 137,
+      "id": 136,
       "slug": "vasudevayani",
       "title": "Vāsudēvayani",
       "title_telugu": "వాసుదేవయని",
@@ -4150,7 +5645,7 @@
       "pratipadartham": null
     },
     {
-      "id": 138,
+      "id": 137,
       "slug": "vinatasuta-vahana",
       "title": "Vinatasuta Vāhana",
       "title_telugu": "వినతసుత వాహన",
@@ -4179,7 +5674,7 @@
       "pratipadartham": null
     },
     {
-      "id": 139,
+      "id": 138,
       "slug": "vinave-o-manasa",
       "title": "Vinavē Ō Manasā",
       "title_telugu": "వినవే ఓ మనసా",
@@ -4208,7 +5703,7 @@
       "pratipadartham": null
     },
     {
-      "id": 140,
+      "id": 139,
       "slug": "vinayakuni-valenu-brova",
       "title": "Vināyakuni Valenu Brōva",
       "title_telugu": "వినాయకుని వలెను బ్రోవ",
@@ -4238,7 +5733,7 @@
       "pratipadartham": null
     },
     {
-      "id": 141,
+      "id": 140,
       "slug": "yochana-kamala-lochana",
       "title": "Yōcanā Kamala Lōcanā",
       "title_telugu": "యోచనా కమల లోచనా",

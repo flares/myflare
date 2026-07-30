@@ -57,9 +57,27 @@ Every file is an envelope, not a bare array:
   "popularity": 5,
   "confidence": "high",
   "notes": "Probably the single most-performed Tyagaraja kriti…",
-  "tags": ["concert-staple", "beginner-friendly"]
+  "tags": ["concert-staple", "beginner-friendly"],
+  "sahityam": [
+    { "kind": "pallavi",    "label_telugu": "పల్లవి",    "telugu": "…", "verified": true },
+    { "kind": "anupallavi", "label_telugu": "అనుపల్లవి", "telugu": "…", "verified": true }
+  ],
+  "pratipadartham": [
+    { "word": "నగుమోము", "meaning_telugu": "…", "meaning": "the smiling face" }
+  ]
 }
 ```
+
+`sahityam` holds the composition's sections in Telugu script and
+`pratipadartham` a word-by-word gloss of the pallavi. Both are nullable, and
+**a partial `sahityam` is the normal case, not a defect**: a section is present
+only when its wording was corroborated against a published lyric source, and
+omitted otherwise. Nothing is ever reconstructed from the metre or inferred
+from what a line "should" say — for devotional text a student will memorise,
+a missing charaṇam is recoverable and a wrong one is not. Each section carries
+its own `verified` flag, and the app says plainly when only part of a
+composition is on file. The prati-pada-artham glosses are written for this
+dataset rather than lifted from a published translation.
 
 Two fields deserve explanation.
 
@@ -156,22 +174,36 @@ Known gaps, all currently reported as validator warnings:
 - Sītā Rāma Vijayam has no songs yet. Naukā Caritram and Prahlāda Bhakti
   Vijayam have eight each, well short of their full length.
 - Telugu script: all 123 rāga names are filled (`ragas.json`'s `name_telugu`).
-  Kṛti sāhityam is at 134/141 titles and 127/141 pallavis (`title_telugu`,
-  `pallavi_telugu`) — the rest are `null` rather than guessed, because mangled
-  devotional text is worse than none.
+  Kṛti titles and pallavis are at 133/140 and 126/140 — the rest are `null`
+  rather than guessed, because mangled devotional text is worse than none.
+- Full `sahityam` beyond the pallavi exists for 29 kṛtis (80 sections, all
+  corroborated). Most are pallavi + anupallavi: the long multi-charaṇam works
+  (the Pañcaratna especially) could not be verified section by section, so their
+  charaṇams are absent rather than reconstructed. `pratipadartham` covers the
+  pallavi of 46 kṛtis.
 
 Records were deliberately **excluded** where authorship was wrong or unclear.
-Eleven candidates were dropped during compilation as misattributions — pieces
-that circulate widely under Tyāgarāja's name in online lists but belong to other
-composers:
+Twelve candidates were dropped as misattributions — pieces that circulate
+widely under Tyāgarāja's name in online lists but belong to other composers:
 
 | Dropped | Actually by |
 |---|---|
-| Akṣayaliṅga Vibhō, Ānandāmṛtakarṣiṇi, Bhajarē Rē Citta, Cintaya Mākanda | Muttusvāmi Dīkṣitar |
+| Akṣayaliṅga Vibhō, Ānandāmṛtakarṣiṇi, Bhajarē Rē Citta, Cintaya Mākanda, Śrī Subrahmaṇyāya Namastē | Muttusvāmi Dīkṣitar |
 | Talli Ninnu Nēra Nammiti, Ō Jagadamba, Marivēre Gati Evvaramma | Śyāmā Śāstri |
 | Brōchēvārevarurā | Mysore Vāsudēvācār |
 | Palukē Baṅgāramayēna | Bhadrācala Rāmadāsu |
 | Koṇḍalalō Nelakonna | Annamācārya |
+
+The Kāmbhōji "Śrī Subrahmaṇyāya Namastē" is the newest of those and the most
+instructive: it survived initial compilation at `high` confidence and was only
+caught later, when filling in its sāhityam turned up a unanimous Dīkṣitar
+attribution. Sourcing the lyrics is itself an attribution check.
+
+Seven further records carry a `notes` entry recording a specific divergence
+found against published sources — a pallavi that continues differently, a title
+shared by two kṛtis in different rāgas, a rāga that most editions disagree with.
+Those were downgraded to `medium` rather than silently re-attributed: weakening
+a claim is safe, swapping in a replacement sourced from a search snippet is not.
 
 A further handful were dropped because the pallavi text, raga or deity couldn't
 be reconciled across sources. Duplicates arriving under variant spellings were
@@ -198,9 +230,9 @@ honest than complete.
 Four views over the same filtered set, so a filter you set in one carries to all
 of them.
 
-- **Catalog** — dense rows: catalog number, title (transliteration and Telugu),
-  first line of the pallavi, raga, tala, language, mēḷa, difficulty, group
-  badges, practice count. Star and flag toggles live on the row.
+- **Catalog** — dense rows: catalog number, title, first line of the pallavi,
+  raga, tala, language, mēḷa, difficulty, group badges, practice count. Star
+  and flag toggles live on the row.
 - **Rāgas** — one card per raga in view: mēḷa and parent, ārōhaṇa/avarōhaṇa as
   swara chips, character notes, and the kṛtis under it. Toggle to include ragas
   with no kṛti yet, so it doubles as a melakarta reference.
@@ -210,9 +242,31 @@ of them.
   your raga repertoire, recently practised, and a "next up" list drawn from what
   you've bookmarked, easiest first.
 
-Detail panel shows the pallavi in both scripts, the gloss, the full raga card
-(scale, mēḷa, character), the tala card (aṅgas plus how to count the cycle), the
-group's context, a practice log, and a free-text notes field that autosaves.
+Detail panel shows the sāhityam section by section in Telugu, the prati-pada-artham
+where it exists, the gloss, the full raga card (scale, mēḷa, character), the tala
+card (aṅgas plus how to count the cycle), the group's context, a practice log,
+and a free-text notes field that autosaves.
+
+**Script.** Telugu is the default: titles, sāhityam, rāga names and swaras all
+render in lipi, with ārōhaṇa/avarōhaṇa as `స రి₂ గ₃` (the Latin notation stays
+on hover). Records with no Telugu yet fall back to transliteration on their own.
+Settings (⚙) switches between Telugu only, Telugu + transliteration, and
+transliteration only.
+
+**Installable.** `manifest.webmanifest` plus a service worker make this a
+standalone PWA. The shell is cache-first so it launches instantly and works
+offline; the dataset JSON is network-first with a cache fallback, so a newly
+published version appears without waiting for a cache bust. Bump `CACHE` in
+`sw.js` when shipping. Settings offers an install button where the browser
+supports it, and spells out the Share → Add to Home Screen route on iOS.
+
+**Navigation.** Opening a kṛti pushes a history entry, so the back button (or
+the phone's back gesture) closes the detail and returns you to the list at the
+scroll position you left, rather than dropping out of the app. Scroll is
+restored from history state, since the list re-renders on each navigation and
+the browser's own restoration would fire against a stale height. On a phone,
+dragging in from the left screen edge opens the filter rail; swiping left
+closes it.
 
 **Study state**, per kṛti, keyed by slug: status (to learn / learning / learnt),
 favourite, bookmark, practice tally with last-practised date, and notes. All of
