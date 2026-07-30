@@ -276,10 +276,19 @@ talas.forEach((t, i) => {
   labelSeen.add(t.label);
 });
 
+// Shared by both the raga and kriti loops below.
+const TELUGU = /[ఀ-౿]/;
+const LATIN_LETTER = /[A-Za-z]/;
+
 // --- ragas -----------------------------------------------------------
 ragas.forEach((r, i) => {
   const at = `records[${i}] (${r.slug})`;
   const W = 'data/ragas.json';
+
+  if (r.name_telugu !== null) {
+    if (!TELUGU.test(r.name_telugu)) err(W, `${at} name_telugu contains no Telugu characters — use null if the script is unknown`);
+    else if (LATIN_LETTER.test(r.name_telugu)) warn(W, `${at} name_telugu mixes Latin letters into Telugu script`);
+  }
 
   if (r.type === 'melakarta') {
     if (r.parent !== r.slug) err(W, `${at} is a melakarta so parent should be its own slug, got "${r.parent}"`);
@@ -341,8 +350,6 @@ ragas.forEach((r, i) => {
 const groupCounts = new Map([...groupSlugs].map((s) => [s, 0]));
 
 // --- kritis ----------------------------------------------------------
-const TELUGU = /[ఀ-౿]/;
-const LATIN_LETTER = /[A-Za-z]/;
 
 /** Sort key for catalog numbering: diacritics folded, non-letters dropped. */
 function sortKey(title) {
@@ -441,6 +448,10 @@ function report() {
       console.log(`  tala      ${distribution(kritis, 'tala').map(([k, v]) => `${k} ${v}`).join(' · ')}`);
       const withTelugu = kritis.filter((k) => k.pallavi_telugu).length;
       console.log(`  telugu script for ${withTelugu}/${kritis.length} pallavis`);
+    }
+    if (ragas.length) {
+      const withTelugu = ragas.filter((r) => r.name_telugu).length;
+      console.log(`  telugu script for ${withTelugu}/${ragas.length} raga names`);
     }
   }
 

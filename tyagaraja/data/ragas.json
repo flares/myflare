@@ -6,6 +6,7 @@
     {
       "slug": "kanakangi",
       "name": "Kanakāṅgī",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 1,
@@ -20,6 +21,7 @@
     {
       "slug": "ratnangi",
       "name": "Ratnāṅgī",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 2,
@@ -34,6 +36,7 @@
     {
       "slug": "ganamurti",
       "name": "Gānamūrti",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 3,
@@ -48,6 +51,7 @@
     {
       "slug": "vanaspati",
       "name": "Vanaspati",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 4,
@@ -62,6 +66,7 @@
     {
       "slug": "manavati",
       "name": "Mānāvati",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 5,
@@ -76,6 +81,7 @@
     {
       "slug": "tanarupi",
       "name": "Tānarūpi",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 6,
@@ -90,6 +96,7 @@
     {
       "slug": "senavati",
       "name": "Sēnāvati",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 7,
@@ -104,6 +111,7 @@
     {
       "slug": "hanumatodi",
       "name": "Hanumatōḍi",
+      "name_telugu": null,
       "aka": [
         "Tōḍi"
       ],
@@ -120,6 +128,7 @@
     {
       "slug": "dhenuka",
       "name": "Dhēnuka",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 9,
@@ -134,6 +143,7 @@
     {
       "slug": "natakapriya",
       "name": "Naṭakapriya",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 10,
@@ -148,6 +158,7 @@
     {
       "slug": "kokilapriya",
       "name": "Kōkilapriya",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 11,
@@ -162,6 +173,7 @@
     {
       "slug": "rupavati",
       "name": "Rūpavati",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 12,
@@ -176,6 +188,7 @@
     {
       "slug": "gayakapriya",
       "name": "Gāyakapriyā",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 13,
@@ -190,6 +203,7 @@
     {
       "slug": "vakulabharanam",
       "name": "Vakuḷābharaṇaṁ",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 14,
@@ -204,6 +218,7 @@
     {
       "slug": "mayamalavagaula",
       "name": "Māyāmāḷavagauḷa",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 15,
@@ -218,6 +233,7 @@
     {
       "slug": "chakravakam",
       "name": "Cakravākam",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 16,
@@ -232,6 +248,7 @@
     {
       "slug": "suryakantam",
       "name": "Sūryakāntam",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 17,
@@ -246,6 +263,7 @@
     {
       "slug": "hatakambari",
       "name": "Hāṭakāmbari",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 18,
@@ -260,6 +278,7 @@
     {
       "slug": "jhankaradhvani",
       "name": "Jhaṅkāradhvani",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 19,
@@ -274,6 +293,7 @@
     {
       "slug": "natabhairavi",
       "name": "Naṭabhairavi",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 20,
@@ -288,6 +308,7 @@
     {
       "slug": "keeravani",
       "name": "Kīravāṇi",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 21,
@@ -302,6 +323,7 @@
     {
       "slug": "kharaharapriya",
       "name": "Kharaharapriyā",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 22,
@@ -316,6 +338,7 @@
     {
       "slug": "gaurimanohari",
       "name": "Gaurimanōhari",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 23,
@@ -330,6 +353,7 @@
     {
       "slug": "varunapriya",
       "name": "Varuṇapriyā",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 24,
@@ -344,6 +368,7 @@
     {
       "slug": "mararanjani",
       "name": "Māraranjani",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 25,
@@ -358,6 +383,7 @@
     {
       "slug": "charukesi",
       "name": "Cārukēśi",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 26,
@@ -372,6 +398,7 @@
     {
       "slug": "sarasangi",
       "name": "Sarasāṅgi",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 27,
@@ -386,6 +413,7 @@
     {
       "slug": "harikambhoji",
       "name": "Harikāmbhōji",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 28,
@@ -400,6 +428,7 @@
     {
       "slug": "dheerasankarabharanam",
       "name": "Dhīraśaṅkarābharaṇaṁ",
+      "name_telugu": null,
       "aka": [
         "Śaṅkarābharaṇaṃ"
       ],
@@ -416,6 +445,7 @@
     {
       "slug": "naganandini",
       "name": "Nāgānandini",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 30,
@@ -430,6 +460,7 @@
     {
       "slug": "yagapriya",
       "name": "Yāgapriyā",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 31,
@@ -444,6 +475,7 @@
     {
       "slug": "ragavardhini",
       "name": "Rāgavardhini",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 32,
@@ -458,6 +490,7 @@
     {
       "slug": "gangeyabhushani",
       "name": "Gāṅgēyabhūṣaṇi",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 33,
@@ -472,6 +505,7 @@
     {
       "slug": "vagadhisvari",
       "name": "Vāgadhīśvari",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 34,
@@ -486,6 +520,7 @@
     {
       "slug": "sulini",
       "name": "Śūlini",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 35,
@@ -500,6 +535,7 @@
     {
       "slug": "chalanata",
       "name": "Chalanāṭa",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 36,
@@ -514,6 +550,7 @@
     {
       "slug": "salagam",
       "name": "Sālagam",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 37,
@@ -528,6 +565,7 @@
     {
       "slug": "jalarnavam",
       "name": "Jalārṇavam",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 38,
@@ -542,6 +580,7 @@
     {
       "slug": "jhalavarali",
       "name": "Jhālavarāḷi",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 39,
@@ -556,6 +595,7 @@
     {
       "slug": "navaneetam",
       "name": "Navanītam",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 40,
@@ -570,6 +610,7 @@
     {
       "slug": "pavani",
       "name": "Pāvani",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 41,
@@ -584,6 +625,7 @@
     {
       "slug": "raghupriya",
       "name": "Raghupriyā",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 42,
@@ -598,6 +640,7 @@
     {
       "slug": "gavambhodi",
       "name": "Gavāmbhōdi",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 43,
@@ -612,6 +655,7 @@
     {
       "slug": "bhavapriya",
       "name": "Bhavapriyā",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 44,
@@ -626,6 +670,7 @@
     {
       "slug": "subhapantuvarali",
       "name": "Śubhapantuvarāḷi",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 45,
@@ -640,6 +685,7 @@
     {
       "slug": "shadvidamargini",
       "name": "Ṣaḍvidhamārgiṇi",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 46,
@@ -654,6 +700,7 @@
     {
       "slug": "suvarnangi",
       "name": "Suvarṇāṅgi",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 47,
@@ -668,6 +715,7 @@
     {
       "slug": "divyamani",
       "name": "Divyamaṇi",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 48,
@@ -682,6 +730,7 @@
     {
       "slug": "dhavalambari",
       "name": "Dhavaḷāmbari",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 49,
@@ -696,6 +745,7 @@
     {
       "slug": "namanarayani",
       "name": "Nāmanārāyaṇi",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 50,
@@ -710,6 +760,7 @@
     {
       "slug": "kamavardhini",
       "name": "Kāmavardhini",
+      "name_telugu": null,
       "aka": [
         "Pantuvarāḷi"
       ],
@@ -726,6 +777,7 @@
     {
       "slug": "ramapriya",
       "name": "Rāmapriyā",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 52,
@@ -740,6 +792,7 @@
     {
       "slug": "gamanasrama",
       "name": "Gamanāśramā",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 53,
@@ -754,6 +807,7 @@
     {
       "slug": "vishwambhari",
       "name": "Viśvāmbhari",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 54,
@@ -768,6 +822,7 @@
     {
       "slug": "shamalangi",
       "name": "Śyāmalāṅgi",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 55,
@@ -782,6 +837,7 @@
     {
       "slug": "shanmukhapriya",
       "name": "Ṣaṇmukhapriyā",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 56,
@@ -796,6 +852,7 @@
     {
       "slug": "simhendramadhyamam",
       "name": "Siṁhēndramadhyamam",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 57,
@@ -810,6 +867,7 @@
     {
       "slug": "hemavati",
       "name": "Hēmāvati",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 58,
@@ -824,6 +882,7 @@
     {
       "slug": "dharmavati",
       "name": "Dharmavati",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 59,
@@ -838,6 +897,7 @@
     {
       "slug": "nitimati",
       "name": "Nītimati",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 60,
@@ -852,6 +912,7 @@
     {
       "slug": "kantamani",
       "name": "Kāntāmaṇi",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 61,
@@ -866,6 +927,7 @@
     {
       "slug": "rishabhapriya",
       "name": "Ṛṣabhapriyā",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 62,
@@ -880,6 +942,7 @@
     {
       "slug": "latangi",
       "name": "Laṭāṅgi",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 63,
@@ -894,6 +957,7 @@
     {
       "slug": "vachaspati",
       "name": "Vācaspati",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 64,
@@ -908,6 +972,7 @@
     {
       "slug": "kalyani",
       "name": "Kalyāṇi",
+      "name_telugu": null,
       "aka": [
         "Mēcakalyāṇi",
         "Yamunākalyāṇi (distinct)"
@@ -925,6 +990,7 @@
     {
       "slug": "chitrambari",
       "name": "Citrāmbari",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 66,
@@ -939,6 +1005,7 @@
     {
       "slug": "sucharitra",
       "name": "Sucaritra",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 67,
@@ -953,6 +1020,7 @@
     {
       "slug": "jyotisvarupini",
       "name": "Jyōtisvarūpiṇi",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 68,
@@ -967,6 +1035,7 @@
     {
       "slug": "dhatuvardhini",
       "name": "Dhātuvardhini",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 69,
@@ -981,6 +1050,7 @@
     {
       "slug": "nasikabhushani",
       "name": "Nāsikābhūṣaṇi",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 70,
@@ -995,6 +1065,7 @@
     {
       "slug": "kosalam",
       "name": "Kōsalam",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 71,
@@ -1009,6 +1080,7 @@
     {
       "slug": "rasikapriya",
       "name": "Rasikapriyā",
+      "name_telugu": null,
       "aka": [],
       "type": "melakarta",
       "mela": 72,
@@ -1023,6 +1095,7 @@
     {
       "slug": "abheri",
       "name": "Ābhēri",
+      "name_telugu": null,
       "type": "janya",
       "mela": 22,
       "parent": "kharaharapriya",
@@ -1037,6 +1110,7 @@
     {
       "slug": "abhogi",
       "name": "Abhōgī",
+      "name_telugu": null,
       "aka": [],
       "type": "janya",
       "mela": 22,
@@ -1051,6 +1125,7 @@
     {
       "slug": "anandabhairavi",
       "name": "Ānandabhairavi",
+      "name_telugu": null,
       "aka": [
         "Ānanda Bhairavi"
       ],
@@ -1067,6 +1142,7 @@
     {
       "slug": "andolika",
       "name": "Āndōḷikā",
+      "name_telugu": null,
       "type": "janya",
       "mela": 22,
       "parent": "kharaharapriya",
@@ -1081,6 +1157,7 @@
     {
       "slug": "arabhi",
       "name": "Ārabhi",
+      "name_telugu": null,
       "aka": [],
       "type": "janya",
       "mela": 29,
@@ -1095,6 +1172,7 @@
     {
       "slug": "athana",
       "name": "Āṭhāṇa",
+      "name_telugu": null,
       "aka": [
         "Aṭāṇā",
         "Aṭana"
@@ -1112,6 +1190,7 @@
     {
       "slug": "bahudari",
       "name": "Bahudāri",
+      "name_telugu": null,
       "type": "janya",
       "mela": 28,
       "parent": "harikambhoji",
@@ -1126,6 +1205,7 @@
     {
       "slug": "begada",
       "name": "Bēgaḍa",
+      "name_telugu": null,
       "aka": [],
       "type": "janya",
       "mela": 28,
@@ -1140,6 +1220,7 @@
     {
       "slug": "bhairavi",
       "name": "Bhairavi",
+      "name_telugu": null,
       "aka": [],
       "type": "janya",
       "mela": 20,
@@ -1154,6 +1235,7 @@
     {
       "slug": "bilahari",
       "name": "Bilahari",
+      "name_telugu": null,
       "aka": [],
       "type": "janya",
       "mela": 29,
@@ -1168,6 +1250,7 @@
     {
       "slug": "darbar",
       "name": "Darbār",
+      "name_telugu": null,
       "aka": [],
       "type": "janya",
       "mela": 20,
@@ -1182,6 +1265,7 @@
     {
       "slug": "devagandhari",
       "name": "Dēvagāndhāri",
+      "name_telugu": null,
       "aka": [],
       "type": "janya",
       "mela": 29,
@@ -1196,6 +1280,7 @@
     {
       "slug": "devamanohari",
       "name": "Dēvamanōhari",
+      "name_telugu": null,
       "aka": [],
       "type": "janya",
       "mela": 22,
@@ -1210,6 +1295,7 @@
     {
       "slug": "dhanyasi",
       "name": "Dhanyāsi",
+      "name_telugu": null,
       "aka": [],
       "type": "janya",
       "mela": 20,
@@ -1224,6 +1310,7 @@
     {
       "slug": "gaula",
       "name": "Gauḷa",
+      "name_telugu": null,
       "type": "janya",
       "mela": 15,
       "parent": "mayamalavagaula",
@@ -1238,6 +1325,7 @@
     {
       "slug": "hamsadhvani",
       "name": "Haṁsadhvani",
+      "name_telugu": null,
       "aka": [],
       "type": "janya",
       "mela": 29,
@@ -1252,6 +1340,7 @@
     {
       "slug": "hamsanadam",
       "name": "Haṃsanādaṃ",
+      "name_telugu": null,
       "type": "janya",
       "mela": 60,
       "parent": "nitimati",
@@ -1266,6 +1355,7 @@
     {
       "slug": "hindolam",
       "name": "Hindōḷaṃ",
+      "name_telugu": null,
       "type": "janya",
       "mela": 20,
       "parent": "natabhairavi",
@@ -1280,6 +1370,7 @@
     {
       "slug": "jaganmohini",
       "name": "Jaganmōhini",
+      "name_telugu": null,
       "type": "janya",
       "mela": 15,
       "parent": "mayamalavagaula",
@@ -1294,6 +1385,7 @@
     {
       "slug": "jayantasena",
       "name": "Jayantasēna",
+      "name_telugu": null,
       "type": "janya",
       "mela": 22,
       "parent": "kharaharapriya",
@@ -1308,6 +1400,7 @@
     {
       "slug": "kambhoji",
       "name": "Kāmbhōji",
+      "name_telugu": null,
       "aka": [],
       "type": "janya",
       "mela": 28,
@@ -1322,6 +1415,7 @@
     {
       "slug": "kanada",
       "name": "Kānaḍā",
+      "name_telugu": null,
       "type": "janya",
       "mela": 22,
       "parent": "kharaharapriya",
@@ -1338,6 +1432,7 @@
     {
       "slug": "kapi",
       "name": "Kāpi",
+      "name_telugu": null,
       "aka": [],
       "type": "janya",
       "mela": 22,
@@ -1352,6 +1447,7 @@
     {
       "slug": "kapinarayani",
       "name": "Kāpī Nārāyaṇi",
+      "name_telugu": null,
       "type": "janya",
       "mela": 28,
       "parent": "harikambhoji",
@@ -1366,6 +1462,7 @@
     {
       "slug": "kedaragaula",
       "name": "Kēdāragauḷa",
+      "name_telugu": null,
       "aka": [],
       "type": "janya",
       "mela": 22,
@@ -1380,6 +1477,7 @@
     {
       "slug": "khamas",
       "name": "Khamās",
+      "name_telugu": null,
       "type": "janya",
       "mela": 28,
       "parent": "harikambhoji",
@@ -1394,6 +1492,7 @@
     {
       "slug": "kuntalavarali",
       "name": "Kuntaḷavarāḷi",
+      "name_telugu": null,
       "aka": [],
       "type": "janya",
       "mela": 22,
@@ -1408,6 +1507,7 @@
     {
       "slug": "lalita",
       "name": "Lalita",
+      "name_telugu": null,
       "aka": [],
       "type": "janya",
       "mela": 51,
@@ -1422,6 +1522,7 @@
     {
       "slug": "madhyamavati",
       "name": "Madhyamāvati",
+      "name_telugu": null,
       "aka": [],
       "type": "janya",
       "mela": 22,
@@ -1436,6 +1537,7 @@
     {
       "slug": "malayamarutam",
       "name": "Malayamārutaṃ",
+      "name_telugu": null,
       "type": "janya",
       "mela": 52,
       "parent": "ramapriya",
@@ -1450,6 +1552,7 @@
     {
       "slug": "mohanam",
       "name": "Mōhanam",
+      "name_telugu": null,
       "aka": [],
       "type": "janya",
       "mela": 28,
@@ -1464,6 +1567,7 @@
     {
       "slug": "mukhari",
       "name": "Mukhāri",
+      "name_telugu": null,
       "aka": [],
       "type": "janya",
       "mela": 22,
@@ -1478,6 +1582,7 @@
     {
       "slug": "nata",
       "name": "Naṭa",
+      "name_telugu": null,
       "aka": [],
       "type": "janya",
       "mela": 29,
@@ -1492,6 +1597,7 @@
     {
       "slug": "nayaki",
       "name": "Nāyaki",
+      "name_telugu": null,
       "aka": [],
       "type": "janya",
       "mela": 22,
@@ -1506,6 +1612,7 @@
     {
       "slug": "nilambari",
       "name": "Nīlāmbari",
+      "name_telugu": null,
       "aka": [],
       "type": "janya",
       "mela": 22,
@@ -1520,6 +1627,7 @@
     {
       "slug": "punnagavarali",
       "name": "Punnāgavarāḷi",
+      "name_telugu": null,
       "aka": [],
       "type": "janya",
       "mela": 8,
@@ -1534,6 +1642,7 @@
     {
       "slug": "poorvikalyani",
       "name": "Pūrvikalyāṇi",
+      "name_telugu": null,
       "aka": [
         "Pūrvikalyāṇi",
         "Gamakakriyā"
@@ -1551,6 +1660,7 @@
     {
       "slug": "ritigaula",
       "name": "Rītigauḷa",
+      "name_telugu": null,
       "aka": [
         "Rītigauḷa"
       ],
@@ -1567,6 +1677,7 @@
     {
       "slug": "sahana",
       "name": "Sahāna",
+      "name_telugu": null,
       "aka": [],
       "type": "janya",
       "mela": 22,
@@ -1581,6 +1692,7 @@
     {
       "slug": "saramati",
       "name": "Sāramati",
+      "name_telugu": null,
       "type": "janya",
       "mela": 20,
       "parent": "natabhairavi",
@@ -1595,6 +1707,7 @@
     {
       "slug": "saranga",
       "name": "Sāraṅga",
+      "name_telugu": null,
       "aka": [],
       "type": "janya",
       "mela": 22,
@@ -1609,6 +1722,7 @@
     {
       "slug": "saurashtram",
       "name": "Saurāṣṭraṃ",
+      "name_telugu": null,
       "type": "janya",
       "mela": 17,
       "parent": "suryakantam",
@@ -1623,6 +1737,7 @@
     {
       "slug": "saveri",
       "name": "Sāvēri",
+      "name_telugu": null,
       "aka": [],
       "type": "janya",
       "mela": 15,
@@ -1637,6 +1752,7 @@
     {
       "slug": "sri",
       "name": "Śrī",
+      "name_telugu": null,
       "aka": [],
       "type": "janya",
       "mela": 22,
@@ -1651,6 +1767,7 @@
     {
       "slug": "sriranjani",
       "name": "Śrīrañjani",
+      "name_telugu": null,
       "aka": [],
       "type": "janya",
       "mela": 22,
@@ -1665,6 +1782,7 @@
     {
       "slug": "suddha-bangala",
       "name": "Śuddha Baṅgāḷa",
+      "name_telugu": null,
       "type": "janya",
       "mela": 22,
       "parent": "kharaharapriya",
@@ -1679,6 +1797,7 @@
     {
       "slug": "suddha-saveri",
       "name": "Śuddhasāvēri",
+      "name_telugu": null,
       "aka": [],
       "type": "janya",
       "mela": 22,
@@ -1693,6 +1812,7 @@
     {
       "slug": "surati",
       "name": "Surati",
+      "name_telugu": null,
       "aka": [],
       "type": "janya",
       "mela": 22,
@@ -1707,6 +1827,7 @@
     {
       "slug": "varali",
       "name": "Varāḷi",
+      "name_telugu": null,
       "type": "janya",
       "mela": 39,
       "parent": "jhalavarali",
@@ -1721,6 +1842,7 @@
     {
       "slug": "vasanta",
       "name": "Vasanta",
+      "name_telugu": null,
       "aka": [],
       "type": "janya",
       "mela": 17,
@@ -1735,6 +1857,7 @@
     {
       "slug": "yadukulakambhoji",
       "name": "Yadukulakāmbhōji",
+      "name_telugu": null,
       "aka": [
         "Yadukula Kāmbhōji",
         "Erukalakāmbhōji"

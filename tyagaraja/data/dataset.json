@@ -16,7 +16,7 @@
       "path": "ragas.json",
       "schema": "raga.schema.json",
       "count": 123,
-      "sha256": "1863eeff55bc759d3d0eb468d1ee94eaf367dadba236c9ad2b72b200a0501a3c"
+      "sha256": "89ad83578fca05992d9fb0cbe764614c767a72d9f315af872be64282c7d645cf"
     },
     "talas": {
       "path": "talas.json",

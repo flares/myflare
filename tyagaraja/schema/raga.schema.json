@@ -15,11 +15,17 @@
   "$defs": {
     "raga": {
       "type": "object",
-      "required": ["slug", "name", "aka", "type", "mela", "parent", "arohana", "avarohana", "scale_type", "chakra", "mood", "notes"],
+      "required": ["slug", "name", "name_telugu", "aka", "type", "mela", "parent", "arohana", "avarohana", "scale_type", "chakra", "mood", "notes"],
       "additionalProperties": false,
       "properties": {
         "slug": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "maxLength": 48 },
         "name": { "type": "string", "minLength": 2, "maxLength": 60 },
+        "name_telugu": {
+          "type": ["string", "null"],
+          "minLength": 2,
+          "maxLength": 60,
+          "description": "The raga name in Telugu script, as printed in Telugu Carnatic songbooks — not a mechanical transliteration. Null where not confidently known."
+        },
         "aka": {
           "type": "array",
           "uniqueItems": true,
