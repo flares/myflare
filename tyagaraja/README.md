@@ -155,8 +155,10 @@ Known gaps, all currently reported as validator warnings:
   Kōvūr are complete at five each.
 - Sītā Rāma Vijayam has no songs yet. Naukā Caritram and Prahlāda Bhakti
   Vijayam have eight each, well short of their full length.
-- Telugu script is filled in for only some records; the rest are `null` rather
-  than guessed, because mangled Telugu is worse than none.
+- Telugu script: all 123 rāga names are filled (`ragas.json`'s `name_telugu`).
+  Kṛti sāhityam is at 134/141 titles and 127/141 pallavis (`title_telugu`,
+  `pallavi_telugu`) — the rest are `null` rather than guessed, because mangled
+  devotional text is worse than none.
 
 Records were deliberately **excluded** where authorship was wrong or unclear.
 Eleven candidates were dropped during compilation as misattributions — pieces

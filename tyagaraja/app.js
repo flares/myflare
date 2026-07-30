@@ -501,7 +501,9 @@
         ${k.notes ? `<div class="card"><h3>Study note</h3><div class="meaning">${esc(k.notes)}</div></div>` : ''}
 
         ${raga ? `<div class="card">
-          <h3>Rāga <span class="side">${esc(raga.name)}${raga.mela ? ` · mēḷa ${raga.mela}` : ''}</span></h3>
+          <h3>Rāga <span class="side">${esc(raga.name)}${
+            raga.name_telugu ? ` <span class="te">${esc(raga.name_telugu)}</span>` : ''
+          }${raga.mela ? ` · mēḷa ${raga.mela}` : ''}</span></h3>
           <div class="melaline" style="font-size:.75rem;color:var(--muted)">
             ${esc(raga.type)}${parent ? ` of ${esc(parent.name)}` : ''}${raga.chakra ? ` · ${esc(raga.chakra)} chakra` : ''} · ${esc(raga.scale_type)}
           </div>
@@ -660,7 +662,9 @@
       const mine = counts.get(r.slug) ?? [];
       const parent = r.parent !== r.slug ? byRaga.get(r.parent) : null;
       return `<article class="card ragacard" data-raga-card="${esc(r.slug)}">
-        <h3><span>${esc(r.name)}</span><span class="count">${mine.length || '—'}</span></h3>
+        <h3><span>${esc(r.name)}${
+          r.name_telugu ? ` <span class="te" style="font-weight:500">${esc(r.name_telugu)}</span>` : ''
+        }</span><span class="count">${mine.length || '—'}</span></h3>
         <div class="melaline">
           ${parent ? `janya of ${esc(parent.name)}` : 'melakarta'}${r.mela ? ` · mēḷa ${r.mela}` : ''}${
             r.chakra ? ` · ${esc(r.chakra)} chakra` : ''} · ${esc(r.scale_type)}${
