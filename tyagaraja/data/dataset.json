@@ -1,7 +1,7 @@
 {
   "$schema": "../schema/dataset.schema.json",
   "name": "tyagaraja-kritis",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "schema_version": "1.0.0",
   "updated": "2026-07-30",
   "provenance": "Compiled from commonly cited Tyagaraja kriti listings and standard Carnatic theory references, then machine-checked: every melakarta scale is derived from its mela number by katapayadi arithmetic and compared against the file, janya scales are checked against their parent mela's swara set, and every raga/tala/group reference must resolve. Raga and tala attributions vary between pathantarams and editions; each kriti carries a `confidence` field saying how much weight to put on its attribution. This is a working subset of the roughly 700 kritis attributed to Tyagaraja, not a complete catalog — see README.md for coverage and how to add entries.",
@@ -9,14 +9,14 @@
     "kritis": {
       "path": "kritis.json",
       "schema": "kriti.schema.json",
-      "count": 79,
-      "sha256": "39c162d3e0a8018af14fda8cda601ce4aa8d194a9cdc6e095334347fb7d282ac"
+      "count": 141,
+      "sha256": "a23de65fa85a6bb1eba914b782d7ea6317af23398e81dc1101d03c9516be4538"
     },
     "ragas": {
       "path": "ragas.json",
       "schema": "raga.schema.json",
       "count": 123,
-      "sha256": "1ec3de5947241576a72a64bc7c8ed8b421c238f742288b6b9565bff01582467b"
+      "sha256": "1863eeff55bc759d3d0eb468d1ee94eaf367dadba236c9ad2b72b200a0501a3c"
     },
     "talas": {
       "path": "talas.json",

@@ -398,6 +398,10 @@ select, .rail input[type="search"] {
 }
 .row .title .te { font-weight: 500; font-size: 0.9rem; color: var(--ink-2); }
 .row .sub {
+  /* Must be block-level: `overflow: hidden` and text-overflow are ignored on a
+     non-replaced inline box, so an inline span would push the page sideways
+     instead of clipping the pallavi preview. */
+  display: block;
   font-size: 0.79rem;
   color: var(--ink-2);
   margin-top: 0.05rem;
@@ -551,14 +555,14 @@ select, .rail input[type="search"] {
 }
 .card > h3 .side { text-transform: none; letter-spacing: 0; font-size: 0.72rem; }
 
-.sahitya { font-size: 1rem; line-height: 1.65; white-space: pre-line; }
+.sahitya { font-size: 1rem; line-height: 1.65; white-space: pre-line; overflow-wrap: anywhere; }
 .sahitya.te { font-size: 1.05rem; line-height: 1.8; }
 .sahitya + .sahitya { margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px dashed var(--border); }
 .meaning { font-size: 0.9rem; color: var(--ink-2); line-height: 1.6; }
 
 .kv { display: grid; grid-template-columns: auto 1fr; gap: 0.28rem 0.7rem; font-size: 0.84rem; }
 .kv dt { color: var(--muted); font-size: 0.75rem; padding-top: 0.1rem; }
-.kv dd { margin: 0; }
+.kv dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
 
 .swaras { display: flex; flex-wrap: wrap; gap: 0.2rem; align-items: center; }
 .sw {
@@ -572,8 +576,13 @@ select, .rail input[type="search"] {
   color: var(--ink);
 }
 .sw.s { color: var(--accent); border-color: var(--accent); }
-.swline { display: grid; grid-template-columns: 1.6rem 1fr; gap: 0.4rem; align-items: center; margin-top: 0.3rem; }
-.swline > span:first-child { font-size: 0.7rem; color: var(--muted); font-family: var(--mono); }
+.swline { display: grid; grid-template-columns: 3rem 1fr; gap: 0.4rem; align-items: center; margin-top: 0.3rem; }
+.swline > span:first-child {
+  font-size: 0.7rem;
+  color: var(--muted);
+  font-family: var(--mono);
+  text-align: right;
+}
 
 .notefield {
   font: inherit;
@@ -597,7 +606,14 @@ select, .rail input[type="search"] {
 .practice .when { font-size: 0.75rem; color: var(--muted); }
 
 .detail-nav { display: flex; gap: 0.4rem; }
-.detail-nav button { flex: 1; }
+.detail-nav button {
+  flex: 1 1 0;
+  min-width: 0;
+  /* Titles can be long — keep each button to one clipped line rather than
+     letting `nowrap` from .iconbtn push the panel sideways. */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 .placeholder { padding: 3rem 1.5rem; text-align: center; color: var(--muted); font-size: 0.88rem; }
 .placeholder .big { font-size: 2rem; display: block; margin-bottom: 0.5rem; opacity: 0.5; }

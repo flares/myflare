@@ -1,6 +1,6 @@
 {
   "$schema": "../schema/raga.schema.json",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "updated": "2026-07-30",
   "records": [
     {
@@ -1730,7 +1730,7 @@
       "scale_type": "vakra",
       "chakra": null,
       "mood": "delicate, springtime, festive",
-      "notes": "A rare raga that entirely omits panchamam; rishabham (R1) appears only in the descent, giving it a vakra character. Not to be confused with the Hindustani raga of the same name, which has a different scale. Classed here under the 17th mela (Suryakantam), whose D2 and N3 it uses; older texts list it under Mayamalavagaula, which makes it bhashanga."
+      "notes": "Classed here under the 17th mela (Sūryakāntam), whose D2 and N3 it actually uses; older texts list it under Māyāmāḷavagauḷa, which makes it bhāṣāṅga. Rishabha and panchama are both dropped."
     },
     {
       "slug": "yadukulakambhoji",

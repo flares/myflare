@@ -647,7 +647,7 @@
       return `<article class="card ragacard">
         <h3><span>${esc(r.name)}</span><span class="count">${mine.length || '—'}</span></h3>
         <div class="melaline">
-          ${esc(r.type)}${r.mela ? ` · mēḷa ${r.mela}` : ''}${parent ? ` · janya of ${esc(parent.name)}` : ''}${
+          ${parent ? `janya of ${esc(parent.name)}` : 'melakarta'}${r.mela ? ` · mēḷa ${r.mela}` : ''}${
             r.chakra ? ` · ${esc(r.chakra)} chakra` : ''} · ${esc(r.scale_type)}${
             (r.aka || []).length ? ` · aka ${r.aka.map((a) => esc(a)).join(', ')}` : ''}
         </div>

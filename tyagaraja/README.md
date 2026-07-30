@@ -38,7 +38,7 @@ Every file is an envelope, not a bare array:
 
 ```json
 {
-  "id": 34,
+  "id": 63,
   "slug": "nagumomu-galavani",
   "title": "Nagumōmu Galavāni",
   "title_telugu": "నగుమోము గలవాని",
@@ -65,7 +65,7 @@ Two fields deserve explanation.
 
 **`id` is a display handle, not a key.** It is the record's position in
 alphabetical title order, so adding a kṛti renumbers everything after it. That's
-deliberate: a student says "number 34" and gets a stable *catalog*, while nothing
+deliberate: a student says "number 63" and gets a stable *catalog*, while nothing
 in the app keys off the number. Favourites, bookmarks, statuses, practice
 tallies and notes all key off **`slug`**, which never changes once published.
 `node renumber.mjs` reassigns ids; CI fails if they drift.
@@ -149,16 +149,31 @@ sets that aren't catalogued yet.
 
 Known gaps, all currently reported as validator warnings:
 
-- Utsava Sampradāya and Divya Nāma are thinly covered against their real extent.
-- Lālgudi Pañcaratnam is absent; Tiruvoṭṭiyūr, Kōvūr and Śrīraṅgam are partial.
-- Naukā Caritram and Prahlāda Bhakti Vijayam have no individual songs yet.
+- Utsava Sampradāya has 9 of its roughly 20 kīrtanas; Divya Nāma is thin against
+  its real extent, which runs to over a hundred.
+- Lālgudi Pañcaratnam is absent and Śrīraṅgam has one of five. Tiruvoṭṭiyūr and
+  Kōvūr are complete at five each.
+- Sītā Rāma Vijayam has no songs yet. Naukā Caritram and Prahlāda Bhakti
+  Vijayam have eight each, well short of their full length.
 - Telugu script is filled in for only some records; the rest are `null` rather
   than guessed, because mangled Telugu is worse than none.
 
 Records were deliberately **excluded** where authorship was wrong or unclear.
-Pieces by Muttusvāmi Dīkṣitar, Annamācārya and others that are commonly
-misfiled under Tyāgarāja in online lists were dropped during compilation, as
-were rows whose pallavi text or deity couldn't be reconciled.
+Eleven candidates were dropped during compilation as misattributions — pieces
+that circulate widely under Tyāgarāja's name in online lists but belong to other
+composers:
+
+| Dropped | Actually by |
+|---|---|
+| Akṣayaliṅga Vibhō, Ānandāmṛtakarṣiṇi, Bhajarē Rē Citta, Cintaya Mākanda | Muttusvāmi Dīkṣitar |
+| Talli Ninnu Nēra Nammiti, Ō Jagadamba, Marivēre Gati Evvaramma | Śyāmā Śāstri |
+| Brōchēvārevarurā | Mysore Vāsudēvācār |
+| Palukē Baṅgāramayēna | Bhadrācala Rāmadāsu |
+| Koṇḍalalō Nelakonna | Annamācārya |
+
+A further handful were dropped because the pallavi text, raga or deity couldn't
+be reconciled across sources. Duplicates arriving under variant spellings were
+folded together rather than left to sit as two rows.
 
 ### Adding a kṛti
 
