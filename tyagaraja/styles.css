@@ -419,6 +419,16 @@ select, .rail input[type="search"] {
   color: var(--muted);
 }
 .row .raga { color: var(--accent); font-weight: 600; }
+/* .raga doubles as a button (row meta + detail line) so it can jump to the
+   Rāgas view — reset button chrome, keep the same look, add a hover cue. */
+button.raga {
+  background: none;
+  border: 0;
+  font: inherit;
+  padding: 0;
+  cursor: pointer;
+}
+button.raga:hover, button.raga:focus-visible { text-decoration: underline; }
 .row .dot { opacity: 0.5; }
 
 .row .marks { display: flex; align-items: center; gap: 0.1rem; padding-top: 0.05rem; }
@@ -626,6 +636,12 @@ select, .rail input[type="search"] {
   padding: 0.8rem 0.75rem;
   grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
   align-items: start;
+}
+
+.ragacard.flash { animation: raga-flash 1.4s ease; border-radius: 10px; }
+@keyframes raga-flash {
+  0% { box-shadow: 0 0 0 3px var(--accent); }
+  100% { box-shadow: 0 0 0 0 transparent; }
 }
 
 .ragacard h3, .groupcard h3 {

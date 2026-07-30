@@ -38,6 +38,16 @@
   };
   let visible = [];
   let selected = null;
+  let pendingRagaFocus = null;
+
+  // Browser history: a view switch (tab click, or a "jump" like clicking a
+  // raga link) pushes an entry so the back button retraces app navigation
+  // instead of leaving the page. Plain list browsing (selecting a kriti,
+  // j/k stepping) only replaces the current entry, as before — otherwise
+  // scanning ten kritis would take ten presses of back to undo.
+  let suppressHistory = false;
+  const appState = () => ({ view: prefs.view, slug: selected });
+  const urlForState = (state) => (state.slug && byKriti.has(state.slug) ? `#${state.slug}` : location.pathname + location.search);
 
   /* ----------------------------------------------------------------- helpers */
 
@@ -173,6 +183,9 @@
 
     const fromHash = location.hash.replace(/^#/, '');
     if (fromHash && byKriti.has(fromHash)) select(fromHash, false);
+    // Establish a baseline history entry carrying {view, slug} so the first
+    // popstate (however the user got here) has real state to restore, not null.
+    if (!history.state) history.replaceState(appState(), '', urlForState(appState()));
   }
 
   async function fetchJson(path) {
@@ -374,7 +387,8 @@
         <span class="title">${titleLat}${titleTe}</span>
         <span class="sub ${sc.telugu && !sc.latin ? 'te' : ''}">${esc(pallavi.split('\n')[0])}</span>
         <span class="meta">
-          <span class="raga">${esc(k.raga)}</span><span class="dot">·</span>
+          <button type="button" class="raga" data-raga-link="${esc(k.raga_slug)}"
+                  title="Open ${esc(k.raga)} in the Rāgas view">${esc(k.raga)}</button><span class="dot">·</span>
           <span>${esc(k.tala)}</span><span class="dot">·</span>
           <span>${esc(k.language)}</span>
           ${raga && raga.mela ? `<span class="dot">·</span><span>mela ${raga.mela}</span>` : ''}
@@ -406,7 +420,7 @@
 
   function select(slug, scroll = true) {
     selected = slug;
-    if (byKriti.has(slug)) history.replaceState(null, '', `#${slug}`);
+    if (!suppressHistory) history.replaceState(appState(), '', urlForState(appState()));
     renderDetail();
     document.querySelectorAll('.row').forEach((el) => el.classList.toggle('sel', el.dataset.slug === slug));
     if (scroll) {
@@ -455,7 +469,8 @@
           <h2>${esc(k.title)}</h2>
           ${k.title_telugu ? `<div class="te">${esc(k.title_telugu)}</div>` : ''}
           <div class="line">
-            <span class="raga">${esc(k.raga)}</span><span class="dot">·</span>
+            <button type="button" class="raga" data-raga-link="${esc(k.raga_slug)}"
+                    title="Open ${esc(k.raga)} in the Rāgas view">${esc(k.raga)}</button><span class="dot">·</span>
             <span>${esc(k.tala)}</span><span class="dot">·</span>
             <span>${esc(k.language)}</span><span class="dot">·</span>
             <span>${esc(k.deity)}</span>
@@ -644,7 +659,7 @@
     const card = (r) => {
       const mine = counts.get(r.slug) ?? [];
       const parent = r.parent !== r.slug ? byRaga.get(r.parent) : null;
-      return `<article class="card ragacard">
+      return `<article class="card ragacard" data-raga-card="${esc(r.slug)}">
         <h3><span>${esc(r.name)}</span><span class="count">${mine.length || '—'}</span></h3>
         <div class="melaline">
           ${parent ? `janya of ${esc(parent.name)}` : 'melakarta'}${r.mela ? ` · mēḷa ${r.mela}` : ''}${
@@ -681,6 +696,26 @@
       savePrefs();
       renderRagasView();
     });
+
+    if (pendingRagaFocus) {
+      const target = pendingRagaFocus;
+      pendingRagaFocus = null;
+      const el = document.querySelector(`[data-raga-card="${CSS.escape(target)}"]`);
+      if (!el && !prefs.showEmptyRagas && D.ragas.some((r) => r.slug === target)) {
+        // Active filters hid every kṛti in this rāga, so its card was suppressed
+        // — reveal it rather than land on what looks like a broken link.
+        prefs.showEmptyRagas = true;
+        savePrefs();
+        pendingRagaFocus = target;
+        renderRagasView();
+      } else if (el) {
+        requestAnimationFrame(() => {
+          el.scrollIntoView({ block: 'start', behavior: 'smooth' });
+          el.classList.add('flash');
+          setTimeout(() => el.classList.remove('flash'), 1400);
+        });
+      }
+    }
   }
 
   /* --------------------------------------------------------------- groups view */
@@ -821,6 +856,7 @@
   /* --------------------------------------------------------------------- views */
 
   function setView(view, initial = false) {
+    const changed = prefs.view !== view;
     prefs.view = view;
     savePrefs();
     ['catalog', 'ragas', 'groups', 'progress'].forEach((v) => {
@@ -829,7 +865,31 @@
     });
     $('.listhead').classList.toggle('hidden', view !== 'catalog');
     if (!initial) refresh();
+    // A real view switch is a "page" in this app — push so the back button
+    // retraces it. Restoring from a popstate (suppressHistory) must not push
+    // a second entry, and the very first render (initial) has nothing to push.
+    if (!initial && changed && !suppressHistory) {
+      history.pushState(appState(), '', urlForState(appState()));
+    }
   }
+
+  /** Jump to a rāga's card in the Rāgas view — used by the raga links in the
+   *  catalog rows and the detail panel. */
+  function goToRaga(slug) {
+    if (!byRaga.has(slug)) return;
+    pendingRagaFocus = slug;
+    setView('ragas');
+  }
+
+  window.addEventListener('popstate', (e) => {
+    const state = e.state || { view: 'catalog', slug: null };
+    suppressHistory = true;
+    selected = state.slug && byKriti.has(state.slug) ? state.slug : null;
+    if (prefs.view !== (state.view || 'catalog')) setView(state.view || 'catalog');
+    else refresh();
+    renderDetail();
+    suppressHistory = false;
+  });
 
   /* --------------------------------------------------------------------- events */
 
@@ -893,6 +953,12 @@
       if (mark) {
         e.stopPropagation();
         toggleMark(mark.dataset.slug, mark.dataset.act);
+        return;
+      }
+      const ragaLink = e.target.closest('[data-raga-link]');
+      if (ragaLink) {
+        e.stopPropagation();
+        goToRaga(ragaLink.dataset.ragaLink);
         return;
       }
       const goto = e.target.closest('[data-goto]');
