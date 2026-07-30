@@ -6,7 +6,14 @@
 <title>Kṛti Kōśam — the Tyāgarāja catalog</title>
 <meta name="description" content="A structured, versioned catalog of Saint Tyagaraja's kritis — raga, tala, language and pallavi for every entry, with a raga reference, tala reference and personal practice tracking.">
 <meta name="color-scheme" content="light dark">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E%F0%9F%AA%94%3C/text%3E%3C/svg%3E">
+<meta name="theme-color" content="#a8560f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Kṛti Kōśam">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -36,7 +43,7 @@
 
   <div class="topbar-actions">
     <button class="iconbtn" id="scriptBtn" title="Script: transliteration / Telugu / both">అ&nbsp;A</button>
-    <button class="iconbtn" id="densityBtn" aria-pressed="false" title="Compact rows">≡</button>
+    <button class="iconbtn" id="settingsBtn" title="Settings">⚙</button>
     <button class="iconbtn" id="helpBtn" title="Keyboard shortcuts &amp; about">?</button>
     <button class="iconbtn" id="dataBtn" title="Backup or restore your study data">⤓</button>
   </div>
@@ -165,6 +172,30 @@
       paṭhāntarams — treat a row as a starting point for your guru's version, not as the
       last word. Coverage is a working subset of the ~700 attributed kṛtis; see
       <a href="README.md">README.md</a> for provenance and how to add entries.</p>
+  </div>
+</dialog>
+
+<dialog id="settingsDlg">
+  <div class="dlg-head"><h2>Settings</h2><button class="iconbtn" data-close>Esc</button></div>
+  <div class="dlg-body">
+    <h3>Script</h3>
+    <p>What to show for kṛti titles, sāhityam, rāga names and swaras.</p>
+    <div class="chips" id="setScript">
+      <button class="chip" data-script="telugu">తెలుగు only</button>
+      <button class="chip" data-script="both">Telugu + transliteration</button>
+      <button class="chip" data-script="latin">Transliteration only</button>
+    </div>
+
+    <h3>Rows</h3>
+    <div class="chips" id="setDensity">
+      <button class="chip" data-density="comfortable">Comfortable</button>
+      <button class="chip" data-density="compact">Compact</button>
+    </div>
+
+    <h3>Install</h3>
+    <p id="installLine">This app can be installed to your home screen and works offline
+      once opened. On iOS use Share → Add to Home Screen.</p>
+    <div class="dlg-actions"><button class="iconbtn hidden" id="installBtn">Install app</button></div>
   </div>
 </dialog>
 

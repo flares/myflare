@@ -27,7 +27,7 @@
         "id", "slug", "title", "title_telugu", "raga", "raga_slug", "tala",
         "language", "pallavi", "pallavi_telugu", "meaning", "deity", "groups",
         "kshetra", "structure", "difficulty", "popularity", "confidence",
-        "notes", "tags"
+        "notes", "tags", "sahityam", "pratipadartham"
       ],
       "additionalProperties": false,
       "properties": {
@@ -101,6 +101,38 @@
           "type": "array",
           "uniqueItems": true,
           "items": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "maxLength": 40 }
+        },
+        "sahityam": {
+          "type": ["array", "null"],
+          "description": "The composition's sections in Telugu script — pallavi, anupallavi, charanams. null where the full text has not been verified; a partial list (pallavi only, or pallavi + anupallavi) is normal and expected. Sections are never reconstructed from meter.",
+          "items": {
+            "type": "object",
+            "required": ["kind", "label_telugu", "telugu", "verified"],
+            "additionalProperties": false,
+            "properties": {
+              "kind": { "type": "string", "enum": ["pallavi", "anupallavi", "charanam"] },
+              "label_telugu": { "type": "string", "minLength": 1, "maxLength": 40 },
+              "telugu": { "type": "string", "minLength": 2, "maxLength": 2000 },
+              "verified": {
+                "type": "boolean",
+                "description": "true when the wording was corroborated against a published lyric source; false when it rests on the compiler's knowledge alone."
+              }
+            }
+          }
+        },
+        "pratipadartham": {
+          "type": ["array", "null"],
+          "description": "Word-by-word gloss of the pallavi. Glosses are written for this dataset, not lifted from a published translation.",
+          "items": {
+            "type": "object",
+            "required": ["word", "meaning_telugu", "meaning"],
+            "additionalProperties": false,
+            "properties": {
+              "word": { "type": "string", "minLength": 1, "maxLength": 80 },
+              "meaning_telugu": { "type": "string", "minLength": 1, "maxLength": 200 },
+              "meaning": { "type": ["string", "null"], "maxLength": 200 }
+            }
+          }
         }
       }
     }

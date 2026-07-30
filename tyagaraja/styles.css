@@ -566,6 +566,37 @@ button.raga:hover, button.raga:focus-visible { text-decoration: underline; }
 .card > h3 .side { text-transform: none; letter-spacing: 0; font-size: 0.72rem; }
 
 .sahitya { font-size: 1rem; line-height: 1.65; white-space: pre-line; overflow-wrap: anywhere; }
+.sahitya.lat { font-size: 0.85rem; color: var(--ink-2); margin-top: 0.25rem; }
+
+/* One block per pallavi / anupallavi / charanam. */
+.sec + .sec { margin-top: 0.7rem; padding-top: 0.6rem; border-top: 1px dashed var(--border); }
+.sec-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  margin-bottom: 0.2rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  font-family: var(--telugu);
+}
+.unverified {
+  font-family: system-ui, sans-serif;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--learning);
+  border: 1px solid var(--learning);
+  border-radius: 4px;
+  padding: 0 0.25rem;
+}
+
+/* prati-pada-artham: word on the left, gloss on the right. */
+.ppa { display: grid; grid-template-columns: auto 1fr; gap: 0.3rem 0.75rem; font-size: 0.88rem; }
+.ppa dt { font-weight: 600; color: var(--ink); text-align: right; }
+.ppa dd { margin: 0; color: var(--ink-2); }
+.ppa dd .en { color: var(--muted); font-size: 0.82rem; }
 .sahitya.te { font-size: 1.05rem; line-height: 1.8; }
 .sahitya + .sahitya { margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px dashed var(--border); }
 .meaning { font-size: 0.9rem; color: var(--ink-2); line-height: 1.6; }
@@ -586,6 +617,9 @@ button.raga:hover, button.raga:focus-visible { text-decoration: underline; }
   color: var(--ink);
 }
 .sw.s { color: var(--accent); border-color: var(--accent); }
+/* Telugu swaras need the Telugu stack — the mono stack has no coverage and
+   falls back to tofu. Slightly larger, since Telugu sits small at this size. */
+.sw.te { font-family: var(--telugu); font-size: 0.86rem; padding: 0.02rem 0.32rem; }
 .swline { display: grid; grid-template-columns: 3rem 1fr; gap: 0.4rem; align-items: center; margin-top: 0.3rem; }
 .swline > span:first-child {
   font-size: 0.7rem;

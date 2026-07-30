@@ -29,7 +29,9 @@
       "tags": [
         "concert-staple",
         "rakti-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 2,
@@ -59,7 +61,9 @@
       "tags": [
         "opera",
         "krishna-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 3,
@@ -84,7 +88,9 @@
       "popularity": 3,
       "confidence": "medium",
       "notes": "Kalyani kriti reflecting on the futility of seeking happiness in worldly life.",
-      "tags": []
+      "tags": [],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 4,
@@ -114,7 +120,9 @@
       "tags": [
         "opera",
         "vishnu-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 5,
@@ -144,7 +152,9 @@
       "tags": [
         "opera",
         "krishna-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 6,
@@ -171,7 +181,9 @@
       "notes": "Well-known Atana kriti, frequently taught to intermediate students.",
       "tags": [
         "concert-staple"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 7,
@@ -198,7 +210,9 @@
       "notes": "Less frequently performed Atana kriti compared to Anupama Gunambudhi.",
       "tags": [
         "rarely-performed"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 8,
@@ -226,7 +240,9 @@
       "tags": [
         "concert-staple",
         "beginner-friendly"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 9,
@@ -255,7 +271,9 @@
       "notes": null,
       "tags": [
         "nama-sankirtana"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 10,
@@ -282,7 +300,9 @@
       "notes": null,
       "tags": [
         "rakti-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 11,
@@ -310,7 +330,9 @@
       "tags": [
         "rare-raga",
         "sanskrit-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 12,
@@ -338,7 +360,9 @@
       "tags": [
         "ghana-raga",
         "rare-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 13,
@@ -366,7 +390,9 @@
       "tags": [
         "concert-staple",
         "rakti-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 14,
@@ -394,7 +420,9 @@
       "tags": [
         "concert-staple",
         "beginner-friendly"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 15,
@@ -421,7 +449,9 @@
       "notes": null,
       "tags": [
         "rarely-performed"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 16,
@@ -448,7 +478,9 @@
       "notes": null,
       "tags": [
         "rakti-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 17,
@@ -473,7 +505,9 @@
       "popularity": 2,
       "confidence": "medium",
       "notes": "Todi kriti describing devotional adornment of the deity.",
-      "tags": []
+      "tags": [],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 18,
@@ -498,7 +532,9 @@
       "popularity": 3,
       "confidence": "medium",
       "notes": "Kalyani kriti expressing the singer's long-standing bond with Rama.",
-      "tags": []
+      "tags": [],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 19,
@@ -528,7 +564,9 @@
       "tags": [
         "opera",
         "krishna-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 20,
@@ -556,7 +594,9 @@
       "tags": [
         "concert-staple",
         "rakti-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 21,
@@ -586,7 +626,9 @@
       "tags": [
         "kshetra-kriti",
         "devi-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 22,
@@ -613,7 +655,9 @@
       "notes": null,
       "tags": [
         "concert-staple"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 23,
@@ -643,7 +687,9 @@
       "tags": [
         "opera",
         "vishnu-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 24,
@@ -670,7 +716,9 @@
       "notes": null,
       "tags": [
         "concert-staple"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 25,
@@ -698,7 +746,9 @@
       "tags": [
         "concert-staple",
         "beginner-friendly"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 26,
@@ -728,7 +778,9 @@
       "tags": [
         "opera",
         "vishnu-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 27,
@@ -758,7 +810,9 @@
       "tags": [
         "ghana-raga-pancharatna",
         "concert-staple"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 28,
@@ -785,7 +839,9 @@
       "notes": "Aṭāṇā (also spelt Aṭana) is a rakti rāga where the gāndhāra is heavily oscillated — the scale on paper tells you very little about it.",
       "tags": [
         "rakti-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 29,
@@ -813,7 +869,9 @@
       "tags": [
         "concert-staple",
         "rakti-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 30,
@@ -840,7 +898,9 @@
       "notes": null,
       "tags": [
         "concert-staple"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 31,
@@ -870,7 +930,9 @@
       "tags": [
         "ghana-raga-pancharatna",
         "concert-staple"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 32,
@@ -897,7 +959,9 @@
       "notes": null,
       "tags": [
         "rakti-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 33,
@@ -924,7 +988,9 @@
       "notes": null,
       "tags": [
         "concert-staple"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 34,
@@ -951,7 +1017,9 @@
       "notes": "Popular vatsalya-bhava (parental-love) kriti depicting baby Rama.",
       "tags": [
         "rare-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 35,
@@ -978,7 +1046,9 @@
       "notes": null,
       "tags": [
         "concert-staple"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 36,
@@ -1006,7 +1076,9 @@
       "tags": [
         "ghana-raga",
         "rare-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 37,
@@ -1033,7 +1105,9 @@
       "notes": null,
       "tags": [
         "rakti-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 38,
@@ -1060,7 +1134,9 @@
       "notes": null,
       "tags": [
         "concert-staple"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 39,
@@ -1087,7 +1163,9 @@
       "notes": "Sahana kriti expressing the bliss (ananda) of devotion.",
       "tags": [
         "rakti-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 40,
@@ -1117,7 +1195,9 @@
       "tags": [
         "opera",
         "krishna-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 41,
@@ -1147,7 +1227,9 @@
       "tags": [
         "opera",
         "krishna-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 42,
@@ -1176,7 +1258,9 @@
       "notes": "Popular Venkatesa kriti associated with Tirumala.",
       "tags": [
         "kshetra-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 43,
@@ -1203,7 +1287,9 @@
       "notes": null,
       "tags": [
         "rare-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 44,
@@ -1234,7 +1320,9 @@
         "opera",
         "krishna-kriti",
         "surrender"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 45,
@@ -1263,7 +1351,9 @@
       "notes": null,
       "tags": [
         "concert-staple"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 46,
@@ -1293,7 +1383,9 @@
       "tags": [
         "kshetra-kriti",
         "siva-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 47,
@@ -1320,7 +1412,9 @@
       "notes": null,
       "tags": [
         "beginner-friendly"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 48,
@@ -1348,7 +1442,9 @@
       "tags": [
         "beginner-friendly",
         "concert-staple"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 49,
@@ -1379,7 +1475,9 @@
         "ghana-raga-pancharatna",
         "concert-staple",
         "sanskrit-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 50,
@@ -1407,7 +1505,9 @@
       "tags": [
         "concert-staple",
         "rakti-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 51,
@@ -1439,7 +1539,9 @@
         "ritual-song",
         "lullaby",
         "rama-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 52,
@@ -1467,7 +1569,9 @@
       "tags": [
         "concert-staple",
         "rakti-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 53,
@@ -1496,7 +1600,9 @@
       "notes": "A ritual song for the kalyāṇōtsavam; the tala is written as khaṇḍa cāpu but many groups sing it in a relaxed Adi.",
       "tags": [
         "beginner-friendly"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 54,
@@ -1526,7 +1632,9 @@
       "tags": [
         "ghana-raga-pancharatna",
         "concert-staple"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 55,
@@ -1556,7 +1664,9 @@
       "tags": [
         "kshetra-kriti",
         "devi-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 56,
@@ -1583,7 +1693,9 @@
       "notes": null,
       "tags": [
         "rarely-performed"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 57,
@@ -1611,7 +1723,9 @@
       "tags": [
         "concert-staple",
         "rakti-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 58,
@@ -1639,7 +1753,9 @@
       "tags": [
         "concert-staple",
         "rakti-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 59,
@@ -1669,7 +1785,9 @@
       "tags": [
         "kshetra-kriti",
         "siva-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 60,
@@ -1697,7 +1815,9 @@
       "tags": [
         "rakti-raga",
         "rarely-performed"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 61,
@@ -1724,7 +1844,9 @@
       "notes": "Devagandhari kriti identifying Rama with the reclining Vishnu of the Ksheerasagara.",
       "tags": [
         "vishnu-rama-identification"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 62,
@@ -1755,7 +1877,9 @@
         "utsava-sampradaya",
         "ritual-song",
         "vishnu-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 63,
@@ -1788,7 +1912,9 @@
         "unjal",
         "lullaby",
         "rama-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 64,
@@ -1816,7 +1942,9 @@
       "tags": [
         "concert-staple",
         "ramayana-narrative"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 65,
@@ -1843,7 +1971,9 @@
       "notes": "Self-addressed kriti in the rare raga Malayamarutam.",
       "tags": [
         "rare-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 66,
@@ -1870,7 +2000,9 @@
       "notes": "Popular Sankarabharanam kriti on mastery of the mind as the key to spiritual attainment.",
       "tags": [
         "concert-staple"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 67,
@@ -1897,7 +2029,9 @@
       "notes": "Rare-raga kriti in the gentle, lullaby-like raga Nilambari.",
       "tags": [
         "rare-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 68,
@@ -1924,7 +2058,9 @@
       "notes": null,
       "tags": [
         "concert-staple"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 69,
@@ -1952,7 +2088,9 @@
       "tags": [
         "concert-staple",
         "rare-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 70,
@@ -1981,7 +2119,9 @@
       "notes": "One of Tyagaraja's Utsava Sampradaya Kirtanas used in ritual temple worship of Rama's daily routine.",
       "tags": [
         "utsava-sampradaya"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 71,
@@ -2006,7 +2146,9 @@
       "popularity": 3,
       "confidence": "medium",
       "notes": "One of the few concert kritis in Māyāmāḷavagauḷa, the rāga every student begins with in varisai practice.",
-      "tags": []
+      "tags": [],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 72,
@@ -2034,7 +2176,9 @@
       "tags": [
         "concert-staple",
         "nada-upasana"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 73,
@@ -2061,7 +2205,9 @@
       "notes": "Set in the rakti raga Kanada.",
       "tags": [
         "rakti-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 74,
@@ -2088,7 +2234,9 @@
       "notes": null,
       "tags": [
         "concert-staple"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 75,
@@ -2113,7 +2261,9 @@
       "popularity": 3,
       "confidence": "medium",
       "notes": "Supplication kriti in Kambhoji; pathantaram details vary between renditions.",
-      "tags": []
+      "tags": [],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 76,
@@ -2142,7 +2292,9 @@
         "nada-upasana",
         "concert-staple",
         "rakti-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 77,
@@ -2169,7 +2321,9 @@
       "notes": "Another central nada-upasana statement kriti, in Begada raga.",
       "tags": [
         "nada-upasana"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 78,
@@ -2194,7 +2348,9 @@
       "popularity": 2,
       "confidence": "medium",
       "notes": "Kriti of impatient longing, set in raga Nayaki.",
-      "tags": []
+      "tags": [],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 79,
@@ -2222,7 +2378,9 @@
       "tags": [
         "concert-staple",
         "beginner-friendly"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 80,
@@ -2252,7 +2410,9 @@
       "tags": [
         "kshetra-kriti",
         "siva-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 81,
@@ -2280,7 +2440,9 @@
       "tags": [
         "concert-staple",
         "beginner-friendly"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 82,
@@ -2308,7 +2470,9 @@
       "tags": [
         "concert-staple",
         "rakti-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 83,
@@ -2338,7 +2502,9 @@
       "tags": [
         "opera",
         "vishnu-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 84,
@@ -2365,7 +2531,9 @@
       "notes": "Sahana kriti of searching, longing devotion.",
       "tags": [
         "rakti-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 85,
@@ -2392,7 +2560,9 @@
       "notes": null,
       "tags": [
         "rakti-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 86,
@@ -2417,7 +2587,9 @@
       "popularity": 3,
       "confidence": "medium",
       "notes": "A plea-for-grace kriti in the springtime raga Vasanta.",
-      "tags": []
+      "tags": [],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 87,
@@ -2448,7 +2620,9 @@
         "opera",
         "vishnu-kriti",
         "mangalam"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 88,
@@ -2476,7 +2650,9 @@
       "tags": [
         "concert-staple",
         "biographical"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 89,
@@ -2503,7 +2679,9 @@
       "notes": null,
       "tags": [
         "rare-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 90,
@@ -2533,7 +2711,9 @@
       "tags": [
         "concert-staple",
         "kshetra-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 91,
@@ -2563,7 +2743,9 @@
       "tags": [
         "opera",
         "krishna-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 92,
@@ -2590,7 +2772,9 @@
       "notes": "A well-known kriti in the rakti raga Saramati.",
       "tags": [
         "rakti-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 93,
@@ -2618,7 +2802,9 @@
       "tags": [
         "rare-raga",
         "advaita"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 94,
@@ -2650,7 +2836,9 @@
         "ritual-song",
         "harati",
         "rama-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 95,
@@ -2678,7 +2866,9 @@
       "tags": [
         "concert-staple",
         "nada-upasana"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 96,
@@ -2705,7 +2895,9 @@
       "notes": "A frequently performed kriti in the compact pentatonic-flavoured raga Hamsanadam.",
       "tags": [
         "concert-staple"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 97,
@@ -2736,7 +2928,9 @@
         "nama-sankirtana",
         "beginner-friendly",
         "rama-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 98,
@@ -2763,7 +2957,9 @@
       "notes": "Utsava Sampradaya processional kriti set to the less common Khanda Chapu tala.",
       "tags": [
         "utsava-sampradaya"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 99,
@@ -2790,7 +2986,9 @@
       "notes": null,
       "tags": [
         "rare-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 100,
@@ -2818,7 +3016,9 @@
       "tags": [
         "concert-staple",
         "beginner-friendly"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 101,
@@ -2847,7 +3047,9 @@
       "notes": null,
       "tags": [
         "beginner-friendly"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 102,
@@ -2874,7 +3076,9 @@
       "notes": "The standard Kharaharapriya main piece for students — long enough to carry niraval and swaram, plain enough that the rāga stays audible.",
       "tags": [
         "concert-staple"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 103,
@@ -2899,7 +3103,9 @@
       "popularity": 3,
       "confidence": "medium",
       "notes": "Surrender-themed kriti in Harikambhoji.",
-      "tags": []
+      "tags": [],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 104,
@@ -2930,7 +3136,9 @@
         "nama-sankirtana",
         "beginner-friendly",
         "rama-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 105,
@@ -2960,7 +3168,9 @@
       "tags": [
         "ghana-raga-pancharatna",
         "concert-staple"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 106,
@@ -2989,7 +3199,9 @@
         "concert-staple",
         "beginner-friendly",
         "sanskrit-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 107,
@@ -3019,7 +3231,9 @@
       "tags": [
         "kshetra-kriti",
         "siva-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 108,
@@ -3047,7 +3261,9 @@
       "tags": [
         "nada-upasana",
         "rare-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 109,
@@ -3074,7 +3290,9 @@
       "notes": "One of the rare kritis whose imagery is political rather than devotional. Kāpī Nārāyaṇi should not be confused with Kāpi.",
       "tags": [
         "concert-staple"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 110,
@@ -3104,7 +3322,9 @@
       "tags": [
         "beginner-friendly",
         "concert-staple"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 111,
@@ -3134,7 +3354,9 @@
       "tags": [
         "utsava-sampradaya",
         "ritual-song"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 112,
@@ -3163,7 +3385,9 @@
         "concert-staple",
         "beginner-friendly",
         "nada-upasana"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 113,
@@ -3190,7 +3414,9 @@
       "notes": "Commonly listed in Kannaḍagauḷa; some editions place it in Kānaḍā, and the two are handled here under one reference entry. Worth confirming with your teacher.",
       "tags": [
         "rare-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 114,
@@ -3218,7 +3444,9 @@
       "tags": [
         "nada-upasana",
         "concert-staple"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 115,
@@ -3246,7 +3474,9 @@
       "tags": [
         "beginner-friendly",
         "ganesha-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 116,
@@ -3274,7 +3504,9 @@
       "tags": [
         "concert-staple",
         "nada-upasana"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 117,
@@ -3299,7 +3531,9 @@
       "popularity": 3,
       "confidence": "medium",
       "notes": "Kambhoji kriti in Rupaka tala praising Rama's incomparability.",
-      "tags": []
+      "tags": [],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 118,
@@ -3326,7 +3560,9 @@
       "notes": "A weighty Bhairavi piece; good practice ground for the rāga's D2-in-ascent, D1-in-descent asymmetry.",
       "tags": [
         "rakti-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 119,
@@ -3356,7 +3592,9 @@
       "tags": [
         "beginner-friendly",
         "nama-sankirtana"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 120,
@@ -3384,7 +3622,9 @@
       "tags": [
         "concert-staple",
         "sanskrit-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 121,
@@ -3414,7 +3654,9 @@
       "tags": [
         "opera",
         "krishna-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 122,
@@ -3441,7 +3683,9 @@
       "notes": "Khamās sits low and warm; this is a common second-item choice.",
       "tags": [
         "concert-staple"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 123,
@@ -3472,7 +3716,9 @@
         "nama-sankirtana",
         "beginner-friendly",
         "rama-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 124,
@@ -3499,7 +3745,9 @@
       "notes": "A gentle, melodic Madhyamavati kriti describing Rama's beauty.",
       "tags": [
         "beginner-friendly"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 125,
@@ -3529,7 +3777,9 @@
       "tags": [
         "kshetra-kriti",
         "siva-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 126,
@@ -3559,7 +3809,9 @@
       "tags": [
         "kshetra-kriti",
         "devi-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 127,
@@ -3589,7 +3841,9 @@
       "tags": [
         "kshetra-kriti",
         "devi-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 128,
@@ -3619,7 +3873,9 @@
       "tags": [
         "kshetra-kriti",
         "devi-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 129,
@@ -3647,7 +3903,9 @@
       "tags": [
         "concert-staple",
         "rare-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 130,
@@ -3676,7 +3934,9 @@
       "notes": "The double meaning of \"tera\" — temple curtain and the veil of the ego — is the whole kriti. Commonly listed in Gauḷipantu; some editions give Gauḷa, and the reference entry here is Gauḷa.",
       "tags": [
         "kshetra-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 131,
@@ -3701,7 +3961,9 @@
       "popularity": 3,
       "confidence": "medium",
       "notes": null,
-      "tags": []
+      "tags": [],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 132,
@@ -3728,7 +3990,9 @@
       "notes": "Bhairavi kriti lamenting the scarcity of true devotees.",
       "tags": [
         "rakti-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 133,
@@ -3758,7 +4022,9 @@
       "tags": [
         "opera",
         "vishnu-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 134,
@@ -3786,7 +4052,9 @@
       "tags": [
         "concert-staple",
         "rakti-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 135,
@@ -3813,7 +4081,9 @@
       "notes": null,
       "tags": [
         "sanskrit-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 136,
@@ -3843,7 +4113,9 @@
       "tags": [
         "opera",
         "vishnu-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 137,
@@ -3873,7 +4145,9 @@
       "tags": [
         "opera",
         "vishnu-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 138,
@@ -3900,7 +4174,9 @@
       "notes": "Set in the comparatively less common raga Jayantasena.",
       "tags": [
         "rare-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 139,
@@ -3927,7 +4203,9 @@
       "notes": "A self-addressed (manasa) kriti in the less common raga Devamanohari.",
       "tags": [
         "rare-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 140,
@@ -3955,7 +4233,9 @@
       "tags": [
         "beginner-friendly",
         "ganesha-kriti"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     },
     {
       "id": 141,
@@ -3982,7 +4262,9 @@
       "notes": null,
       "tags": [
         "rakti-raga"
-      ]
+      ],
+      "sahityam": null,
+      "pratipadartham": null
     }
   ]
 }

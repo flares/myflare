@@ -23,7 +23,10 @@
   const byKriti = new Map();
 
   let study = {};
-  let prefs = { script: 'both', compact: false, sort: 'catalog', view: 'catalog', showEmptyRagas: false };
+  // Telugu-first by default: for the reader this is built for, the lipi is the
+  // primary text and the transliteration is the fallback. `scripts()` drops
+  // back to transliteration automatically for records with no Telugu yet.
+  let prefs = { script: 'telugu', compact: false, sort: 'catalog', view: 'catalog', showEmptyRagas: false };
   const filters = {
     q: '',
     status: new Set(),
@@ -46,8 +49,27 @@
   // j/k stepping) only replaces the current entry, as before — otherwise
   // scanning ten kritis would take ten presses of back to undo.
   let suppressHistory = false;
-  const appState = () => ({ view: prefs.view, slug: selected });
+  // We restore scroll ourselves from history state — the list is re-rendered on
+  // every navigation, so the browser's own guess is made against a stale height.
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  const appState = () => ({ view: prefs.view, slug: selected, scrollY: window.scrollY });
   const urlForState = (state) => (state.slug && byKriti.has(state.slug) ? `#${state.slug}` : location.pathname + location.search);
+
+  /** Snapshot where the user currently is (including scroll) into the entry
+   *  they are leaving, then push the new one. Without the snapshot, going back
+   *  would restore the view but dump them at the top of a 141-row list. */
+  function pushNav() {
+    if (suppressHistory) return;
+    history.replaceState({ ...(history.state || {}), scrollY: window.scrollY }, '', location.href);
+    const next = appState();
+    next.scrollY = 0;
+    history.pushState(next, '', urlForState(next));
+  }
+
+  function replaceNav() {
+    if (suppressHistory) return;
+    history.replaceState(appState(), '', urlForState(appState()));
+  }
 
   /* ----------------------------------------------------------------- helpers */
 
@@ -116,12 +138,47 @@
     [1, 2, 3, 4, 5].map((i) => `<i class="${i <= n ? 'on' : ''}"></i>`).join('')
   }</span>`;
 
+  // Telugu swara notation: the sthāna number rides as a subscript, the way it
+  // is printed in Telugu notation books (S R2 G3 → స రి₂ గ₃).
+  const SWARA_TELUGU = { S: 'స', R: 'రి', G: 'గ', M: 'మ', P: 'ప', D: 'ద', N: 'ని' };
+  const SUBSCRIPT = ['', '₁', '₂', '₃'];
+
+  function swaraLabel(sw) {
+    if (prefs.script === 'latin') return sw;
+    const base = SWARA_TELUGU[sw[0]];
+    if (!base) return sw;
+    const n = Number(sw[1]);
+    return n ? base + SUBSCRIPT[n] : base;
+  }
+
   const swaraChips = (line) => (line || '')
     .split(' ')
-    .map((sw) => `<span class="sw${sw === 'S' ? ' s' : ''}">${esc(sw)}</span>`)
+    .map((sw) => `<span class="sw${sw === 'S' ? ' s' : ''}${
+      prefs.script === 'latin' ? '' : ' te'
+    }" title="${esc(sw)}">${esc(swaraLabel(sw))}</span>`)
     .join('');
 
   const statusBadge = (st) => (st === 'todo' ? '' : `<span class="badge st-${st}">${st}</span>`);
+
+  /** The kriti's display title under the current script setting, for the
+   *  cross-view link lists in the Rāgas, Groups and Progress views. */
+  function linkTitle(k) {
+    return prefs.script === 'telugu' && k.title_telugu
+      ? `<span class="te">${esc(k.title_telugu)}</span>`
+      : esc(k.title);
+  }
+
+  /** The composition's verified sections, in order, Telugu script. */
+  function renderSahityam(k, sc) {
+    return k.sahityam.map((sec) => `
+      <div class="sec">
+        <div class="sec-label">${esc(sec.label_telugu)}${
+          sec.verified ? '' : '<span class="unverified" title="From the compiler\'s knowledge, not corroborated against a published lyric source">unverified</span>'
+        }</div>
+        <div class="sahitya te">${esc(sec.telugu)}</div>
+        ${sec.kind === 'pallavi' && sc.latin ? `<div class="sahitya lat">${esc(k.pallavi)}</div>` : ''}
+      </div>`).join('');
+  }
 
   /** Which scripts to show, honouring the toggle and falling back when Telugu is absent. */
   function scripts(k) {
@@ -363,9 +420,17 @@
     });
     $('#difficultyLabel').textContent = `up to ${filters.maxDifficulty}`;
     $('#popularityLabel').textContent = `${filters.minPopularity} and up`;
-    $('#densityBtn').setAttribute('aria-pressed', String(prefs.compact));
     $('#scriptBtn').textContent = { both: 'అ A', latin: 'A', telugu: 'అ' }[prefs.script];
     $('#scriptBtn').title = `Script: ${{ both: 'both', latin: 'transliteration', telugu: 'Telugu' }[prefs.script]}`;
+  }
+
+  function syncSettings() {
+    document.querySelectorAll('[data-script]').forEach((el) => {
+      el.setAttribute('aria-pressed', String(el.dataset.script === prefs.script));
+    });
+    document.querySelectorAll('[data-density]').forEach((el) => {
+      el.setAttribute('aria-pressed', String((el.dataset.density === 'compact') === prefs.compact));
+    });
   }
 
   /* ------------------------------------------------------------- catalog list */
@@ -387,8 +452,11 @@
         <span class="title">${titleLat}${titleTe}</span>
         <span class="sub ${sc.telugu && !sc.latin ? 'te' : ''}">${esc(pallavi.split('\n')[0])}</span>
         <span class="meta">
-          <button type="button" class="raga" data-raga-link="${esc(k.raga_slug)}"
-                  title="Open ${esc(k.raga)} in the Rāgas view">${esc(k.raga)}</button><span class="dot">·</span>
+          <button type="button" class="raga${sc.telugu && !sc.latin && raga?.name_telugu ? ' te' : ''}"
+                  data-raga-link="${esc(k.raga_slug)}"
+                  title="Open ${esc(k.raga)} in the Rāgas view">${
+                    sc.telugu && !sc.latin && raga?.name_telugu ? esc(raga.name_telugu) : esc(k.raga)
+                  }</button><span class="dot">·</span>
           <span>${esc(k.tala)}</span><span class="dot">·</span>
           <span>${esc(k.language)}</span>
           ${raga && raga.mela ? `<span class="dot">·</span><span>mela ${raga.mela}</span>` : ''}
@@ -419,8 +487,14 @@
   /* -------------------------------------------------------------- detail panel */
 
   function select(slug, scroll = true) {
+    // Opening the detail is a navigation step, so back closes it and returns
+    // to the list where it was. Stepping between kritis with j/k while it is
+    // already open only replaces — otherwise scanning ten kritis would cost
+    // ten presses of back to undo.
+    const wasOpen = selected !== null;
     selected = slug;
-    if (!suppressHistory) history.replaceState(appState(), '', urlForState(appState()));
+    if (wasOpen) replaceNav();
+    else pushNav();
     renderDetail();
     document.querySelectorAll('.row').forEach((el) => el.classList.toggle('sel', el.dataset.slug === slug));
     if (scroll) {
@@ -442,6 +516,7 @@
     holder.classList.remove('hidden');
 
     const s = peek(k.slug);
+    const sc = scripts(k);
     const raga = byRaga.get(k.raga_slug);
     const tala = byTala.get(k.tala);
     const parent = raga && raga.parent !== raga.slug ? byRaga.get(raga.parent) : null;
@@ -466,11 +541,16 @@
 
       <div class="detail-body">
         <div class="dtitle">
-          <h2>${esc(k.title)}</h2>
-          ${k.title_telugu ? `<div class="te">${esc(k.title_telugu)}</div>` : ''}
+          ${sc.telugu && !sc.latin && k.title_telugu
+            ? `<h2 class="te">${esc(k.title_telugu)}</h2>`
+            : `<h2>${esc(k.title)}</h2>${
+                sc.telugu && k.title_telugu ? `<div class="te">${esc(k.title_telugu)}</div>` : ''
+              }`}
           <div class="line">
             <button type="button" class="raga" data-raga-link="${esc(k.raga_slug)}"
-                    title="Open ${esc(k.raga)} in the Rāgas view">${esc(k.raga)}</button><span class="dot">·</span>
+                    title="Open ${esc(k.raga)} in the Rāgas view">${
+                      sc.telugu && !sc.latin && raga?.name_telugu ? esc(raga.name_telugu) : esc(k.raga)
+                    }</button><span class="dot">·</span>
             <span>${esc(k.tala)}</span><span class="dot">·</span>
             <span>${esc(k.language)}</span><span class="dot">·</span>
             <span>${esc(k.deity)}</span>
@@ -492,11 +572,26 @@
         </div>
 
         <div class="card">
-          <h3>Pallavi <span class="side">${esc(structure)}</span></h3>
-          <div class="sahitya">${esc(k.pallavi)}</div>
-          ${k.pallavi_telugu ? `<div class="sahitya te">${esc(k.pallavi_telugu)}</div>` : ''}
+          <h3>${k.sahityam?.length ? 'సాహిత్యం · Sāhityam' : 'Pallavi'} <span class="side">${esc(structure)}</span></h3>
+          ${k.sahityam?.length ? renderSahityam(k, sc) : `
+            <div class="sahitya">${esc(k.pallavi)}</div>
+            ${sc.telugu && k.pallavi_telugu ? `<div class="sahitya te">${esc(k.pallavi_telugu)}</div>` : ''}`}
           <div class="meaning" style="margin-top:.6rem">${esc(k.meaning)}</div>
+          ${k.sahityam?.length && k.sahityam.length <= 2 && k.structure.charanams > 0 ? `
+            <div class="notes" style="margin-top:.5rem;font-size:.76rem;color:var(--muted)">
+              Only the sections above are verified — the remaining charaṇams are not in the
+              dataset yet rather than being reconstructed from memory.
+            </div>` : ''}
         </div>
+
+        ${k.pratipadartham?.length ? `<div class="card">
+          <h3>ప్రతిపదార్థం <span class="side">word by word, pallavi</span></h3>
+          <dl class="ppa">${k.pratipadartham.map((w) => `
+            <dt class="te">${esc(w.word)}</dt>
+            <dd><span class="te">${esc(w.meaning_telugu)}</span>${
+              w.meaning && sc.latin ? `<span class="en"> — ${esc(w.meaning)}</span>` : ''
+            }</dd>`).join('')}</dl>
+        </div>` : ''}
 
         ${k.notes ? `<div class="card"><h3>Study note</h3><div class="meaning">${esc(k.notes)}</div></div>` : ''}
 
@@ -594,7 +689,15 @@
   }
 
   function closeDetail() {
-    $('#detail').classList.remove('open');
+    // Opening the detail pushed an entry, so closing it should pop that entry
+    // rather than diverge from what the phone's back gesture does.
+    if (history.state?.slug && selected) history.back();
+    else {
+      selected = null;
+      $('#detail').classList.remove('open');
+      renderDetail();
+      replaceNav();
+    }
   }
 
   function step(delta) {
@@ -662,8 +765,13 @@
       const mine = counts.get(r.slug) ?? [];
       const parent = r.parent !== r.slug ? byRaga.get(r.parent) : null;
       return `<article class="card ragacard" data-raga-card="${esc(r.slug)}">
-        <h3><span>${esc(r.name)}${
-          r.name_telugu ? ` <span class="te" style="font-weight:500">${esc(r.name_telugu)}</span>` : ''
+        <h3><span>${
+          prefs.script === 'telugu' && r.name_telugu
+            ? `<span class="te">${esc(r.name_telugu)}</span>`
+            : `${esc(r.name)}${
+                prefs.script === 'both' && r.name_telugu
+                  ? ` <span class="te" style="font-weight:500">${esc(r.name_telugu)}</span>` : ''
+              }`
         }</span><span class="count">${mine.length || '—'}</span></h3>
         <div class="melaline">
           ${parent ? `janya of ${esc(parent.name)}` : 'melakarta'}${r.mela ? ` · mēḷa ${r.mela}` : ''}${
@@ -677,7 +785,7 @@
         ${mine.length ? `<div class="kritilinks">${
           mine.sort((a, b) => a.id - b.id).map((k) => {
             const st = peek(k.slug).status;
-            return `<button data-goto="${esc(k.slug)}"><span class="num">${k.id}</span><span>${esc(k.title)}</span>${
+            return `<button data-goto="${esc(k.slug)}"><span class="num">${k.id}</span><span>${linkTitle(k)}</span>${
               st === 'todo' ? '' : `<span class="st badge st-${st}">${st}</span>`}</button>`;
           }).join('')
         }</div>` : ''}
@@ -739,7 +847,10 @@
         ${g.study_note ? `<div class="study">${esc(g.study_note)}</div>` : ''}
         ${mine.length ? `<div class="kritilinks">${mine.map((k) => {
           const st = peek(k.slug).status;
-          return `<button data-goto="${esc(k.slug)}"><span class="num">${k.id}</span><span>${esc(k.title)} <span style="color:var(--accent)">${esc(k.raga)}</span></span>${
+          return `<button data-goto="${esc(k.slug)}"><span class="num">${k.id}</span><span>${linkTitle(k)} <span style="color:var(--accent)">${
+            prefs.script === 'telugu' && byRaga.get(k.raga_slug)?.name_telugu
+              ? `<span class="te">${esc(byRaga.get(k.raga_slug).name_telugu)}</span>` : esc(k.raga)
+          }</span></span>${
             st === 'todo' ? '' : `<span class="st badge st-${st}">${st}</span>`}</button>`;
         }).join('')}</div>` : `<div class="notes" style="opacity:.7">${
           all === 0
@@ -789,7 +900,7 @@
 
     const linkList = (items, sub) => (items.length
       ? `<div class="kritilinks">${items.map((k) => `<button data-goto="${esc(k.slug)}">
-          <span class="num">${k.id}</span><span>${esc(k.title)}</span>
+          <span class="num">${k.id}</span><span>${linkTitle(k)}</span>
           <span class="st">${esc(sub(k))}</span></button>`).join('')}</div>`
       : '<div class="notes" style="opacity:.75">Nothing here yet.</div>');
 
@@ -872,9 +983,7 @@
     // A real view switch is a "page" in this app — push so the back button
     // retraces it. Restoring from a popstate (suppressHistory) must not push
     // a second entry, and the very first render (initial) has nothing to push.
-    if (!initial && changed && !suppressHistory) {
-      history.pushState(appState(), '', urlForState(appState()));
-    }
+    if (!initial && changed) pushNav();
   }
 
   /** Jump to a rāga's card in the Rāgas view — used by the raga links in the
@@ -886,12 +995,16 @@
   }
 
   window.addEventListener('popstate', (e) => {
-    const state = e.state || { view: 'catalog', slug: null };
+    const state = e.state || { view: 'catalog', slug: null, scrollY: 0 };
     suppressHistory = true;
     selected = state.slug && byKriti.has(state.slug) ? state.slug : null;
     if (prefs.view !== (state.view || 'catalog')) setView(state.view || 'catalog');
     else refresh();
     renderDetail();
+    if (!selected) $('#detail').classList.remove('open');
+    // Restore after layout has settled, or the browser clamps the scroll to
+    // whatever height the list happened to have mid-render.
+    requestAnimationFrame(() => window.scrollTo(0, state.scrollY || 0));
     suppressHistory = false;
   });
 
@@ -1000,6 +1113,12 @@
     };
     $('#scrim').addEventListener('click', closeRail);
     $('#railClose').addEventListener('click', closeRail);
+    const openRail = () => {
+      $('#rail').classList.add('open');
+      $('#scrim').classList.add('on');
+      $('#railBtn').setAttribute('aria-expanded', 'true');
+    };
+    wireEdgeSwipe(openRail, closeRail);
 
     $('#scriptBtn').addEventListener('click', () => {
       const order = ['both', 'latin', 'telugu'];
@@ -1009,11 +1128,29 @@
       renderDetail();
     });
 
-    $('#densityBtn').addEventListener('click', () => {
-      prefs.compact = !prefs.compact;
+    $('#settingsBtn').addEventListener('click', () => {
+      syncSettings();
+      $('#settingsDlg').showModal();
+    });
+
+    $('#setScript').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-script]');
+      if (!btn) return;
+      prefs.script = btn.dataset.script;
+      savePrefs();
+      syncSettings();
+      syncChips();
+      refresh();
+      renderDetail();
+    });
+
+    $('#setDensity').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-density]');
+      if (!btn) return;
+      prefs.compact = btn.dataset.density === 'compact';
       document.body.classList.toggle('compact', prefs.compact);
       savePrefs();
-      syncChips();
+      syncSettings();
     });
 
     $('#helpBtn').addEventListener('click', () => $('#helpDlg').showModal());
@@ -1031,6 +1168,43 @@
     $('#wipeBtn').addEventListener('click', wipeStudy);
 
     document.addEventListener('keydown', onKey);
+  }
+
+  /** Edge swipe: drag in from the left screen edge to pull the filter rail
+   *  out, swipe left on the open rail to put it away. Only below the desktop
+   *  breakpoint, where the rail is a slide-over rather than a fixed column. */
+  function wireEdgeSwipe(open, close) {
+    const EDGE = 28;      // px from the left edge that counts as a starting grab
+    const DISTANCE = 55;  // px of horizontal travel before it counts
+    const SLOP = 45;      // px of vertical drift allowed before it reads as a scroll
+    let x0 = 0;
+    let y0 = 0;
+    let tracking = null;
+
+    const mobile = () => window.matchMedia('(max-width: 61.99rem)').matches;
+
+    document.addEventListener('touchstart', (e) => {
+      if (!mobile() || e.touches.length !== 1) { tracking = null; return; }
+      const t = e.touches[0];
+      x0 = t.clientX;
+      y0 = t.clientY;
+      const isOpen = $('#rail').classList.contains('open');
+      if (!isOpen && x0 <= EDGE) tracking = 'open';
+      else if (isOpen) tracking = 'close';
+      else tracking = null;
+    }, { passive: true });
+
+    document.addEventListener('touchmove', (e) => {
+      if (!tracking || e.touches.length !== 1) return;
+      const t = e.touches[0];
+      const dx = t.clientX - x0;
+      const dy = Math.abs(t.clientY - y0);
+      if (dy > SLOP) { tracking = null; return; } // it's a scroll, leave it alone
+      if (tracking === 'open' && dx > DISTANCE) { open(); tracking = null; }
+      if (tracking === 'close' && dx < -DISTANCE) { close(); tracking = null; }
+    }, { passive: true });
+
+    document.addEventListener('touchend', () => { tracking = null; }, { passive: true });
   }
 
   function clearFilters() {
@@ -1154,5 +1328,40 @@
     $('#dataMsg').textContent = 'Cleared.';
   }
 
+  /* ------------------------------------------------------------------- PWA */
+
+  function wirePwa() {
+    if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch((e) => {
+          console.warn('service worker registration failed', e);
+        });
+      });
+    }
+
+    // Chromium fires this instead of showing its own install affordance; stash
+    // it so the Settings dialog can offer a real button. Other browsers (iOS)
+    // never fire it, which is why the dialog also spells out the manual route.
+    let deferred = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferred = e;
+      $('#installBtn').classList.remove('hidden');
+    });
+    $('#installBtn').addEventListener('click', async () => {
+      if (!deferred) return;
+      deferred.prompt();
+      await deferred.userChoice;
+      deferred = null;
+      $('#installBtn').classList.add('hidden');
+    });
+    window.addEventListener('appinstalled', () => {
+      deferred = null;
+      $('#installBtn').classList.add('hidden');
+      $('#installLine').textContent = 'Installed — this app now runs from your home screen and works offline.';
+    });
+  }
+
+  wirePwa();
   boot();
 })();

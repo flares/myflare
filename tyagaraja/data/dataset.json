@@ -10,7 +10,7 @@
       "path": "kritis.json",
       "schema": "kriti.schema.json",
       "count": 141,
-      "sha256": "a16a07d28a03eff9d2bad570620719604e66de1599e7947ff48052b4704a8ca9"
+      "sha256": "086a0a81a093bc63f79820f38d62a74a1dea535fdd1c24b4c2f9a28701d322fb"
     },
     "ragas": {
       "path": "ragas.json",
