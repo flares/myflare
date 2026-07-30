@@ -1,0 +1,117 @@
+{
+  "$schema": "../schema/tala.schema.json",
+  "version": "1.0.0",
+  "updated": "2026-07-30",
+  "records": [
+    {
+      "slug": "adi",
+      "name": "Ādi",
+      "label": "Adi",
+      "aksharas": 8,
+      "angas": "laghu(4) + drutam(2) + drutam(2)",
+      "counting": "Beat + 3 finger counts (laghu), then beat + wave (drutam), then beat + wave (drutam).",
+      "jati": "Chatusra",
+      "notes": "The most common tala in Carnatic kritis; structurally it is chatusra-jati Tripuṭa tala. 8 aksharas per cycle, grouped 4+2+2. Desādi and Madhyādi are eduppu (starting-point) variants of this same structure, not separate talas."
+    },
+    {
+      "slug": "rupaka",
+      "name": "Rūpaka",
+      "label": "Rupaka",
+      "aksharas": 6,
+      "angas": "drutam(2) + laghu(4)",
+      "counting": "Beat + wave (drutam), then beat + 3 finger counts (laghu).",
+      "jati": "Chatusra",
+      "notes": "As commonly counted in kriti attributions, Rūpaka has 6 aksharas (drutam + chatusra laghu). Many performers feel it informally as a 3-beat cycle, but the formal akshara count used in notation is 6."
+    },
+    {
+      "slug": "misra-chapu",
+      "name": "Miśra Cāpu",
+      "label": "Misra Chapu",
+      "aksharas": 7,
+      "angas": "3 + 4",
+      "counting": "Clap through a group of 3 counts, then clap through a group of 4 counts. Chapu talas are counted by claps only, with no waves (no drutam/laghu anga symbols used).",
+      "jati": "Misra",
+      "notes": "7-akshara cycle. Some texts and teaching lineages write the grouping as 3+4, others as 4+3 (i.e., which clap falls first varies by tradition) — both describe the same 7-count cycle."
+    },
+    {
+      "slug": "khanda-chapu",
+      "name": "Khaṇḍa Cāpu",
+      "label": "Khanda Chapu",
+      "aksharas": 5,
+      "angas": "2 + 3",
+      "counting": "Clap through a group of 2 counts, then clap through a group of 3 counts.",
+      "jati": "Khanda",
+      "notes": "5-akshara cycle, counted purely by claps like all chapu talas. Some traditions reverse the grouping to 3+2. Good early tala for practicing asymmetric (non-4/8-beat) counting."
+    },
+    {
+      "slug": "desadi",
+      "name": "Dēśādi",
+      "label": "Desadi",
+      "aksharas": 8,
+      "angas": "laghu(4) + drutam(2) + drutam(2) [Ādi tala structure; sahitya eduppu at akshara 4]",
+      "counting": "Count Ādi tala normally (beat + 3 finger counts, beat + wave, beat + wave); the first sahitya syllable lands after 1.5 beats have elapsed, i.e., on the 4th akshara of the cycle.",
+      "jati": "Chatusra",
+      "notes": "Dēśādi is NOT a separate tala structure — it is Ādi tala (8 aksharas, laghu+drutam+drutam) distinguished only by its eduppu: the sung syllable begins after 3 aksharas (1.5 beats) have passed. Contrast with plain Ādi (eduppu on beat 1) and Madhyādi (eduppu at the 8-akshara cycle's midpoint)."
+    },
+    {
+      "slug": "madhyadi",
+      "name": "Madhyādi",
+      "label": "Madhyadi",
+      "aksharas": 8,
+      "angas": "laghu(4) + drutam(2) + drutam(2) [Ādi tala structure; sahitya eduppu at akshara 5]",
+      "counting": "Count Ādi tala normally (beat + 3 finger counts, beat + wave, beat + wave); the first sahitya syllable lands after 2 full beats (4 aksharas) have elapsed, i.e., on the 5th akshara — exactly the midpoint of the 8-akshara cycle.",
+      "jati": "Chatusra",
+      "notes": "Like Dēśādi, Madhyādi is an eduppu convention within Ādi tala, not a distinct anga structure. 'Madhya' (middle) refers to the sahitya starting at the exact midpoint of the avartana, after the laghu and first drutam have completed."
+    },
+    {
+      "slug": "ata",
+      "name": "Aṭa",
+      "label": "Ata",
+      "aksharas": 14,
+      "angas": "laghu(5) + laghu(5) + drutam(2) + drutam(2)",
+      "counting": "Beat + 4 finger counts (laghu), beat + 4 finger counts (laghu), beat + wave (drutam), beat + wave (drutam).",
+      "jati": "Khanda",
+      "notes": "As used in kriti attributions, Aṭa tala is khanda-jati: two khanda laghus (5 each) followed by two drutams, 14 aksharas per cycle. Rare in the kriti repertoire — most of what looks long is Adi at a slow pace. All five Pancharatna kritis are in Adi, not Ata."
+    },
+    {
+      "slug": "jhampa",
+      "name": "Jhampā",
+      "label": "Jhampa",
+      "aksharas": 10,
+      "angas": "laghu(7) + drutam(2) + anudrutam(1)",
+      "counting": "Beat + 6 finger counts (laghu), then beat + wave (drutam), then a single beat with no wave (anudrutam).",
+      "jati": "Misra",
+      "notes": "As used in kriti attributions, Jhampa tala is misra-jati: a 7-count laghu, a drutam, and a lone anudrutam. 10 aksharas per cycle. The anudrutam anga (a bare single beat) appears only in this tala among common kriti talas, making it useful for drilling that anga."
+    },
+    {
+      "slug": "triputa",
+      "name": "Tripuṭa",
+      "label": "Triputa",
+      "aksharas": 7,
+      "angas": "laghu(3) + drutam(2) + drutam(2)",
+      "counting": "Beat + 2 finger counts (laghu), then beat + wave (drutam), then beat + wave (drutam).",
+      "jati": "Tisra",
+      "notes": "As used plainly in kriti attributions, Tripuṭa tala is tisra-jati (3+2+2 = 7 aksharas). If the same laghu+drutam+drutam skeleton is performed in chatusra jati (4+2+2 = 8) it becomes Ādi tala — the two talas share one anga structure across different jatis."
+    },
+    {
+      "slug": "eka",
+      "name": "Ēka",
+      "label": "Eka",
+      "aksharas": 4,
+      "angas": "laghu(4)",
+      "counting": "Beat + 3 finger counts — a single laghu, repeating each cycle.",
+      "jati": "Chatusra",
+      "notes": "The simplest of the sapta talas: one chatusra laghu, 4 aksharas per cycle. Useful as a first tala for internalizing laghu counting before combining angas."
+    },
+    {
+      "slug": "matya",
+      "name": "Mātya",
+      "label": "Matya",
+      "aksharas": 10,
+      "angas": "laghu(4) + drutam(2) + laghu(4)",
+      "counting": "Beat + 3 finger counts (laghu), then beat + wave (drutam), then beat + 3 finger counts (laghu).",
+      "jati": "Chatusra",
+      "notes": "10-akshara cycle in chatusra jati (4+2+4). Less frequently seen in kriti attributions than Ādi, Rūpaka, or the chapu talas, but appears in works of several composers."
+    }
+  ]
+}

@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://myflare.local/tyagaraja/schema/kriti.schema.json",
+  "title": "Tyagaraja kriti collection",
+  "description": "A versioned collection of kritis attributed to Saint Tyagaraja (1767-1847).",
+  "type": "object",
+  "required": ["version", "updated", "records"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "Semver of this file's contents. Minor bump = records added, patch = corrections, major = field shape change."
+    },
+    "updated": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+    "records": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/kriti" }
+    }
+  },
+  "$defs": {
+    "kriti": {
+      "type": "object",
+      "required": [
+        "id", "slug", "title", "title_telugu", "raga", "raga_slug", "tala",
+        "language", "pallavi", "pallavi_telugu", "meaning", "deity", "groups",
+        "kshetra", "structure", "difficulty", "popularity", "confidence",
+        "notes", "tags"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Catalog number. Assigned by alphabetical title order and regenerated when records are added, so it is a display handle, not a stable key. Use `slug` as the stable key."
+        },
+        "slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+          "minLength": 3,
+          "maxLength": 64,
+          "description": "Stable identifier. Never renamed once published - user favourites and notes key off this."
+        },
+        "title": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "title_telugu": { "type": ["string", "null"], "minLength": 2, "maxLength": 160 },
+        "raga": { "type": "string", "minLength": 2, "maxLength": 60 },
+        "raga_slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+          "description": "Must resolve against a record in ragas.json."
+        },
+        "tala": {
+          "type": "string",
+          "enum": ["Adi", "Rupaka", "Misra Chapu", "Khanda Chapu", "Desadi", "Madhyadi", "Ata", "Jhampa", "Triputa", "Eka", "Matya"]
+        },
+        "language": { "type": "string", "enum": ["Telugu", "Sanskrit", "Manipravalam"] },
+        "pallavi": { "type": "string", "minLength": 4, "maxLength": 400 },
+        "pallavi_telugu": { "type": ["string", "null"], "minLength": 4, "maxLength": 500 },
+        "meaning": { "type": "string", "minLength": 10, "maxLength": 700 },
+        "deity": {
+          "type": "string",
+          "enum": ["Rama", "Siva", "Devi", "Ganesha", "Vishnu", "Krishna", "Hanuman", "Sarasvati", "Subrahmanya", "Lakshmi", "Narasimha", "Venkatesa", "Other"]
+        },
+        "groups": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+          "description": "Each entry must resolve against a record in groups.json."
+        },
+        "kshetra": { "type": ["string", "null"], "maxLength": 60 },
+        "structure": {
+          "type": "object",
+          "required": ["anupallavi", "charanams"],
+          "additionalProperties": false,
+          "properties": {
+            "anupallavi": { "type": "boolean" },
+            "charanams": { "type": "integer", "minimum": 0, "maximum": 40 }
+          }
+        },
+        "difficulty": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "1 = a divya nama a first-year student can pick up, 5 = pancharatna territory."
+        },
+        "popularity": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "5 = heard in almost every concert, 1 = rarely performed."
+        },
+        "confidence": {
+          "type": "string",
+          "enum": ["high", "medium"],
+          "description": "How much weight to put on the raga/tala attribution. `high` = cross-checked and stable across editions. `medium` = follows commonly cited listings but paṭhāntarams differ, so verify against your teacher's version. Records whose authorship itself is doubtful are not in the dataset at all."
+        },
+        "notes": { "type": ["string", "null"], "maxLength": 900 },
+        "tags": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "maxLength": 40 }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kṛti Kōśam — the Tyāgarāja catalog</title>
+<meta name="description" content="A structured, versioned catalog of Saint Tyagaraja's kritis — raga, tala, language and pallavi for every entry, with a raga reference, tala reference and personal practice tracking.">
+<meta name="color-scheme" content="light dark">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <button class="iconbtn" id="railBtn" aria-label="Filters" aria-expanded="false">☰</button>
+    <span class="glyph" aria-hidden="true">॥</span>
+    <h1>Kṛti Kōśam</h1>
+    <span class="sub">Tyāgarāja</span>
+  </div>
+
+  <div class="searchbox">
+    <span class="icon" aria-hidden="true">⌕</span>
+    <label class="hidden" for="q">Search kritis</label>
+    <input id="q" type="search" autocomplete="off" spellcheck="false"
+           placeholder="Search title, pallavi, raga, meaning…">
+    <span class="hint"><kbd>/</kbd></span>
+  </div>
+
+  <nav class="views" role="tablist" aria-label="Views">
+    <button role="tab" id="tab-catalog" aria-selected="true" data-view="catalog">Catalog<span class="n" id="n-catalog"></span></button>
+    <button role="tab" id="tab-ragas" aria-selected="false" data-view="ragas">Rāgas<span class="n" id="n-ragas"></span></button>
+    <button role="tab" id="tab-groups" aria-selected="false" data-view="groups">Groups<span class="n" id="n-groups"></span></button>
+    <button role="tab" id="tab-progress" aria-selected="false" data-view="progress">Progress<span class="n" id="n-progress"></span></button>
+  </nav>
+
+  <div class="topbar-actions">
+    <button class="iconbtn" id="scriptBtn" title="Script: transliteration / Telugu / both">అ&nbsp;A</button>
+    <button class="iconbtn" id="densityBtn" aria-pressed="false" title="Compact rows">≡</button>
+    <button class="iconbtn" id="helpBtn" title="Keyboard shortcuts &amp; about">?</button>
+    <button class="iconbtn" id="dataBtn" title="Backup or restore your study data">⤓</button>
+  </div>
+</header>
+
+<div class="scrim" id="scrim"></div>
+
+<div class="shell">
+
+  <aside class="rail" id="rail" aria-label="Filters">
+    <div class="rail-head">
+      <strong>Filters</strong>
+      <button class="iconbtn" id="railClose">Done</button>
+    </div>
+
+    <h2>Status</h2>
+    <div class="chips" id="f-status"></div>
+
+    <h2>Marks</h2>
+    <div class="chips" id="f-marks"></div>
+
+    <h2>Groups</h2>
+    <div class="chips" id="f-groups"></div>
+
+    <h2>Rāga <span id="ragaCount"></span></h2>
+    <div class="raga-filter">
+      <input type="search" id="ragaSearch" placeholder="Filter rāgas…" autocomplete="off" aria-label="Filter raga list">
+      <div class="raga-list" id="f-ragas"></div>
+    </div>
+
+    <h2>Tāla</h2>
+    <div class="chips" id="f-talas"></div>
+
+    <h2>Language</h2>
+    <div class="chips" id="f-langs"></div>
+
+    <h2>Deity</h2>
+    <div class="chips" id="f-deities"></div>
+
+    <h2>Difficulty</h2>
+    <div class="slider-row">
+      <input type="range" id="f-difficulty" min="1" max="5" value="5" aria-label="Maximum difficulty">
+      <span id="difficultyLabel">up to 5</span>
+    </div>
+
+    <h2>Popularity</h2>
+    <div class="slider-row">
+      <input type="range" id="f-popularity" min="1" max="5" value="1" aria-label="Minimum popularity">
+      <span id="popularityLabel">1 and up</span>
+    </div>
+
+    <button class="iconbtn rail-reset" id="resetBtn">Clear all filters</button>
+  </aside>
+
+  <main class="content">
+    <div class="listhead">
+      <span class="count" id="count">loading…</span>
+      <div class="activefilters" id="activeFilters"></div>
+      <span class="spacer"></span>
+      <label for="sort">Sort</label>
+      <select id="sort" style="width:auto">
+        <option value="catalog">Catalog #</option>
+        <option value="title">Title A–Z</option>
+        <option value="raga">Rāga</option>
+        <option value="tala">Tāla</option>
+        <option value="difficulty">Easiest first</option>
+        <option value="difficulty-desc">Hardest first</option>
+        <option value="popularity">Most performed</option>
+        <option value="status">Status</option>
+        <option value="practised">Recently practised</option>
+      </select>
+    </div>
+
+    <section class="view" id="view-catalog" role="tabpanel" aria-labelledby="tab-catalog">
+      <ol class="kritis" id="list"></ol>
+    </section>
+
+    <section class="view hidden" id="view-ragas" role="tabpanel" aria-labelledby="tab-ragas"></section>
+    <section class="view hidden" id="view-groups" role="tabpanel" aria-labelledby="tab-groups"></section>
+    <section class="view hidden" id="view-progress" role="tabpanel" aria-labelledby="tab-progress"></section>
+  </main>
+
+  <aside class="detail" id="detail" aria-label="Kriti detail">
+    <div class="placeholder" id="detailPlaceholder">
+      <span class="big" aria-hidden="true">♪</span>
+      Pick a kriti to see its pallavi, meaning, rāga scale and tāla —
+      and to keep your own notes against it.
+    </div>
+    <div id="detailContent" class="hidden"></div>
+  </aside>
+
+</div>
+
+<footer>
+  <a href="../index.html">← myflare home</a>
+  <span>Kṛti Kōśam — Tyāgarāja kṛti catalog</span>
+  <span class="ver" id="version"></span>
+  <a href="README.md">dataset &amp; schema</a>
+</footer>
+
+<dialog id="helpDlg">
+  <div class="dlg-head"><h2>Shortcuts &amp; about</h2><button class="iconbtn" data-close>Esc</button></div>
+  <div class="dlg-body">
+    <div class="shortcuts">
+      <kbd>/</kbd><span>focus search</span>
+      <kbd>j</kbd><span>next kriti</span>
+      <kbd>k</kbd><span>previous kriti</span>
+      <kbd>f</kbd><span>toggle favourite</span>
+      <kbd>b</kbd><span>toggle bookmark</span>
+      <kbd>1</kbd><span>mark <em>to learn</em></span>
+      <kbd>2</kbd><span>mark <em>learning</em></span>
+      <kbd>3</kbd><span>mark <em>learnt</em></span>
+      <kbd>p</kbd><span>log a practice session</span>
+      <kbd>x</kbd><span>clear all filters</span>
+      <kbd>?</kbd><span>this dialog</span>
+      <kbd>Esc</kbd><span>close panel / dialog</span>
+    </div>
+    <h3>What this is</h3>
+    <p>A versioned dataset of kṛtis by Saint Tyāgarāja (1767–1847) — rāga, tāla, language,
+      pallavi and a short gloss for each — wrapped in a study app. Rāga scales are
+      cross-checked against melakarta arithmetic in CI, so a wrong ārōhaṇa cannot land in
+      the data. Everything you mark, note or practise stays in this browser's
+      <code>localStorage</code>; nothing is uploaded.</p>
+    <h3>Read the fine print</h3>
+    <p>Rāga and tāla attributions follow commonly cited editions and differ between
+      paṭhāntarams — treat a row as a starting point for your guru's version, not as the
+      last word. Coverage is a working subset of the ~700 attributed kṛtis; see
+      <a href="README.md">README.md</a> for provenance and how to add entries.</p>
+  </div>
+</dialog>
+
+<dialog id="dataDlg">
+  <div class="dlg-head"><h2>Your study data</h2><button class="iconbtn" data-close>Esc</button></div>
+  <div class="dlg-body">
+    <p id="dataSummary"></p>
+    <p>Favourites, bookmarks, statuses, practice tallies and notes live only in this
+      browser, keyed by kṛti slug. Export a copy before switching devices or clearing
+      site data.</p>
+    <div class="dlg-actions">
+      <button class="iconbtn" id="exportBtn">Export JSON</button>
+      <button class="iconbtn" id="importBtn">Import JSON…</button>
+      <button class="iconbtn" id="wipeBtn">Erase everything</button>
+    </div>
+    <input type="file" id="importFile" accept="application/json,.json" class="hidden">
+    <p id="dataMsg" class="notes"></p>
+  </div>
+</dialog>
+
+<script src="app.js"></script>
+</body>
+</html>

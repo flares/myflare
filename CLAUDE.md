@@ -40,5 +40,6 @@ Each subproject is self-contained and unrelated to the others. When working on o
 | Parayana Tracker | `parayana/` | Tap-a-day calendar counter for Lalitha Sahasranama Parayana, goal-tracked to 41 |
 | Kalpavriksha | `kalpavriksha/` | Tap-to-grow full-page tree PWA — one leaf and one "Sri Rama" per tap |
 | Paper Football | `paper-football/` | Landscape two-player pitch game — node lattice, dying trail, drafted movement cards |
+| Kṛti Kōśam | `tyagaraja/` | Versioned Tyāgarāja kṛti dataset (schema-validated in CI) + study app |
 
 Keep this table (and the root `README.md` table/`Structure` block) in sync whenever a subproject is added, renamed, or removed.

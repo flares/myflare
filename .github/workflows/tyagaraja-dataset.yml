@@ -1,0 +1,45 @@
+name: tyagaraja dataset
+
+on:
+  push:
+    paths:
+      - 'tyagaraja/data/**'
+      - 'tyagaraja/schema/**'
+      - 'tyagaraja/*.mjs'
+      - '.github/workflows/tyagaraja-dataset.yml'
+  pull_request:
+    paths:
+      - 'tyagaraja/data/**'
+      - 'tyagaraja/schema/**'
+      - 'tyagaraja/*.mjs'
+      - '.github/workflows/tyagaraja-dataset.yml'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # No dependencies to install — the validator is plain Node, by design.
+      - name: Validate dataset against schemas
+        working-directory: tyagaraja
+        run: node validate.mjs
+
+      - name: Check catalog numbering is in alphabetical order
+        working-directory: tyagaraja
+        run: node renumber.mjs --check
+
+      - name: Confirm the manifest is not stale
+        working-directory: tyagaraja
+        run: |
+          node validate.mjs --update --quiet
+          if ! git diff --quiet -- data/dataset.json; then
+            echo "::error file=tyagaraja/data/dataset.json::Manifest counts or hashes are out of date. Run 'node validate.mjs --update' and commit the result."
+            git --no-pager diff -- data/dataset.json
+            exit 1
+          fi

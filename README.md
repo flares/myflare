@@ -13,6 +13,7 @@ Personal web interface — a hub page (`index.html`) linking to individual sub-p
 | Wallet | [`wallet/`](wallet/) | Encrypted digital cardholder — capture, crop & store ID/credit/debit cards as images — see [`wallet/README.md`](wallet/README.md) |
 | Kalpavriksha | [`kalpavriksha/`](kalpavriksha/) | Tap-to-grow tree PWA, one leaf and one “Sri Rama” per tap — see [`kalpavriksha/README.md`](kalpavriksha/README.md) |
 | Paper Football | [`paper-football/`](paper-football/) | Two-player landscape pitch game with drafted movement cards — see [`paper-football/README.md`](paper-football/README.md) |
+| Kṛti Kōśam | [`tyagaraja/`](tyagaraja/) | Versioned Tyāgarāja kṛti dataset + schema validation in CI, with a study app over it — see [`tyagaraja/README.md`](tyagaraja/README.md) |
 
 ## Todo / planning
 
@@ -76,4 +77,15 @@ paper-football/
   cards.js              ← 12-card movement deck & card mini-grid renderer
   board.js              ← pitch, goals & lattice drawing, ball flight, trail
   game.js               ← state machine, legal moves, win detection
+tyagaraja/
+  README.md             ← dataset spec, schema/versioning rules & coverage caveats
+  index.html            ← topbar, filter rail, four views, detail panel
+  styles.css            ← dense mobile-first light/dark, cards, swara chips
+  app.js                ← filter/sort/render, study state, import & export
+  validate.mjs          ← zero-dep schema + Carnatic-theory validator
+  renumber.mjs          ← alphabetical catalog numbering
+  data/                 ← manifest + kritis, ragas, talas, groups
+  schema/               ← JSON Schema 2020-12 for each data file
+.github/workflows/
+  tyagaraja-dataset.yml ← CI: validate dataset, numbering & manifest freshness
 ```
