@@ -7,13 +7,19 @@
  *
  * Bump CACHE when shipping — the activate handler drops every other cache. */
 
-const CACHE = 'kriti-kosam-v1';
+const CACHE = 'kriti-kosam-v2';
 
 const SHELL = [
   './',
   './index.html',
   './styles.css',
   './app.js',
+  /* Site-wide auth gate. Outside this worker's registration scope, but scope
+   * only limits which *pages* the worker controls — requests from those pages
+   * still come through here, so precaching keeps offline launches working. */
+  '../auth/guard.js',
+  '../auth/core.js',
+  '../auth/firebase-config.js',
   './manifest.webmanifest',
   './icons/icon-192.png',
   './icons/icon-512.png',
@@ -77,7 +83,10 @@ self.addEventListener('fetch', (event) => {
     if (cached) return cached;
     try {
       const fresh = await fetch(request);
-      if (fresh && fresh.ok && url.pathname.startsWith('/tyagaraja/')) {
+      // Substring, not startsWith: on a GitHub Pages project site everything
+      // sits under /<repo>/, so an anchored match never fires. /auth/ is in
+      // here too — those modules gate the page and must survive going offline.
+      if (fresh && fresh.ok && (url.pathname.includes('/tyagaraja/') || url.pathname.includes('/auth/'))) {
         const cache = await caches.open(CACHE);
         cache.put(request, fresh.clone());
       }

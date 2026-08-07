@@ -53,6 +53,9 @@
   tfoot td { font-weight: 700; color: var(--ink); padding: 0.65rem 0.85rem; font-variant-numeric: tabular-nums; }
   footer { margin-top: 1.5rem; color: var(--muted); font-size: 0.78rem; }
 </style>
+<!-- myflare auth gate: page stays hidden until an allow-listed account is confirmed -->
+<style>html:not(.auth-ok) body{visibility:hidden}</style>
+<script type="module" src="../../auth/guard.js"></script>
 </head>
 <body>
 <div class="wrap">

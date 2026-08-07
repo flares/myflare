@@ -72,6 +72,9 @@
   pre { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1rem; overflow-x: auto; font-size: 0.82rem; }
   footer { margin-top: 3rem; color: var(--muted); font-size: 0.8rem; }
 </style>
+<!-- myflare auth gate: page stays hidden until an allow-listed account is confirmed -->
+<style>html:not(.auth-ok) body{visibility:hidden}</style>
+<script type="module" src="../auth/guard.js"></script>
 </head>
 <body>
   <nav>

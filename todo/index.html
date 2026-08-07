@@ -99,6 +99,9 @@
   .dot.promoted { background: var(--promoted); }
   footer { margin-top: auto; padding-top: 3rem; color: var(--muted); font-size: 0.8rem; }
 </style>
+<!-- myflare auth gate: page stays hidden until an allow-listed account is confirmed -->
+<style>html:not(.auth-ok) body{visibility:hidden}</style>
+<script type="module" src="../auth/guard.js"></script>
 </head>
 <body>
   <header>

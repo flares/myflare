@@ -40,23 +40,51 @@
   header { text-align: center; margin-bottom: 3rem; position: relative; width: 100%; max-width: 900px; }
   h1 { font-size: 2rem; font-weight: 700; letter-spacing: -0.02em; }
   header p { color: var(--ink-2); margin-top: 0.5rem; }
-  a.todo-btn {
+  .actions {
     position: absolute;
     top: 0;
     right: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .chip {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
+    font: inherit;
     font-size: 0.8rem;
     font-weight: 600;
     color: var(--ink-2);
     text-decoration: none;
+    background: none;
     border: 1px solid var(--border);
     border-radius: 999px;
     padding: 0.35rem 0.85rem;
+    cursor: pointer;
     transition: border-color 0.15s ease, color 0.15s ease;
   }
-  a.todo-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .chip:hover { border-color: var(--accent); color: var(--accent); }
+  .chip:disabled { opacity: 0.55; cursor: default; }
+  #whoami {
+    font-size: 0.75rem;
+    color: var(--muted);
+    max-width: 16rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  /* Two chips pinned to the corner run into the title on a narrow screen, so
+     drop them into normal flow above it. The address goes entirely — the
+     Sign out button alone is enough to say you're signed in. */
+  @media (max-width: 640px) {
+    #whoami { display: none; }
+    .actions {
+      position: static;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+    }
+  }
   main {
     width: 100%; max-width: 900px;
     display: grid; gap: 1rem;
@@ -88,10 +116,17 @@
   }
   footer { margin-top: auto; padding-top: 3rem; color: var(--muted); font-size: 0.8rem; }
 </style>
+<!-- myflare auth gate: page stays hidden until an allow-listed account is confirmed -->
+<style>html:not(.auth-ok) body{visibility:hidden}</style>
+<script type="module" src="auth/guard.js"></script>
 </head>
 <body>
   <header>
-    <a class="todo-btn" href="todo/index.html">Todo →</a>
+    <div class="actions">
+      <span id="whoami" hidden></span>
+      <a class="chip" href="todo/index.html">Todo →</a>
+      <button id="signout" class="chip" type="button" hidden>Sign out</button>
+    </div>
     <h1>myflare</h1>
     <p>Personal web interface — sub-projects</p>
   </header>
@@ -138,5 +173,27 @@
     </a>
   </main>
   <footer>myflare · personal projects hub</footer>
+
+  <script type="module">
+    // Same module URL the <head> tag already loaded, so this reuses that run
+    // rather than starting a second auth check.
+    import { authReady } from './auth/guard.js';
+
+    const { user, offline, signOut } = await authReady;
+
+    const who = document.getElementById('whoami');
+    const btn = document.getElementById('signout');
+
+    if (user && user.email) {
+      who.textContent = offline ? `${user.email} · offline` : user.email;
+      who.hidden = false;
+    }
+    btn.hidden = false;
+    btn.addEventListener('click', () => {
+      btn.disabled = true;
+      btn.textContent = 'Signing out…';
+      signOut();
+    });
+  </script>
 </body>
 </html>

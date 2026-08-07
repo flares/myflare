@@ -9,6 +9,9 @@
 <script src="cards.js" defer></script>
 <script src="board.js" defer></script>
 <script src="game.js" defer></script>
+<!-- myflare auth gate: page stays hidden until an allow-listed account is confirmed -->
+<style>html:not(.auth-ok) body{visibility:hidden}</style>
+<script type="module" src="../auth/guard.js"></script>
 </head>
 <body data-screen="start">
 

@@ -20,7 +20,21 @@ Each subproject is self-contained and unrelated to the others. When working on o
 1. Create `<name>/` at the repo root containing at minimum an `index.html` and a `README.md`, plus whatever JS/CSS it needs. Static only — no build step, no bundler, no shared dependencies between subprojects. Must work as a plain file served from GitHub Pages.
 2. Add a card for it inside `<main>` in root `index.html`, matching the existing `a.project` markup pattern.
 3. Add a row to the table in root `README.md`, and an entry to the `Structure` file-tree block at the bottom of that file.
-4. Nothing else at the root changes — there's no shared registry, router, config, or build system to update.
+4. Add the auth gate to every new HTML page (see below).
+5. Nothing else at the root changes — there's no shared registry, router, config, or build system to update.
+
+## Auth gate (site-wide)
+
+`auth/` is the one piece of shared code in the repo — the scope rule above does not apply to it. Every page on the site is closed until Firebase confirms a signed-in, allow-listed account.
+
+**Every new HTML page needs these two lines before `</head>`**, with `../` adjusted for folder depth:
+
+```html
+<style>html:not(.auth-ok) body{visibility:hidden}</style>
+<script type="module" src="../auth/guard.js"></script>
+```
+
+The `<style>` is the fail-closed half — if the module never runs, the page stays blank. Read `auth/README.md` before changing anything under `auth/`; it covers the named-Firebase-app split from the subprojects' own anonymous auth, the offline-grace path the two PWAs depend on, and what a client-side gate does and doesn't actually protect.
 
 ## Conventions shared across subprojects
 

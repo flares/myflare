@@ -81,6 +81,9 @@
   .addfund { padding: 0.7rem 1rem; color: var(--accent); font-size: 0.85rem; cursor: pointer; border-top: 1px solid var(--grid); }
   footer { margin-top: 1.5rem; color: var(--muted); font-size: 0.76rem; }
 </style>
+<!-- myflare auth gate: page stays hidden until an allow-listed account is confirmed -->
+<style>html:not(.auth-ok) body{visibility:hidden}</style>
+<script type="module" src="../../auth/guard.js"></script>
 </head>
 <body>
 
