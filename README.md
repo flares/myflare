@@ -4,16 +4,23 @@ Personal web interface — a hub page (`index.html`) linking to individual sub-p
 
 ## Access
 
-The site is private: every page is gated behind Firebase Google sign-in, and only
-addresses on the allowlist in [`auth/firebase-config.js`](auth/firebase-config.js)
-get in. Anyone else lands on [`login.html`](login.html). The **Sign out** button
-is in the home-page header.
+The site is private: every page is gated behind Firebase Google sign-in
+(project `myflare-b6701`), and only allow-listed accounts get in. Anyone else
+lands on [`login.html`](login.html). The **Sign out** button is in the
+home-page header.
 
-Setup — and an honest note on what a client-side gate does and doesn't protect —
-is in [`auth/README.md`](auth/README.md). Short version: it keeps the site from
-being *used* by strangers, but the static files are still public URLs, so real
-secrets stay behind Firebase security rules and the existing client-side
-encryption in Portfolio Tracker and Wallet.
+**The allowlist lives in Firestore**, so access is managed from the Firebase
+console — no code change, no deploy. Add a document to the `allowlist`
+collection whose ID is the lowercased email address to grant access; delete it
+(or set `disabled: true`) to revoke. The rules in
+[`firestore.rules`](firestore.rules) are what actually enforce this: they let a
+signed-in account read exactly one document, the one named after its own
+verified address.
+
+Setup steps and an honest account of what the gate does and doesn't protect are
+in [`auth/README.md`](auth/README.md). Short version: it keeps the site from
+being *used* by strangers and keeps Firestore data unreadable to them, but the
+static files are still public URLs on GitHub Pages.
 
 ## Sub-projects
 
@@ -40,10 +47,11 @@ being promoted into their own sub-project folder above. See
 ```
 index.html              ← main hub page with links to sub-projects, incl. Todo
 login.html              ← Google sign-in / first-run Firebase setup
+firestore.rules         ← the security rules that actually enforce the allowlist
 auth/
   README.md             ← setup steps, scope of the gate & design notes
-  firebase-config.js    ← the file you edit: Firebase config + email allowlist
-  core.js               ← config, allowlist, SDK loading, offline grace
+  firebase-config.js    ← project config + ACCESS_MODE
+  core.js               ← config, the authorize() verdict, SDK, offline grace
   guard.js              ← the gate; imported by every page
   login.js              ← drives login.html
 todo/

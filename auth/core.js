@@ -9,8 +9,11 @@
 
 import {
   FIREBASE_CONFIG,
+  ACCESS_MODE,
+  ALLOWLIST_COLLECTION,
   ALLOWED_EMAILS,
   ALLOWED_DOMAINS,
+  REQUIRE_GOOGLE,
   OFFLINE_GRACE_DAYS,
 } from './firebase-config.js';
 
@@ -60,7 +63,8 @@ export function clearConfig() {
 
 const norm = (s) => String(s || '').trim().toLowerCase();
 
-export function isAllowed(email) {
+/* The in-repo list. Only consulted in 'local' mode. */
+export function isLocallyAllowed(email) {
   const e = norm(email);
   if (!e) return false;
 
@@ -73,6 +77,56 @@ export function isAllowed(email) {
 
   if (emails.includes(e)) return true;
   return domains.some((d) => e.endsWith('@' + d));
+}
+
+/* Does Firestore hold an allowlist document for this address?
+ *
+ * The rules let a signed-in account read exactly one document — the one named
+ * after its own verified email — so a missing document comes back as a clean
+ * "doesn't exist" rather than an error, and nobody can enumerate the list. */
+async function isRemotelyAllowed(email) {
+  const { db, fsMod } = await getDb();
+  const ref = fsMod.doc(db, ALLOWLIST_COLLECTION, norm(email));
+  const snap = await fsMod.getDoc(ref);
+  if (!snap.exists()) return false;
+  // A document can switch someone off without deleting it.
+  return snap.data()?.disabled !== true;
+}
+
+/* The single verdict every caller should use.
+ *
+ * Returns { ok } or { ok: false, reason }, where reason is one of:
+ *   'no-email' | 'unverified' | 'not-google' | 'not-listed' | 'backend'
+ * 'backend' means we could not reach the allowlist — that is a failure to
+ * verify, never an approval. */
+export async function authorize(user) {
+  if (!user || !user.email) return { ok: false, reason: 'no-email' };
+
+  // Google always reports its own addresses as verified; anything claiming
+  // otherwise didn't come from where we think it did.
+  if (user.emailVerified === false) return { ok: false, reason: 'unverified' };
+
+  if (REQUIRE_GOOGLE) {
+    const viaGoogle = (user.providerData || []).some((p) => p && p.providerId === 'google.com');
+    // providerData is empty on a restored session in some SDK paths; only
+    // reject when we positively know it was some other provider.
+    if ((user.providerData || []).length && !viaGoogle) return { ok: false, reason: 'not-google' };
+  }
+
+  if (ACCESS_MODE !== 'firestore') {
+    return isLocallyAllowed(user.email) ? { ok: true } : { ok: false, reason: 'not-listed' };
+  }
+
+  try {
+    return (await isRemotelyAllowed(user.email))
+      ? { ok: true }
+      : { ok: false, reason: 'not-listed' };
+  } catch (err) {
+    // permission-denied means the rules refused the read, which for this
+    // collection can only mean the address isn't the one it claims to be.
+    if (err && err.code === 'permission-denied') return { ok: false, reason: 'not-listed' };
+    return { ok: false, reason: 'backend', error: err };
+  }
 }
 
 /* ---------------- SDK / auth instance ---------------- */
@@ -90,6 +144,23 @@ export function loadSdk() {
   return sdkPromise;
 }
 
+let dbPromise = null;
+
+/* Firestore is only pulled in when the allowlist actually lives there, so
+ * 'local' mode costs nothing extra. */
+function getDb() {
+  if (!dbPromise) {
+    dbPromise = (async () => {
+      const [{ app }, fsMod] = await Promise.all([
+        getAuth(),
+        import(`https://www.gstatic.com/firebasejs/${SDK_VERSION}/firebase-firestore.js`),
+      ]);
+      return { db: fsMod.getFirestore(app), fsMod };
+    })().catch((err) => { dbPromise = null; throw err; });
+  }
+  return dbPromise;
+}
+
 let authPromise = null;
 
 export function getAuth() {
@@ -100,7 +171,7 @@ export function getAuth() {
       const { appMod, authMod } = await loadSdk();
       const app = appMod.getApps().find((a) => a.name === APP_NAME)
         || appMod.initializeApp(cfg, APP_NAME);
-      return { auth: authMod.getAuth(app), authMod };
+      return { auth: authMod.getAuth(app), authMod, app };
     })().catch((err) => { authPromise = null; throw err; });
   }
   return authPromise;
@@ -130,13 +201,16 @@ export function forgetGrant() {
   try { localStorage.removeItem(LS_GRANT); } catch { /* nothing to clear */ }
 }
 
-/* A previously-verified, still-allow-listed, still-fresh session, or null.
- * Only consulted when the SDK itself could not be reached. */
+/* A previously-verified, still-fresh session, or null. Only consulted when the
+ * SDK itself could not be reached — with no network there is no way to re-ask
+ * Firestore, so freshness is the only check left. In 'local' mode the in-repo
+ * list is still available offline, so it is re-applied. */
 export function graceGrant() {
   if (!(OFFLINE_GRACE_DAYS > 0)) return null;
   try {
     const rec = JSON.parse(localStorage.getItem(LS_GRANT) || 'null');
-    if (!rec || !isAllowed(rec.email)) return null;
+    if (!rec || !rec.email) return null;
+    if (ACCESS_MODE !== 'firestore' && !isLocallyAllowed(rec.email)) return null;
     if (!(Date.now() - rec.at < OFFLINE_GRACE_DAYS * 86400000)) return null;
     return rec;
   } catch {
