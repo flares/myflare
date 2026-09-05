@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Forest Friends — voice animal game for kids</title>
-<link rel="stylesheet" href="styles.css?v=6">
+<link rel="stylesheet" href="styles.css?v=8">
 <!-- myflare auth gate: page stays hidden until an allow-listed account is confirmed -->
 <style>html:not(.auth-ok) body{visibility:hidden}</style>
 <script type="module" src="../auth/guard.js"></script>
@@ -12,7 +12,12 @@
 <body>
   <!-- ======================= FOREST SCENE ======================= -->
   <div id="scene" class="scene">
-    <!-- top-down forest floor with scattered tree canopies (filled by JS) -->
+    <div class="forest-film" aria-hidden="true">
+      <video class="forest-film-fill" autoplay muted loop playsinline preload="auto" src="assets/reference/living-forest-reference.mp4"></video>
+      <video class="forest-film-main" autoplay muted loop playsinline preload="auto" src="assets/reference/living-forest-reference.mp4"></video>
+      <div class="forest-light"></div>
+    </div>
+    <!-- subtle foreground atmosphere, filled by JS -->
     <div class="forest" id="forest"></div>
 
     <!-- animals live here; the river (drawn by JS) is where water animals swim -->
@@ -23,7 +28,7 @@
     <!-- big prompt letter, bottom-right -->
     <div id="letterCard" class="letter-card" title="Say an animal that starts with this letter!">
       <span id="letterGlyph" class="letter-glyph">A</span>
-      <span class="letter-hint">say an animal!</span>
+      <span class="letter-hint">find a friend</span>
     </div>
 
     <!-- floating speech bubble showing what was heard -->
@@ -33,11 +38,11 @@
   <!-- ======================= TOP CONTROL BAR ======================= -->
   <header class="topbar">
     <div class="brand">
-      <span class="brand-emoji">🌲</span>
+      <span class="brand-emoji">🌿</span>
       <span class="brand-name">Forest Friends</span>
     </div>
     <div class="controls">
-      <button id="micBtn" class="btn btn-mic" aria-pressed="false">
+      <button id="micBtn" class="btn btn-mic btn-primary" aria-pressed="false">
         <span class="mic-dot"></span>
         <span id="micLabel">Tap to talk</span>
       </button>
@@ -50,6 +55,7 @@
         <option value="en-US">English (US)</option>
         <option value="te-IN">తెలుగు Telugu</option>
       </select>
+      <button id="menuBtn" class="btn" aria-haspopup="dialog" aria-controls="menuOverlay" aria-expanded="false" title="Open menu">☰ Menu</button>
       <button id="helpBtn" class="btn" title="How to play">❔</button>
     </div>
   </header>
@@ -57,8 +63,8 @@
   <!-- ======================= BOTTOM INDEX ROW ======================= -->
   <footer class="index-bar">
     <div class="index-label">
-      Only <b id="indexLetter">A</b> animals now —
-      <span class="index-tip">say “<span id="indexExample">Ant</span> enter” or “3 <span id="indexExample2">Ant</span> enter” — a new letter follows each time · “exit all” anytime</span>
+      Friends beginning with <b id="indexLetter">A</b>
+      <span class="index-tip">Say “<span id="indexExample">Ant</span> come” or tap a card</span>
     </div>
     <div id="indexRow" class="index-row"><!-- animal chips injected here --></div>
   </footer>
@@ -78,16 +84,42 @@
         <li>Send some home: <b>“Lion exit”</b> (one) or <b>“5 lion exit”</b> (up to five). <i>po</i> / <i>bye</i> work too.</li>
         <li>Special commands anytime: <b>“exit all animals”</b> empties the forest; <b>“reduce zoo size”</b> randomly sends some home.</li>
         <li>No microphone? <b>Tap an animal</b> in the bottom row to summon it. Use <b>🎲 New letter</b> to skip a letter.</li>
+        <li>Open <b>☰ Menu</b> to browse and play every animal sound in one scrollable library.</li>
       </ol>
-      <p class="overlay-note">Tip: works best in Chrome. Animals are emoji; sounds try to use a real recording from Wikimedia Commons and fall back to a playful synthesized voice if you're offline.</p>
+      <p class="overlay-note">Tip: works best in Chrome. Animal voices are taxon-identified, research-grade field recordings from iNaturalist. If a verified recording is unavailable, the game stays quiet instead of imitating one.</p>
       <button id="helpStart" class="btn btn-primary">Let's play! 🎉</button>
     </div>
   </div>
 
+  <!-- ======================= MENU / SOUND LIBRARY ======================= -->
+  <div id="menuOverlay" class="overlay" hidden>
+    <section class="overlay-card menu-card" role="dialog" aria-modal="true" aria-labelledby="menuTitle">
+      <button id="menuClose" class="overlay-close" aria-label="Close menu">✕</button>
+      <div class="menu-heading">
+        <span class="menu-kicker">Explore the forest</span>
+        <h2 id="menuTitle">Menu</h2>
+      </div>
+      <section class="sound-library" aria-labelledby="soundLibraryTitle">
+        <div class="sound-library-head">
+          <div>
+            <h3 id="soundLibraryTitle">🔊 All animal sounds</h3>
+            <p>Tap any friend to hear a real field recording.</p>
+          </div>
+          <label class="sound-search">
+            <span class="sr-only">Search animals</span>
+            <input id="soundSearch" type="search" placeholder="Search animals…" autocomplete="off">
+          </label>
+        </div>
+        <div id="soundList" class="sound-list" aria-live="polite"></div>
+        <p id="soundEmpty" class="sound-empty" hidden>No animals match that search.</p>
+      </section>
+    </section>
+  </div>
+
   <!-- data + engines (built as separate modules) -->
-  <script src="animals.js?v=6"></script>
-  <script src="audio.js?v=6"></script>
-  <script src="realsounds.js?v=6"></script>
-  <script src="game.js?v=6"></script>
+  <script src="animals.js?v=8"></script>
+  <script src="audio.js?v=8"></script>
+  <script src="realsounds.js?v=8"></script>
+  <script src="game.js?v=8"></script>
 </body>
 </html>
