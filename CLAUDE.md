@@ -34,9 +34,7 @@ Each subproject is self-contained and unrelated to the others. When working on o
 <script type="module" src="../auth/guard.js"></script>
 ```
 
-The `<style>` is the fail-closed half — if the module never runs, the page stays blank.
-
-The allowlist is **not in the repo** — it is the `allowlist` collection in Firestore (project `myflare-b6701`), managed from the Firebase console. `firestore.rules` at the repo root is what enforces it; `auth/` only decides what renders. Read `auth/README.md` before changing anything under `auth/` or in `firestore.rules`; it covers the named-Firebase-app split from the subprojects' own anonymous auth, why an unreachable allowlist must never read as approval, the offline-grace path the two PWAs depend on, and what a client-side gate does and doesn't actually protect.
+The `<style>` is the fail-closed half — if the module never runs, the page stays blank. Read `auth/README.md` before changing anything under `auth/`; it covers the named-Firebase-app split from the subprojects' own anonymous auth, the offline-grace path the two PWAs depend on, and what a client-side gate does and doesn't actually protect.
 
 ## Conventions shared across subprojects
 

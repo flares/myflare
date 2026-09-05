@@ -22,7 +22,7 @@ import {
   getConfig,
   getAuth,
   firstAuthState,
-  authorize,
+  isAllowed,
   rememberGrant,
   forgetGrant,
   graceGrant,
@@ -157,27 +157,11 @@ async function gate() {
       return await never();
     }
 
-    const verdict = await authorize(user);
-
-    if (!verdict.ok) {
+    if (!isAllowed(user.email)) {
       clearTimeout(checking);
-
-      // Couldn't reach the allowlist at all. That's a failure to verify, not a
-      // refusal — don't sign the user out over a network blip, and don't let
-      // them in either.
-      if (verdict.reason === 'backend') {
-        await whenBody();
-        paintOverlay(
-          'Can’t check access right now',
-          'Signed in, but the allowlist in Firestore couldn’t be read. Check your connection — if this persists, the Firestore database or its rules may not be set up yet.',
-          { label: 'Retry', onClick: () => location.reload() },
-        );
-        throw verdict.error || new Error('allowlist unreachable');
-      }
-
       const denied = user.email || '';
       await signOutEverywhere();
-      location.replace(loginUrlFor({ denied: denied || '1', why: verdict.reason }));
+      location.replace(loginUrlFor({ denied: denied || '1' }));
       return await never();
     }
 

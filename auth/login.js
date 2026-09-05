@@ -7,7 +7,7 @@ import {
   clearConfig,
   getAuth,
   firstAuthState,
-  authorize,
+  isAllowed,
   rememberGrant,
   forgetGrant,
   safeNext,
@@ -144,51 +144,26 @@ function describe(err) {
   return (err && err.message) || 'Sign-in failed.';
 }
 
-function refusal(reason, email) {
-  const who = email || 'That account';
-  switch (reason) {
-    case 'not-google':
-      return 'This site only accepts Google sign-in.';
-    case 'unverified':
-      return `${who} has no verified email address.`;
-    case 'no-email':
-      return 'That sign-in carried no email address.';
-    default:
-      return `${who} isn’t on the allowlist for this site.`;
-  }
-}
-
 /* Decide what a signed-in user gets: in, or bounced with a reason. */
 async function settle(user) {
-  if (!user) {
-    show('signin');
-    $('google-btn').disabled = false;
-    return false;
-  }
-
-  const verdict = await authorize(user);
-
-  if (verdict.ok) {
+  if (user && isAllowed(user.email)) {
     rememberGrant(user.email);
     location.replace(next);
     return true;
   }
 
-  // Couldn't reach the allowlist — say so rather than blaming the account, and
-  // leave the session alone so a retry doesn't need a fresh sign-in.
-  if (verdict.reason === 'backend') {
+  if (user) {
+    const email = user.email || 'That account';
+    forgetGrant();
+    try { await authCtx.authMod.signOut(authCtx.auth); } catch { /* best effort */ }
     show('signin');
     $('google-btn').disabled = false;
-    note('Signed in, but the allowlist in Firestore couldn’t be read. Check your '
-      + 'connection — if this persists, the Firestore database or its rules may not be set up yet.', 'warn');
+    note(`${email} isn’t on the allowlist for this site.`, 'deny');
     return false;
   }
 
-  forgetGrant();
-  try { await authCtx.authMod.signOut(authCtx.auth); } catch { /* best effort */ }
   show('signin');
   $('google-btn').disabled = false;
-  note(refusal(verdict.reason, user.email), 'deny');
   return false;
 }
 
@@ -243,7 +218,7 @@ async function boot() {
   if (params.has('denied')) {
     const who = params.get('denied');
     show('signin');
-    note(refusal(params.get('why'), who && who !== '1' ? who : null), 'deny');
+    note(`${who && who !== '1' ? who : 'That account'} isn’t on the allowlist for this site.`, 'deny');
     return;
   }
 
