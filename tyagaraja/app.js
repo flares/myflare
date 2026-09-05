@@ -371,6 +371,7 @@
     renderActiveFilters();
     if (prefs.view === 'catalog') renderList();
     if (prefs.view === 'ragas') renderRagasView();
+    if (prefs.view === 'lyrics') renderLyricsView();
     if (prefs.view === 'groups') renderGroupsView();
     if (prefs.view === 'progress') renderProgressView();
     renderTabCounts();
@@ -389,6 +390,7 @@
   function renderTabCounts() {
     $('#n-catalog').textContent = visible.length;
     $('#n-ragas').textContent = new Set(visible.map((k) => k.raga_slug)).size;
+    $('#n-lyrics').textContent = visible.filter((k) => k.sahityam?.length).length;
     $('#n-groups').textContent = D.groups.length;
     const learnt = D.kritis.filter((k) => peek(k.slug).status === 'learnt').length;
     $('#n-progress').textContent = learnt;
@@ -753,6 +755,89 @@
 
   /* ---------------------------------------------------------------- ragas view */
 
+  /** A raga-wise, Telugu-first reading desk.  The catalog deliberately keeps
+   * uncorroborated charanams out of its local data, so a song without a full
+   * text gets a direct hand-off to the lyric repository instead of a made-up
+   * completion. */
+  // Exact title matches in Anupallavi's public, composer-tagged song index.
+  // Do not manufacture a likely-looking URL for other records: a wrong source
+  // is worse than no source when a student is learning text.
+  const ANUPALLAVI_SLUGS = new Set([
+    'anupama-gunambudhi', 'bhajana-seyave', 'bhuvini-dasudane', 'brova-bharama',
+    'choodare-chelulara', 'dachukovalena', 'daya-seyavayya', 'dinamani-vamsa',
+    'emi-jesitenemi', 'endaro-mahanubhavulu', 'endu-daginado', 'enta-muddo',
+    'etula-brotuvo', 'gandhamu-puyyaruga', 'giripai-nelakonna', 'ee-vasudha-nivanti',
+    'jagadanandakaraka', 'jnanamosaga-rada', 'koluvaiyunnade', 'mari-mari-ninne',
+    'marugelara', 'naa-jivadhara', 'nagumomu-galavani', 'narada-muni-veduluna',
+    'nee-naama-roopamulaku', 'ninne-bhajana', 'palukavademira', 'raju-vedale',
+    'samaja-vara-gamana', 'sarasa-sama-dana', 'sitamma-mayamma',
+    'sri-raghuvara-aprameya', 'sri-raghuvara-sugunalaya', 'sundari-nannindarilo',
+    'sundari-nee-divya-roopamu', 'teliyaleru-rama', 'undedi-ramudokkadu',
+    'vaddayundede', 'vandanamu-raghunandana', 'vaaridhi-neeku', 'vasudevayani',
+    'vinave-o-manasa',
+  ]);
+
+  function lyricSource(k) {
+    if (!ANUPALLAVI_SLUGS.has(k.slug)) return null;
+    // The verified index uses these canonical URL slugs for the exact matches
+    // above, including its established spelling variants.
+    const path = {
+      'choodare-chelulara': 'cudare-celulara', 'ee-vasudha-nivanti': 'i-vasudha-nivanti',
+      'naa-jivadhara': 'na-jivadhara', 'narada-muni-veduluna': 'narada-muni-vedalina',
+      'nee-naama-roopamulaku': 'ni-nama-rupamulaku', 'sundari-nee-divya-roopamu': 'sundari-ni-divya-rupamunu',
+      'undedi-ramudokkadu': 'undedi-ramudokadu', 'vaaridhi-neeku': 'varidhi-niku',
+    }[k.slug] || k.slug;
+    return `https://www.anupallavi.com/song/${path}/`;
+  }
+
+  function renderLyricsView() {
+    const byVisibleRaga = new Map();
+    visible.forEach((k) => byVisibleRaga.set(k.raga_slug, [...(byVisibleRaga.get(k.raga_slug) ?? []), k]));
+    const ragas = [...byVisibleRaga.keys()]
+      .map((slug) => byRaga.get(slug))
+      .filter(Boolean)
+      .sort((a, b) => a.name.localeCompare(b.name));
+    const lyricCount = visible.filter((k) => k.sahityam?.length).length;
+
+    const song = (k) => {
+      const sections = k.sahityam || [{
+        kind: 'pallavi', label_telugu: 'పల్లవి', telugu: k.pallavi_telugu || k.pallavi, verified: false,
+      }];
+      const sectionCount = k.sahityam?.length || 0;
+      const expected = 1 + Number(k.structure.anupallavi) + k.structure.charanams;
+      const complete = sectionCount >= expected;
+      const source = lyricSource(k);
+      return `<details class="lyric-song">
+        <summary><span class="num">${k.id}</span><span class="te">${esc(k.title_telugu || k.title)}</span>
+          <span class="side">${complete ? 'పూర్తి సాహిత్యం' : sectionCount ? `${sectionCount}/${expected} భాగాలు` : 'పల్లవి మాత్రమే'}</span></summary>
+        <div class="lyric-body">
+          ${sections.map((sec) => `<section class="lyric-section">
+            <h4 class="te">${esc(sec.label_telugu)}</h4><p class="sahitya te">${esc(sec.telugu)}</p>
+          </section>`).join('')}
+          ${complete ? '' : `<p class="lyric-gap">ఈ కృతికి స్థానికంగా పూర్తి, ధృవీకరించిన సాహిత్యం ఇంకా లేదు.</p>`}
+          <div class="lyric-actions">
+            <button class="iconbtn" data-goto="${esc(k.slug)}">కృతి వివరాలు</button>
+            ${source
+              ? `<a class="iconbtn" href="${source}" target="_blank" rel="noopener noreferrer">Anupallavi మూలం ↗</a>`
+              : '<span class="source-pending">మూలం: సేకరణలో ఉంది</span>'}
+          </div>
+        </div>
+      </details>`;
+    };
+
+    $('#view-lyrics').innerHTML = `<div class="lyrics-head">
+      <div><span class="count"><b>${ragas.length}</b> రాగాలు · <b>${visible.length}</b> కృతులు</span>
+      <p>ప్రతి రాగాలోని కృతులను తెలుగులో చదవండి. స్థానిక పాఠ్యం పూర్తిగా ధృవీకరించబడిన చోట మాత్రమే చూపబడుతుంది; Anupallavi మూల లింకులు ఖచ్చితంగా సరిపోలిన కృతులకే చూపబడతాయి.</p></div>
+    </div><div class="lyrics-ragas">${ragas.map((r) => {
+      const songs = byVisibleRaga.get(r.slug).sort((a, b) => a.id - b.id);
+      return `<article class="card lyric-raga" id="lyrics-${esc(r.slug)}">
+        <h3><span>${esc(r.name)} ${r.name_telugu ? `<span class="te">${esc(r.name_telugu)}</span>` : ''}</span><span class="count">${songs.length}</span></h3>
+        <div class="melaline">${esc(r.scale_type)}${r.mela ? ` · mēḷa ${r.mela}` : ''}</div>
+        ${songs.map(song).join('')}
+      </article>`;
+    }).join('')}</div>`;
+  }
+
   function renderRagasView() {
     const counts = new Map();
     visible.forEach((k) => counts.set(k.raga_slug, [...(counts.get(k.raga_slug) ?? []), k]));
@@ -974,7 +1059,7 @@
     const changed = prefs.view !== view;
     prefs.view = view;
     savePrefs();
-    ['catalog', 'ragas', 'groups', 'progress'].forEach((v) => {
+    ['catalog', 'ragas', 'lyrics', 'groups', 'progress'].forEach((v) => {
       $(`#view-${v}`).classList.toggle('hidden', v !== view);
       $(`#tab-${v}`).setAttribute('aria-selected', String(v === view));
     });

@@ -82,6 +82,29 @@ body.compact { --row-pad: 0.38rem; font-size: 14px; }
 .te { font-family: var(--telugu); }
 .hidden { display: none !important; }
 
+/* --------------------------------------------------------- Telugu lyrics */
+
+.lyrics-head { padding: .9rem 0 1rem; }
+.lyrics-head p { max-width: 48rem; color: var(--ink-2); font-size: .86rem; margin-top: .35rem; }
+.lyrics-ragas { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 25rem), 1fr)); gap: .75rem; align-items: start; }
+.lyric-raga { padding: .75rem; }
+.lyric-raga > h3 { display: flex; justify-content: space-between; gap: .75rem; }
+.lyric-song { border-top: 1px solid var(--border); margin-top: .65rem; padding-top: .5rem; }
+.lyric-song summary { cursor: pointer; display: flex; align-items: baseline; gap: .45rem; list-style: none; font-weight: 650; }
+.lyric-song summary::-webkit-details-marker { display: none; }
+.lyric-song summary::before { content: '›'; color: var(--accent); font-size: 1.15rem; line-height: .8; transition: transform .15s ease; }
+.lyric-song[open] summary::before { transform: rotate(90deg); }
+.lyric-song .num { color: var(--muted); font: .7rem var(--mono); }
+.lyric-song .side { margin-left: auto; color: var(--muted); font-size: .7rem; font-weight: 500; text-align: right; }
+.lyric-body { padding: .65rem .15rem .1rem 1.15rem; }
+.lyric-section + .lyric-section { margin-top: .6rem; }
+.lyric-section h4 { color: var(--accent-ink); font-size: .78rem; margin-bottom: .1rem; }
+.lyric-body .sahitya { white-space: pre-line; line-height: 1.8; font-size: 1rem; }
+.lyric-gap { font-size: .78rem; color: var(--muted); margin-top: .65rem; }
+.lyric-actions { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .55rem; }
+.lyric-actions a { text-decoration: none; }
+.source-pending { align-self: center; color: var(--muted); font-size: .75rem; }
+
 /* ------------------------------------------------------------------ topbar */
 
 .topbar {
