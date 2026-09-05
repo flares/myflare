@@ -1,0 +1,95 @@
+{
+  "$schema": "../schema/group.schema.json",
+  "version": "1.0.0",
+  "updated": "2026-07-30",
+  "records": [
+    {
+      "slug": "pancharatna",
+      "name": "Pañcaratna Kṛtis",
+      "kind": "pancharatna",
+      "expected_count": 5,
+      "summary": "The 'five gems' composed by Tyāgarāja in praise of Rāma, each set in a different rāga (Naṭa, Gaula, Ārabhi, Varāḷi, Śrī) and considered his most celebrated single group of kṛtis. They are sung together every January by massed choirs of musicians at the Tyāgarāja Ārādhana in Tiruvaiyāru, the composer's samādhi town.",
+      "study_note": "Learn the pallavi and one caraṇam of Jagadānandakāraka first, since its Sanskrit-only sāhityam and clean sōlkaṭṭu-like phrasing make it the most approachable entry point before tackling the swara sections of the other four."
+    },
+    {
+      "slug": "utsava-sampradaya",
+      "name": "Utsava Sampradāya Kīrtanas",
+      "kind": "collection",
+      "expected_count": 20,
+      "summary": "A group of roughly twenty short, simple kīrtanas Tyāgarāja composed to accompany specific ritual moments in temple festival worship — waking the deity, decorating it, the ceremonial swing (ūñjal), and putting it to rest at night. They are melodically simple compared to his kṛtis, meant for group participation rather than solo virtuosity.",
+      "study_note": "Approach these as functional, repetitive songs tied to a ritual sequence rather than as concert showpieces — learn a few of the most common ones (e.g. the ūñjal songs) for their tune and context before worrying about elaboration."
+    },
+    {
+      "slug": "divya-nama",
+      "name": "Divya Nāma Kīrtanas",
+      "kind": "collection",
+      "expected_count": null,
+      "summary": "Simple, repetitive nāma-saṅkīrtanas (name-chanting songs) composed by Tyāgarāja for congregational singing by people without formal musical training, in contrast to his intricate concert kṛtis. They emphasize repetition of the divine name over melodic or rhythmic complexity.",
+      "study_note": "Treat these as group-singing pieces to internalize tāla and bhakti bhāva, not as technical study material — they are useful for a beginner's rhythm practice precisely because the tunes are easy."
+    },
+    {
+      "slug": "nauka-charitram",
+      "name": "Naukā Caritram",
+      "kind": "opera",
+      "expected_count": null,
+      "summary": "One of Tyāgarāja's two musical operas (geya nāṭakam), depicting Kṛṣṇa and the gopīs taking a boat ride on the Yamunā that begins to sink because of the gopīs' pride, teaching a moral about ego and surrender to God. It is composed in Telugu as a sequence of linked songs that carry a narrative, unlike his independent kṛtis.",
+      "study_note": "Study it as a narrative song-cycle — read a synopsis of the story first so the sequence of songs and their dramatic context make sense before learning individual pieces out of order."
+    },
+    {
+      "slug": "prahlada-bhakti-vijayam",
+      "name": "Prahlāda Bhakti Vijayam",
+      "kind": "opera",
+      "expected_count": null,
+      "summary": "Tyāgarāja's larger and more famous musical opera, narrating the story of the child-devotee Prahlāda's unwavering devotion to Viṣṇu despite persecution by his father Hiraṇyakaśipu, culminating in Narasiṃha's appearance. It is a substantial multi-song work spanning many rāgas and tālas, and is considered one of his major compositional achievements alongside the Pañcaratna kṛtis.",
+      "study_note": "Because of its length and narrative structure, learn it in the sequence of the story (Prahlāda's devotion, the persecution, the Narasiṃha avatāram) rather than picking songs at random, so the dramatic arc reinforces memory."
+    },
+    {
+      "slug": "sita-rama-vijayam",
+      "name": "Sītā Rāma Vijayam",
+      "kind": "opera",
+      "expected_count": null,
+      "summary": "A lesser-known musical work attributed to Tyāgarāja depicting episodes from the Rāmāyaṇa; it is far shorter and less complete than his two major operas, Naukā Caritram and Prahlāda Bhakti Vijayam, and is performed and studied far less often.",
+      "study_note": "Treat this as a minor, supplementary work — prioritize the Pañcaratna kṛtis and the two major operas first, and only return to this once those are secure."
+    },
+    {
+      "slug": "tiruvottiyur-pancharatna",
+      "name": "Tiruvoṭṭiyūr Pañcaratnam",
+      "kind": "pancharatna",
+      "expected_count": 5,
+      "summary": "A set of five kṛtis Tyāgarāja composed in praise of the deity at the Tiruvoṭṭiyūr temple (near present-day Chennai), one of several regional 'pancharatna' sets he composed at temple towns during his travels, distinct from the more famous Tiruvaiyāru Pañcaratna kṛtis.",
+      "study_note": "Learn these after the main Pañcaratna set, comparing rāga choices and structure to see how Tyāgarāja varied the 'five kṛtis in five rāgas' template across different temple dedications."
+    },
+    {
+      "slug": "kovur-pancharatna",
+      "name": "Kōvūr Pañcaratnam",
+      "kind": "pancharatna",
+      "expected_count": 5,
+      "summary": "A set of five kṛtis composed by Tyāgarāja in praise of the presiding deity at Kōvūr, another of the regional pañcaratna sets composed during his pilgrimages to temple towns near Tiruvaiyāru.",
+      "study_note": "Study alongside the other regional pañcaratna sets (Tiruvoṭṭiyūr, Lālgudi, Śrīraṅgam) as a group, noting shared structural conventions rather than treating each in isolation."
+    },
+    {
+      "slug": "lalgudi-pancharatna",
+      "name": "Lālgudi Pañcaratnam",
+      "kind": "pancharatna",
+      "expected_count": 5,
+      "summary": "A set of five kṛtis Tyāgarāja composed at Lālgudi, a temple town near Tiruchirapalli, in praise of its presiding deity, following the same five-kṛtis-in-five-rāgas pattern he used at other temple towns.",
+      "study_note": "Learn this set as a comparative exercise against the main Pañcaratna kṛtis to see how the composer adapted the format to a smaller, more local occasion."
+    },
+    {
+      "slug": "srirangam-pancharatna",
+      "name": "Śrīraṅgam Pañcaratnam",
+      "kind": "pancharatna",
+      "expected_count": 5,
+      "summary": "A set of five kṛtis composed by Tyāgarāja in praise of Lord Raṅganātha at the Śrīraṅgam temple, one of the most important Vaiṣṇava shrines in South India, forming another of his regional pañcaratna groups.",
+      "study_note": "Given Śrīraṅgam's stature as a major Vaiṣṇava pilgrimage site, pair study of these kṛtis with their textual references to Raṅganātha to deepen understanding of the sāhityam, not just the melody."
+    },
+    {
+      "slug": "tirupati-venkatesa",
+      "name": "Tirupati Veṅkaṭeśa Kṛtis",
+      "kind": "kshetra",
+      "expected_count": null,
+      "summary": "A small number of individual kṛtis Tyāgarāja composed in praise of Lord Veṅkaṭeśvara during a visit to Tirupati, such as the well-known 'Tērā Tīyagarādā,' rather than a fixed five-song pañcaratna set like his other temple-town groups.",
+      "study_note": "Do not expect a canonical fixed count as with the pañcaratna sets — learn each Veṅkaṭeśa kṛti on its own merits, starting with the most commonly performed one in concert."
+    }
+  ]
+}

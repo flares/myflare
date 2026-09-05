@@ -11,6 +11,9 @@ Personal web interface — a hub page (`index.html`) linking to individual sub-p
 | Forest Friends | [`forest-friends/`](forest-friends/) | Voice-controlled kids' animal game (English & Telugu) — see [`forest-friends/README.md`](forest-friends/README.md) |
 | Parayana Tracker | [`parayana/`](parayana/) | Lalitha Sahasranama Parayana tally — see [`parayana/README.md`](parayana/README.md) |
 | Wallet | [`wallet/`](wallet/) | Encrypted digital cardholder — capture, crop & store ID/credit/debit cards as images — see [`wallet/README.md`](wallet/README.md) |
+| Kalpavriksha | [`kalpavriksha/`](kalpavriksha/) | Tap-to-grow tree PWA, one leaf and one “Sri Rama” per tap — see [`kalpavriksha/README.md`](kalpavriksha/README.md) |
+| Paper Football | [`paper-football/`](paper-football/) | Two-player landscape pitch game with drafted movement cards — see [`paper-football/README.md`](paper-football/README.md) |
+| Kṛti Kōśam | [`tyagaraja/`](tyagaraja/) | Versioned Tyāgarāja kṛti dataset + schema validation in CI, with a study app over it — see [`tyagaraja/README.md`](tyagaraja/README.md) |
 
 ## Todo / planning
 
@@ -56,4 +59,33 @@ wallet/
   index.html            ← deck view, add-card wizard, viewer, dialogs
   app.js                ← crypto, storage, perspective-crop warp, deck logic
   styles.css            ← cardholder deck, crop/brush stages, dialogs
+kalpavriksha/
+  README.md             ← project spec & the scaling design notes
+  index.html            ← canvas, the one button, details dialog
+  styles.css            ← mobile-first light/dark, button & dialog chrome
+  tree.js               ← procedural skeleton: count → structure → leaf slots
+  render.js             ← camera, wind, branches, foliage, atmosphere
+  audio.js              ← chant playback (file if present, else synthesized)
+  store.js              ← debounced localStorage tally, per-day counts
+  app.js                ← tap → leaf → sound → tally; dialog & copy
+  sw.js  manifest.webmanifest  icons/   ← PWA shell
+  audio/                ← drop sri-rama.mp3 here
+paper-football/
+  README.md             ← rules, card deck & design brief (read before any change)
+  index.html            ← start / draft / game screens + pitch SVG shell
+  styles.css            ← layout, pitch chrome, cards, overlays, dark mode
+  cards.js              ← 12-card movement deck & card mini-grid renderer
+  board.js              ← pitch, goals & lattice drawing, ball flight, trail
+  game.js               ← state machine, legal moves, win detection
+tyagaraja/
+  README.md             ← dataset spec, schema/versioning rules & coverage caveats
+  index.html            ← topbar, filter rail, four views, detail panel
+  styles.css            ← dense mobile-first light/dark, cards, swara chips
+  app.js                ← filter/sort/render, study state, import & export
+  validate.mjs          ← zero-dep schema + Carnatic-theory validator
+  renumber.mjs          ← alphabetical catalog numbering
+  data/                 ← manifest + kritis, ragas, talas, groups
+  schema/               ← JSON Schema 2020-12 for each data file
+.github/workflows/
+  tyagaraja-dataset.yml ← CI: validate dataset, numbering & manifest freshness
 ```

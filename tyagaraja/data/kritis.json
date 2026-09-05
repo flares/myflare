@@ -1,0 +1,5765 @@
+{
+  "$schema": "../schema/kriti.schema.json",
+  "version": "1.4.0",
+  "updated": "2026-07-30",
+  "records": [
+    {
+      "id": 1,
+      "slug": "adamodi-galade",
+      "title": "Ādāmōḍi Gaḷadē",
+      "title_telugu": "ఆడమోడి గలదే",
+      "raga": "Cārukēśi",
+      "raga_slug": "charukesi",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Ādāmōḍi gaḷadē śrī rāmuni sari",
+      "pallavi_telugu": null,
+      "meaning": "Asks if there is anyone as forgiving and gracious as Sri Rama, who tolerates every fault of his devotees.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 4,
+      "confidence": "high",
+      "notes": "Popular Charukesi kriti, often used to showcase the raga's characteristic swaras.",
+      "tags": [
+        "concert-staple",
+        "rakti-raga"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 2,
+      "slug": "adavaramella-kudi",
+      "title": "Aḍavāramella Kūḍi",
+      "title_telugu": "అడవారమెల్ల కూడి",
+      "raga": "Yadukulakāmbhōji",
+      "raga_slug": "yadukulakambhoji",
+      "tala": "Misra Chapu",
+      "language": "Telugu",
+      "pallavi": "Adavaramella kudi manamu adudamu Harini vedi",
+      "pallavi_telugu": "ఆడవారమెల్ల కూడి మనము ఆడుదాము హరిని వేడి",
+      "meaning": "The gopis say to one another: let all of us maidens join together and go speak to Hari, coaxing him to come play with us.",
+      "deity": "Krishna",
+      "groups": [
+        "nauka-charitram"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 2
+      },
+      "difficulty": 3,
+      "popularity": 2,
+      "confidence": "high",
+      "notes": "Follows the vachana dialogues between the gopis and Krishna early in the play.",
+      "tags": [
+        "opera",
+        "krishna-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 3,
+      "slug": "adigi-sukhamu",
+      "title": "Adigi Sukhamu",
+      "title_telugu": "అడిగి సుఖము",
+      "raga": "Kalyāṇi",
+      "raga_slug": "kalyani",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Adigi sukhamu evvarikiraa ee bhoomi lo",
+      "pallavi_telugu": "అడిగి సుఖము ఎవ్వరికిరా ఈ భూమిలో",
+      "meaning": "The singer questions whether anyone in this world has ever attained the happiness they went looking for through mere worldly pursuit, contrasting it with devotion to Rama.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 3,
+      "confidence": "medium",
+      "notes": "Kalyani kriti reflecting on the futility of seeking happiness in worldly life.",
+      "tags": [],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 4,
+      "slug": "adugu-varamula",
+      "title": "Aḍugu Varamula",
+      "title_telugu": "అడుగు వరముల",
+      "raga": "Ārabhi",
+      "raga_slug": "arabhi",
+      "tala": "Misra Chapu",
+      "language": "Telugu",
+      "pallavi": "Adugu varamulaniccedanu",
+      "pallavi_telugu": "అడుగు వరముల నిచ్చెదను",
+      "meaning": "Sung as the Lord's own words to Prahlada: 'Ask, and I shall grant you whatever boons you seek' — the Lord tempts and tests Prahlada's devotion with worldly offers.",
+      "deity": "Vishnu",
+      "groups": [
+        "prahlada-bhakti-vijayam"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 2
+      },
+      "difficulty": 3,
+      "popularity": 2,
+      "confidence": "high",
+      "notes": "Kriti no. 18 of Prahlada Bhakti Vijayam in the standard sequence.",
+      "tags": [
+        "opera",
+        "vishnu-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 5,
+      "slug": "allakallolamaayenu",
+      "title": "Allakallōlamāyenu",
+      "title_telugu": "అల్లకల్లోలమాయెను",
+      "raga": "Saurāṣṭraṃ",
+      "raga_slug": "saurashtram",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Allakallolamayenu amma",
+      "pallavi_telugu": "అల్లకల్లోలమాయెను అమ్మ",
+      "meaning": "As the storm strikes and the boat begins to founder, the terrified gopis cry that everything has fallen into utter confusion, and pray to Goddess Yamuna to save Krishna and relieve their trouble.",
+      "deity": "Krishna",
+      "groups": [
+        "nauka-charitram"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 2
+      },
+      "difficulty": 3,
+      "popularity": 2,
+      "confidence": "high",
+      "notes": "The addressee within the song is Yamuna Devi, but the piece belongs to the Krishna-centred Nauka Charitram narrative.",
+      "tags": [
+        "opera",
+        "krishna-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 6,
+      "slug": "anupama-gunambudhi",
+      "title": "Anupama Guṇāmbudhi",
+      "title_telugu": "అనుపమ గుణాంబుధి",
+      "raga": "Āṭhāṇa",
+      "raga_slug": "athana",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Anupama guṇāmbudhi śrī rāmā nīvē gati",
+      "pallavi_telugu": "అనుపమ గుణాంబుధి శ్రీరామా నీవే గతి",
+      "meaning": "Addresses Rama as the boundless ocean of matchless virtues, and the singer's sole refuge.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 4,
+      "confidence": "high",
+      "notes": "Well-known Atana kriti, frequently taught to intermediate students.",
+      "tags": [
+        "concert-staple"
+      ],
+      "sahityam": null,
+      "pratipadartham": [
+        {
+          "word": "అనుపమ",
+          "meaning_telugu": "సాటిలేని",
+          "meaning": "incomparable"
+        },
+        {
+          "word": "గుణాంబుధి",
+          "meaning_telugu": "సుగుణముల సముద్రమా",
+          "meaning": "O ocean of (virtuous) qualities"
+        },
+        {
+          "word": "శ్రీరామా",
+          "meaning_telugu": "ఓ శ్రీరామా",
+          "meaning": "O Sri Rama"
+        },
+        {
+          "word": "నీవే",
+          "meaning_telugu": "నీవు మాత్రమే",
+          "meaning": "you alone"
+        },
+        {
+          "word": "గతి",
+          "meaning_telugu": "దిక్కు, ఆశ్రయము",
+          "meaning": "refuge, final resort"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "slug": "balakanakamaya-chela",
+      "title": "Bāla Kanaka Maya Cēla",
+      "title_telugu": "బాల కనకమయ చేల",
+      "raga": "Āṭhāṇa",
+      "raga_slug": "athana",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Bāla kanaka maya cēla dharuni rāma",
+      "pallavi_telugu": "బాల కనక మయ చేల ధరుని రామ",
+      "meaning": "Describes the young Rama's golden robes and radiant form.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 2,
+      "confidence": "medium",
+      "notes": "Less frequently performed Atana kriti compared to Anupama Gunambudhi.",
+      "tags": [
+        "rarely-performed"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 8,
+      "slug": "bantu-riti-kolu",
+      "title": "Baṇṭu Rīti Kolu",
+      "title_telugu": "బంటు రీతి కొలు",
+      "raga": "Haṃsanādaṃ",
+      "raga_slug": "hamsanadam",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Baṇṭu rīti kolu swāmi nīvē manasuku telisi",
+      "pallavi_telugu": "బంటు రీతి కొలు స్వామి నీవే మనసుకు తెలిసి",
+      "meaning": "The singer offers himself as Rama's loyal servant, asking to be accepted into faithful service.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 5,
+      "confidence": "high",
+      "notes": "Extremely popular concert item; one of the best-known Hamsanadam kritis.",
+      "tags": [
+        "concert-staple",
+        "beginner-friendly"
+      ],
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "బంటు రీతి కొలు స్వామి నీవే మనసుకు తెలిసి",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "రోమాంచమను ఘన కంచుకము\nరామ భక్తుడను ముద్ర బిళ్ళయు\nరామ నామమను వర ఖడ్గమివి\nరాజిల్లు నయ్య త్యాగరాజునికే",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "బంటు",
+          "meaning_telugu": "సేవకుడు, భటుడు",
+          "meaning": "servant, soldier"
+        },
+        {
+          "word": "రీతి",
+          "meaning_telugu": "విధముగా",
+          "meaning": "in the manner of"
+        },
+        {
+          "word": "కొలు",
+          "meaning_telugu": "సేవలో ఉంచుకొనుము",
+          "meaning": "employ (me) in service"
+        },
+        {
+          "word": "స్వామి",
+          "meaning_telugu": "ఓ ప్రభూ",
+          "meaning": "O Lord"
+        },
+        {
+          "word": "నీవే",
+          "meaning_telugu": "నీవు మాత్రమే",
+          "meaning": "you alone"
+        },
+        {
+          "word": "మనసుకు",
+          "meaning_telugu": "మనస్సునకు",
+          "meaning": "to the mind"
+        },
+        {
+          "word": "తెలిసి",
+          "meaning_telugu": "తెలిసికొని",
+          "meaning": "having understood"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "slug": "bhajana-seyave",
+      "title": "Bhajana Sēyavē",
+      "title_telugu": "భజన సేయవే",
+      "raga": "Kalyāṇi",
+      "raga_slug": "kalyani",
+      "tala": "Rupaka",
+      "language": "Telugu",
+      "pallavi": "Bhajana sēyavē ō manasā",
+      "pallavi_telugu": "భజన సేయవే ఓ మనసా",
+      "meaning": "Instructs the mind to simply get on with worship.",
+      "deity": "Rama",
+      "groups": [
+        "divya-nama"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": false,
+        "charanams": 3
+      },
+      "difficulty": 2,
+      "popularity": 2,
+      "confidence": "medium",
+      "notes": null,
+      "tags": [
+        "nama-sankirtana"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 10,
+      "slug": "bhavanuta-naa-manasu",
+      "title": "Bhāvanuta Nā Manasu",
+      "title_telugu": "భావనుత నా మనసు",
+      "raga": "Mōhanam",
+      "raga_slug": "mohanam",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Bhāvanuta nā manasu nī vasamā rāma",
+      "pallavi_telugu": "భావనుత నా మనసు నీ వశమా రామ",
+      "meaning": "Asks whether the singer's mind, praised for its devotion, is truly under Rama's control.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 3,
+      "confidence": "medium",
+      "notes": null,
+      "tags": [
+        "rakti-raga"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 11,
+      "slug": "bhogeendra-sayinam",
+      "title": "Bhōgīndra Śāyinaṃ",
+      "title_telugu": "భోగీంద్రశాయినం",
+      "raga": "Kuntaḷavarāḷi",
+      "raga_slug": "kuntalavarali",
+      "tala": "Adi",
+      "language": "Sanskrit",
+      "pallavi": "Bhōgīndra śāyinaṃ bhaja mānasa",
+      "pallavi_telugu": "భోగీంద్ర శాయినం భజ మానస",
+      "meaning": "Calls on the mind to worship Vishnu, who reclines upon the serpent couch.",
+      "deity": "Vishnu",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 4,
+      "popularity": 3,
+      "confidence": "high",
+      "notes": "One of Tyagaraja's few Sanskrit compositions, set in the rare raga Kuntalavarali.",
+      "tags": [
+        "rare-raga",
+        "sanskrit-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 12,
+      "slug": "bhuvini-dasudane",
+      "title": "Bhuvini Dāsuḍane",
+      "title_telugu": "భువిని దాసుడనే",
+      "raga": "Śrī",
+      "raga_slug": "sri",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Bhuvini dāsuḍane manasuku",
+      "pallavi_telugu": "భువిని దాసుడనె మనసుకు",
+      "meaning": "Declares oneself a true servant of Rama in this world, questioning the sincerity of that claim.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 4,
+      "popularity": 2,
+      "confidence": "medium",
+      "notes": "Composed in the ghana raga Sri; less commonly performed.",
+      "tags": [
+        "ghana-raga",
+        "rare-raga"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 13,
+      "slug": "brova-bharama",
+      "title": "Brōva Bhāramā",
+      "title_telugu": "బ్రోవ భారమా",
+      "raga": "Bahudāri",
+      "raga_slug": "bahudari",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Brōva bhāramā raghurāma nāku",
+      "pallavi_telugu": "బ్రోవ భారమా రఘురామ నాకు",
+      "meaning": "Asks Rama whether protecting the singer is really too great a burden for him.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 4,
+      "confidence": "high",
+      "notes": null,
+      "tags": [
+        "concert-staple",
+        "rakti-raga"
+      ],
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "బ్రోవ భారమా రఘురామ నాకు",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "శ్రీ వాసుదేవ అండకోట్ల కుక్షిని యుంచుకోలేదా నన్ను",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "కలశాంబుధిలో దయతో అమరులకై అడిగాక గోపికలకై కొండ లెత్తలేదా కరుణాకర త్యాగరాజుని",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "బ్రోవ",
+          "meaning_telugu": "కాపాడుట",
+          "meaning": "to protect"
+        },
+        {
+          "word": "భారమా",
+          "meaning_telugu": "భారముగా ఉన్నదా",
+          "meaning": "is it a burden"
+        },
+        {
+          "word": "రఘురామ",
+          "meaning_telugu": "రఘువంశపు రాముడా",
+          "meaning": "O Rama of the Raghu dynasty"
+        },
+        {
+          "word": "నాకు",
+          "meaning_telugu": "నా కొరకు",
+          "meaning": "for me"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "slug": "chakkani-raja-margamu",
+      "title": "Cakkani Rāja Mārgamu",
+      "title_telugu": "చక్కని రాజ మార్గము",
+      "raga": "Kharaharapriyā",
+      "raga_slug": "kharaharapriya",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Cakkani rāja mārgamu unḍaga swāmi",
+      "pallavi_telugu": "చక్కని రాజ మార్గము ఉండగ స్వామి",
+      "meaning": "Compares surrender to Rama's grace to a clear royal road, contrasted with the crooked bylanes of other paths.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 5,
+      "confidence": "high",
+      "notes": "Concert staple; often taught early for its clear structure.",
+      "tags": [
+        "concert-staple",
+        "beginner-friendly"
+      ],
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "చక్కని రాజ మార్గము ఉండగ స్వామి",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "చిక్కని పాలు మీగడ యుండగ\nచీయని గంగా సాగర మేల",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "కంటికి సుందరతరమగు రూపమే\nముక్కంటి నోట చెలఁగెడు నామమే\nత్యాగరాజింటనే నెలకొన్నది దైవమే",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "చక్కని",
+          "meaning_telugu": "అందమైన",
+          "meaning": "beautiful, fine"
+        },
+        {
+          "word": "రాజ మార్గము",
+          "meaning_telugu": "రాజమార్గము, రహదారి",
+          "meaning": "royal road, highway"
+        },
+        {
+          "word": "ఉండగ",
+          "meaning_telugu": "ఉండగా, కలిగి ఉండగా",
+          "meaning": "while there exists"
+        },
+        {
+          "word": "స్వామి",
+          "meaning_telugu": "ఓ ప్రభూ",
+          "meaning": "O Lord"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "slug": "chede-buddi-manura",
+      "title": "Cēdē Buddi Mānurā",
+      "title_telugu": "చెడే బుద్ధి మానురా",
+      "raga": "Āṭhāṇa",
+      "raga_slug": "athana",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Cēdē buddi mānurā manasā",
+      "pallavi_telugu": "చేదే బుద్ధి మానురా మనసా",
+      "meaning": "Admonishes the mind to abandon its base, harmful thoughts.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 2,
+      "confidence": "medium",
+      "notes": null,
+      "tags": [
+        "rarely-performed"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 16,
+      "slug": "chesinadella-marachitivo",
+      "title": "Cēsinadella Maracitivō",
+      "title_telugu": "చేసినదెల్ల మరచితివో",
+      "raga": "Kharaharapriyā",
+      "raga_slug": "kharaharapriya",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Cēsinadella maracitivō rāma nāyeḍa",
+      "pallavi_telugu": "చేసినదెల్ల మరచితివో రామ నాయెడ",
+      "meaning": "Asks Rama if he has forgotten all the good deeds the singer has done for him.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 3,
+      "confidence": "medium",
+      "notes": null,
+      "tags": [
+        "rakti-raga"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 17,
+      "slug": "chetulara-sringaramu",
+      "title": "Chētulārā Śṛṅgāramu",
+      "title_telugu": "చేతులారా శృంగారము",
+      "raga": "Hanumatōḍi",
+      "raga_slug": "hanumatodi",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Chetulara sringaramu seyu vela idera Rama",
+      "pallavi_telugu": "చేతులార శృంగారము సేయు వేళ ఇదేరా రామ",
+      "meaning": "The singer describes decorating and adorning Rama with his own hands, expressing devotion through the ritual act of decking out the deity.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 2,
+      "confidence": "medium",
+      "notes": "Todi kriti describing devotional adornment of the deity.",
+      "tags": [],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 18,
+      "slug": "chinnanadena",
+      "title": "Chinnanāḍēna Nēḍu Chelimi",
+      "title_telugu": "చిన్ననాడేన నేడు చెలిమి",
+      "raga": "Kalyāṇi",
+      "raga_slug": "kalyani",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Chinnanadena needu chelimi seyu vaadanu kaanu",
+      "pallavi_telugu": "చిన్ననాడేనా నీదు చెలిమి సేయు వాడను కాను",
+      "meaning": "The devotee protests that his friendship and devotion to Rama did not begin only today, but stretches back through many lifetimes, so the Lord should not now abandon him.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 3,
+      "confidence": "medium",
+      "notes": "Kalyani kriti expressing the singer's long-standing bond with Rama.",
+      "tags": [],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 19,
+      "slug": "choodare-chelulara",
+      "title": "Cūḍarē Celulārā",
+      "title_telugu": "చూడరే చెలులారా",
+      "raga": "Kāmavardhini",
+      "raga_slug": "kamavardhini",
+      "tala": "Misra Chapu",
+      "language": "Telugu",
+      "pallavi": "Choodare chelulara Yamuna Devi sogasella santoshamuna",
+      "pallavi_telugu": "చూడరే చెలులారా యమునాదేవి సొగసెల్ల సంతోషమున",
+      "meaning": "The gopis call to one another, 'Look, friends, at the joyous beauty of the river Yamuna!' — describing the cuckoos and the romantic atmosphere on the riverbank before the boat ride.",
+      "deity": "Krishna",
+      "groups": [
+        "nauka-charitram"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 2
+      },
+      "difficulty": 3,
+      "popularity": 2,
+      "confidence": "high",
+      "notes": null,
+      "tags": [
+        "opera",
+        "krishna-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 20,
+      "slug": "dachukovalena",
+      "title": "Dācukōvalenā",
+      "title_telugu": "దాచుకోవలెనా",
+      "raga": "Hanumatōḍi",
+      "raga_slug": "hanumatodi",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Dācukōvalenā dayalēni vāri tōḍa",
+      "pallavi_telugu": "దాచుకోవలెనా దయలేని వారి తోడ",
+      "meaning": "Asks why one should have to hide one's devotion in the presence of those who lack compassion.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 4,
+      "popularity": 5,
+      "confidence": "high",
+      "notes": "Major Todi concert piece, technically demanding.",
+      "tags": [
+        "concert-staple",
+        "rakti-raga"
+      ],
+      "sahityam": null,
+      "pratipadartham": [
+        {
+          "word": "దాచుకోవలెనా",
+          "meaning_telugu": "దాచుకోవాలా, మరుగుపరచవలెనా",
+          "meaning": "must (it/this) be hidden away?"
+        },
+        {
+          "word": "దయలేని",
+          "meaning_telugu": "దయ లేని, కరుణ లేని",
+          "meaning": "lacking compassion"
+        },
+        {
+          "word": "వారి",
+          "meaning_telugu": "వారి యొక్క",
+          "meaning": "of those (people)"
+        },
+        {
+          "word": "తోడ",
+          "meaning_telugu": "తోడుగా, తోపాటు",
+          "meaning": "along with"
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "slug": "darini-telusukonti",
+      "title": "Dārini Telusukoṇṭi",
+      "title_telugu": "దారిని తెలుసుకొంటి",
+      "raga": "Śuddhasāvēri",
+      "raga_slug": "suddha-saveri",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Dārini telusukoṇṭi tripurasundari",
+      "pallavi_telugu": "దారిని తెలుసుకొంటి త్రిపురసుందరి",
+      "meaning": "Says he has found the way, addressing the Goddess Tripurasundari of Tiruvottiyur.",
+      "deity": "Devi",
+      "groups": [
+        "tiruvottiyur-pancharatna"
+      ],
+      "kshetra": "Tiruvottiyur",
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 3,
+      "confidence": "high",
+      "notes": "From the Tiruvoṭṭiyūr set on Devi — unusual for a composer whose work is almost entirely on Rama.",
+      "tags": [
+        "kshetra-kriti",
+        "devi-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 22,
+      "slug": "dasarathi-nee-runamu",
+      "title": "Dāśarathī Nī Ṛṇamu",
+      "title_telugu": "దాశరథీ నీ ఋణము",
+      "raga": "Hanumatōḍi",
+      "raga_slug": "hanumatodi",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Dāśarathī nī ṛṇamu tīrcuko lēka",
+      "pallavi_telugu": "దాశరథీ నీ ఋణము తీర్చుకో లేక",
+      "meaning": "The singer laments being unable to repay the debt of gratitude owed to Dasarathi (Rama).",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 4,
+      "confidence": "high",
+      "notes": null,
+      "tags": [
+        "concert-staple"
+      ],
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "దాశరథీ నీ ఋణము తీర్చుకో లేక",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "ఆశ తీర దూర దేశములను ప్రకాశింపజేసిన రసిక శిరోమణి",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "భక్తి లేని కవిజాల వరేణ్యులు భావమెరుగలేరని కలిలోన జని భుక్తి ముక్తి కల్గుననీ కీర్తనములు బోధించిన త్యాగరాజ కరార్చిత",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "దాశరథీ",
+          "meaning_telugu": "దశరథుని కుమారుడా",
+          "meaning": "O son of Dasaratha (Rama)"
+        },
+        {
+          "word": "నీ",
+          "meaning_telugu": "నీయొక్క",
+          "meaning": "your"
+        },
+        {
+          "word": "ఋణము",
+          "meaning_telugu": "అప్పు",
+          "meaning": "debt"
+        },
+        {
+          "word": "తీర్చుకో లేక",
+          "meaning_telugu": "తీర్చుకొనలేక",
+          "meaning": "being unable to repay"
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "slug": "daya-seyavayya",
+      "title": "Daya Sēyavayya",
+      "title_telugu": "దయ సేయవయ్య",
+      "raga": "Yadukulakāmbhōji",
+      "raga_slug": "yadukulakambhoji",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Daya seyu sadaya",
+      "pallavi_telugu": "దయ సేయు సదయ",
+      "meaning": "Prahlada pleads with the merciful Lord to grant him the same comfort and devotion that Sita drew from contemplating the Lord's grace.",
+      "deity": "Vishnu",
+      "groups": [
+        "prahlada-bhakti-vijayam"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 2
+      },
+      "difficulty": 3,
+      "popularity": 2,
+      "confidence": "medium",
+      "notes": "Raga and narrative context are well attested; the tala (given here as Adi) is less firmly confirmed than for the other Prahlada Bhakti Vijayam entries.",
+      "tags": [
+        "opera",
+        "vishnu-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 24,
+      "slug": "dinamani-vamsa",
+      "title": "Dinamaṇi Vaṃśa",
+      "title_telugu": "దినమణి వంశ",
+      "raga": "Harikāmbhōji",
+      "raga_slug": "harikambhoji",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Dinamaṇi vaṃśa sudhāmbudhi candra",
+      "pallavi_telugu": "దినమణి వంశ సుధాంబుధి చంద్ర",
+      "meaning": "Praises Rama as the moon risen from the nectarous ocean that is the Solar dynasty.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 4,
+      "confidence": "medium",
+      "notes": "The \"sudhāmbudhi candra\" phrasing in this pallavi also appears in a differently attributed composition — the wording needs checking against a printed edition.",
+      "tags": [
+        "concert-staple"
+      ],
+      "sahityam": null,
+      "pratipadartham": [
+        {
+          "word": "దినమణి",
+          "meaning_telugu": "సూర్యుడు",
+          "meaning": "the sun"
+        },
+        {
+          "word": "వంశ",
+          "meaning_telugu": "వంశము, కులము",
+          "meaning": "dynasty, lineage"
+        },
+        {
+          "word": "సుధాంబుధి",
+          "meaning_telugu": "అమృత సముద్రము",
+          "meaning": "ocean of nectar"
+        },
+        {
+          "word": "చంద్ర",
+          "meaning_telugu": "చంద్రుడు",
+          "meaning": "moon (i.e. the moon risen from that ocean)"
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "slug": "dorakuna-ituvanti-seva",
+      "title": "Dorakunā Ituvaṇṭi Sēva",
+      "title_telugu": "దొరకునా ఇటువంటి సేవ",
+      "raga": "Bilahari",
+      "raga_slug": "bilahari",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Dorakunā ituvaṇṭi sēvā śrī rāmā",
+      "pallavi_telugu": "దొరకునా ఇటువంటి సేవా శ్రీరామా",
+      "meaning": "Wonders whether such an opportunity to serve Rama will ever come again.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 4,
+      "confidence": "high",
+      "notes": null,
+      "tags": [
+        "concert-staple",
+        "beginner-friendly"
+      ],
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "దొరకునా ఇటువంటి సేవా శ్రీరామా",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "దొరుకునా అల్ప తప మొనరించిన భూసుర వరులకునైన సురులకైన",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "దొరకునా",
+          "meaning_telugu": "లభించునా",
+          "meaning": "will [it] be obtained"
+        },
+        {
+          "word": "ఇటువంటి",
+          "meaning_telugu": "ఈ విధమైన",
+          "meaning": "such, of this kind"
+        },
+        {
+          "word": "సేవా",
+          "meaning_telugu": "సేవించు అవకాశము",
+          "meaning": "opportunity to serve"
+        },
+        {
+          "word": "శ్రీరామా",
+          "meaning_telugu": "శ్రీరాముడా",
+          "meaning": "O Sri Rama"
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "slug": "dorakunaayani-surula",
+      "title": "Dorakunāyani Sūrula",
+      "title_telugu": "దొరకునాయని సూరుల",
+      "raga": "Hanumatōḍi",
+      "raga_slug": "hanumatodi",
+      "tala": "Rupaka",
+      "language": "Telugu",
+      "pallavi": "Dorakunayani surula dora vedalenu kanare",
+      "pallavi_telugu": "దొరకునాయని సురుల దొర వెడలెను కనరే",
+      "meaning": "Indra, lord of the celestials, sets out wondering whether he might be privileged to behold Hari, moon-faced with Sita by his side, being worshipped by Prahlada.",
+      "deity": "Vishnu",
+      "groups": [
+        "prahlada-bhakti-vijayam"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 2
+      },
+      "difficulty": 3,
+      "popularity": 2,
+      "confidence": "high",
+      "notes": null,
+      "tags": [
+        "opera",
+        "vishnu-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 27,
+      "slug": "dudukugala-nanne",
+      "title": "Duḍukugala Nannē",
+      "title_telugu": "దుడుకుగల నన్నే",
+      "raga": "Gauḷa",
+      "raga_slug": "gaula",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Duḍukugala nannē dora koḍuku brōcurā entō",
+      "pallavi_telugu": "దుడుకుగల నన్నే దొర కొడుకు బ్రోచురా",
+      "meaning": "Tyagaraja calls himself a wretch full of misdeeds and asks which prince's son would trouble to save him — a catalogue of self-accusation.",
+      "deity": "Rama",
+      "groups": [
+        "pancharatna"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 12
+      },
+      "difficulty": 5,
+      "popularity": 5,
+      "confidence": "high",
+      "notes": "The charanams are an unsparing list of the composer's own failings. Gaula's vakra descent makes this the hardest of the five to keep in tune.",
+      "tags": [
+        "ghana-raga-pancharatna",
+        "concert-staple"
+      ],
+      "sahityam": null,
+      "pratipadartham": [
+        {
+          "word": "దుడుకుగల",
+          "meaning_telugu": "మొండితనము గల, తొందరపాటు గల",
+          "meaning": "the one (me) who is impudent/rash"
+        },
+        {
+          "word": "నన్నే",
+          "meaning_telugu": "నన్ను మాత్రమే",
+          "meaning": "me alone"
+        },
+        {
+          "word": "దొర కొడుకు",
+          "meaning_telugu": "రాజకుమారుడు (రాముడు)",
+          "meaning": "the king's son (Rama)"
+        },
+        {
+          "word": "బ్రోచురా",
+          "meaning_telugu": "కాపాడడా, రక్షించడా",
+          "meaning": "will (he) not protect (me)?"
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "slug": "ela-nee-daya-radu",
+      "title": "Ēlā Nī Daya Rādu",
+      "title_telugu": "ఏలా నీ దయ రాదు",
+      "raga": "Āṭhāṇa",
+      "raga_slug": "athana",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Ēlā nī daya rādu rāmā nāpai",
+      "pallavi_telugu": "ఏలా నీ దయ రాదు రామా నాపై",
+      "meaning": "Asks Rama why his compassion has still not descended upon the singer.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 3,
+      "confidence": "high",
+      "notes": "Aṭāṇā (also spelt Aṭana) is a rakti rāga where the gāndhāra is heavily oscillated — the scale on paper tells you very little about it.",
+      "tags": [
+        "rakti-raga"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 29,
+      "slug": "emani-vinnavintura",
+      "title": "Ēmani Vinnavintura",
+      "title_telugu": null,
+      "raga": "Rītigauḷa",
+      "raga_slug": "ritigaula",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Emani vinnavintura nannu brova ide vela ika",
+      "pallavi_telugu": null,
+      "meaning": "The devotee asks what more he can possibly submit to Rama in supplication, declaring that now is the very moment for the Lord to come and protect him.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 4,
+      "confidence": "high",
+      "notes": "A well-loved kriti in the rakti raga Ritigaula, frequently performed as a main item.",
+      "tags": [
+        "concert-staple",
+        "rakti-raga"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 30,
+      "slug": "emi-jesitenemi",
+      "title": "Ēmi Jēsitēnēmi",
+      "title_telugu": "ఏమి జేసితేనేమి",
+      "raga": "Kharaharapriyā",
+      "raga_slug": "kharaharapriya",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Ēmi jēsitēnēmi manasuku nirmalatvamu lēka",
+      "pallavi_telugu": "ఏమి జేసితేనేమి మనసుకు నిర్మలత్వము లేక",
+      "meaning": "Declares that whatever one does is fruitless without purity of mind.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 4,
+      "confidence": "medium",
+      "notes": "Independently flagged twice: the commonly documented setting is Tōḍi, not Kharaharapriyā as recorded here.",
+      "tags": [
+        "concert-staple"
+      ],
+      "sahityam": null,
+      "pratipadartham": [
+        {
+          "word": "ఏమి జేసితేనేమి",
+          "meaning_telugu": "ఏమి చేసినా ఏమి ప్రయోజనము",
+          "meaning": "what does it matter, whatever one does"
+        },
+        {
+          "word": "మనసుకు",
+          "meaning_telugu": "మనసునకు",
+          "meaning": "to the mind"
+        },
+        {
+          "word": "నిర్మలత్వము",
+          "meaning_telugu": "స్వచ్ఛత, పరిశుద్ధత",
+          "meaning": "purity, clarity"
+        },
+        {
+          "word": "లేక",
+          "meaning_telugu": "లేకుండా",
+          "meaning": "without, lacking"
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "slug": "endaro-mahanubhavulu",
+      "title": "Endarō Mahānubhāvulu",
+      "title_telugu": "ఎందరో మహానుభావులు",
+      "raga": "Śrī",
+      "raga_slug": "sri",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Endarō mahānubhāvulu andarikī vandanamulu",
+      "pallavi_telugu": "ఎందరో మహానుభావులు అందరికీ వందనములు",
+      "meaning": "Salutes the countless great souls who have realised the divine — the composer bowing to everyone who came before him.",
+      "deity": "Rama",
+      "groups": [
+        "pancharatna"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 10
+      },
+      "difficulty": 5,
+      "popularity": 5,
+      "confidence": "high",
+      "notes": "Always sung last of the five, and the piece that closes the massed Ārādhana rendition at Tiruvaiyāru. Śrī rāga's narrow contours make the swara passages deceptively hard.",
+      "tags": [
+        "ghana-raga-pancharatna",
+        "concert-staple"
+      ],
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "ఎందరో మహానుభావులు అందరికీ వందనములు",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "చందురు వర్ణుని అందచందమును\nహృదయారవిందమున జూచి బ్రహ్మానందమనుభవించు\nవారెందరో మహానుభావులు అందరికీ వందనములు",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "ఎందరో",
+          "meaning_telugu": "ఎంతమందో, అసంఖ్యాకముగా",
+          "meaning": "how many, countless"
+        },
+        {
+          "word": "మహానుభావులు",
+          "meaning_telugu": "గొప్ప పుణ్యాత్ములు, గొప్పవారు",
+          "meaning": "great/noble souls"
+        },
+        {
+          "word": "అందరికీ",
+          "meaning_telugu": "అందరికి కూడా",
+          "meaning": "to all of them"
+        },
+        {
+          "word": "వందనములు",
+          "meaning_telugu": "నమస్కారములు",
+          "meaning": "salutations"
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "slug": "endu-daginado",
+      "title": "Endu Dāginādō",
+      "title_telugu": "ఎందు దాగినాడో",
+      "raga": "Śrīrañjani",
+      "raga_slug": "sriranjani",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Endu dāginādō rāmuḍu",
+      "pallavi_telugu": "ఎందు దాగినాడో రాముడు",
+      "meaning": "Wonders where Rama is hiding, unseen by his devotee.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 2,
+      "confidence": "medium",
+      "notes": null,
+      "tags": [
+        "rakti-raga"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 33,
+      "slug": "endukku-peddala",
+      "title": "Endukū Peddala",
+      "title_telugu": "ఎందుకు పెద్దల",
+      "raga": "Dhīraśaṅkarābharaṇaṁ",
+      "raga_slug": "dheerasankarabharanam",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Endukū peddala mātalu vinaka",
+      "pallavi_telugu": "ఎందుకూ పెద్దల మాటలు వినక",
+      "meaning": "Questions why the young do not heed the counsel of their elders.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 4,
+      "confidence": "high",
+      "notes": null,
+      "tags": [
+        "concert-staple"
+      ],
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "ఎందుకూ పెద్దల మాటలు వినక",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "అందరివలె దాటిదాటి వదరితి అందరాని పండాయే గదరా",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "వేద శాస్త్ర పురాణ తత్త్వార్థము దెలిసి భేద రహిత వేదాంతమును దెలిసి నాద విద్య మర్మంబులను దెలిసి నాథ త్యాగరాజనుత నిజముగా",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "ఎందుకూ",
+          "meaning_telugu": "ఎందుకని (నొక్కి పలుకుట)",
+          "meaning": "why (emphatic)"
+        },
+        {
+          "word": "పెద్దల",
+          "meaning_telugu": "పెద్దలైనవారి",
+          "meaning": "of the elders/wise ones"
+        },
+        {
+          "word": "మాటలు",
+          "meaning_telugu": "మాటలను",
+          "meaning": "words"
+        },
+        {
+          "word": "వినక",
+          "meaning_telugu": "వినకుండా",
+          "meaning": "without heeding"
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "slug": "enta-muddo",
+      "title": "Enta Muddō",
+      "title_telugu": "ఎంత ముద్దో",
+      "raga": "Malayamārutaṃ",
+      "raga_slug": "malayamarutam",
+      "tala": "Rupaka",
+      "language": "Telugu",
+      "pallavi": "Enta muddō enta sogasō śrī rāma bāla",
+      "pallavi_telugu": "ఎంత ముద్దో ఎంత సొగసో శ్రీరామ బాల",
+      "meaning": "Describes how utterly charming and beautiful the child Rama appears.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 3,
+      "confidence": "medium",
+      "notes": "Popular vatsalya-bhava (parental-love) kriti depicting baby Rama.",
+      "tags": [
+        "rare-raga"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 35,
+      "slug": "etavunara",
+      "title": "Ēṭāvunarā",
+      "title_telugu": "ఏ తావునరా",
+      "raga": "Kalyāṇi",
+      "raga_slug": "kalyani",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Ēṭāvunarā nī daya rādā",
+      "pallavi_telugu": null,
+      "meaning": "Asks what manner of person withholds compassion, questioning Rama's delay in showing grace.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 4,
+      "confidence": "high",
+      "notes": null,
+      "tags": [
+        "concert-staple"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 36,
+      "slug": "eti-janma-midi",
+      "title": "Ēṭi Janma Midi",
+      "title_telugu": "ఏటి జన్మ మిది",
+      "raga": "Varāḷi",
+      "raga_slug": "varali",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Ēṭi janma midi rāma bhakti lēka",
+      "pallavi_telugu": "ఏటి జన్మ మిది రామ భక్తి లేక",
+      "meaning": "Laments what kind of birth this is, lived without devotion to Rama.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 4,
+      "popularity": 3,
+      "confidence": "medium",
+      "notes": "Set in Varali, one of the ghana ragas; demanding, ancient raga.",
+      "tags": [
+        "ghana-raga",
+        "rare-raga"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 37,
+      "slug": "etula-brotuvo",
+      "title": "Ēṭula Brōtuvō",
+      "title_telugu": "ఏటుల బ్రోతువో",
+      "raga": "Dēvagāndhāri",
+      "raga_slug": "devagandhari",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Ēṭula brōtuvō ēmō rāma nannu",
+      "pallavi_telugu": "ఏటుల బ్రోతువో ఏమో రామ నన్ను",
+      "meaning": "Wonders in what way Rama will ultimately choose to protect the singer.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 3,
+      "confidence": "medium",
+      "notes": null,
+      "tags": [
+        "rakti-raga"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 38,
+      "slug": "evari-mata-vinnavemira",
+      "title": "Ēvari Māṭa Vinnavēmirā",
+      "title_telugu": "ఎవరి మాట విన్నవేమిరా",
+      "raga": "Kāmbhōji",
+      "raga_slug": "kambhoji",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Ēvari māṭa vinnavēmirā manasā",
+      "pallavi_telugu": "ఏవరి మాట విన్నవేమిరా మనసా",
+      "meaning": "Asks the mind whose advice it has been listening to, having strayed from devotion.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 4,
+      "confidence": "medium",
+      "notes": "Documented versions of this pallavi do not carry the trailing \"manasā\" recorded here.",
+      "tags": [
+        "concert-staple"
+      ],
+      "sahityam": null,
+      "pratipadartham": [
+        {
+          "word": "ఏవరి",
+          "meaning_telugu": "ఎవరియొక్క",
+          "meaning": "whose"
+        },
+        {
+          "word": "మాట",
+          "meaning_telugu": "మాటను",
+          "meaning": "word, speech"
+        },
+        {
+          "word": "విన్నవేమిరా",
+          "meaning_telugu": "వినితివా ఏమిటి",
+          "meaning": "did you go and listen to (rhetorical)"
+        },
+        {
+          "word": "మనసా",
+          "meaning_telugu": "ఓ మనసా",
+          "meaning": "O mind"
+        }
+      ]
+    },
+    {
+      "id": 39,
+      "slug": "evarichchirira",
+      "title": "Evarichchirirā Ī Ānanda",
+      "title_telugu": null,
+      "raga": "Sahāna",
+      "raga_slug": "sahana",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Evarichchirira ee ananda mevarichirira",
+      "pallavi_telugu": "ఎవరిచ్చిరిరా ఈ ఆనందమెవరిచ్చిరిరా",
+      "meaning": "Tyagaraja asks who else could have given him this bliss, other than the Lord himself, celebrating the joy that devotion has brought him.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 2,
+      "confidence": "medium",
+      "notes": "Sahana kriti expressing the bliss (ananda) of devotion.",
+      "tags": [
+        "rakti-raga"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 40,
+      "slug": "evaru-manaku-samanam",
+      "title": "Evaru Manaku Samānamu",
+      "title_telugu": "ఎవరు మనకు సమానము",
+      "raga": "Dēvagāndhāri",
+      "raga_slug": "devagandhari",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Evaru manaku samanam(i)lalOn(i)ntulara nedu",
+      "pallavi_telugu": "ఎవరు మనకు సమానమిలలోనింతులారా నేడు",
+      "meaning": "The gopis boast to one another, in their pride, that no one on earth today is equal to them now that Krishna has become theirs — the very pride the boat episode is designed to humble.",
+      "deity": "Krishna",
+      "groups": [
+        "nauka-charitram"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 2
+      },
+      "difficulty": 3,
+      "popularity": 2,
+      "confidence": "high",
+      "notes": "Listed as kriti no. 11 of the Nauka Charitram sequence; a madhyama-kala composition.",
+      "tags": [
+        "opera",
+        "krishna-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 41,
+      "slug": "gandhamu-puyyaruga",
+      "title": "Gandhamu Puyyarugā",
+      "title_telugu": "గంధము పూయరుగా",
+      "raga": "Punnāgavarāḷi",
+      "raga_slug": "punnagavarali",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Gandhamu puyyaruga",
+      "pallavi_telugu": "గంధము పుయ్యరుగా",
+      "meaning": "The gopis, meeting Krishna joyfully at the riverbank, apply sandal paste to him, expressing their devotion in service before pride sets in and the boat trip turns dangerous.",
+      "deity": "Krishna",
+      "groups": [
+        "nauka-charitram"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 2
+      },
+      "difficulty": 3,
+      "popularity": 2,
+      "confidence": "high",
+      "notes": null,
+      "tags": [
+        "opera",
+        "krishna-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 42,
+      "slug": "giripai-nelakonna",
+      "title": "Giripai Nelakonna",
+      "title_telugu": "గిరిపై నెలకొన్న",
+      "raga": "Sahāna",
+      "raga_slug": "sahana",
+      "tala": "Rupaka",
+      "language": "Telugu",
+      "pallavi": "Giripai nelakonna venkaṭaramuni",
+      "pallavi_telugu": "గిరిపై నెలకొన్న వేంకటరమణుని",
+      "meaning": "Describes Lord Venkatesa, who has made his abode atop the hill.",
+      "deity": "Venkatesa",
+      "groups": [
+        "tirupati-venkatesa"
+      ],
+      "kshetra": "Tirupati",
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 4,
+      "confidence": "medium",
+      "notes": "Popular Venkatesa kriti associated with Tirumala. Published sources for this kṛti address Rāma on the hill rather than Veṅkaṭaramaṇa, which would also move the deity and kṣētra attribution — verify before relying on the Tirupati grouping.",
+      "tags": [
+        "kshetra-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": [
+        {
+          "word": "గిరిపై",
+          "meaning_telugu": "కొండపైన",
+          "meaning": "on the hill"
+        },
+        {
+          "word": "నెలకొన్న",
+          "meaning_telugu": "స్థిరముగా వెలసిన",
+          "meaning": "who is established/residing"
+        },
+        {
+          "word": "వేంకటరమణుని",
+          "meaning_telugu": "వేంకటాద్రి రమణుని (శ్రీవేంకటేశ్వరుని)",
+          "meaning": "of Venkataramana, the Lord of the Venkata hill"
+        }
+      ]
+    },
+    {
+      "id": 43,
+      "slug": "grahabalamemi",
+      "title": "Grahabalamēmi",
+      "title_telugu": "గ్రహబలమేమి",
+      "raga": "Rītigauḷa",
+      "raga_slug": "ritigaula",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Grahabalamēmi śrī rāmuḍē balamu",
+      "pallavi_telugu": "గ్రహబలమేమి శ్రీరాముడే బలము",
+      "meaning": "Declares that planetary influence means nothing when Rama himself is one's strength.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 3,
+      "confidence": "medium",
+      "notes": null,
+      "tags": [
+        "rare-raga"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 44,
+      "slug": "hari-hari-neeyokka",
+      "title": "Hari Hari Nī(y)okka",
+      "title_telugu": "హరి హరి నీయొక్క",
+      "raga": "Punnāgavarāḷi",
+      "raga_slug": "punnagavarali",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Hari Hari neeyokka charanamu nosangu",
+      "pallavi_telugu": "హరి హరి నీయొక్క చరణము నొసంగు",
+      "meaning": "The chastened gopis beg Krishna, 'Hari, Hari, grant us your holy feet' realising that worldly pleasure and fortune are not permanent, and seeking refuge in surrender.",
+      "deity": "Krishna",
+      "groups": [
+        "nauka-charitram"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 2
+      },
+      "difficulty": 3,
+      "popularity": 2,
+      "confidence": "high",
+      "notes": "The 14th piece of Nauka Charitram, sung after the boat begins to sink, as the gopis' pride gives way to surrender.",
+      "tags": [
+        "opera",
+        "krishna-kriti",
+        "surrender"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 45,
+      "slug": "heccarikaga-rara",
+      "title": "Heccarikagā Rārā",
+      "title_telugu": "హెచ్చరికగా రారా",
+      "raga": "Yadukulakāmbhōji",
+      "raga_slug": "yadukulakambhoji",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Heccarikagā rārā rāma",
+      "pallavi_telugu": "హెచ్చరికగా రారా రామ",
+      "meaning": "Calls Rama to come forth watchfully, alert to the devotee's plea.",
+      "deity": "Rama",
+      "groups": [
+        "utsava-sampradaya"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 4,
+      "confidence": "high",
+      "notes": null,
+      "tags": [
+        "concert-staple"
+      ],
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "హెచ్చరికగా రారా రామ",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "పచ్చవిల్తుని గన్న పాలిత సురేంద్ర",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "కనకమయమౌ మకుట కాంతి మెరయగను ఘనమైన కుండల యుగంబులు గదలగను ఘనమైన నూపుర యుగంబు ఘల్లలను సనకాదులెల్ల కని సంతసిల్లగును",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "హెచ్చరికగా",
+          "meaning_telugu": "అప్రమత్తముగా, జాగరూకతతో",
+          "meaning": "attentively, with due ceremony"
+        },
+        {
+          "word": "రారా",
+          "meaning_telugu": "రమ్ము",
+          "meaning": "come!"
+        },
+        {
+          "word": "రామ",
+          "meaning_telugu": "ఓ రామా",
+          "meaning": "O Rama"
+        }
+      ]
+    },
+    {
+      "id": 46,
+      "slug": "ee-vasudha-nivanti",
+      "title": "Ī Vasudha Nīvaṇṭi",
+      "title_telugu": "ఈ వసుధ నీవంటి",
+      "raga": "Sahāna",
+      "raga_slug": "sahana",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Ee vasudha nivanti daya galavarevaru kanamu",
+      "pallavi_telugu": "ఈ వసుధ నీవంటి దయ గలవారెవరు కనము",
+      "meaning": "Asks where in this world one could find a god as compassionate as Siva of Kovur, who bestows boons and causes all growth and prosperity.",
+      "deity": "Siva",
+      "groups": [
+        "kovur-pancharatna"
+      ],
+      "kshetra": "Kovur",
+      "structure": {
+        "anupallavi": true,
+        "charanams": 2
+      },
+      "difficulty": 3,
+      "popularity": 2,
+      "confidence": "high",
+      "notes": "Composed June 1839 at the Sundareswara temple, Kovur, during its Vaisakha Visakham festival; one of the five Kovur Pancharatna kritis.",
+      "tags": [
+        "kshetra-kriti",
+        "siva-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 47,
+      "slug": "inta-saukhyamanine",
+      "title": "Inta Saukhyamanine",
+      "title_telugu": "ఇంత సౌఖ్యమనినే",
+      "raga": "Kāpi",
+      "raga_slug": "kapi",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Inta saukhyamanine evvarammā",
+      "pallavi_telugu": "ఇంత సౌఖ్యమానినే ఎవ్వరమ్మా",
+      "meaning": "Exclaims that no one else can be told of such happiness found in devotion to Rama.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 2,
+      "popularity": 3,
+      "confidence": "medium",
+      "notes": null,
+      "tags": [
+        "beginner-friendly"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 48,
+      "slug": "intakannanandamemi",
+      "title": "Intakannānandamēmi",
+      "title_telugu": "ఇంతకన్నానందమేమి",
+      "raga": "Bilahari",
+      "raga_slug": "bilahari",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Intakannānandamēmi rāma nāmamu",
+      "pallavi_telugu": "ఇంతకన్నానందమేమి రామ నామము",
+      "meaning": "Asks what greater joy exists than chanting the name of Rama.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 2,
+      "popularity": 4,
+      "confidence": "high",
+      "notes": null,
+      "tags": [
+        "beginner-friendly",
+        "concert-staple"
+      ],
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "ఇంతకన్నానందమేమి రామ నామము",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "సంత జనులకెల్ల సమ్మతియైయుండు కాని",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "ఆడుచు నాదమున పాడుచు ఎదుట రావేడుచు మనసున కూడియుండుట చాలు",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "ఇంతకన్న",
+          "meaning_telugu": "దీనికంటె",
+          "meaning": "more than this"
+        },
+        {
+          "word": "ఆనందమేమి",
+          "meaning_telugu": "ఎక్కువ ఆనందము ఏముంటుంది",
+          "meaning": "what greater joy is there"
+        },
+        {
+          "word": "రామ నామము",
+          "meaning_telugu": "రాముని పేరు",
+          "meaning": "the name of Rama"
+        }
+      ]
+    },
+    {
+      "id": 49,
+      "slug": "jagadanandakaraka",
+      "title": "Jagadānandakāraka",
+      "title_telugu": "జగదానందకారక",
+      "raga": "Naṭa",
+      "raga_slug": "nata",
+      "tala": "Adi",
+      "language": "Sanskrit",
+      "pallavi": "Jagadānandakāraka jaya jānakī prāṇanāyaka",
+      "pallavi_telugu": "జగదానందకారక జయ జానకీ ప్రాణనాయక",
+      "meaning": "Hails Rama as the source of the world's joy and the lord of Janaki's life — the only Pancharatna entirely in Sanskrit.",
+      "deity": "Rama",
+      "groups": [
+        "pancharatna"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 10
+      },
+      "difficulty": 5,
+      "popularity": 5,
+      "confidence": "high",
+      "notes": "Ten charanams, each a garland of Rama's names in Sanskrit. The one Pancharatna with no Telugu in it. Learn the pallavi and one charanam properly before attempting the whole.",
+      "tags": [
+        "ghana-raga-pancharatna",
+        "concert-staple",
+        "sanskrit-kriti"
+      ],
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "జగదానందకారక జయ జానకీ ప్రాణనాయక",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "గగనాధిప సత్కులజ రాజరాజేశ్వర\nసుగుణాకర సురసేవ్య భవ్యదాయక సదా సకల జగదానందకారక",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "జగదానందకారక",
+          "meaning_telugu": "జగత్తుకు ఆనందము కలిగించువాడా",
+          "meaning": "O bestower of bliss to the universe"
+        },
+        {
+          "word": "జయ",
+          "meaning_telugu": "విజయము కలవాడా (జయము వహించు)",
+          "meaning": "victorious one, hail"
+        },
+        {
+          "word": "జానకీ",
+          "meaning_telugu": "సీత",
+          "meaning": "Janaki (Sita)"
+        },
+        {
+          "word": "ప్రాణనాయక",
+          "meaning_telugu": "ప్రాణములకు నాయకుడు, ప్రాణేశ్వరుడు",
+          "meaning": "lord of (her) life-breath"
+        }
+      ]
+    },
+    {
+      "id": 50,
+      "slug": "jnanamosaga-rada",
+      "title": "Jñānamosaga Rādā",
+      "title_telugu": "జ్ఞానమొసగ రాదా",
+      "raga": "Pūrvikalyāṇi",
+      "raga_slug": "poorvikalyani",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Jñānamosaga rādā nī daya rāmā",
+      "pallavi_telugu": "జ్ఞానమొసగ రాదా నీ దయ రామా",
+      "meaning": "Pleads with Rama to grant the wisdom needed for liberation.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 4,
+      "confidence": "high",
+      "notes": null,
+      "tags": [
+        "concert-staple",
+        "rakti-raga"
+      ],
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "జ్ఞానమొసగ రాదా నీ దయ రామా",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "నీ నామముచే నా మది నిర్మలమైనది",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "పరమాత్ముడు జీవాత్ముడు పదునాలుగు లోకములు నర కిన్నర కింపురుషులు నారదాది మునులు పరిపూర్ణ నిష్కళంక నిరవధి సుఖదాయక వర త్యాగరాజార్చిత వరము తానానే",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "జ్ఞానము",
+          "meaning_telugu": "తెలివి, ఆత్మజ్ఞానము",
+          "meaning": "wisdom, self-knowledge"
+        },
+        {
+          "word": "ఒసగ రాదా",
+          "meaning_telugu": "ఇవ్వరాదా",
+          "meaning": "won't you bestow"
+        },
+        {
+          "word": "నీ",
+          "meaning_telugu": "నీయొక్క",
+          "meaning": "your"
+        },
+        {
+          "word": "దయ",
+          "meaning_telugu": "కరుణ",
+          "meaning": "grace, mercy"
+        },
+        {
+          "word": "రామా",
+          "meaning_telugu": "ఓ రామా",
+          "meaning": "O Rama"
+        }
+      ]
+    },
+    {
+      "id": 51,
+      "slug": "jo-jo-rama-ananda",
+      "title": "Jō Jō Rāma Ānanda",
+      "title_telugu": null,
+      "raga": "Rītigauḷa",
+      "raga_slug": "ritigaula",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Jo jo Rama ananda ghana",
+      "pallavi_telugu": "జో జో రామ ఆనంద ఘన",
+      "meaning": "A lullaby in which Tyagaraja, adopting the voice of a mother, sings Rama to sleep, repeating the sleep-refrain 'jo jo' while praising the Lord's qualities and form; sung at the pavalimpu (putting-to-rest) part of the daily ritual.",
+      "deity": "Rama",
+      "groups": [
+        "utsava-sampradaya"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": false,
+        "charanams": 6
+      },
+      "difficulty": 2,
+      "popularity": 3,
+      "confidence": "high",
+      "notes": "Ritigaula's gently rocking arohana/avarohana suits the lullaby mood; one of Tyagaraja's best-known pavalimpu songs.",
+      "tags": [
+        "utsava-sampradaya",
+        "ritual-song",
+        "lullaby",
+        "rama-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 52,
+      "slug": "kaddanuvariki",
+      "title": "Kaddanuvāriki",
+      "title_telugu": "కద్దనువారికి",
+      "raga": "Hanumatōḍi",
+      "raga_slug": "hanumatodi",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Kaddanuvāriki kaddanukō lēka",
+      "pallavi_telugu": "కద్దనువారికి కద్దనుకో లేక",
+      "meaning": "Speaks of being unable to refuse those who claim to belong to oneself.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 4,
+      "popularity": 4,
+      "confidence": "high",
+      "notes": null,
+      "tags": [
+        "concert-staple",
+        "rakti-raga"
+      ],
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "కద్దనువారికి కద్దనుకో లేక",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "అద్దంపు చెక్కిల్లచే ముద్దుగారు మోము జూడ బుద్ధి గలిగినట్టి మా వద్ద రావదేమిరా",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "నిద్దుర నిరాకరించి ముద్దుగా తంబుర పట్టి శుద్ధమైన మనసుచే సుస్వరముతో బద్దు తప్పక భజియించే భక్త పాలనము సేయు తద్దయ శాలివి నీవే త్యాగరాజ సన్నుత",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "కద్దనువారికి",
+          "meaning_telugu": "దేవుడు కలడు అని చెప్పువారికి",
+          "meaning": "to those who say 'He (God) exists'"
+        },
+        {
+          "word": "కద్దనుకో",
+          "meaning_telugu": "అట్లు అనుకొనుటకు",
+          "meaning": "to accept/consider it so"
+        },
+        {
+          "word": "లేక",
+          "meaning_telugu": "లేకపోతే, లేకుండా",
+          "meaning": "or not, being unable"
+        }
+      ]
+    },
+    {
+      "id": 53,
+      "slug": "kalyanamu-vaibhogame",
+      "title": "Kalyāṇamu Vaibhōgamē",
+      "title_telugu": "కల్యాణము వైభోగమే",
+      "raga": "Dhīraśaṅkarābharaṇaṁ",
+      "raga_slug": "dheerasankarabharanam",
+      "tala": "Khanda Chapu",
+      "language": "Telugu",
+      "pallavi": "Kalyāṇamu vaibhōgamē śrī rāma",
+      "pallavi_telugu": "కల్యాణము వైభోగమే శ్రీరామ",
+      "meaning": "Celebrates the splendour of Rama and Sita's wedding — sung at the marriage sequence of temple festivals.",
+      "deity": "Rama",
+      "groups": [
+        "utsava-sampradaya"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 3
+      },
+      "difficulty": 2,
+      "popularity": 3,
+      "confidence": "medium",
+      "notes": "A ritual song for the kalyāṇōtsavam; the tala is written as khaṇḍa cāpu but many groups sing it in a relaxed Adi.",
+      "tags": [
+        "beginner-friendly"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 54,
+      "slug": "kanakana-ruchira",
+      "title": "Kanakana Rucirā",
+      "title_telugu": "కనకన రుచిరా",
+      "raga": "Varāḷi",
+      "raga_slug": "varali",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Kanakana rucirā kanakavasana ninnu",
+      "pallavi_telugu": "కనకన రుచిరా కనకవసన నిన్ను",
+      "meaning": "The more he looks at the golden-robed Rama, the sweeter the sight becomes — a kriti built entirely on the pleasure of darshan.",
+      "deity": "Rama",
+      "groups": [
+        "pancharatna"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 8
+      },
+      "difficulty": 5,
+      "popularity": 5,
+      "confidence": "high",
+      "notes": "Varāḷi is traditionally not taught guru-to-student directly; learners pick it up by listening. Take the vakra ārōhaṇa slowly.",
+      "tags": [
+        "ghana-raga-pancharatna",
+        "concert-staple"
+      ],
+      "sahityam": null,
+      "pratipadartham": [
+        {
+          "word": "కనకన",
+          "meaning_telugu": "ధగధగా మెరయుచున్న",
+          "meaning": "brightly glowing/dazzling"
+        },
+        {
+          "word": "రుచిరా",
+          "meaning_telugu": "అందముగా ఉన్నదానా",
+          "meaning": "O brilliant/beautiful one"
+        },
+        {
+          "word": "కనకవసన",
+          "meaning_telugu": "బంగారు వస్త్రము ధరించినవాడా",
+          "meaning": "O one clad in golden garments"
+        },
+        {
+          "word": "నిన్ను",
+          "meaning_telugu": "నిన్ను (ద్వితీయా విభక్తి)",
+          "meaning": "you (object)"
+        }
+      ]
+    },
+    {
+      "id": 55,
+      "slug": "kanna-thalli-neevu",
+      "title": "Kanna Talli Nīvu",
+      "title_telugu": "కన్న తల్లి నీవు",
+      "raga": "Sāvēri",
+      "raga_slug": "saveri",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Kanna thalli neevu naapaala kaluka",
+      "pallavi_telugu": "కన్నతల్లి నీవు నాపాల కలుగ",
+      "meaning": "Addresses the Goddess as 'my own birth-mother', asking that the good fortune of her grace fall to the singer's share.",
+      "deity": "Devi",
+      "groups": [
+        "tiruvottiyur-pancharatna"
+      ],
+      "kshetra": "Tiruvottiyur",
+      "structure": {
+        "anupallavi": true,
+        "charanams": 2
+      },
+      "difficulty": 3,
+      "popularity": 3,
+      "confidence": "high",
+      "notes": "One of the five Tiruvottiyur Pancharatna kritis on Devi Tripurasundari; composed for Veena Kuppayyar.",
+      "tags": [
+        "kshetra-kriti",
+        "devi-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 56,
+      "slug": "karunajaladhi",
+      "title": "Karuṇājaladhi",
+      "title_telugu": "కరుణాజలధి",
+      "raga": "Sahāna",
+      "raga_slug": "sahana",
+      "tala": "Rupaka",
+      "language": "Telugu",
+      "pallavi": "Karuṇājaladhi ēlukō rāma nannu",
+      "pallavi_telugu": "కరుణాజలధి ఏలుకో రామ నన్ను",
+      "meaning": "Calls Rama the ocean of compassion, pleading to be governed and protected by him.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 2,
+      "confidence": "medium",
+      "notes": null,
+      "tags": [
+        "rarely-performed"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 57,
+      "slug": "koluvaiyunnade",
+      "title": "Koluvaiyunnāḍē",
+      "title_telugu": "కొలువైయున్నాడే",
+      "raga": "Bhairavi",
+      "raga_slug": "bhairavi",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Koluvaiyunnāḍē rāmuḍu koluvaiyunnāḍē",
+      "pallavi_telugu": "కొలువైయున్నాడే రాముడు కొలువైయున్నాడే",
+      "meaning": "Announces that Lord Rama is present, holding court, ready to receive his devotees.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 4,
+      "confidence": "medium",
+      "notes": "Two distinct kṛtis share this title in different rāgas; the Bhairavi attribution here could not be isolated from the other with confidence.",
+      "tags": [
+        "concert-staple",
+        "rakti-raga"
+      ],
+      "sahityam": null,
+      "pratipadartham": [
+        {
+          "word": "కొలువైయున్నాడే",
+          "meaning_telugu": "సభలో కొలువుదీరి ఉన్నాడే",
+          "meaning": "is holding court, is seated in royal assembly"
+        },
+        {
+          "word": "రాముడు",
+          "meaning_telugu": "శ్రీరాముడు",
+          "meaning": "Rama"
+        }
+      ]
+    },
+    {
+      "id": 58,
+      "slug": "koluvamaregada",
+      "title": "Koluvamaregadā",
+      "title_telugu": "కొలువమరెగదా",
+      "raga": "Hanumatōḍi",
+      "raga_slug": "hanumatodi",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Koluvamaregadā vināvē rāma",
+      "pallavi_telugu": "కొలువమరెగదా వినావే రామ",
+      "meaning": "Asks Rama why he no longer holds court to receive his devotees, having hidden himself away.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 4,
+      "popularity": 5,
+      "confidence": "high",
+      "notes": "Landmark Todi masterpiece, a concert staple demanding advanced technique.",
+      "tags": [
+        "concert-staple",
+        "rakti-raga"
+      ],
+      "sahityam": null,
+      "pratipadartham": [
+        {
+          "word": "కొలువు",
+          "meaning_telugu": "రాజసభ, సేవ",
+          "meaning": "royal court, service"
+        },
+        {
+          "word": "అమరెగదా",
+          "meaning_telugu": "తగియుండదా, ఏర్పడదా",
+          "meaning": "would it not be fitting/established"
+        },
+        {
+          "word": "వినావే",
+          "meaning_telugu": "వినవా, వినుటలేదా",
+          "meaning": "do you not hear"
+        },
+        {
+          "word": "రామ",
+          "meaning_telugu": "ఓ రామా",
+          "meaning": "O Rama"
+        }
+      ]
+    },
+    {
+      "id": 59,
+      "slug": "kori-sevimparare",
+      "title": "Kōri Sēvimparārē",
+      "title_telugu": "కోరి సేవింపరారే",
+      "raga": "Kharaharapriyā",
+      "raga_slug": "kharaharapriya",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Kori sevimparare",
+      "pallavi_telugu": "కోరి సేవింపరారే",
+      "meaning": "Invites devotees to lovingly seek out and serve Sundareswara, the Lord of Kovur, consort of Goddess Saundarya Nayaki.",
+      "deity": "Siva",
+      "groups": [
+        "kovur-pancharatna"
+      ],
+      "kshetra": "Kovur",
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 2,
+      "confidence": "high",
+      "notes": "One of the five Kovur Pancharatna kritis; four of the five have only a single charanam.",
+      "tags": [
+        "kshetra-kriti",
+        "siva-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 60,
+      "slug": "kshinamai",
+      "title": "Kṣīṇamai Tiruganu",
+      "title_telugu": null,
+      "raga": "Sāvēri",
+      "raga_slug": "saveri",
+      "tala": "Rupaka",
+      "language": "Telugu",
+      "pallavi": "Kṣīṇamai nē nevariṭō vēḍudune",
+      "pallavi_telugu": null,
+      "meaning": "The singer, worn down and weakened, asks whom else he can implore for help.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 2,
+      "confidence": "medium",
+      "notes": null,
+      "tags": [
+        "rakti-raga",
+        "rarely-performed"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 61,
+      "slug": "ksheera-sagara-sayana",
+      "title": "Kṣīra Sāgara Śayana",
+      "title_telugu": "క్షీర సాగర శయన",
+      "raga": "Dēvagāndhāri",
+      "raga_slug": "devagandhari",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Ksheera sagara sayana sri Rama nannu brova",
+      "pallavi_telugu": "క్షీర సాగర శయన శ్రీరామ నన్ను బ్రోవ",
+      "meaning": "The singer addresses Rama as the one who reclines on the ocean of milk (identifying him with Vishnu/Adisesha-Narayana) and pleads with him to come and protect the devotee.",
+      "deity": "Vishnu",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 3,
+      "confidence": "high",
+      "notes": "Devagandhari kriti identifying Rama with the reclining Vishnu of the Ksheerasagara.",
+      "tags": [
+        "vishnu-rama-identification"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 62,
+      "slug": "kshira-sagara-vihara",
+      "title": "Kṣīra Sāgara Vihāra",
+      "title_telugu": "క్షీర సాగర విహార",
+      "raga": "Ānandabhairavi",
+      "raga_slug": "anandabhairavi",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Kshira sagara vihara aparimita ghora pataka vidara",
+      "pallavi_telugu": "క్షీర సాగర విహార అపరిమిత ఘోర పాతక విదార",
+      "meaning": "Addresses the Lord as the one who sports in the ocean of milk (Vishnu reclining on Adisesha) and who tears apart even the most terrible sins of his devotees.",
+      "deity": "Vishnu",
+      "groups": [
+        "utsava-sampradaya"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 2
+      },
+      "difficulty": 2,
+      "popularity": 3,
+      "confidence": "medium",
+      "notes": "Grouped with the utsava-sampradaya kirtanas in the standard published collection.",
+      "tags": [
+        "utsava-sampradaya",
+        "ritual-song",
+        "vishnu-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 63,
+      "slug": "laali-yugave-mapali-daivama",
+      "title": "Lāli Yugavē Māpāli Daivama",
+      "title_telugu": "లాలి యూగవే మాపాలి దైవమా",
+      "raga": "Nīlāmbari",
+      "raga_slug": "nilambari",
+      "tala": "Rupaka",
+      "language": "Telugu",
+      "pallavi": "Lali yugave mapali daivama",
+      "pallavi_telugu": "లాలియూగవే మా పాలి దైవమా",
+      "meaning": "A cradle/swing lullaby: 'Oh our own Lord, sway gently (on the swing/cradle), lali' — sung while rocking the deity, praising Rama's qualities in each charanam.",
+      "deity": "Rama",
+      "groups": [
+        "utsava-sampradaya"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": false,
+        "charanams": 4
+      },
+      "difficulty": 2,
+      "popularity": 3,
+      "confidence": "high",
+      "notes": "Neelambari is the traditional lullaby raga in Carnatic music; this is Tyagaraja's principal unjal/pavalimpu song in it.",
+      "tags": [
+        "utsava-sampradaya",
+        "ritual-song",
+        "unjal",
+        "lullaby",
+        "rama-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 64,
+      "slug": "ma-janaki-chettabatti",
+      "title": "Mā Jānaki Chettabaṭṭi",
+      "title_telugu": "మా జానకి చెట్టబట్టి",
+      "raga": "Kāmbhōji",
+      "raga_slug": "kambhoji",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Ma Janaki chettabatti brahmastramu vesi",
+      "pallavi_telugu": "మా జానకి చెట్టబట్టి బ్రహ్మాస్త్రము వేసి",
+      "meaning": "The kriti recalls the moment Rama, holding Sita's (Janaki's) hand, releases the Brahmastra, celebrating his valour and devotion to Sita in the same breath.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 4,
+      "confidence": "high",
+      "notes": "Narrative kriti recalling a scene from the Ramayana war episode.",
+      "tags": [
+        "concert-staple",
+        "ramayana-narrative"
+      ],
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "మా జానకి చెట్టబట్టి బ్రహ్మాస్త్రము వేసి",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "రాజరాజవర రాజీవాక్ష విను రావణాదియని రాజిల్లు కీర్తియు",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "కానకేగి యాజ్ఞ మీరక మాయాకర మునిచి శిఖి చెంతనే యుండి దానవుని వెంటనే చని యశోకటని మూలనుండి వాని మాటలకు గోపగించి కంట విధియించకనే యుండి శ్రీ నాయక యశము నీకే కల్గజేయ లేదా త్యాగరాజ పరిపాల",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "మా జానకి",
+          "meaning_telugu": "మన జానకిదేవి (సీత)",
+          "meaning": "our Janaki (Sita)"
+        },
+        {
+          "word": "చెట్టబట్టి",
+          "meaning_telugu": "చేయిపట్టి (వివాహమాడి)",
+          "meaning": "having taken her hand (in marriage)"
+        },
+        {
+          "word": "బ్రహ్మాస్త్రము",
+          "meaning_telugu": "బ్రహ్మదేవుని అస్త్రము",
+          "meaning": "the Brahma-weapon"
+        },
+        {
+          "word": "వేసి",
+          "meaning_telugu": "ప్రయోగించి",
+          "meaning": "having released/cast"
+        }
+      ]
+    },
+    {
+      "id": 65,
+      "slug": "manasa-etulo",
+      "title": "Mānasā Etulō",
+      "title_telugu": null,
+      "raga": "Malayamārutaṃ",
+      "raga_slug": "malayamarutam",
+      "tala": "Rupaka",
+      "language": "Telugu",
+      "pallavi": "Manasa etulo doorapu chelimi seyaka",
+      "pallavi_telugu": "మనసా ఎటులో దూరపు చెలిమి సేయక",
+      "meaning": "Tyagaraja tells his own mind not to keep a distant, half-hearted friendship with the Lord, urging it toward whole-hearted devotion.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 3,
+      "confidence": "medium",
+      "notes": "Self-addressed kriti in the rare raga Malayamarutam.",
+      "tags": [
+        "rare-raga"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 66,
+      "slug": "manasu-swadhinamaina",
+      "title": "Mānasu Svādhīnamaina",
+      "title_telugu": "మానసు స్వాధీనమైన",
+      "raga": "Dhīraśaṅkarābharaṇaṁ",
+      "raga_slug": "dheerasankarabharanam",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Manasu swadhinamaina vaniki dushkarambedidi",
+      "pallavi_telugu": "మనసు స్వాధీనమైన వానికి దుష్కరంబేదిది",
+      "meaning": "Tyagaraja declares that for one who has gained mastery over his own mind, nothing at all remains difficult to achieve.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 4,
+      "confidence": "high",
+      "notes": "Popular Sankarabharanam kriti on mastery of the mind as the key to spiritual attainment.",
+      "tags": [
+        "concert-staple"
+      ],
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "మనసు స్వాధీనమైన వానికి దుష్కరంబేదిది",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "తనువు తాను గాదని యెంచువానికి తపము చేయునేల దశరథ బాల",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "అన్ని నీవనుచు యెంచిన వానికి ఆశ్రమ భేదములేల కన్నుగట్టు మాయలని యెంచు వానికి కాంతల భ్రమలేల దశరథ బాల",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "మనసు",
+          "meaning_telugu": "మనస్సు",
+          "meaning": "the mind"
+        },
+        {
+          "word": "స్వాధీనమైన",
+          "meaning_telugu": "తన అధీనములో ఉన్న",
+          "meaning": "that has come under one's own control"
+        },
+        {
+          "word": "వానికి",
+          "meaning_telugu": "ఆ వ్యక్తికి",
+          "meaning": "to that person"
+        },
+        {
+          "word": "దుష్కరంబు",
+          "meaning_telugu": "కష్టసాధ్యమైనది",
+          "meaning": "a difficult task"
+        },
+        {
+          "word": "ఏదిది",
+          "meaning_telugu": "ఏమి మిగిలియున్నది",
+          "meaning": "what is left/what remains"
+        }
+      ]
+    },
+    {
+      "id": 67,
+      "slug": "marakata-manimaya",
+      "title": "Marakata Maṇimaya",
+      "title_telugu": "మరకత మణిమయ",
+      "raga": "Nīlāmbari",
+      "raga_slug": "nilambari",
+      "tala": "Rupaka",
+      "language": "Telugu",
+      "pallavi": "Marakata manimaya chela dharudai",
+      "pallavi_telugu": "మరకత మణిమయ చేల ధరుడై",
+      "meaning": "The kriti describes Rama's dark, emerald-hued splendour, comparing his complexion and radiance to the lustre of a marakata (emerald) gem.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 2,
+      "confidence": "medium",
+      "notes": "Rare-raga kriti in the gentle, lullaby-like raga Nilambari.",
+      "tags": [
+        "rare-raga"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 68,
+      "slug": "mari-mari-ninne",
+      "title": "Mari Mari Ninnē",
+      "title_telugu": "మరి మరి నిన్నే",
+      "raga": "Kāmbhōji",
+      "raga_slug": "kambhoji",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Mari mari ninnē morali danṭi",
+      "pallavi_telugu": null,
+      "meaning": "Again and again he has pleaded — and asks how many more times he must.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 4,
+      "popularity": 4,
+      "confidence": "medium",
+      "notes": null,
+      "tags": [
+        "concert-staple"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 69,
+      "slug": "marugelara",
+      "title": "Marugēlarā",
+      "title_telugu": "మరుగేలరా",
+      "raga": "Jayantasēna",
+      "raga_slug": "jayantasena",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Marugēlarā ō rāghavā",
+      "pallavi_telugu": "మరుగేలరా ఓ రాఘవా",
+      "meaning": "Why the concealment, Raghava? — asks why Rama hides himself from one who has no other refuge.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 4,
+      "confidence": "high",
+      "notes": "Jayantasēna is used for almost nothing else, so the rāga and the kriti are learnt together.",
+      "tags": [
+        "concert-staple",
+        "rare-raga"
+      ],
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "మరుగేలరా ఓ రాఘవా",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "మరుగేల చరాచర రూప పరాత్పర సూర్య సుధాకర లోచన",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "అన్ని నీవనుచు అంతరంగమున తిన్నగా వెతగి తెలుసుకొంటిన్నయ్య నిన్నే గాని మదినెన్న జాలనొరుల నన్ను బ్రోవవయ్య త్యాగరాజ నుత",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "మరుగేలరా",
+          "meaning_telugu": "ఎందుకు మరుగవుతావు (దాగుతావు)",
+          "meaning": "why do you hide/conceal yourself"
+        },
+        {
+          "word": "ఓ",
+          "meaning_telugu": "సంబోధన అవ్యయము",
+          "meaning": "oh (vocative particle)"
+        },
+        {
+          "word": "రాఘవా",
+          "meaning_telugu": "రఘువంశపు రాముడా",
+          "meaning": "O Raghava, descendant of Raghu (Rama)"
+        }
+      ]
+    },
+    {
+      "id": 70,
+      "slug": "melukovaiyya",
+      "title": "Mēlukōvaiyya",
+      "title_telugu": "మేలుకోవయ్య",
+      "raga": "Bhairavi",
+      "raga_slug": "bhairavi",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Melukovaiyya Rama Melukovaiyya",
+      "pallavi_telugu": "మేలుకోవయ్య రామ మేలుకోవయ్య",
+      "meaning": "A suprabhatam-style waking song asking Rama to rise from sleep at dawn, part of the Utsava Sampradaya kritis composed for daily temple worship.",
+      "deity": "Rama",
+      "groups": [
+        "utsava-sampradaya"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 2,
+      "popularity": 3,
+      "confidence": "high",
+      "notes": "One of Tyagaraja's Utsava Sampradaya Kirtanas used in ritual temple worship of Rama's daily routine.",
+      "tags": [
+        "utsava-sampradaya"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 71,
+      "slug": "meru-samana",
+      "title": "Mēru Samāna",
+      "title_telugu": "మేరు సమాన",
+      "raga": "Māyāmāḷavagauḷa",
+      "raga_slug": "mayamalavagaula",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Mēru samāna dhīra",
+      "pallavi_telugu": "మేరు సమాన ధీర",
+      "meaning": "Praises Rama as steady as Mount Meru.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 3,
+      "confidence": "medium",
+      "notes": "One of the few concert kritis in Māyāmāḷavagauḷa, the rāga every student begins with in varisai practice.",
+      "tags": [],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 72,
+      "slug": "mokshamu-galada",
+      "title": "Mōkṣamu Galadā",
+      "title_telugu": "మోక్షము గలదా",
+      "raga": "Sāramati",
+      "raga_slug": "saramati",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Mōkṣamu galadā bhuvilō jīvanmuktulu gāni vāralaku",
+      "pallavi_telugu": "మోక్షము గలదా భువిలో",
+      "meaning": "Asks whether liberation is possible at all for those who are not already free while living — and answers that music itself is the path.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 4,
+      "popularity": 5,
+      "confidence": "high",
+      "notes": "The charanam names bhakti, saṅgīta and jñāna together. Sāramati's four-note descent is what makes the piece sound like it is looking inward.",
+      "tags": [
+        "concert-staple",
+        "nada-upasana"
+      ],
+      "sahityam": null,
+      "pratipadartham": [
+        {
+          "word": "మోక్షము",
+          "meaning_telugu": "ముక్తి, విడుదల",
+          "meaning": "liberation"
+        },
+        {
+          "word": "గలదా",
+          "meaning_telugu": "ఉన్నదా",
+          "meaning": "is there (any)?"
+        },
+        {
+          "word": "భువిలో",
+          "meaning_telugu": "ఈ లోకములో",
+          "meaning": "in this world"
+        }
+      ]
+    },
+    {
+      "id": 73,
+      "slug": "muripemu-kaligina",
+      "title": "Muripemu Kaligina",
+      "title_telugu": "మురిపెము కలిగిన",
+      "raga": "Kānaḍā",
+      "raga_slug": "kanada",
+      "tala": "Rupaka",
+      "language": "Telugu",
+      "pallavi": "Muripemu kaligina thalliki mundara",
+      "pallavi_telugu": "మురిపెము కలిగిన తల్లికి ముందర",
+      "meaning": "The kriti speaks of the tender affection a child receives standing before a doting mother, using this image as a metaphor for the devotee's relationship with the Lord.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 2,
+      "confidence": "medium",
+      "notes": "Set in the rakti raga Kanada.",
+      "tags": [
+        "rakti-raga"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 74,
+      "slug": "naa-jivadhara",
+      "title": "Nā Jīvādhāra",
+      "title_telugu": "నా జీవాధార",
+      "raga": "Bilahari",
+      "raga_slug": "bilahari",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Nā jīvādhāra nāpai nīkinta parākēlarā",
+      "pallavi_telugu": "నా జీవాధార నాపై నీకింత పరాకేలరా",
+      "meaning": "Calls Rama the very support of his life, then asks why he is being ignored.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 4,
+      "confidence": "medium",
+      "notes": "The well-sourced Bilahari kṛti opening with these words continues differently from the pallavi recorded here — the second half of the line needs checking against a printed edition.",
+      "tags": [
+        "concert-staple"
+      ],
+      "sahityam": null,
+      "pratipadartham": [
+        {
+          "word": "నా",
+          "meaning_telugu": "నాయొక్క",
+          "meaning": "my"
+        },
+        {
+          "word": "జీవాధార",
+          "meaning_telugu": "జీవితమునకు ఆధారమైనవాడా",
+          "meaning": "O support/sustainer of my life"
+        },
+        {
+          "word": "నాపై",
+          "meaning_telugu": "నా మీద",
+          "meaning": "upon me, towards me"
+        },
+        {
+          "word": "నీకు",
+          "meaning_telugu": "నీకు",
+          "meaning": "to you"
+        },
+        {
+          "word": "ఇంత",
+          "meaning_telugu": "ఇంతమాత్రము",
+          "meaning": "this much"
+        },
+        {
+          "word": "పరాకు",
+          "meaning_telugu": "నిర్లక్ష్యము, అశ్రద్ధ",
+          "meaning": "indifference, neglect"
+        },
+        {
+          "word": "ఏలరా",
+          "meaning_telugu": "ఎందుకురా",
+          "meaning": "why, oh why"
+        }
+      ]
+    },
+    {
+      "id": 75,
+      "slug": "naa-moralanu-vinaraada",
+      "title": "Nā Moralanu Vinarāda",
+      "title_telugu": "నా మొరలను వినరాదా",
+      "raga": "Kāmbhōji",
+      "raga_slug": "kambhoji",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Naa moralanu vinaraada oh Ramaa",
+      "pallavi_telugu": "నా మొరలను వినరాదా ఓ రామా",
+      "meaning": "The devotee asks Rama why he will not listen to his earnest pleas and cries of distress.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 3,
+      "confidence": "medium",
+      "notes": "Supplication kriti in Kambhoji; pathantaram details vary between renditions.",
+      "tags": [],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 76,
+      "slug": "nadaloludai",
+      "title": "Nādalōluḍai",
+      "title_telugu": "నాదలోలుడై",
+      "raga": "Kalyāṇi",
+      "raga_slug": "kalyani",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Nadaloludai Brahmananda maname vasudai",
+      "pallavi_telugu": null,
+      "meaning": "Tyagaraja describes how the mind that is absorbed in nada (sacred sound/music) becomes established in Brahmananda, the bliss of the Absolute, making the case that music itself is a path to liberation.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 4,
+      "confidence": "high",
+      "notes": "One of Tyagaraja's core nada-upasana kritis, in the grand raga Kalyani.",
+      "tags": [
+        "nada-upasana",
+        "concert-staple",
+        "rakti-raga"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 77,
+      "slug": "nadopasana-chese",
+      "title": "Nādōpāsana Chēse",
+      "title_telugu": "నాదోపాసన చేసే",
+      "raga": "Bēgaḍa",
+      "raga_slug": "begada",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Nadopasana chese vaariki dorakani sukhamu koladu",
+      "pallavi_telugu": null,
+      "meaning": "Tyagaraja proclaims that for those who worship God through nada (sacred sound), there is no limit to the happiness they attain, reiterating his conviction that music itself is a spiritual path.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 3,
+      "confidence": "high",
+      "notes": "Another central nada-upasana statement kriti, in Begada raga.",
+      "tags": [
+        "nada-upasana"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 78,
+      "slug": "nadupai-balukavemira",
+      "title": "Nāḍupai Baluka Vēmira",
+      "title_telugu": null,
+      "raga": "Nāyaki",
+      "raga_slug": "nayaki",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Nadupai balukavemira Ramayya needu",
+      "pallavi_telugu": null,
+      "meaning": "The devotee asks Rama why he continues to delay in speaking or responding, expressing impatience born of deep longing.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 2,
+      "confidence": "medium",
+      "notes": "Kriti of impatient longing, set in raga Nayaki.",
+      "tags": [],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 79,
+      "slug": "nagumomu-galavani",
+      "title": "Nagumōmu Galavāni",
+      "title_telugu": "నగుమోము గలవాని",
+      "raga": "Ābhēri",
+      "raga_slug": "abheri",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Nagumōmu galavāni nā manōharuni jūci",
+      "pallavi_telugu": "నగుమోము గలవాని నా మనోహరుని జూచి",
+      "meaning": "Longs for one glimpse of the smiling-faced Lord who has stolen his heart, and asks Garuda to carry the message.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 5,
+      "confidence": "high",
+      "notes": "Probably the single most-performed Tyagaraja kriti. The anupallavi asks Garuda why he has not brought Rama — that address is the emotional hinge of the piece.",
+      "tags": [
+        "concert-staple",
+        "beginner-friendly"
+      ],
+      "sahityam": null,
+      "pratipadartham": [
+        {
+          "word": "నగుమోము",
+          "meaning_telugu": "చిరునవ్వు గల ముఖము",
+          "meaning": "smiling face"
+        },
+        {
+          "word": "గలవాని",
+          "meaning_telugu": "కలిగియున్నవాని",
+          "meaning": "of the one who possesses"
+        },
+        {
+          "word": "నా మనోహరుని",
+          "meaning_telugu": "నా మనసును హరించువానిని",
+          "meaning": "my heart-stealer, my beloved"
+        },
+        {
+          "word": "జూచి",
+          "meaning_telugu": "చూసి",
+          "meaning": "having seen"
+        }
+      ]
+    },
+    {
+      "id": 80,
+      "slug": "nammi-vachina-nannu",
+      "title": "Nammi Vaccina Nannu",
+      "title_telugu": "నమ్మి వచ్చిన నన్ను",
+      "raga": "Kalyāṇi",
+      "raga_slug": "kalyani",
+      "tala": "Rupaka",
+      "language": "Telugu",
+      "pallavi": "Nammi vaccina nannu nayamuga brovave",
+      "pallavi_telugu": "నమ్మి వచ్చిన నన్ను నయముగ బ్రోవవే",
+      "meaning": "'Kindly protect me, who has come to you trusting in you' — Tyagaraja prays for the grace of Sundareswara of Kovur.",
+      "deity": "Siva",
+      "groups": [
+        "kovur-pancharatna"
+      ],
+      "kshetra": "Kovur",
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 2,
+      "confidence": "high",
+      "notes": "One of the five Kovur Pancharatna kritis.",
+      "tags": [
+        "kshetra-kriti",
+        "siva-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 81,
+      "slug": "nannu-palimpa",
+      "title": "Nannu Pālimpa",
+      "title_telugu": "నన్ను పాలింప",
+      "raga": "Mōhanam",
+      "raga_slug": "mohanam",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Nannu pālimpa naḍaci vaccitivō",
+      "pallavi_telugu": "నన్ను పాలింప నడచి వచ్చితివో",
+      "meaning": "Asks whether Rama has actually walked all this way just to look after him.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 4,
+      "confidence": "high",
+      "notes": "Mōhanaṃ with no half-notes at all — one of the safest first concert pieces, and still substantial enough for swaram.",
+      "tags": [
+        "concert-staple",
+        "beginner-friendly"
+      ],
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "నన్ను పాలింప నడచి వచ్చితివో",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "వనజ నయన మోమును జూచుట జీవనమని\nనెనరున మనసు మర్మము తెలిసి",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "సురపతి నీలమణి నిభ తనువుతో ఉరమున\nముత్యపు సరుల చయముతో కరమున శర\nకోదండ కాంతితో ధరణి తనయతో త్యాగరాజార్చిత",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "నన్ను",
+          "meaning_telugu": "నన్ను",
+          "meaning": "me"
+        },
+        {
+          "word": "పాలింప",
+          "meaning_telugu": "రక్షించుటకు, పోషించుటకు",
+          "meaning": "to protect, to nurture"
+        },
+        {
+          "word": "నడచి",
+          "meaning_telugu": "నడిచి",
+          "meaning": "having walked"
+        },
+        {
+          "word": "వచ్చితివో",
+          "meaning_telugu": "వచ్చితివా",
+          "meaning": "did you come?"
+        }
+      ]
+    },
+    {
+      "id": 82,
+      "slug": "nannu-vidachi",
+      "title": "Nannu Viḍaci",
+      "title_telugu": "నన్ను విడచి",
+      "raga": "Rītigauḷa",
+      "raga_slug": "ritigaula",
+      "tala": "Misra Chapu",
+      "language": "Telugu",
+      "pallavi": "Nannu viḍaci kadalakura rā",
+      "pallavi_telugu": "నన్ను విడచి కదలకురా",
+      "meaning": "Begs Rama not to move a step away and leave him behind.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 4,
+      "popularity": 4,
+      "confidence": "high",
+      "notes": "Rītigauḷa is all curves and no straight lines; this kriti is the usual vehicle for learning them. Miśra cāpu keeps the phrases from settling.",
+      "tags": [
+        "concert-staple",
+        "rakti-raga"
+      ],
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "నన్ను విడచి కదలకురా",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "నిన్ను బాసి అరనిమిషం ఓర్వనురా",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "తరముకాని ఎండవేళ కల్పతరు నీడ\nదొరికినట్లాయెనీ వేళ",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "నన్ను",
+          "meaning_telugu": "నన్ను",
+          "meaning": "me"
+        },
+        {
+          "word": "విడచి",
+          "meaning_telugu": "వదిలి",
+          "meaning": "having abandoned, having left"
+        },
+        {
+          "word": "కదలకురా",
+          "meaning_telugu": "కదలకుమురా",
+          "meaning": "don't move away"
+        }
+      ]
+    },
+    {
+      "id": 83,
+      "slug": "narada-muni-veduluna",
+      "title": "Nārada Muni Veḍalina",
+      "title_telugu": "నారద ముని వెడలిన",
+      "raga": "Kāmavardhini",
+      "raga_slug": "kamavardhini",
+      "tala": "Rupaka",
+      "language": "Telugu",
+      "pallavi": "Narada muni vedalina su-gunatisayamu vinare",
+      "pallavi_telugu": "నారద ముని వెడలిన సుగుణాతిశయము వినరే",
+      "meaning": "Describes sage Narada setting out, praised for his outstanding virtues, to bring Prahlada the news of Hari's impending visit.",
+      "deity": "Vishnu",
+      "groups": [
+        "prahlada-bhakti-vijayam"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 2
+      },
+      "difficulty": 3,
+      "popularity": 2,
+      "confidence": "high",
+      "notes": "The melody stays largely in the upper (tara) shadja register, characteristic of this rendering of Pantuvarali.",
+      "tags": [
+        "opera",
+        "vishnu-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 84,
+      "slug": "nenendu-vedukudura",
+      "title": "Nēnendu Vedukudurā",
+      "title_telugu": "నేనెందు వెతుకుదురా",
+      "raga": "Sahāna",
+      "raga_slug": "sahana",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Nenendu vedukudura needanu vina O Rama",
+      "pallavi_telugu": null,
+      "meaning": "The singer asks where he should search for Rama, when there is nothing besides the Lord himself to look for or find comfort in.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 3,
+      "confidence": "medium",
+      "notes": "Sahana kriti of searching, longing devotion.",
+      "tags": [
+        "rakti-raga"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 85,
+      "slug": "ni-bhajana-gana",
+      "title": "Nī Bhajana Gāna",
+      "title_telugu": "నీ భజన గాన",
+      "raga": "Nāyaki",
+      "raga_slug": "nayaki",
+      "tala": "Rupaka",
+      "language": "Telugu",
+      "pallavi": "Nī bhajana gāna rasikula nīvē kāvavē",
+      "pallavi_telugu": "నీ భజన గాన రసికుల నీవే కావవే",
+      "meaning": "Asks Rama to protect those who take delight in singing his praise.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 3,
+      "confidence": "medium",
+      "notes": null,
+      "tags": [
+        "rakti-raga"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 86,
+      "slug": "nee-daya-rada",
+      "title": "Nī Daya Rādā",
+      "title_telugu": "నీ దయ రాదా",
+      "raga": "Vasanta",
+      "raga_slug": "vasanta",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Nee daya rada ika nannu brova Rama",
+      "pallavi_telugu": "నీ దయ రాదా ఇక నన్ను బ్రోవ రామ",
+      "meaning": "The devotee asks Rama why his compassion has not yet arrived, pleading for the Lord's grace to protect him now.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 2,
+      "popularity": 3,
+      "confidence": "medium",
+      "notes": "A plea-for-grace kriti in the springtime raga Vasanta.",
+      "tags": [],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 87,
+      "slug": "nee-naama-roopamulaku",
+      "title": "Nī Nāma Rūpamulaku",
+      "title_telugu": "నీ నామ రూపములకు",
+      "raga": "Saurāṣṭraṃ",
+      "raga_slug": "saurashtram",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Nee naama roopamulaku nitya jaya mangalam",
+      "pallavi_telugu": "నీ నామ రూపములకు నిత్య జయ మంగళం",
+      "meaning": "'Eternal victory and auspiciousness to your sacred name and form' — the closing mangalam that ends Prahlada Bhakti Vijayam and is often sung as a benedictory finale in concerts.",
+      "deity": "Vishnu",
+      "groups": [
+        "prahlada-bhakti-vijayam"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": false,
+        "charanams": 1
+      },
+      "difficulty": 2,
+      "popularity": 3,
+      "confidence": "high",
+      "notes": "The final number of the opera, in the same Saurashtram raga used to open its Ganapati invocation.",
+      "tags": [
+        "opera",
+        "vishnu-kriti",
+        "mangalam"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 88,
+      "slug": "nidhi-chala-sukhama",
+      "title": "Nidhi Cāla Sukhamā",
+      "title_telugu": "నిధి చాల సుఖమా",
+      "raga": "Kalyāṇi",
+      "raga_slug": "kalyani",
+      "tala": "Misra Chapu",
+      "language": "Telugu",
+      "pallavi": "Nidhi cāla sukhamā rāmuni sannidhi sēva sukhamā",
+      "pallavi_telugu": "నిధి చాల సుఖమా రాముని సన్నిధి సేవ సుఖమా",
+      "meaning": "Which is the real comfort — a hoard of wealth, or standing in Rama's presence? Written when Tyagaraja refused the Tanjore court's patronage.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 5,
+      "confidence": "high",
+      "notes": "The biographical kriti: his answer to the king's invitation. Short, and the whole argument sits in the pallavi.",
+      "tags": [
+        "concert-staple",
+        "biographical"
+      ],
+      "sahityam": null,
+      "pratipadartham": [
+        {
+          "word": "నిధి",
+          "meaning_telugu": "సంపద, ధనము",
+          "meaning": "treasure, wealth"
+        },
+        {
+          "word": "చాల",
+          "meaning_telugu": "మిక్కిలి",
+          "meaning": "greatly, very much"
+        },
+        {
+          "word": "సుఖమా",
+          "meaning_telugu": "సుఖమునిచ్చునా",
+          "meaning": "is it happiness?"
+        },
+        {
+          "word": "రాముని సన్నిధి",
+          "meaning_telugu": "రాముని సమీపము",
+          "meaning": "the presence of Rama"
+        },
+        {
+          "word": "సేవ",
+          "meaning_telugu": "సేవించుట",
+          "meaning": "service, worship"
+        }
+      ]
+    },
+    {
+      "id": 89,
+      "slug": "ninne-bhajana",
+      "title": "Ninnē Bhajana",
+      "title_telugu": "నిన్నే భజన",
+      "raga": "Naṭakapriya",
+      "raga_slug": "natakapriya",
+      "tala": "Misra Chapu",
+      "language": "Telugu",
+      "pallavi": "Ninnē bhajana gānu",
+      "pallavi_telugu": "నిన్నే భజన గాను",
+      "meaning": "A vow to worship no one but Rama.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 2,
+      "confidence": "medium",
+      "notes": null,
+      "tags": [
+        "rare-raga"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 90,
+      "slug": "o-rangasayi",
+      "title": "Ō Raṅgaśāyī",
+      "title_telugu": "ఓ రంగశాయి",
+      "raga": "Kāmbhōji",
+      "raga_slug": "kambhoji",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Ō raṅgaśāyī pilacitē ō ranga",
+      "pallavi_telugu": "ఓ రంగశాయీ పిలిచితే ఓ రంగ",
+      "meaning": "Calls out to Ranganatha at Srirangam and asks why, when called, he does not answer.",
+      "deity": "Vishnu",
+      "groups": [
+        "srirangam-pancharatna"
+      ],
+      "kshetra": "Srirangam",
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 5,
+      "popularity": 5,
+      "confidence": "high",
+      "notes": "Composed at the Srirangam temple gate. A full-length Kāmbhōji main piece — the charanam's madhyama-kāla passage is the famous stretch.",
+      "tags": [
+        "concert-staple",
+        "kshetra-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": [
+        {
+          "word": "ఓ",
+          "meaning_telugu": "సంబోధన",
+          "meaning": "O (vocative)"
+        },
+        {
+          "word": "రంగశాయీ",
+          "meaning_telugu": "శ్రీరంగమున శయనించువాడా (విష్ణువు)",
+          "meaning": "O one reclining at Sri Ranga (Vishnu)"
+        },
+        {
+          "word": "పిలిచితే",
+          "meaning_telugu": "పిలిచినట్లయితే",
+          "meaning": "if (I) call"
+        },
+        {
+          "word": "రంగ",
+          "meaning_telugu": "ఓ రంగా (సంబోధన)",
+          "meaning": "O Ranga"
+        }
+      ]
+    },
+    {
+      "id": 91,
+      "slug": "odanu-jaripe-muccata",
+      "title": "Ōḍanu Jaripē Muccaṭa",
+      "title_telugu": "ఓడను జరిపే ముచ్చట",
+      "raga": "Sāraṅga",
+      "raga_slug": "saranga",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Odanu jaripe muccata",
+      "pallavi_telugu": "ఓడను జరిపే ముచ్చట",
+      "meaning": "Describes the delightful spectacle of Krishna and the gopis setting the boat afloat and rowing out onto the river Yamuna.",
+      "deity": "Krishna",
+      "groups": [
+        "nauka-charitram"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 2
+      },
+      "difficulty": 3,
+      "popularity": 2,
+      "confidence": "high",
+      "notes": "A frequently performed standalone excerpt from Nauka Charitram.",
+      "tags": [
+        "opera",
+        "krishna-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 92,
+      "slug": "palukavademira",
+      "title": "Palukavadēmirā",
+      "title_telugu": "పలుకవదేమిరా",
+      "raga": "Sāramati",
+      "raga_slug": "saramati",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Palukavademira Rama palume na yeda bayalu",
+      "pallavi_telugu": null,
+      "meaning": "The singer implores Rama to speak to him, asking why the Lord remains silent while his devotee's heart is laid bare in longing.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 3,
+      "confidence": "medium",
+      "notes": "A well-known kriti in the rakti raga Saramati.",
+      "tags": [
+        "rakti-raga"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 93,
+      "slug": "paramatmudu",
+      "title": "Paramātmuḍu Veligē",
+      "title_telugu": "పరమాత్ముడు వెలిగే",
+      "raga": "Vāgadhīśvari",
+      "raga_slug": "vagadhisvari",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Paramātmuḍu veligē muccaṭa bāga telusukōrē",
+      "pallavi_telugu": "పరమాత్ముడు వెలిగే ముచ్చట బాగ తెలుసుకోరే",
+      "meaning": "Says the supreme self shines in everything — in every creature, in every element — and asks the listener to grasp it properly.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 4,
+      "popularity": 3,
+      "confidence": "medium",
+      "notes": "The most explicitly advaitic of the well-known kritis. Vāgadhīśvari (34th mēḷa) is almost unused elsewhere.",
+      "tags": [
+        "rare-raga",
+        "advaita"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 94,
+      "slug": "patiki-mangala-haratire",
+      "title": "Patiki Maṅgaḷa Hāratīrē",
+      "title_telugu": null,
+      "raga": "Ārabhi",
+      "raga_slug": "arabhi",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Patiki mangala haratire, Sri Ramapatiki mangala haratire",
+      "pallavi_telugu": "పతికి మంగళ హారతిరే, శ్రీ రామపతికి మంగళ హారతిరే",
+      "meaning": "A harati (waving of lamps) song calling on devotees to perform the auspicious lamp-offering to Rama, the Lord of Sita; sung during the harati portion of the daily utsava ritual.",
+      "deity": "Rama",
+      "groups": [
+        "utsava-sampradaya"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 2
+      },
+      "difficulty": 1,
+      "popularity": 3,
+      "confidence": "high",
+      "notes": "A standard harati kriti from the utsava-sampradaya set, distinct from the similarly-titled 'Patiki Harati' in Surati.",
+      "tags": [
+        "utsava-sampradaya",
+        "ritual-song",
+        "harati",
+        "rama-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 95,
+      "slug": "ragasudharasa",
+      "title": "Rāgasudhārasa",
+      "title_telugu": "రాగసుధారస",
+      "raga": "Āndōḷikā",
+      "raga_slug": "andolika",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Rāgasudhārasa pānamu jēsi rājillavē ō manasā",
+      "pallavi_telugu": "రాగసుధారస పానము జేసి రాజిల్లవే ఓ మనసా",
+      "meaning": "Urges the mind to drink the nectar of rāga and shine — devotion through music rather than ritual.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 4,
+      "confidence": "high",
+      "notes": "One of the nāda-upāsana group where Tyagaraja argues that music is itself the sādhana. Āndōḷikā rocks gently, which suits the argument.",
+      "tags": [
+        "concert-staple",
+        "nada-upasana"
+      ],
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "రాగసుధారస పానము జేసి రాజిల్లవే ఓ మనసా",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "యాగ యోగ త్యాగ భోగ ఫలమొసంగే",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "సదాశివమయమగు నాదోంకార స్వరవిదులు\nజీవన్ముక్తులని త్యాగరాజు తెలియు",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "రాగసుధారస",
+          "meaning_telugu": "రాగము యొక్క అమృతరసము",
+          "meaning": "the nectar-essence of melody (rāga)"
+        },
+        {
+          "word": "పానము",
+          "meaning_telugu": "తాగుట",
+          "meaning": "drinking"
+        },
+        {
+          "word": "జేసి",
+          "meaning_telugu": "చేసి",
+          "meaning": "having done"
+        },
+        {
+          "word": "రాజిల్లవే",
+          "meaning_telugu": "ప్రకాశించుము",
+          "meaning": "shine forth!"
+        },
+        {
+          "word": "ఓ",
+          "meaning_telugu": "ఓ",
+          "meaning": "oh (vocative)"
+        },
+        {
+          "word": "మనసా",
+          "meaning_telugu": "ఓ మనసా",
+          "meaning": "O mind"
+        }
+      ]
+    },
+    {
+      "id": 96,
+      "slug": "raghunayaka-nannu-brova",
+      "title": "Raghunāyaka Nannu Brōva",
+      "title_telugu": "రఘునాయక నన్ను బ్రోవ",
+      "raga": "Haṃsanādaṃ",
+      "raga_slug": "hamsanadam",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Raghunayaka nannu brova naa yeda deenudanu ika",
+      "pallavi_telugu": "రఘునాయక నన్ను బ్రోవ నా యెద దీనుడను ఇక",
+      "meaning": "The singer calls out to Rama, chief of the Raghu dynasty, describing himself as a helpless soul and asking to be protected.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 4,
+      "confidence": "medium",
+      "notes": "A frequently performed kriti in the compact pentatonic-flavoured raga Hamsanadam. The well-sourced Haṃsadhvani kṛti opening \"Raghunāyaka\" continues differently from the pallavi recorded here; the remainder of the line is unconfirmed.",
+      "tags": [
+        "concert-staple"
+      ],
+      "sahityam": null,
+      "pratipadartham": [
+        {
+          "word": "రఘునాయక",
+          "meaning_telugu": "రఘువంశ నాయకుడా",
+          "meaning": "O Lord of the Raghu dynasty"
+        },
+        {
+          "word": "నన్ను",
+          "meaning_telugu": "నన్ను",
+          "meaning": "me"
+        },
+        {
+          "word": "బ్రోవ",
+          "meaning_telugu": "రక్షించుటకు",
+          "meaning": "to protect"
+        },
+        {
+          "word": "నా",
+          "meaning_telugu": "నాయొక్క",
+          "meaning": "my"
+        },
+        {
+          "word": "యెద",
+          "meaning_telugu": "హృదయము",
+          "meaning": "heart"
+        },
+        {
+          "word": "దీనుడను",
+          "meaning_telugu": "దీనస్థితిలో ఉన్నవాడను",
+          "meaning": "I am pitiable, wretched"
+        },
+        {
+          "word": "ఇక",
+          "meaning_telugu": "ఇప్పుడు",
+          "meaning": "now, henceforth"
+        }
+      ]
+    },
+    {
+      "id": 97,
+      "slug": "raghupate-rama",
+      "title": "Raghupatē Rāma",
+      "title_telugu": "రఘుపతే రామ",
+      "raga": "Sahāna",
+      "raga_slug": "sahana",
+      "tala": "Rupaka",
+      "language": "Telugu",
+      "pallavi": "Raghupate Rama",
+      "pallavi_telugu": "రఘుపతే రామ",
+      "meaning": "A garland of epithets addressed to Rama — 'Peerless Lord', 'Lord well sung by Narada', 'Adornment of the Solar dynasty', 'Breaker of Siva's bow' — sung as a devotional name-litany.",
+      "deity": "Rama",
+      "groups": [
+        "divya-nama"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": false,
+        "charanams": 3
+      },
+      "difficulty": 2,
+      "popularity": 2,
+      "confidence": "medium",
+      "notes": "Raga (Sahana) is well attested; the tala is inferred from the typical medium-paced setting of Tyagaraja's Sahana pieces rather than directly confirmed.",
+      "tags": [
+        "nama-sankirtana",
+        "beginner-friendly",
+        "rama-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 98,
+      "slug": "raju-vedale",
+      "title": "Rāju Vēḍale",
+      "title_telugu": "రాజు వెడలె",
+      "raga": "Hanumatōḍi",
+      "raga_slug": "hanumatodi",
+      "tala": "Khanda Chapu",
+      "language": "Telugu",
+      "pallavi": "Raju vedale Kausalya thanaya Ramaraju vedale",
+      "pallavi_telugu": "రాజు వెడలె కౌసల్య తనయ రామరాజు వెడలె",
+      "meaning": "The kriti describes the king (Rama, son of Kausalya) setting out in procession, part of the set of Utsava Sampradaya songs describing ceremonial temple events.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 2,
+      "confidence": "medium",
+      "notes": "Utsava Sampradaya processional kriti set to the less common Khanda Chapu tala.",
+      "tags": [
+        "utsava-sampradaya"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 99,
+      "slug": "rama-bhakti-samrajya",
+      "title": "Rāma Bhakti Sāmrājya",
+      "title_telugu": "రామ భక్తి సామ్రాజ్య",
+      "raga": "Śuddha Baṅgāḷa",
+      "raga_slug": "suddha-bangala",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Rāma bhakti sāmrājya mē manuṣulakau",
+      "pallavi_telugu": null,
+      "meaning": "Calls devotion to Rama an empire in itself — the only sovereignty worth holding.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 3,
+      "confidence": "medium",
+      "notes": null,
+      "tags": [
+        "rare-raga"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 100,
+      "slug": "rama-katha-sudha",
+      "title": "Rāma Kathā Sudhā",
+      "title_telugu": "రామ కథా సుధ",
+      "raga": "Madhyamāvati",
+      "raga_slug": "madhyamavati",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Rāma kathā sudhā rasa pānamu",
+      "pallavi_telugu": "రామ కథా సుధా రస పానము",
+      "meaning": "Drinking the nectar of Rama's story is worth more, he says, than any other draught.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 4,
+      "confidence": "high",
+      "notes": "Madhyamāvati is traditionally a closing rāga, so this often ends a concert.",
+      "tags": [
+        "concert-staple",
+        "beginner-friendly"
+      ],
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "రామ కథా సుధా రస పానము",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "భామామణి జానకి సౌమిత్రి భరతాదులతో\nభూమి వెలయు సీత",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "ధర్మాద్దఖిల ఫలదమే మనసా ధైర్యానంద\nసౌఖ్య నికేతనమే కర్మ బంధ జ్వలనాబ్ధి\nనావమే కలిహరమే త్యాగరాజ వినుతుడగు",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "రామ",
+          "meaning_telugu": "రాముని",
+          "meaning": "of Rama"
+        },
+        {
+          "word": "కథా",
+          "meaning_telugu": "కథ",
+          "meaning": "the story"
+        },
+        {
+          "word": "సుధా",
+          "meaning_telugu": "అమృతము",
+          "meaning": "nectar"
+        },
+        {
+          "word": "రస",
+          "meaning_telugu": "రసము",
+          "meaning": "essence, juice"
+        },
+        {
+          "word": "పానము",
+          "meaning_telugu": "తాగుట",
+          "meaning": "drinking"
+        }
+      ]
+    },
+    {
+      "id": 101,
+      "slug": "rama-nannu-brovara",
+      "title": "Rāma Nannu Brōvarā",
+      "title_telugu": "రామ నన్ను బ్రోవరా",
+      "raga": "Harikāmbhōji",
+      "raga_slug": "harikambhoji",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Rāma nannu brōvarā rājakumāra",
+      "pallavi_telugu": "రామ నన్ను బ్రోవరా రాజకుమార",
+      "meaning": "A plain, direct appeal: protect me, prince Rama.",
+      "deity": "Rama",
+      "groups": [
+        "divya-nama"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": false,
+        "charanams": 3
+      },
+      "difficulty": 2,
+      "popularity": 3,
+      "confidence": "medium",
+      "notes": null,
+      "tags": [
+        "beginner-friendly"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 102,
+      "slug": "rama-ni-samanam-evaru",
+      "title": "Rāma Nī Samānam Evaru",
+      "title_telugu": "రామ నీ సమానమెవరు",
+      "raga": "Kharaharapriyā",
+      "raga_slug": "kharaharapriya",
+      "tala": "Rupaka",
+      "language": "Telugu",
+      "pallavi": "Rāma nī samānam evaru raghuvaṃśa sudhāmbudhi candra",
+      "pallavi_telugu": "రామ నీ సమానమెవరు రఘువంశ సుధాంబుధి చంద్ర",
+      "meaning": "Asks who could possibly equal Rama, moon of the nectar-ocean of the Raghu line.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 5,
+      "confidence": "high",
+      "notes": "The standard Kharaharapriya main piece for students — long enough to carry niraval and swaram, plain enough that the rāga stays audible.",
+      "tags": [
+        "concert-staple"
+      ],
+      "sahityam": null,
+      "pratipadartham": [
+        {
+          "word": "రామ",
+          "meaning_telugu": "ఓ రామా",
+          "meaning": "O Rama"
+        },
+        {
+          "word": "నీ సమానము",
+          "meaning_telugu": "నీకు సాటి",
+          "meaning": "your equal"
+        },
+        {
+          "word": "ఎవరు",
+          "meaning_telugu": "ఎవరు కలరు",
+          "meaning": "who is (there)"
+        },
+        {
+          "word": "రఘువంశ",
+          "meaning_telugu": "రఘు వంశము యొక్క",
+          "meaning": "of the Raghu dynasty"
+        },
+        {
+          "word": "సుధాంబుధి చంద్ర",
+          "meaning_telugu": "అమృత సముద్రమునకు చంద్రుని వంటివాడా",
+          "meaning": "O moon to the nectar-ocean (of the Raghu lineage)"
+        }
+      ]
+    },
+    {
+      "id": 103,
+      "slug": "rama-ninne-nammiti",
+      "title": "Rāma Ninnē Nammiti",
+      "title_telugu": "రామ నిన్నే నమ్మితి",
+      "raga": "Harikāmbhōji",
+      "raga_slug": "harikambhoji",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Rama ninne nammitini Raghurama needu",
+      "pallavi_telugu": "రామ నిన్నే నమ్మితిని రఘురామ నీదు",
+      "meaning": "The devotee declares to Rama that he has placed his trust in the Lord alone, and no one else, asking to be looked after on that basis.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 3,
+      "confidence": "medium",
+      "notes": "Surrender-themed kriti in Harikambhoji.",
+      "tags": [],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 104,
+      "slug": "re-manasa-chintaya-sri-ramam",
+      "title": "Rē Mānasa Cintaya Śrī Rāmam",
+      "title_telugu": "రే మానస చింతయ శ్రీరామం",
+      "raga": "Hanumatōḍi",
+      "raga_slug": "hanumatodi",
+      "tala": "Rupaka",
+      "language": "Telugu",
+      "pallavi": "Re manasa chintaya Sri Ramam",
+      "pallavi_telugu": "రే మానస చింతయ శ్రీ రామం",
+      "meaning": "Tyagaraja addresses his own mind, urging it: 'O mind, ever meditate on Sri Rama' — a simple name-contemplation piece typical of the Divya Nama repertoire.",
+      "deity": "Rama",
+      "groups": [
+        "divya-nama"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": false,
+        "charanams": 4
+      },
+      "difficulty": 2,
+      "popularity": 2,
+      "confidence": "high",
+      "notes": "Cited alongside simpler pieces like 'Dasaratha Nandana' as an example of the Divya Nama Kirtana group, though musically somewhat more elaborate than the plainest name-chants.",
+      "tags": [
+        "nama-sankirtana",
+        "beginner-friendly",
+        "rama-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 105,
+      "slug": "sadhinchene",
+      "title": "Sādhiñcanē",
+      "title_telugu": "సాధించెనే",
+      "raga": "Ārabhi",
+      "raga_slug": "arabhi",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Sādhiñcanē ō manasā",
+      "pallavi_telugu": "సాధించెనే ఓ మనసా",
+      "meaning": "Tells the mind that Rama got his way — a half-affectionate complaint that the Lord always does exactly as he pleases.",
+      "deity": "Rama",
+      "groups": [
+        "pancharatna"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 9
+      },
+      "difficulty": 5,
+      "popularity": 5,
+      "confidence": "high",
+      "notes": "Famous for its tone: the composer scolds Rama through the charanams, ending with the line about Yasoda. Ārabhi's clean lines expose any slack in the tala.",
+      "tags": [
+        "ghana-raga-pancharatna",
+        "concert-staple"
+      ],
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "సాధించెనే ఓ మనసా",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "బోధించిన సన్మార్గవచనముల\nబొంకు జేసి తా బట్టినపట్టు సాధించెనే ఓ మనసా",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "సాధించెనే",
+          "meaning_telugu": "సాధించినాడు కదా, నెరవేర్చుకొన్నాడు",
+          "meaning": "has (he) accomplished it, indeed!"
+        },
+        {
+          "word": "ఓ మనసా",
+          "meaning_telugu": "ఓ మనస్సా",
+          "meaning": "O mind"
+        }
+      ]
+    },
+    {
+      "id": 106,
+      "slug": "samaja-vara-gamana",
+      "title": "Sāmaja Vara Gamana",
+      "title_telugu": "సామజ వరగమన",
+      "raga": "Hindōḷaṃ",
+      "raga_slug": "hindolam",
+      "tala": "Adi",
+      "language": "Sanskrit",
+      "pallavi": "Sāmaja vara gamana sādhu hṛt sārasābja pālita",
+      "pallavi_telugu": "సామజ వర గమన సాధు హృత్ సారసాబ్జ పాలిత",
+      "meaning": "Praises the Lord whose gait is majestic as an elephant's, who tends the lotus-hearts of the good.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 5,
+      "confidence": "high",
+      "notes": "Sanskrit sāhityam, Hindōḷaṃ's five notes, and a tune that sits comfortably — which is why it turns up in almost every student's first concert set.",
+      "tags": [
+        "concert-staple",
+        "beginner-friendly",
+        "sanskrit-kriti"
+      ],
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "సామజ వర గమన సాధు హృత్ సారసాబ్జ పాలిత",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "సామనిగమజ సుధామయ గానవిచక్షణ\nగుణశీల దయాలవాల మాంపాలయ",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "సామజ వర గమన",
+          "meaning_telugu": "శ్రేష్ఠమైన గజగమనము గలవాడా",
+          "meaning": "O one whose gait is like the finest of elephants"
+        },
+        {
+          "word": "సాధు హృత్",
+          "meaning_telugu": "సజ్జనుల హృదయము",
+          "meaning": "the hearts of the virtuous"
+        },
+        {
+          "word": "సారసాబ్జ",
+          "meaning_telugu": "పద్మము వంటి",
+          "meaning": "lotus (heart)"
+        },
+        {
+          "word": "పాలిత",
+          "meaning_telugu": "పాలింపబడిన, నివసించు",
+          "meaning": "cherished/dwelt in (by whom)"
+        }
+      ]
+    },
+    {
+      "id": 107,
+      "slug": "sambho-mahadeva",
+      "title": "Śāmbhō Mahādēva",
+      "title_telugu": "శాంభో మహాదేవ",
+      "raga": "Kāmavardhini",
+      "raga_slug": "kamavardhini",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Śāmbhō mahādēva śaṅkara girijā ramaṇa",
+      "pallavi_telugu": "శాంభో మహాదేవ శంకర గిరిజా రమణ",
+      "meaning": "Salutes Siva as the great god, consort of Girija.",
+      "deity": "Siva",
+      "groups": [
+        "kovur-pancharatna"
+      ],
+      "kshetra": "Kovur",
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 4,
+      "popularity": 3,
+      "confidence": "medium",
+      "notes": "Pantuvarāḷi here is the modern name for the 51st mēḷa Kāmavardhini — not the 45th mēḷa Śubhapantuvarāḷi.",
+      "tags": [
+        "kshetra-kriti",
+        "siva-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 108,
+      "slug": "sangeeta-jnanamu",
+      "title": "Saṅgīta Jñānamu Bhakti Vinā",
+      "title_telugu": "సంగీత జ్ఞానము భక్తి వినా",
+      "raga": "Dhēnuka",
+      "raga_slug": "dhenuka",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Sangeeta jnanamu bhakti vina sanmargamu galada",
+      "pallavi_telugu": "సంగీత జ్ఞానము భక్తి వినా సన్మార్గము కలదా",
+      "meaning": "Tyagaraja asks whether there can be any true path to righteousness without musical knowledge joined to devotion, asserting that sangita gyanamu and bhakti are inseparable.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 3,
+      "confidence": "medium",
+      "notes": "A key nada/sangita-upasana statement kriti, set in the melakarta-janya raga Dhenuka.",
+      "tags": [
+        "nada-upasana",
+        "rare-raga"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 109,
+      "slug": "sarasa-sama-dana",
+      "title": "Sārasa Sāma Dāna",
+      "title_telugu": "సరస సామ దాన",
+      "raga": "Kāpī Nārāyaṇi",
+      "raga_slug": "kapinarayani",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Sārasa sāma dāna bhēda daṇḍa catura",
+      "pallavi_telugu": "సారస సామ దాన భేద దండ చతుర",
+      "meaning": "Praises Rama as adept in all four instruments of statecraft — conciliation, gifts, division and force.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 4,
+      "popularity": 4,
+      "confidence": "medium",
+      "notes": "One of the rare kritis whose imagery is political rather than devotional. Kāpī Nārāyaṇi should not be confused with Kāpi.",
+      "tags": [
+        "concert-staple"
+      ],
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "సారస సామ దాన భేద దండ చతుర",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "పరమ శంభవాగ్రేసరుడు పలుకు రావణుడు\nతెలియలేక పోయె",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "హితవు మాటలెంతో బాగ పల్కితివి సతముగా\nఅయోధ్య నిచ్చెనంటివి నత సహోదరుని\nరాజుజేసి రాజ హతముజేసితివి త్యాగరాజ నుత",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "సారస",
+          "meaning_telugu": "నేర్పరి, సున్నితమైన",
+          "meaning": "skilled, elegant"
+        },
+        {
+          "word": "సామ",
+          "meaning_telugu": "సామోపాయము (సముదాయించుట)",
+          "meaning": "conciliation (one of the four political means)"
+        },
+        {
+          "word": "దాన",
+          "meaning_telugu": "దానోపాయము",
+          "meaning": "gift, bribery"
+        },
+        {
+          "word": "భేద",
+          "meaning_telugu": "భేదోపాయము",
+          "meaning": "sowing discord"
+        },
+        {
+          "word": "దండ",
+          "meaning_telugu": "దండోపాయము",
+          "meaning": "punishment"
+        },
+        {
+          "word": "చతుర",
+          "meaning_telugu": "నేర్పరి",
+          "meaning": "expert, adept"
+        }
+      ]
+    },
+    {
+      "id": 110,
+      "slug": "sitamma-mayamma",
+      "title": "Sītamma Māyamma",
+      "title_telugu": "సీతమ్మ మాయమ్మ",
+      "raga": "Vasanta",
+      "raga_slug": "vasanta",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Sītamma māyamma śrī rāmuḍu mā taṇḍri",
+      "pallavi_telugu": "సీతమ్మ మాయమ్మ శ్రీరాముడు మా తండ్రి",
+      "meaning": "Sita is our mother and Rama our father — the household framing that makes this one of the most-loved of the festival kirtanas.",
+      "deity": "Rama",
+      "groups": [
+        "utsava-sampradaya"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 3
+      },
+      "difficulty": 2,
+      "popularity": 4,
+      "confidence": "high",
+      "notes": "Short, warm and almost always the first utsava sampradāya kīrtana a student learns.",
+      "tags": [
+        "beginner-friendly",
+        "concert-staple"
+      ],
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "సీతమ్మ మాయమ్మ శ్రీరాముడు మా తండ్రి",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "వాతాత్మజ సౌమిత్రి వైనతేయ రిపుమర్దన\nధాతా భరతాదులు సోదరులు మాకు ఓ మనసా",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "పరమేశ వశిష్ఠ పరాశర నారద శౌనక శుక\nసురపతి గౌతమ లంబోదర గుహ సనకాదులు\nధర నిజ భాగవతాగ్రేసరులెవ్వరో వారెల్లను\nవర త్యాగరాజునికి పరమ బాంధవులు మనసా",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "సీతమ్మ",
+          "meaning_telugu": "సీతాదేవి",
+          "meaning": "Mother Sita"
+        },
+        {
+          "word": "మాయమ్మ",
+          "meaning_telugu": "నా తల్లి",
+          "meaning": "my mother"
+        },
+        {
+          "word": "శ్రీరాముడు",
+          "meaning_telugu": "శ్రీరాముడు",
+          "meaning": "Sri Rama"
+        },
+        {
+          "word": "మా",
+          "meaning_telugu": "మాయొక్క",
+          "meaning": "our"
+        },
+        {
+          "word": "తండ్రి",
+          "meaning_telugu": "తండ్రి",
+          "meaning": "father"
+        }
+      ]
+    },
+    {
+      "id": 111,
+      "slug": "sobhane-sobhane",
+      "title": "Śōbhanē Śōbhanē",
+      "title_telugu": "శోభనే శోభనే",
+      "raga": "Kāmavardhini",
+      "raga_slug": "kamavardhini",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Sobhane sobhane",
+      "pallavi_telugu": "శోభనే శోభనే",
+      "meaning": "A benedictory 'sobhanam' song of the kind sung by women during harati/auspicious ceremonies, wishing splendour and well-being to the Lord; part of the utsava-sampradaya festive repertoire.",
+      "deity": "Rama",
+      "groups": [
+        "utsava-sampradaya"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 2
+      },
+      "difficulty": 2,
+      "popularity": 2,
+      "confidence": "medium",
+      "notes": "Raga and tala are well attested; its exact place among the utsava ritual sequence (likely the wedding/harati group) is less certain than for the other entries here.",
+      "tags": [
+        "utsava-sampradaya",
+        "ritual-song"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 112,
+      "slug": "sobhillu-saptasvara",
+      "title": "Śōbhillu Saptasvara",
+      "title_telugu": "శోభిల్లు సప్తస్వర",
+      "raga": "Jaganmōhini",
+      "raga_slug": "jaganmohini",
+      "tala": "Rupaka",
+      "language": "Telugu",
+      "pallavi": "Śōbhillu saptasvara sundarula bhajimpavē manasā",
+      "pallavi_telugu": "శోభిల్లు సప్తస్వర సుందరుల భజింపవే మనసా",
+      "meaning": "Tells the mind to worship the seven beautiful swaras, which shine in the navel, heart, throat, tongue and nose.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 2,
+      "popularity": 4,
+      "confidence": "high",
+      "notes": "A kriti about music itself — it names where each svara resonates in the body. Common early-concert opener.",
+      "tags": [
+        "concert-staple",
+        "beginner-friendly",
+        "nada-upasana"
+      ],
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "శోభిల్లు సప్తస్వర సుందరుల భజింపవే మనసా",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "నాభి హృత్ కంఠ రసన నాసాదులయందు",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "ధర ఋగ్ సామాదులలో వర గాయత్రి హృదయమున\nసుర భూసుర మానసమున శుభ త్యాగరాజుని ఎద",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "శోభిల్లు",
+          "meaning_telugu": "ప్రకాశించు",
+          "meaning": "shining, resplendent"
+        },
+        {
+          "word": "సప్తస్వర",
+          "meaning_telugu": "ఏడు స్వరములు",
+          "meaning": "the seven musical notes"
+        },
+        {
+          "word": "సుందరుల",
+          "meaning_telugu": "అందమైనవారిని",
+          "meaning": "the beautiful ones"
+        },
+        {
+          "word": "భజింపవే",
+          "meaning_telugu": "కొలువుము",
+          "meaning": "worship!"
+        },
+        {
+          "word": "మనసా",
+          "meaning_telugu": "ఓ మనసా",
+          "meaning": "O mind"
+        }
+      ]
+    },
+    {
+      "id": 113,
+      "slug": "sogasu-juda-tarama",
+      "title": "Sogasu Jūḍa Taramā",
+      "title_telugu": "సొగసు జూడ తరమా",
+      "raga": "Kānaḍā",
+      "raga_slug": "kanada",
+      "tala": "Rupaka",
+      "language": "Telugu",
+      "pallavi": "Sogasu jūḍa taramā nī sogasu jūḍa taramā",
+      "pallavi_telugu": "సొగసు జూడ తరమా నీ సొగసు జూడ తరమా",
+      "meaning": "Asks whether it is even possible to take in the Lord's beauty — the eye cannot hold it.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 4,
+      "popularity": 3,
+      "confidence": "medium",
+      "notes": "Commonly listed in Kannaḍagauḷa; some editions place it in Kānaḍā, and the two are handled here under one reference entry. Worth confirming with your teacher.",
+      "tags": [
+        "rare-raga"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 114,
+      "slug": "sogasuga-mridanga-talamu",
+      "title": "Sogasugā Mṛdaṅga Tāḷamu",
+      "title_telugu": "సొగసుగా మృదంగ తాళము",
+      "raga": "Śrīrañjani",
+      "raga_slug": "sriranjani",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Sogasuga mridanga talamu jatiyu sadhukagarada o manasa",
+      "pallavi_telugu": null,
+      "meaning": "Tyagaraja asks his own mind whether it can keep the beautiful rhythm of the mridangam and the jati in tune while singing of Rama, using the joy of rhythm as a metaphor for disciplined devotion.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 4,
+      "confidence": "high",
+      "notes": "Frequently cited as Tyagaraja's tribute to rhythm and percussion; addressed to his own mind (manasa).",
+      "tags": [
+        "nada-upasana",
+        "concert-staple"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 115,
+      "slug": "ganapatini-sevimparare",
+      "title": "Śrī Gaṇapatini Sēvimparārē",
+      "title_telugu": "శ్రీ గణపతిని సేవింపరారే",
+      "raga": "Saurāṣṭraṃ",
+      "raga_slug": "saurashtram",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Śrī gaṇapatini sēvimparārē manasā",
+      "pallavi_telugu": "శ్రీ గణపతిని సేవింపరారే మనసా",
+      "meaning": "Urges the mind to worship Lord Ganapati, the remover of obstacles.",
+      "deity": "Ganesha",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 2,
+      "popularity": 3,
+      "confidence": "high",
+      "notes": null,
+      "tags": [
+        "beginner-friendly",
+        "ganesha-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 116,
+      "slug": "sri-narada",
+      "title": "Śrī Nārada",
+      "title_telugu": "శ్రీ నారద",
+      "raga": "Kānaḍā",
+      "raga_slug": "kanada",
+      "tala": "Rupaka",
+      "language": "Telugu",
+      "pallavi": "Śrī nārada nāda sarasīruha bhṛṅga",
+      "pallavi_telugu": "శ్రీ నారద నాద సరసీరుహ భృంగ",
+      "meaning": "Salutes Narada as the bee at the lotus of nāda — the sage who gave Tyagaraja his music.",
+      "deity": "Other",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 4,
+      "popularity": 4,
+      "confidence": "high",
+      "notes": "Tyagaraja composed several kritis on Narada after receiving the Svārārṇava text; this is the best known. Kānaḍā is learnt by imitation, not from its scale.",
+      "tags": [
+        "concert-staple",
+        "nada-upasana"
+      ],
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "శ్రీ నారద నాద సరసీరుహ భృంగ",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "దీన మాన రక్షక జగదీశ భేషంకేశ",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "వేద జనితవర వీణా వాదన తత్వజ్ఞ ఖేదకర\nత్రితాప రహిత ఖేచర వినుత యాదవ కులాప్త\nసదా మోద హృదయ మునివర్య శ్రీద త్యాగరాజ\nవినుత శ్రీకర మాం పాలయ",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "శ్రీ",
+          "meaning_telugu": "శ్రీ",
+          "meaning": "an honorific prefix"
+        },
+        {
+          "word": "నారద",
+          "meaning_telugu": "నారద మహర్షి",
+          "meaning": "sage Narada"
+        },
+        {
+          "word": "నాద",
+          "meaning_telugu": "నాదము",
+          "meaning": "of sound/music"
+        },
+        {
+          "word": "సరసీరుహ",
+          "meaning_telugu": "పద్మము",
+          "meaning": "lotus"
+        },
+        {
+          "word": "భృంగ",
+          "meaning_telugu": "తుమ్మెద",
+          "meaning": "bee, bumblebee (one who hovers over)"
+        }
+      ]
+    },
+    {
+      "id": 117,
+      "slug": "sri-raghuvara-aprameya",
+      "title": "Śrī Raghuvara Aprameya",
+      "title_telugu": "శ్రీ రఘువర అప్రమేయ",
+      "raga": "Kāmbhōji",
+      "raga_slug": "kambhoji",
+      "tala": "Rupaka",
+      "language": "Telugu",
+      "pallavi": "Sri Raghuvara aprameya sri Raghuvara",
+      "pallavi_telugu": "శ్రీ రఘువర అప్రమేయ శ్రీ రఘువర",
+      "meaning": "The composer salutes Rama, the best of the Raghu clan, as immeasurable and beyond ordinary comprehension.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 3,
+      "confidence": "medium",
+      "notes": "Kambhoji kriti in Rupaka tala praising Rama's incomparability.",
+      "tags": [],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 118,
+      "slug": "sri-raghuvara-sugunalaya",
+      "title": "Śrī Raghuvara Sugunālaya",
+      "title_telugu": "శ్రీ రఘువర సుగుణాలయ",
+      "raga": "Bhairavi",
+      "raga_slug": "bhairavi",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Śrī raghuvara sugunālaya",
+      "pallavi_telugu": "శ్రీ రఘువర సుగుణాలయ",
+      "meaning": "Addresses Rama as the dwelling-place of every good quality.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 4,
+      "popularity": 3,
+      "confidence": "medium",
+      "notes": "A weighty Bhairavi piece; good practice ground for the rāga's D2-in-ascent, D1-in-descent asymmetry.",
+      "tags": [
+        "rakti-raga"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 119,
+      "slug": "sri-rama-jaya-rama",
+      "title": "Śrī Rāma Jaya Rāma",
+      "title_telugu": "శ్రీరామ జయరామ",
+      "raga": "Madhyamāvati",
+      "raga_slug": "madhyamavati",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Śrī rāma jaya rāma śṛṅgāra rāma",
+      "pallavi_telugu": "శ్రీ రామ జయ రామ శృంగార రామ",
+      "meaning": "A name-chant on Rama in his beauty — built for a group to sing together, not for solo display.",
+      "deity": "Rama",
+      "groups": [
+        "divya-nama"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": false,
+        "charanams": 4
+      },
+      "difficulty": 1,
+      "popularity": 3,
+      "confidence": "medium",
+      "notes": "Typical divya nāma construction: a short repeating tune, the work carried by the names rather than by melodic variation.",
+      "tags": [
+        "beginner-friendly",
+        "nama-sankirtana"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 120,
+      "slug": "sringarinchukoni-vedaliri",
+      "title": "Śṛṅgārin̄cukoni Vedalirī",
+      "title_telugu": "శృంగారించుకొని వెడలిరీ",
+      "raga": "Surati",
+      "raga_slug": "surati",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Sringarinchukoni vedaliri",
+      "pallavi_telugu": "శృంగారించుకొని వెడలిరీ",
+      "meaning": "Opening daru of Nauka Charitram, describing the gopis dressing and adorning themselves in excitement before setting out to meet Krishna for the boat ride.",
+      "deity": "Krishna",
+      "groups": [
+        "nauka-charitram"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 2
+      },
+      "difficulty": 3,
+      "popularity": 2,
+      "confidence": "high",
+      "notes": "One of the more frequently excerpted songs from Nauka Charitram in concerts.",
+      "tags": [
+        "opera",
+        "krishna-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 121,
+      "slug": "sujana-jivana",
+      "title": "Sujana Jīvana",
+      "title_telugu": "సుజన జీవన",
+      "raga": "Khamās",
+      "raga_slug": "khamas",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Sujana jīvana rāma",
+      "pallavi_telugu": "సుజన జీవన రామ",
+      "meaning": "Rama is the very life of good people.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 4,
+      "confidence": "high",
+      "notes": "Khamās sits low and warm; this is a common second-item choice.",
+      "tags": [
+        "concert-staple"
+      ],
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "సుజన జీవన రామ",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "భుజగ భూషణార్చిత బుధ జనావనత అజవందిత\nశ్రిత చందన దశ తురంగ మామవ",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "చారు నేత్ర శ్రీ కళత్ర శ్రీ రమ్య గాత్ర తారక నామ\nసుచరిత్ర దశరథ పుత్ర తారకాది పానన ధర్మ\nపాలక తారయ రఘువర నిర్మల త్యాగరాజ సన్నుత",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "సుజన",
+          "meaning_telugu": "మంచివారి",
+          "meaning": "of good people"
+        },
+        {
+          "word": "జీవన",
+          "meaning_telugu": "జీవనాధారము",
+          "meaning": "life, sustenance"
+        },
+        {
+          "word": "రామ",
+          "meaning_telugu": "ఓ రామ",
+          "meaning": "O Rama"
+        }
+      ]
+    },
+    {
+      "id": 122,
+      "slug": "sundara-dasaratha-nandana",
+      "title": "Sundara Daśaratha Nandana Vandanamu",
+      "title_telugu": "సుందర దశరథ నందన వందనము",
+      "raga": "Kāpi",
+      "raga_slug": "kapi",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Sundara Dasaratha Nandana Vandanamu",
+      "pallavi_telugu": "సుందర దశరథ నందన వందనము",
+      "meaning": "'Salutations to the handsome son of King Dasaratha' — the charanams go on to describe Sita seated gracefully on Rama's lap and the sages Agastya, Vasishtha, Markandeya and others extolling his glory.",
+      "deity": "Rama",
+      "groups": [
+        "divya-nama"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": false,
+        "charanams": 6
+      },
+      "difficulty": 2,
+      "popularity": 3,
+      "confidence": "high",
+      "notes": "A dvi-matu keertana: the pallavi has its own tune while all six charanams share a second, common tune, making it well suited to group singing. Distinct from the similarly-named 'Dasaratha Nandana' in raga Asaveri.",
+      "tags": [
+        "nama-sankirtana",
+        "beginner-friendly",
+        "rama-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 123,
+      "slug": "sundaratara-deham",
+      "title": "Sundarataraṁ Dēhaṁ",
+      "title_telugu": "సుందరతరం దేహం",
+      "raga": "Madhyamāvati",
+      "raga_slug": "madhyamavati",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Sundaratara deham raghuvara idi Rama",
+      "pallavi_telugu": "సుందరతరం దేహం రఘువర ఇది రామ",
+      "meaning": "Tyagaraja marvels at the extraordinarily beautiful form of Rama, dwelling on the physical loveliness of the Lord as an object of meditation.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 2,
+      "popularity": 3,
+      "confidence": "medium",
+      "notes": "A gentle, melodic Madhyamavati kriti describing Rama's beauty.",
+      "tags": [
+        "beginner-friendly"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 124,
+      "slug": "sundareswaruni",
+      "title": "Sundarēśvaruni",
+      "title_telugu": "సుందరేశ్వరుని",
+      "raga": "Dhīraśaṅkarābharaṇaṁ",
+      "raga_slug": "dheerasankarabharanam",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Sundareswaruni sevimpa rare",
+      "pallavi_telugu": "సుందరేశ్వరుని సేవింప రారే",
+      "meaning": "Praises Lord Siva as Sundareswara ('the beautiful Lord') of Kovur, calling devotees to his worship.",
+      "deity": "Siva",
+      "groups": [
+        "kovur-pancharatna"
+      ],
+      "kshetra": "Kovur",
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 2,
+      "confidence": "high",
+      "notes": "One of the five Kovur Pancharatna kritis; the exact opening words of the pallavi beyond the title are not fully confirmed.",
+      "tags": [
+        "kshetra-kriti",
+        "siva-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 125,
+      "slug": "sundari-nannindarilo",
+      "title": "Sundari Nannindarilō",
+      "title_telugu": "సుందరి నన్నిందరిలో",
+      "raga": "Bēgaḍa",
+      "raga_slug": "begada",
+      "tala": "Rupaka",
+      "language": "Telugu",
+      "pallavi": "Sundari nannindarilo",
+      "pallavi_telugu": "సుందరి నన్నిందరిలో",
+      "meaning": "Tyagaraja sings the praises of Goddess Tripurasundari of Tiruvottiyur, singling himself out among all as her devotee.",
+      "deity": "Devi",
+      "groups": [
+        "tiruvottiyur-pancharatna"
+      ],
+      "kshetra": "Tiruvottiyur",
+      "structure": {
+        "anupallavi": true,
+        "charanams": 2
+      },
+      "difficulty": 3,
+      "popularity": 2,
+      "confidence": "high",
+      "notes": "One of the five Tiruvottiyur Pancharatna kritis on Devi Tripurasundari.",
+      "tags": [
+        "kshetra-kriti",
+        "devi-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 126,
+      "slug": "sundari-nee-divya-roopamu",
+      "title": "Sundari Nī Divya Rūpamunu",
+      "title_telugu": "సుందరి నీ దివ్య రూపమును",
+      "raga": "Kalyāṇi",
+      "raga_slug": "kalyani",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Sundari nee divya roopamunu joochi",
+      "pallavi_telugu": "సుందరి నీ దివ్య రూపమును జూచి",
+      "meaning": "Tyagaraja sings of beholding the Goddess Tripurasundari's divine form at Tiruvottiyur (Adipuram), lost in wonder at her beauty.",
+      "deity": "Devi",
+      "groups": [
+        "tiruvottiyur-pancharatna"
+      ],
+      "kshetra": "Tiruvottiyur",
+      "structure": {
+        "anupallavi": true,
+        "charanams": 2
+      },
+      "difficulty": 3,
+      "popularity": 3,
+      "confidence": "high",
+      "notes": "One of the five Tiruvottiyur Pancharatna kritis on Devi Tripurasundari.",
+      "tags": [
+        "kshetra-kriti",
+        "devi-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 127,
+      "slug": "sundari-ninnu-varnimpa",
+      "title": "Sundari Ninnu Varṇimpa",
+      "title_telugu": "సుందరి నిన్ను వర్ణింప",
+      "raga": "Ārabhi",
+      "raga_slug": "arabhi",
+      "tala": "Misra Chapu",
+      "language": "Telugu",
+      "pallavi": "Sundari ninnu varnimpa tarama",
+      "pallavi_telugu": "సుందరి నిన్ను వర్ణింప తరమా",
+      "meaning": "Praises the beautiful Goddess Tripurasundari of Tiruvottiyur, comparing her face to the moon and her splendour to lightning, saying it is beyond words to describe her fully.",
+      "deity": "Devi",
+      "groups": [
+        "tiruvottiyur-pancharatna"
+      ],
+      "kshetra": "Tiruvottiyur",
+      "structure": {
+        "anupallavi": true,
+        "charanams": 2
+      },
+      "difficulty": 3,
+      "popularity": 2,
+      "confidence": "high",
+      "notes": "Composed at the request of his disciple Veena Kuppayyar during a visit to Tiruvottiyur; one of the five Tiruvottiyur Pancharatna kritis on Devi Tripurasundari.",
+      "tags": [
+        "kshetra-kriti",
+        "devi-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 128,
+      "slug": "teliyaleru-rama",
+      "title": "Teliyalēru Rāma",
+      "title_telugu": "తెలియలేరు రామ",
+      "raga": "Dhēnuka",
+      "raga_slug": "dhenuka",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Teliyalēru rāma bhakti mārgamunu",
+      "pallavi_telugu": "తెలియలేరు రామ భక్తి మార్గమును",
+      "meaning": "Says that people cannot recognise the path of devotion, however much they argue about it.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 4,
+      "popularity": 4,
+      "confidence": "high",
+      "notes": "Dhēnuka (9th mēḷa) is otherwise barely used; this kriti is effectively the rāga's calling card.",
+      "tags": [
+        "concert-staple",
+        "rare-raga"
+      ],
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "తెలియలేరు రామ భక్తి మార్గమును",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "ఇలనంతట తిరుగుచును కలవరించేరు కాని",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "తెలియలేరు",
+          "meaning_telugu": "తెలుసుకొనలేరు",
+          "meaning": "they do not understand"
+        },
+        {
+          "word": "రామ",
+          "meaning_telugu": "ఓ రామ",
+          "meaning": "O Rama"
+        },
+        {
+          "word": "భక్తి",
+          "meaning_telugu": "భక్తి",
+          "meaning": "devotion"
+        },
+        {
+          "word": "మార్గమును",
+          "meaning_telugu": "మార్గమును",
+          "meaning": "the path"
+        }
+      ]
+    },
+    {
+      "id": 129,
+      "slug": "tera-tiyagarada",
+      "title": "Tera Tīyagarādā",
+      "title_telugu": "తెర తీయగరాదా",
+      "raga": "Gauḷa",
+      "raga_slug": "gaula",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Tera tīyagarādā lōni tirupati venkaṭaramaṇa",
+      "pallavi_telugu": "తెర తీయగరాదా లోని తిరుపతి వేంకటరమణ",
+      "meaning": "Asks Venkataramana of Tirupati to draw aside the curtain — outwardly the temple screen, inwardly the veil of ego.",
+      "deity": "Venkatesa",
+      "groups": [
+        "tirupati-venkatesa"
+      ],
+      "kshetra": "Tirupati",
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 4,
+      "confidence": "medium",
+      "notes": "The double meaning of \"tera\" — temple curtain and the veil of the ego — is the whole kriti. Commonly listed in Gauḷipantu; some editions give Gauḷa, and the reference entry here is Gauḷa.",
+      "tags": [
+        "kshetra-kriti"
+      ],
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "తెర తీయగరాదా లోని తిరుపతి వేంకటరమణ",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "పరమ పురుష ధర్మాది మోక్షముల పారదోలుచున్నది\nనా లోని",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "మత్స్యము ఆకలికొని కాలముచే మగ్నమైన\nరీతినున్నది అచ్చమైన దీప సన్నిధిని మరుగు\nఅడ్డబడి చెరచినట్టున్నది",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "తెర",
+          "meaning_telugu": "తెరను",
+          "meaning": "the curtain"
+        },
+        {
+          "word": "తీయగరాదా",
+          "meaning_telugu": "తీయలేవా",
+          "meaning": "can you not remove?"
+        },
+        {
+          "word": "లోని",
+          "meaning_telugu": "లోపలనున్న",
+          "meaning": "within"
+        },
+        {
+          "word": "తిరుపతి వేంకటరమణ",
+          "meaning_telugu": "తిరుపతి వేంకటరమణుడు",
+          "meaning": "Lord Venkataramana of Tirupati"
+        }
+      ]
+    },
+    {
+      "id": 130,
+      "slug": "undedi-ramudokkadu",
+      "title": "Uṇḍēdi Rāmuḍokaḍu",
+      "title_telugu": "ఉండేది రాముడొక్కడు",
+      "raga": "Harikāmbhōji",
+      "raga_slug": "harikambhoji",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Uṇḍēdi rāmuḍokaḍu",
+      "pallavi_telugu": "ఉండేది రాముడొకడు",
+      "meaning": "There is only one Rama — a flat statement of exclusive devotion.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 3,
+      "confidence": "medium",
+      "notes": null,
+      "tags": [],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 131,
+      "slug": "upacharamu-chesevaramu",
+      "title": "Upachāramu Chēsēvāramu",
+      "title_telugu": "ఉపచారము చేసేవారము",
+      "raga": "Bhairavi",
+      "raga_slug": "bhairavi",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Upacharamu chesevaramu levani",
+      "pallavi_telugu": "ఉపచారము చేసేవారము లేవని",
+      "meaning": "Tyagaraja laments that there is no one left to attend upon and serve the Lord with proper ritual care, expressing the loneliness of true devotion in a careless world.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 3,
+      "confidence": "medium",
+      "notes": "Bhairavi kriti lamenting the scarcity of true devotees.",
+      "tags": [
+        "rakti-raga"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 132,
+      "slug": "vaddayundede",
+      "title": "Vaddayuṇḍēdē",
+      "title_telugu": "వద్దయుండేదే",
+      "raga": "Varāḷi",
+      "raga_slug": "varali",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Vaddayundede bahu melu varijaksha",
+      "pallavi_telugu": "వద్దయుండేదే బహు మేలు వారిజాక్ష",
+      "meaning": "Prahlada expresses his one-pointed longing to remain always at the Lotus-eyed Lord's side, calling that alone the greatest good.",
+      "deity": "Vishnu",
+      "groups": [
+        "prahlada-bhakti-vijayam"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 2
+      },
+      "difficulty": 3,
+      "popularity": 2,
+      "confidence": "high",
+      "notes": null,
+      "tags": [
+        "opera",
+        "vishnu-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 133,
+      "slug": "vandanamu-raghunandana",
+      "title": "Vandanamu Raghunandana",
+      "title_telugu": "వందనము రఘునందన",
+      "raga": "Sahāna",
+      "raga_slug": "sahana",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Vandanamu raghunandana setu bandhana",
+      "pallavi_telugu": "వందనము రఘునందన సేతు బంధన",
+      "meaning": "Salutations to the delight of the Raghus, who bridged the sea.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 4,
+      "confidence": "high",
+      "notes": "Sahānā's gamakas are the point here — sung plainly the kriti loses its character entirely.",
+      "tags": [
+        "concert-staple",
+        "rakti-raga"
+      ],
+      "sahityam": [
+        {
+          "kind": "pallavi",
+          "label_telugu": "పల్లవి",
+          "telugu": "వందనము రఘునందన సేతు బంధన",
+          "verified": true
+        },
+        {
+          "kind": "anupallavi",
+          "label_telugu": "అనుపల్లవి",
+          "telugu": "శ్రీధామా నాతో వాదమా నే భేదమా ఇది మోదమా రామ",
+          "verified": true
+        },
+        {
+          "kind": "charanam",
+          "label_telugu": "చరణం 1",
+          "telugu": "శ్రీరామ హృచ్చరమా బ్రోవ భారమా రాయబారమా రామ",
+          "verified": true
+        }
+      ],
+      "pratipadartham": [
+        {
+          "word": "వందనము",
+          "meaning_telugu": "నమస్కారము",
+          "meaning": "salutations"
+        },
+        {
+          "word": "రఘునందన",
+          "meaning_telugu": "రఘువంశసంతోషకరుడా",
+          "meaning": "O joy of the Raghu clan"
+        },
+        {
+          "word": "సేతు",
+          "meaning_telugu": "సేతువును",
+          "meaning": "the bridge/causeway"
+        },
+        {
+          "word": "బంధన",
+          "meaning_telugu": "కట్టినవాడా",
+          "meaning": "the one who built/bound"
+        }
+      ]
+    },
+    {
+      "id": 134,
+      "slug": "vara-lila-gana-lola",
+      "title": "Vara Līla Gāna Lōla",
+      "title_telugu": "వర లీలా గాన లోల",
+      "raga": "Dhīraśaṅkarābharaṇaṁ",
+      "raga_slug": "dheerasankarabharanam",
+      "tala": "Adi",
+      "language": "Sanskrit",
+      "pallavi": "Vara līla gāna lōla sura pāla suguṇa jāla",
+      "pallavi_telugu": "వర లీలా గాన లోల సుర పాల సుగుణ జాల",
+      "meaning": "Praises the Lord absorbed in the song of his own play — a Sanskrit kriti dense with internal rhyme.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 4,
+      "popularity": 3,
+      "confidence": "medium",
+      "notes": null,
+      "tags": [
+        "sanskrit-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 135,
+      "slug": "vaaridhi-neeku",
+      "title": "Vāridhi Nīku",
+      "title_telugu": "వారిధి నీకు",
+      "raga": "Hanumatōḍi",
+      "raga_slug": "hanumatodi",
+      "tala": "Misra Chapu",
+      "language": "Telugu",
+      "pallavi": "Varidhi neeku vandanamunonarinceda",
+      "pallavi_telugu": "వారిధి నీకు వందనమునొనరించెద",
+      "meaning": "Prahlada, cast into the sea by Hiranyakashipu, salutes the Lord of the Ocean and asks him to show the path by which Hari always dwells in his heart.",
+      "deity": "Vishnu",
+      "groups": [
+        "prahlada-bhakti-vijayam"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 2
+      },
+      "difficulty": 3,
+      "popularity": 2,
+      "confidence": "high",
+      "notes": "One of the better-known Todi excerpts from Prahlada Bhakti Vijayam.",
+      "tags": [
+        "opera",
+        "vishnu-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 136,
+      "slug": "vasudevayani",
+      "title": "Vāsudēvayani",
+      "title_telugu": "వాసుదేవయని",
+      "raga": "Kalyāṇi",
+      "raga_slug": "kalyani",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Vasudeva-ani veDalina-I dauvarikuni kanarE",
+      "pallavi_telugu": null,
+      "meaning": "Draws attention to the Lord's gatekeepers (dvarapalakas) who set out chanting the name 'Vasudeva', heralding the Lord's approach in the Prahlada narrative.",
+      "deity": "Vishnu",
+      "groups": [
+        "prahlada-bhakti-vijayam"
+      ],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 2
+      },
+      "difficulty": 3,
+      "popularity": 2,
+      "confidence": "high",
+      "notes": null,
+      "tags": [
+        "opera",
+        "vishnu-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 137,
+      "slug": "vinatasuta-vahana",
+      "title": "Vinatasuta Vāhana",
+      "title_telugu": "వినతసుత వాహన",
+      "raga": "Jayantasēna",
+      "raga_slug": "jayantasena",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Vinatasuta vahana venu gopala",
+      "pallavi_telugu": "వినతసుత వాహన వేణు గోపాల",
+      "meaning": "The kriti addresses the Lord as one whose mount is the son of Vinata (Garuda), praising his majesty as he is borne through the skies on the eagle-vehicle.",
+      "deity": "Vishnu",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 2,
+      "confidence": "medium",
+      "notes": "Set in the comparatively less common raga Jayantasena.",
+      "tags": [
+        "rare-raga"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 138,
+      "slug": "vinave-o-manasa",
+      "title": "Vinavē Ō Manasā",
+      "title_telugu": "వినవే ఓ మనసా",
+      "raga": "Dēvamanōhari",
+      "raga_slug": "devamanohari",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Vinave o manasa vinu ninnu vina",
+      "pallavi_telugu": null,
+      "meaning": "Tyagaraja addresses his own mind, urging it to listen and understand that there is nothing beside the Lord worth attending to.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 2,
+      "confidence": "medium",
+      "notes": "A self-addressed (manasa) kriti in the less common raga Devamanohari.",
+      "tags": [
+        "rare-raga"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 139,
+      "slug": "vinayakuni-valenu-brova",
+      "title": "Vināyakuni Valenu Brōva",
+      "title_telugu": "వినాయకుని వలెను బ్రోవ",
+      "raga": "Madhyamāvati",
+      "raga_slug": "madhyamavati",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Vinayakuni valenu brova vedalitivo Rama nannu",
+      "pallavi_telugu": "వినాయకుని వలెను బ్రోవ వెడలితివో రామ నన్ను",
+      "meaning": "The singer asks whether Rama has come forth to protect him the way he protects through the grace of Vinayaka (Ganesha), invoking Ganesha as the remover of obstacles before praising Rama.",
+      "deity": "Ganesha",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 2,
+      "popularity": 3,
+      "confidence": "high",
+      "notes": "A commonly taught Ganesha-invoking kriti of Tyagaraja in the beginner-friendly raga Madhyamavati.",
+      "tags": [
+        "beginner-friendly",
+        "ganesha-kriti"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    },
+    {
+      "id": 140,
+      "slug": "yochana-kamala-lochana",
+      "title": "Yōcanā Kamala Lōcanā",
+      "title_telugu": "యోచనా కమల లోచనా",
+      "raga": "Darbār",
+      "raga_slug": "darbar",
+      "tala": "Adi",
+      "language": "Telugu",
+      "pallavi": "Yōcanā kamala lōcanā nī bhajana",
+      "pallavi_telugu": "యోచనా కమల లోచనా నీ భజన",
+      "meaning": "Asks the lotus-eyed one what thought is holding him back from granting his devotee.",
+      "deity": "Rama",
+      "groups": [],
+      "kshetra": null,
+      "structure": {
+        "anupallavi": true,
+        "charanams": 1
+      },
+      "difficulty": 3,
+      "popularity": 3,
+      "confidence": "medium",
+      "notes": null,
+      "tags": [
+        "rakti-raga"
+      ],
+      "sahityam": null,
+      "pratipadartham": null
+    }
+  ]
+}

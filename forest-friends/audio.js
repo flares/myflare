@@ -1,19 +1,17 @@
 /**
  * audio.js — Forest Friends sound engine
  * -----------------------------------------------------------------------
- * A self-contained, dependency-free sound engine built entirely on top of
- * the Web Audio API. Every sound heard in the game — animal noises and
- * the background music — is synthesized on the fly using oscillators,
- * noise buffers, gain envelopes and filters. There are NO audio files,
- * NO network requests and NO base64-encoded blobs anywhere in this file.
+ * A dependency-free Web Audio engine for interface cues and a soft, generated
+ * wind-and-leaves ambience. Animal voices are handled separately by
+ * realsounds.js and are never synthesized here as a fallback.
  *
  * Public API (attached to window.GameAudio):
  *   unlock(): Promise<void>          - create/resume the AudioContext.
  *   playAnimal(soundName): void      - play a short synthesized sound.
- *   startMusic(): void               - start looping background music.
- *   stopMusic(): void                - stop the background music.
- *   isMusicOn(): boolean             - whether music is currently playing.
- *   setMusicVolume(v): void          - set music volume (0..1).
+ *   startMusic(): void               - start forest ambience (legacy API name).
+ *   stopMusic(): void                - stop forest ambience.
+ *   isMusicOn(): boolean             - whether ambience is playing.
+ *   setMusicVolume(v): void          - set ambience volume (0..1).
  * -----------------------------------------------------------------------
  */
 (function () {
@@ -31,7 +29,7 @@
 
   var audioCtx = null;      // Single shared AudioContext, created lazily.
   var masterGain = null;    // Master output gain node (moderate volume).
-  var musicGain = null;     // Dedicated gain node for background music.
+  var musicGain = null;     // Dedicated gain node for forest ambience.
 
   var MASTER_VOLUME = 0.9;      // Overall ceiling so nothing clips/harshes.
   var DEFAULT_MUSIC_VOLUME = 0.08;
@@ -583,114 +581,82 @@
   };
 
   // -----------------------------------------------------------------------
-  // Background music
+  // Soft forest ambience — wind and leaves only, with no melody, uploaded-video
+  // audio, or animal recordings. The noise is generated locally so its contents
+  // are deterministic in kind and cannot unexpectedly include a bird call.
   // -----------------------------------------------------------------------
-  // A gentle, looping, kid-friendly melody in C major pentatonic, played
-  // with a soft triangle-wave voice and scheduled ahead of time using the
-  // classic "lookahead scheduler" pattern (checks audioCtx.currentTime on
-  // an interval and schedules any notes that fall within the lookahead
-  // window). This keeps timing sample-accurate even though setInterval
-  // itself is not.
+  var musicState = { playing: false, sources: [], stopTimer: null };
 
-  var musicState = {
-    playing: false,
-    schedulerId: null,
-    nextNoteTime: 0,
-    noteIndex: 0
-  };
-
-  // A cheerful, simple pentatonic melody loop (C major pentatonic: C D E G A).
-  // Each entry is [frequency in Hz, duration in beats]. A "beat" is scaled
-  // by MUSIC_BEAT_SECONDS below. `0` frequency means a rest.
-  var MUSIC_NOTES = [
-    [523.25, 1], [587.33, 1], [659.25, 1], [783.99, 1],
-    [659.25, 1], [587.33, 1], [523.25, 2],
-    [0, 1],
-    [659.25, 1], [783.99, 1], [880.00, 1], [783.99, 1],
-    [659.25, 1], [587.33, 1], [523.25, 2],
-    [0, 1]
-  ];
-
-  var MUSIC_BEAT_SECONDS = 0.34; // tempo — gentle, unhurried
-  var MUSIC_LOOKAHEAD = 0.1;     // how often the scheduler wakes (seconds)
-  var MUSIC_SCHEDULE_AHEAD = 0.3; // how far ahead of "now" to schedule notes
-
-  /** Schedule a single soft triangle-wave music note with its own envelope. */
-  function scheduleMusicNote(freq, startTime, duration) {
-    if (freq <= 0) return; // rest — nothing to schedule
-    var voice = createVoice('triangle', freq, musicGain);
-    // A touch of low-pass filtering keeps the tone mellow/rounded.
-    var filter = audioCtx.createBiquadFilter();
-    filter.type = 'lowpass';
-    filter.frequency.value = 2000;
-    voice.gain.disconnect();
-    voice.gain.connect(filter);
-    filter.connect(musicGain);
-
-    var attack = Math.min(0.08, duration * 0.2);
-    var release = Math.min(0.25, duration * 0.4);
-    envelope(voice.gain, startTime, attack, 1.0, duration, release);
-    playNode(voice.osc, startTime, startTime + duration + 0.05);
-  }
-
-  /** The lookahead scheduler tick: fills the schedule-ahead window with notes. */
-  function musicSchedulerTick() {
-    if (!audioCtx || !musicState.playing) return;
-    while (musicState.nextNoteTime < audioCtx.currentTime + MUSIC_SCHEDULE_AHEAD) {
-      var note = MUSIC_NOTES[musicState.noteIndex % MUSIC_NOTES.length];
-      var freq = note[0];
-      var beats = note[1];
-      var duration = beats * MUSIC_BEAT_SECONDS;
-
-      scheduleMusicNote(freq, musicState.nextNoteTime, duration * 0.92);
-
-      musicState.nextNoteTime += duration;
-      musicState.noteIndex++;
+  function makeLoopingNoise(seconds, smoothness) {
+    var frames = Math.floor(audioCtx.sampleRate * seconds);
+    var buffer = audioCtx.createBuffer(1, frames, audioCtx.sampleRate);
+    var data = buffer.getChannelData(0), value = 0;
+    for (var i = 0; i < frames; i++) {
+      value = value * smoothness + (Math.random() * 2 - 1) * (1 - smoothness);
+      data[i] = value;
     }
+    var source = audioCtx.createBufferSource();
+    source.buffer = buffer;
+    source.loop = true;
+    return source;
   }
 
   function startMusic() {
     var ctx = ensureContext();
-    if (!ctx) return;
-    if (musicState.playing) return; // idempotent: already running
-    if (ctx.state === 'suspended') {
-      // Best-effort resume; if it fails (no gesture yet) music will still
-      // be scheduled and will simply begin audibly once resumed.
-      try { ctx.resume(); } catch (e) { /* ignore */ }
-    }
+    if (!ctx || musicState.playing) return;
+    if (musicState.stopTimer) { window.clearTimeout(musicState.stopTimer); musicState.stopTimer = null; }
+    if (ctx.state === 'suspended') try { ctx.resume(); } catch (e) {}
+
+    var t = ctx.currentTime;
+    musicGain.gain.cancelScheduledValues(t);
+    musicGain.gain.setValueAtTime(0.0001, t);
+    musicGain.gain.linearRampToValueAtTime(DEFAULT_MUSIC_VOLUME, t + 1.4);
+
+    // Broad, slow wind through the canopy.
+    var wind = makeLoopingNoise(11, 0.997);
+    var windFilter = ctx.createBiquadFilter();
+    windFilter.type = 'lowpass'; windFilter.frequency.value = 720;
+    var windHighpass = ctx.createBiquadFilter();
+    windHighpass.type = 'highpass'; windHighpass.frequency.value = 70;
+    wind.connect(windFilter); windFilter.connect(windHighpass); windHighpass.connect(musicGain);
+
+    // A very quiet, irregular high-frequency layer suggests leaves rustling.
+    var leaves = makeLoopingNoise(7, 0.72);
+    var leafFilter = ctx.createBiquadFilter();
+    leafFilter.type = 'bandpass'; leafFilter.frequency.value = 1900; leafFilter.Q.value = 0.7;
+    var leafGain = ctx.createGain(); leafGain.gain.value = 0.11;
+    var sway = ctx.createOscillator(); sway.type = 'sine'; sway.frequency.value = 0.09;
+    var swayDepth = ctx.createGain(); swayDepth.gain.value = 0.065;
+    sway.connect(swayDepth); swayDepth.connect(leafGain.gain);
+    leaves.connect(leafFilter); leafFilter.connect(leafGain); leafGain.connect(musicGain);
+
+    wind.start(t); leaves.start(t); sway.start(t);
+    musicState.sources = [wind, leaves, sway];
     musicState.playing = true;
-    musicState.noteIndex = 0;
-    musicState.nextNoteTime = ctx.currentTime + 0.05;
-    musicSchedulerTick();
-    musicState.schedulerId = window.setInterval(musicSchedulerTick, MUSIC_LOOKAHEAD * 1000);
   }
 
   function stopMusic() {
+    if (!musicState.playing) return;
     musicState.playing = false;
-    if (musicState.schedulerId !== null) {
-      window.clearInterval(musicState.schedulerId);
-      musicState.schedulerId = null;
-    }
-    // Any already-scheduled notes will finish naturally with their own
-    // release ramps (no abrupt cutoff), since we only stop *scheduling
-    // new* notes here.
+    var t = now(), sources = musicState.sources.slice();
+    musicState.sources.length = 0;
+    musicGain.gain.cancelScheduledValues(t);
+    musicGain.gain.setValueAtTime(Math.max(0.0001, musicGain.gain.value), t);
+    musicGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.6);
+    musicState.stopTimer = window.setTimeout(function () {
+      sources.forEach(function (source) { try { source.stop(); } catch (e) {} });
+      musicState.stopTimer = null;
+    }, 650);
   }
 
-  function isMusicOn() {
-    return !!musicState.playing;
-  }
+  function isMusicOn() { return !!musicState.playing; }
 
   function setMusicVolume(v) {
-    if (!musicGain) {
-      // Context may not exist yet; still remember desired volume for
-      // when it does get created.
-      DEFAULT_MUSIC_VOLUME = clamp01(v);
-      return;
-    }
-    var clamped = clamp01(v);
+    DEFAULT_MUSIC_VOLUME = clamp01(v);
+    if (!musicGain || !musicState.playing) return;
     var t = now();
     musicGain.gain.cancelScheduledValues(t);
-    musicGain.gain.linearRampToValueAtTime(clamped, t + 0.05);
+    musicGain.gain.linearRampToValueAtTime(DEFAULT_MUSIC_VOLUME, t + 0.15);
   }
 
   function clamp01(v) {

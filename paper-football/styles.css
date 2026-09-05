@@ -1,0 +1,598 @@
+/* Paper Football — layout, pitch chrome, cards, overlays, dark mode.
+   See README.md §3 for the full design brief this file implements. */
+
+/* ---------------------------------------------------------------- reset */
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+button { font: inherit; }
+h1, h2, p { margin: 0; }
+a { color: inherit; }
+
+/* ------------------------------------------------------------- tokens */
+
+:root {
+  color-scheme: light dark;
+
+  --p1: #2a6ff0;
+  --p2: #e0393e;
+  --grass: #3f9a4e;
+  --grass-stripe: #378a45;
+  --markings: rgba(255, 255, 255, .55);
+  --grid: rgba(255, 255, 255, .18);
+
+  --page: #f9f9f7;
+  --surface: #fcfcfb;
+  --ink: #0b0b0b;
+  --ink-2: #3a3a38;
+  --muted: #6b6b67;
+  --border: rgba(11, 11, 11, .12);
+
+  --shadow: 0 10px 24px rgba(0, 0, 0, .16);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --p1: #5b9bff;
+    --p2: #ff6b6f;
+    --grass: #1f5a2c;
+    --grass-stripe: #1b4f27;
+    --markings: rgba(255, 255, 255, .45);
+    --grid: rgba(255, 255, 255, .14);
+
+    --page: #0d0d0d;
+    --surface: #1a1a19;
+    --ink: #ffffff;
+    --ink-2: #d8d8d5;
+    --muted: #969692;
+    --border: rgba(255, 255, 255, .12);
+
+    --shadow: 0 10px 26px rgba(0, 0, 0, .5);
+  }
+}
+
+/* --------------------------------------------------------------- base */
+
+html, body {
+  height: 100%;
+  background: var(--page);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+body {
+  height: 100dvh;
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  position: relative;
+}
+
+/* ---------------------------------------------------------- rotate gate */
+
+#rotate-gate {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  background: var(--page);
+  color: var(--ink);
+  text-align: center;
+  padding: 24px;
+}
+
+#rotate-gate::before {
+  content: "";
+  width: 56px;
+  height: 88px;
+  border: 3px solid var(--ink);
+  border-radius: 10px;
+  position: relative;
+  animation: pf-rotate-glyph 1.8s ease-in-out infinite;
+}
+
+#rotate-gate .rotate-text {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+@media (orientation: portrait) {
+  #rotate-gate { display: flex; }
+  .screen, .overlay { display: none !important; }
+}
+
+@keyframes pf-rotate-glyph {
+  0%, 15%   { transform: rotate(0deg); }
+  45%, 60%  { transform: rotate(-90deg); }
+  100%      { transform: rotate(-90deg); }
+}
+
+/* ------------------------------------------------------------- screens */
+
+.screen {
+  display: none;
+  height: 100dvh;
+  width: 100vw;
+}
+
+body[data-screen="start"] #screen-start { display: flex; }
+body[data-screen="draft"] #screen-draft { display: flex; }
+body[data-screen="game"]  #screen-game  { display: flex; }
+
+/* ----------------------------------------------------------- start screen */
+
+#screen-start {
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+#screen-start .panel {
+  width: min(420px, 92vw);
+  max-height: 96%;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: clamp(16px, 4vh, 28px) clamp(20px, 5vw, 32px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#screen-start h1 {
+  font-size: clamp(1.3rem, 3.4vh, 1.7rem);
+  font-weight: 800;
+  letter-spacing: -.01em;
+}
+
+#screen-start .tagline {
+  color: var(--muted);
+  font-size: .88rem;
+  line-height: 1.4;
+}
+
+#screen-start label {
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  margin-top: 6px;
+}
+
+#size-select {
+  appearance: none;
+  background: var(--page);
+  color: var(--ink);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: .95rem;
+  font-weight: 600;
+}
+
+.primary {
+  border: none;
+  border-radius: 12px;
+  background: var(--p1);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 12px 18px;
+  cursor: pointer;
+  transition: transform .12s ease, filter .12s ease;
+}
+.primary:active { transform: scale(.97); }
+.primary:disabled { opacity: .4; cursor: default; transform: none; }
+
+.ghost {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--ink);
+  font-weight: 700;
+  font-size: .95rem;
+  padding: 12px 18px;
+  cursor: pointer;
+  transition: transform .12s ease, background .12s ease;
+}
+.ghost:active { transform: scale(.97); }
+
+#screen-start .tally {
+  text-align: center;
+  font-size: .9rem;
+  color: var(--muted);
+  margin-top: 2px;
+}
+#screen-start .tally b { color: var(--ink); font-size: 1rem; }
+#tally-p1 { color: var(--p1); }
+#tally-p2 { color: var(--p2); }
+
+#screen-start footer {
+  text-align: center;
+  margin-top: 4px;
+}
+#screen-start footer a {
+  font-size: .78rem;
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--border);
+}
+
+/* ----------------------------------------------------------- draft screen */
+
+#screen-draft {
+  flex-direction: column;
+  padding: 10px clamp(12px, 3vw, 28px) 12px;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.draft-head {
+  text-align: center;
+  flex: 0 0 auto;
+}
+
+#draft-title {
+  font-size: clamp(.95rem, 2.6vh, 1.2rem);
+  font-weight: 800;
+}
+
+#draft-sub {
+  font-size: .78rem;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.draft-cards {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: clamp(6px, 1.4vw, 14px);
+  padding: 4px 0;
+}
+
+#btn-draft-confirm {
+  flex: 0 0 auto;
+  align-self: center;
+  min-width: 160px;
+}
+
+/* ------------------------------------------------------------ game screen */
+
+/* Landscape phones have far more spare width than height, and the pitch is
+   height-starved in a three-band stack. Putting the hand in a right-hand rail
+   hands the board the full column height and makes it ~25% larger. */
+body[data-screen="game"] #screen-game {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto minmax(0, 1fr);
+  height: 100dvh;
+}
+
+.hud {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 10px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.turn-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px 4px 8px;
+  border-radius: 999px;
+  font-size: .78rem;
+  font-weight: 700;
+  background: rgba(127, 127, 127, .14);
+  color: var(--ink-2);
+}
+.turn-pill i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: currentColor;
+  display: inline-block;
+}
+.turn-pill.p1 { background: color-mix(in srgb, var(--p1) 18%, transparent); color: var(--p1); }
+.turn-pill.p2 { background: color-mix(in srgb, var(--p2) 18%, transparent); color: var(--p2); }
+
+.moves {
+  font-size: .78rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.icon-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--page);
+  color: var(--ink-2);
+  font-size: 1rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.icon-btn:active { transform: scale(.92); }
+
+.board-wrap {
+  grid-column: 1;
+  grid-row: 2;
+  min-height: 0;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--page);
+  padding: 2px 4px;
+}
+
+#pitch {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.hand {
+  grid-column: 2;
+  grid-row: 2;
+  width: clamp(84px, 13vw, 108px);
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: clamp(4px, 1.2vh, 10px);
+  padding: 6px 8px;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  transition: background-color .2s ease;
+}
+.hand.p1 { background: color-mix(in srgb, var(--p1) 14%, var(--surface)); }
+.hand.p2 { background: color-mix(in srgb, var(--p2) 14%, var(--surface)); }
+
+/* ------------------------------------------------------------- card component */
+
+.pf-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
+  cursor: pointer;
+  transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+  user-select: none;
+}
+
+.pf-card--lg {
+  flex: 1 1 0;
+  max-width: 168px;
+  padding: 10px 6px 8px;
+}
+.pf-card--lg .pf-card-grid { width: 100%; max-width: 108px; }
+.pf-card--lg .pf-card-name { font-size: .82rem; }
+
+.pf-card--sm {
+  flex: 1 1 0;
+  min-height: 0;
+  width: 100%;
+  padding: 4px 4px 3px;
+  border-width: 1.5px;
+  gap: 2px;
+}
+.pf-card--sm .pf-card-grid { width: auto; height: 100%; max-height: 52px; flex: 1 1 auto; min-height: 0; }
+.pf-card--sm .pf-card-name { font-size: .58rem; line-height: 1; flex: 0 0 auto; }
+
+.pf-card-grid { display: block; }
+
+.pf-card-name {
+  font-weight: 700;
+  color: var(--ink-2);
+  letter-spacing: -.01em;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.pf-card:hover { transform: translateY(-2px); }
+
+.pf-card.selected {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, .22);
+}
+.pf-card.p1.selected { border-color: var(--p1); }
+.pf-card.p2.selected { border-color: var(--p2); }
+
+.pf-card.active {
+  border-color: currentColor;
+}
+.pf-card.p1.active { border-color: var(--p1); box-shadow: 0 0 0 3px color-mix(in srgb, var(--p1) 30%, transparent); }
+.pf-card.p2.active { border-color: var(--p2); box-shadow: 0 0 0 3px color-mix(in srgb, var(--p2) 30%, transparent); }
+
+.pf-card.disabled {
+  opacity: .38;
+  filter: grayscale(.4);
+  cursor: default;
+}
+.pf-card.disabled:hover { transform: none; }
+
+/* card mini-grid marks */
+.pf-card .pf-cell-empty {
+  fill: rgba(127, 127, 127, .10);
+}
+.pf-card.p1 .pf-mark { fill: var(--p1); }
+.pf-card.p2 .pf-mark { fill: var(--p2); }
+.pf-card .pf-ball-body { fill: var(--ink-2); opacity: .5; }
+.pf-card .pf-ball-core { fill: var(--surface); }
+
+/* --------------------------------------------------------------- overlay */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, .55);
+  backdrop-filter: blur(2px);
+  padding: 16px;
+}
+.overlay[hidden] { display: none; }
+
+.result-card {
+  width: min(360px, 92vw);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: 24px 22px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#result-title { font-size: 1.3rem; font-weight: 800; }
+#result-title.p1 { color: var(--p1); }
+#result-title.p2 { color: var(--p2); }
+
+#result-reason { color: var(--muted); font-size: .9rem; }
+
+.result-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+.result-actions button { flex: 1; }
+
+/* --------------------------------------------------------- pitch dynamics */
+/* Classes applied by board.js to SVG elements it creates inside #pitch. */
+
+.pf-highlight-disc,
+.pf-highlight-ring {
+  pointer-events: none;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+
+.pf-highlight-ring {
+  animation: pf-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes pf-pulse {
+  0%   { transform: scale(1);    opacity: .9; }
+  50%  { transform: scale(1.15); opacity: .45; }
+  100% { transform: scale(1);    opacity: .9; }
+}
+
+.pf-hit { pointer-events: auto; }
+
+.pf-dead-dot {
+  animation: pf-fade-in .2s ease-out both;
+}
+
+@keyframes pf-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.pf-land-ring {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: pf-land-ring .52s ease-out forwards;
+}
+.pf-land-ring--instant { animation-duration: .05s; }
+
+@keyframes pf-land-ring {
+  0%   { transform: scale(.4); opacity: .85; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+
+.pf-net,
+.pf-goal-flash {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+
+.pf-net.pf-celebrate {
+  animation: pf-net-ripple .62s ease-out;
+}
+.pf-goal-flash.pf-celebrate {
+  animation: pf-goal-flash .62s ease-out;
+}
+
+@keyframes pf-net-ripple {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(1.06); }
+  60%  { transform: scale(.98); }
+  100% { transform: scale(1); }
+}
+
+@keyframes pf-goal-flash {
+  0%   { opacity: 0; }
+  25%  { opacity: .55; }
+  100% { opacity: 0; }
+}
+
+/* ------------------------------------------------------------ reduced motion */
+
+@media (prefers-reduced-motion: reduce) {
+  #rotate-gate::before { animation: none; }
+
+  .pf-highlight-ring {
+    animation: none;
+    opacity: .75;
+  }
+
+  .pf-land-ring {
+    animation-duration: .05s;
+  }
+
+  .pf-net.pf-celebrate,
+  .pf-goal-flash.pf-celebrate {
+    animation-duration: .06s;
+  }
+
+  .pf-dead-dot {
+    animation-duration: .01s;
+  }
+
+  .pf-card,
+  .primary,
+  .ghost,
+  .icon-btn {
+    transition: none;
+  }
+}

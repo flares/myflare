@@ -4,12 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Forest Friends — voice animal game for kids</title>
-<link rel="stylesheet" href="styles.css?v=6">
+<link rel="stylesheet" href="styles.css?v=9">
 </head>
 <body>
   <!-- ======================= FOREST SCENE ======================= -->
   <div id="scene" class="scene">
-    <!-- top-down forest floor with scattered tree canopies (filled by JS) -->
+    <div class="forest-film" aria-hidden="true">
+      <video class="forest-film-fill" autoplay muted loop playsinline preload="auto" src="assets/reference/living-forest-reference.mp4"></video>
+      <video class="forest-film-main" autoplay muted loop playsinline preload="auto" src="assets/reference/living-forest-reference.mp4"></video>
+      <div class="forest-light"></div>
+    </div>
+    <!-- subtle foreground atmosphere, filled by JS -->
     <div class="forest" id="forest"></div>
 
     <!-- animals live here; the river (drawn by JS) is where water animals swim -->
@@ -18,9 +23,12 @@
     </div>
 
     <!-- big prompt letter, bottom-right -->
-    <div id="letterCard" class="letter-card" title="Say an animal that starts with this letter!">
-      <span id="letterGlyph" class="letter-glyph">A</span>
-      <span class="letter-hint">say an animal!</span>
+    <div id="letterPrompt" class="letter-prompt">
+      <div id="letterCard" class="letter-card" title="Say an animal that starts with this letter!">
+        <span id="letterGlyph" class="letter-glyph">A</span>
+        <span class="letter-hint">find a friend</span>
+      </div>
+      <button id="newLetterBtn" class="btn letter-new-btn" title="Show a new letter">🎲 New letter</button>
     </div>
 
     <!-- floating speech bubble showing what was heard -->
@@ -30,16 +38,15 @@
   <!-- ======================= TOP CONTROL BAR ======================= -->
   <header class="topbar">
     <div class="brand">
-      <span class="brand-emoji">🌲</span>
+      <span class="brand-emoji">🌿</span>
       <span class="brand-name">Forest Friends</span>
     </div>
     <div class="controls">
-      <button id="micBtn" class="btn btn-mic" aria-pressed="false">
+      <button id="micBtn" class="btn btn-mic btn-primary" aria-pressed="false">
         <span class="mic-dot"></span>
         <span id="micLabel">Tap to talk</span>
       </button>
-      <button id="musicBtn" class="btn" aria-pressed="false" title="Playful background music">🎵 Music</button>
-      <button id="newLetterBtn" class="btn" title="Show a new letter">🎲 New letter</button>
+      <button id="musicBtn" class="btn" aria-pressed="false" title="Soft wind and leaves, with no animal calls">🌿 Forest sound</button>
       <button id="reduceBtn" class="btn" title="Randomly send some animals home">✂️ Fewer</button>
       <button id="clearBtn" class="btn" title="Send everyone home">🧹 Exit all</button>
       <select id="langSelect" class="btn" title="Voice language">
@@ -47,6 +54,7 @@
         <option value="en-US">English (US)</option>
         <option value="te-IN">తెలుగు Telugu</option>
       </select>
+      <button id="menuBtn" class="btn" aria-haspopup="dialog" aria-controls="menuOverlay" aria-expanded="false" title="Open menu">☰ Menu</button>
       <button id="helpBtn" class="btn" title="How to play">❔</button>
     </div>
   </header>
@@ -54,8 +62,8 @@
   <!-- ======================= BOTTOM INDEX ROW ======================= -->
   <footer class="index-bar">
     <div class="index-label">
-      Only <b id="indexLetter">A</b> animals now —
-      <span class="index-tip">say “<span id="indexExample">Ant</span> enter” or “3 <span id="indexExample2">Ant</span> enter” — a new letter follows each time · “exit all” anytime</span>
+      Friends beginning with <b id="indexLetter">A</b>
+      <span class="index-tip">Say “<span id="indexExample">Cow</span> come” or tap a card</span>
     </div>
     <div id="indexRow" class="index-row"><!-- animal chips injected here --></div>
   </footer>
@@ -75,16 +83,42 @@
         <li>Send some home: <b>“Lion exit”</b> (one) or <b>“5 lion exit”</b> (up to five). <i>po</i> / <i>bye</i> work too.</li>
         <li>Special commands anytime: <b>“exit all animals”</b> empties the forest; <b>“reduce zoo size”</b> randomly sends some home.</li>
         <li>No microphone? <b>Tap an animal</b> in the bottom row to summon it. Use <b>🎲 New letter</b> to skip a letter.</li>
+        <li>Open <b>☰ Menu</b> to browse and play every animal sound in one scrollable library.</li>
       </ol>
-      <p class="overlay-note">Tip: works best in Chrome. Animals are emoji; sounds try to use a real recording from Wikimedia Commons and fall back to a playful synthesized voice if you're offline.</p>
+      <p class="overlay-note">Tip: works best in Chrome. The animal list is limited to familiar animals from India. Recordings made in India are preferred; verified same-species recordings are used when a local one is unavailable.</p>
       <button id="helpStart" class="btn btn-primary">Let's play! 🎉</button>
     </div>
   </div>
 
+  <!-- ======================= MENU / SOUND LIBRARY ======================= -->
+  <div id="menuOverlay" class="overlay" hidden>
+    <section class="overlay-card menu-card" role="dialog" aria-modal="true" aria-labelledby="menuTitle">
+      <button id="menuClose" class="overlay-close" aria-label="Close menu">✕</button>
+      <div class="menu-heading">
+        <span class="menu-kicker">Explore the forest</span>
+        <h2 id="menuTitle">Menu</h2>
+      </div>
+      <section class="sound-library" aria-labelledby="soundLibraryTitle">
+        <div class="sound-library-head">
+          <div>
+            <h3 id="soundLibraryTitle">🔊 Indian animal sounds</h3>
+            <p>Tap to listen. The selected animal stays highlighted until its recording ends.</p>
+          </div>
+          <label class="sound-search">
+            <span class="sr-only">Search animals</span>
+            <input id="soundSearch" type="search" placeholder="Search animals…" autocomplete="off">
+          </label>
+        </div>
+        <div id="soundList" class="sound-list" aria-live="polite"></div>
+        <p id="soundEmpty" class="sound-empty" hidden>No animals match that search.</p>
+      </section>
+    </section>
+  </div>
+
   <!-- data + engines (built as separate modules) -->
-  <script src="animals.js?v=6"></script>
-  <script src="audio.js?v=6"></script>
-  <script src="realsounds.js?v=6"></script>
-  <script src="game.js?v=6"></script>
+  <script src="animals.js?v=9"></script>
+  <script src="audio.js?v=9"></script>
+  <script src="realsounds.js?v=9"></script>
+  <script src="game.js?v=9"></script>
 </body>
 </html>

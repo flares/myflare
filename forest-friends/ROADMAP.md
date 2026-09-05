@@ -11,7 +11,7 @@ these — this file is just the backlog.
 - [ ] **Forest ambience for background music.** Replace the synthesized
       background tune with genuine forest sounds (birdsong, wind, stream).
 - [ ] **Realistic animal sounds.** Continue toward real recordings for the
-      per-animal voices (building on the runtime Wikimedia Commons lookup +
+      per-animal voices (building on the India-first iNaturalist lookup +
       synth fallback already in `realsounds.js`).
 - [ ] **Idle ambient calls.** Every once in a while, a roaming animal
       spontaneously makes its own sound (random, low frequency), so the forest

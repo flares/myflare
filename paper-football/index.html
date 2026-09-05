@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#3f9a4e">
+<title>Paper Football</title>
+<link rel="stylesheet" href="styles.css">
+<script src="cards.js" defer></script>
+<script src="board.js" defer></script>
+<script src="game.js" defer></script>
+</head>
+<body data-screen="start">
+
+  <div id="rotate-gate">
+    <svg width="64" height="64" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+      <rect x="20" y="8" width="24" height="40" rx="4" fill="none" stroke="currentColor" stroke-width="3"></rect>
+      <circle cx="32" cy="42" r="1.6" fill="currentColor"></circle>
+      <path d="M46 18 a14 14 0 1 1 -5 -9" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"></path>
+      <path d="M46 18 l6 -2 l-1 7 z" fill="currentColor"></path>
+    </svg>
+    <p>Rotate your device</p>
+    <p class="rotate-sub">Paper Football is landscape-only.</p>
+  </div>
+
+  <section class="screen" id="screen-start">
+    <div class="panel">
+      <h1>Paper Football</h1>
+      <p class="tagline">One ball, a lattice of nodes, and an Onitama-style hand of movement cards you draft before kickoff. Pass the phone and play.</p>
+      <label for="size-select">Board size</label>
+      <select id="size-select">
+        <option value="7x15">7 × 15</option>
+        <option value="9x15">9 × 15</option>
+      </select>
+      <button id="btn-kickoff" class="primary">Kick Off</button>
+      <p class="tally">Blue <b id="tally-p1">0</b> · <b id="tally-p2">0</b> Red</p>
+      <footer><a href="../index.html">myflare home</a></footer>
+    </div>
+  </section>
+
+  <section class="screen" id="screen-draft">
+    <header class="draft-head">
+      <h2 id="draft-title">Player 1 (M) — pick 3</h2>
+      <p id="draft-sub">3 left</p>
+    </header>
+    <div class="draft-cards" id="draft-cards"><!-- 6 PFCards.el(..., {size:'lg'}) --></div>
+    <button id="btn-draft-confirm" class="primary" disabled>Confirm</button>
+  </section>
+
+  <section class="screen" id="screen-game">
+    <div class="hud">
+      <span class="turn-pill" id="turn-pill"><i></i><span id="turn-label">Blue Player</span></span>
+      <span class="moves" id="move-count">Move 1</span>
+      <button id="btn-restart" class="icon-btn" aria-label="Restart">⟳</button>
+    </div>
+    <div class="board-wrap"><svg id="pitch"></svg></div>
+    <div class="hand" id="hand"><!-- 3 PFCards.el(..., {size:'sm'}) --></div>
+  </section>
+
+  <div class="overlay" id="result" hidden>
+    <div class="result-card">
+      <h2 id="result-title"></h2>
+      <p id="result-reason"></p>
+      <div class="result-actions">
+        <button id="btn-rematch" class="primary">Rematch</button>
+        <button id="btn-newgame" class="ghost">New Game</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

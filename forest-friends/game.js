@@ -1,7 +1,7 @@
 /* ===================================================================
    Forest Friends — game core
    Ties together: the animal dataset (animals.js -> window.ANIMALS),
-   the synthesized sound engine (audio.js -> window.GameAudio), the
+   authentic recording engine (realsounds.js), background-music engine,
    Web Speech API for voice commands, and the forest scene.
 
    Behaviour:
@@ -25,6 +25,7 @@
   var riverSvg     = document.getElementById("river");
   var letterGlyph  = document.getElementById("letterGlyph");
   var letterCard   = document.getElementById("letterCard");
+  var letterPrompt = document.getElementById("letterPrompt");
   var indexRow     = document.getElementById("indexRow");
   var indexLetter  = document.getElementById("indexLetter");
   var indexExample = document.getElementById("indexExample");
@@ -41,6 +42,12 @@
   var helpOverlay  = document.getElementById("helpOverlay");
   var helpClose    = document.getElementById("helpClose");
   var helpStart    = document.getElementById("helpStart");
+  var menuBtn      = document.getElementById("menuBtn");
+  var menuOverlay  = document.getElementById("menuOverlay");
+  var menuClose    = document.getElementById("menuClose");
+  var soundSearch  = document.getElementById("soundSearch");
+  var soundList    = document.getElementById("soundList");
+  var soundEmpty   = document.getElementById("soundEmpty");
 
   // ---- state -------------------------------------------------------
   var currentLetter = "A";
@@ -64,7 +71,7 @@
 
   // habitat -> where an animal roams. Fliers stay in the sky, swimmers in the
   // pond, everyone else on the ground.
-  var AIR   = { bat:1, bee:1, eagle:1, owl:1, parrot:1, vulture:1, nightingale:1 };
+  var AIR   = { bee:1, crow:1, eagle:1, myna:1, owl:1, parrot:1, peacock:1, pigeon:1, sparrow:1, vulture:1 };
   var WATER = { alligator:1, crocodile:1, dolphin:1, duck:1, flamingo:1, frog:1, goose:1,
                 hippopotamus:1, jellyfish:1, newt:1, otter:1, penguin:1, swan:1, toad:1,
                 turtle:1, walrus:1, whale:1, xraytetra:1, yabby:1 };
@@ -99,21 +106,21 @@
     if (indexBar) {
       var ibh = indexBar.getBoundingClientRect().height;
       stage.style.bottom = (ibh + 8) + "px";
-      letterCard.style.bottom = (ibh + 8) + "px";
+      if (letterPrompt) letterPrompt.style.bottom = (ibh + 8) + "px";
     }
     var r = stage.getBoundingClientRect();
     stageW = r.width; stageH = r.height;
     buildRiver();
   }
 
-  // scatter round tree canopies across the whole map (top-down look)
+  // Scatter a restrained layer of fireflies over the supplied forest film.
   function plantTrees() {
     if (!forest) return;
     var area = window.innerWidth * window.innerHeight;
-    var n = Math.max(24, Math.min(70, Math.round(area / 26000)));
+    var n = Math.max(10, Math.min(28, Math.round(area / 50000)));
     var html = "";
     for (var i = 0; i < n; i++) {
-      var size = (30 + Math.random() * Math.random() * 130) | 0;   // many small, few big
+      var size = 5;
       var left = (Math.random() * 100).toFixed(1);
       var top = (Math.random() * 100).toFixed(1);
       var delay = (-Math.random() * 7).toFixed(1);
@@ -207,8 +214,7 @@
       chip.innerHTML =
         '<span class="chip-count" hidden>0</span>' +
         '<span class="chip-emoji">' + a.emoji + '</span>' +
-        '<span class="chip-name">' + a.name + '</span>' +
-        '<span class="chip-tel">' + (a.teluguRoman || "") + '</span>';
+        '<span class="chip-name">' + a.name + '</span>';
       chip.addEventListener("click", function () { ensureAudio(); enterN(a, 1); });
       indexRow.appendChild(chip);
       if (window.RealSounds) window.RealSounds.prefetch(a);   // warm real-sound lookups
@@ -258,6 +264,23 @@
     return { vx: stageW * rand(0.03, 0.08), vy: stageH * rand(0.02, 0.06) };                        // land, steady
   }
 
+  // Emoji are optically uniform, but animals are not. These values keep mice
+  // and insects small, everyday animals readable, and megafauna impressive
+  // without letting any friend swallow the scene.
+  var TINY = { ant:1, bee:1, mouse:1 };
+  var SMALL = { bee:1, crow:1, frog:1, mouse:1, myna:1, owl:1, parrot:1, pigeon:1,
+                rabbit:1, sparrow:1, squirrel:1 };
+  var LARGE = { bear:1, buffalo:1, camel:1, cow:1, giraffe:1, gorilla:1, hippopotamus:1,
+                horse:1, lion:1, moose:1, tiger:1, walrus:1, yak:1, zebra:1, zebu:1 };
+  var HUGE = { elephant:1, whale:1 };
+  function sizeScaleFor(key) {
+    if (TINY[key]) return rand(.38, .48);
+    if (SMALL[key]) return rand(.55, .68);
+    if (HUGE[key]) return rand(1.08, 1.2);
+    if (LARGE[key]) return rand(.88, 1.02);
+    return rand(.7, .86);
+  }
+
   function update(dt, now) {
     for (var i = instances.length - 1; i >= 0; i--) {
       var it = instances[i];
@@ -269,7 +292,7 @@
         if (it.t >= 1) { it.t = 1; it.tdir = -1; } else if (it.t <= 0) { it.t = 0; it.tdir = 1; }
         var pr = pointOnRiver(it.t);
         var wig = Math.sin(now * 0.004 + it.phase) * it.lat;    // gentle side-to-side in the current
-        it.x = pr.x - it.tx * 0 - pr.ty * wig - it.w / 2;       // offset perpendicular to flow
+        it.x = pr.x - pr.ty * wig - it.w / 2;                    // offset perpendicular to flow
         it.y = pr.y + pr.tx * wig - it.h / 2;
         it.faceDir = pr.tx * it.tdir >= 0 ? -1 : 1;
       } else if (it.entering) {
@@ -328,7 +351,7 @@
     var flipEl = el.querySelector(".a-flip");
 
     var box = el.getBoundingClientRect();
-    var scale = rand(0.85, 1.15);
+    var scale = sizeScaleFor(a.key);
     var w = (box.width || 90) * scale, h = (box.height || 90) * scale;
 
     var it = {
@@ -356,7 +379,7 @@
     instances.push(it);
 
     el.addEventListener("click", function () {
-      ensureAudio(); playSoundThrice(a); sparkle(it);   // tap a critter to hear it
+      ensureAudio(); playSound(a); sparkle(it);   // tap a critter to hear it
     });
 
     sparkle(it);
@@ -376,7 +399,7 @@
       made++;
     }
     showBubble((made > 1 ? made + " " : "") + a.name + (made > 1 ? "s" : "") + " coming in! " + a.emoji);
-    playSoundThrice(a);   // real recording if available, else synth x3
+    playSound(a);
     advanceLetter();
   }
 
@@ -438,22 +461,85 @@
 
   function playReject() { if (AUDIO) try { AUDIO.playAnimal("click"); } catch (e) {} }
 
-  // Play a real recording if RealSounds can get one for this animal; otherwise
-  // fall back to the synthesized voice, played three times so it's clear.
-  function playSoundThrice(a) {
-    var sound = a && a.sound ? a.sound : "generic";
-    var synthThrice = function () {
-      if (!AUDIO) return;
-      for (var i = 0; i < 3; i++) (function (i) {
-        setTimeout(function () { try { AUDIO.playAnimal(sound); } catch (e) {} }, i * 330);
-      })(i);
-    };
+  // Animal voices must be recordings, never oscillator impressions. A missing
+  // verified clip is preferable to teaching a child the wrong sound.
+  function playSound(a, onEnded) {
     if (a && a.key && window.RealSounds) {
-      window.RealSounds.play(a, /*times*/ 2).then(function (ok) {
-        if (!ok) synthThrice();      // no real clip available -> synth
+      return window.RealSounds.play(a, onEnded).then(function (ok) {
+        if (!ok) showBubble("A real " + a.name.toLowerCase() + " recording isn't available yet.", true);
+        return ok;
       });
+    }
+    return Promise.resolve(false);
+  }
+
+  // -------------------------------------------------------------------
+  //  Menu + complete animal sound library
+  // -------------------------------------------------------------------
+  function buildSoundLibrary() {
+    if (!soundList) return;
+    soundList.innerHTML = "";
+    ANIMALS.slice().sort(function (a, b) { return a.name.localeCompare(b.name); }).forEach(function (a) {
+      var button = document.createElement("button");
+      button.className = "sound-item";
+      button.type = "button";
+      button.dataset.search = norm(a.name + " " + (a.telugu || "") + " " + (a.teluguRoman || "") + " " + (a.aliases || []).join(" "));
+      button.setAttribute("aria-label", "Play " + a.name + " sound");
+      button.innerHTML = '<span class="sound-item-emoji">' + a.emoji + '</span>' +
+        '<span class="sound-item-copy"><span class="sound-item-name">' + a.name + '</span></span>' +
+        '<span class="sound-item-state" aria-hidden="true">▶</span>';
+      button.addEventListener("pointerenter", function () {
+        if (window.RealSounds) window.RealSounds.prefetch(a);
+      }, { once: true });
+      button.addEventListener("focus", function () {
+        if (window.RealSounds) window.RealSounds.prefetch(a);
+      }, { once: true });
+      button.addEventListener("click", function () {
+        ensureAudio();
+        if (button.classList.contains("is-loading")) return;
+        if (window.RealSounds) window.RealSounds.stop();
+        Array.prototype.forEach.call(soundList.children, function (item) {
+          item.classList.remove("is-loading", "is-playing");
+          item.querySelector(".sound-item-state").textContent = "▶";
+        });
+        button.classList.add("is-loading");
+        button.querySelector(".sound-item-state").textContent = "●";
+        playSound(a, function () {
+          button.classList.remove("is-loading", "is-playing");
+          button.querySelector(".sound-item-state").textContent = "▶";
+        }).then(function (ok) {
+          button.classList.remove("is-loading");
+          button.classList.toggle("is-playing", ok);
+          button.querySelector(".sound-item-state").textContent = ok ? "♪" : "—";
+          if (!ok) setTimeout(function () { button.querySelector(".sound-item-state").textContent = "▶"; }, 1200);
+        });
+      });
+      soundList.appendChild(button);
+    });
+  }
+
+  function filterSoundLibrary() {
+    var query = norm(soundSearch ? soundSearch.value : "");
+    var visible = 0;
+    Array.prototype.forEach.call(soundList.children, function (button) {
+      var show = !query || button.dataset.search.indexOf(query) !== -1;
+      button.hidden = !show;
+      if (show) visible++;
+    });
+    if (soundEmpty) soundEmpty.hidden = visible !== 0;
+  }
+
+  function showMenu(open) {
+    if (!menuOverlay) return;
+    menuOverlay.hidden = !open;
+    menuOverlay.style.display = open ? "grid" : "none";
+    menuBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    if (open) {
+      stopListening();
+      setTimeout(function () { if (soundSearch) soundSearch.focus(); }, 0);
     } else {
-      synthThrice();
+      if (window.RealSounds) window.RealSounds.stop();
+      menuBtn.focus();
     }
   }
 
@@ -660,8 +746,8 @@
   micBtn.addEventListener("click", function () { if (wantListening) stopListening(); else startListening(); });
   musicBtn.addEventListener("click", function () {
     ensureAudio(); if (!AUDIO) return;
-    if (AUDIO.isMusicOn()) { AUDIO.stopMusic(); musicBtn.setAttribute("aria-pressed", "false"); musicBtn.textContent = "🎵 Music"; }
-    else { AUDIO.startMusic(); musicBtn.setAttribute("aria-pressed", "true"); musicBtn.textContent = "🔊 Music on"; }
+    if (AUDIO.isMusicOn()) { AUDIO.stopMusic(); musicBtn.setAttribute("aria-pressed", "false"); musicBtn.textContent = "🌿 Forest sound"; }
+    else { AUDIO.startMusic(); musicBtn.setAttribute("aria-pressed", "true"); musicBtn.textContent = "🌿 Forest sound on"; }
   });
   newLetterBtn.addEventListener("click", function () { ensureAudio(); randomLetter(); });
   clearBtn.addEventListener("click", function () { ensureAudio(); exitAll(); });
@@ -681,10 +767,19 @@
   helpBtn.addEventListener("click", function () { showHelp(true); });
   helpClose.addEventListener("click", function () { showHelp(false); });
   helpOverlay.addEventListener("click", function (e) { if (e.target === helpOverlay) showHelp(false); });
-  document.addEventListener("keydown", function (e) { if (e.key === "Escape") showHelp(false); });
+  if (menuBtn) menuBtn.addEventListener("click", function () { showHelp(false); showMenu(true); });
+  if (menuClose) menuClose.addEventListener("click", function () { showMenu(false); });
+  if (menuOverlay) menuOverlay.addEventListener("click", function (e) { if (e.target === menuOverlay) showMenu(false); });
+  if (soundSearch) soundSearch.addEventListener("input", filterSoundLibrary);
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") {
+      showHelp(false);
+      if (menuOverlay && !menuOverlay.hidden) showMenu(false);
+    }
+  });
   helpStart.addEventListener("click", function () {
     showHelp(false); ensureAudio(); startListening();
-    if (AUDIO && !AUDIO.isMusicOn()) { AUDIO.startMusic(); musicBtn.setAttribute("aria-pressed", "true"); musicBtn.textContent = "🔊 Music on"; }
+    if (AUDIO && !AUDIO.isMusicOn()) { AUDIO.startMusic(); musicBtn.setAttribute("aria-pressed", "true"); musicBtn.textContent = "🌿 Forest sound on"; }
   });
   window.addEventListener("resize", function () { plantTrees(); measureStage(); });
 
@@ -695,9 +790,10 @@
     if (!ANIMALS.length && window.ANIMALS && window.ANIMALS.length) ANIMALS = window.ANIMALS;
     if (!ANIMALS.length) {
       showBubble("Loading animals…", true);
-      return setTimeout(function () { ANIMALS = window.ANIMALS || []; if (ANIMALS.length) { buildAliasIndex(); plantTrees(); measureStage(); randomLetter(); } }, 300);
+      return setTimeout(function () { ANIMALS = window.ANIMALS || []; if (ANIMALS.length) { buildAliasIndex(); buildSoundLibrary(); plantTrees(); measureStage(); randomLetter(); } }, 300);
     }
     buildAliasIndex();
+    buildSoundLibrary();
     plantTrees();
     measureStage();
     randomLetter();
