@@ -2,19 +2,6 @@
 
 Personal web interface — a hub page (`index.html`) linking to individual sub-projects, each living in its own subfolder.
 
-## Access
-
-The site is private: every page is gated behind Firebase Google sign-in, and only
-addresses on the allowlist in [`auth/firebase-config.js`](auth/firebase-config.js)
-get in. Anyone else lands on [`login.html`](login.html). The **Sign out** button
-is in the home-page header.
-
-Setup — and an honest note on what a client-side gate does and doesn't protect —
-is in [`auth/README.md`](auth/README.md). Short version: it keeps the site from
-being *used* by strangers, but the static files are still public URLs, so real
-secrets stay behind Firebase security rules and the existing client-side
-encryption in Portfolio Tracker and Wallet.
-
 ## Sub-projects
 
 | Sub-project | Folder | Status |
@@ -39,13 +26,6 @@ being promoted into their own sub-project folder above. See
 
 ```
 index.html              ← main hub page with links to sub-projects, incl. Todo
-login.html              ← Google sign-in / first-run Firebase setup
-auth/
-  README.md             ← setup steps, scope of the gate & design notes
-  firebase-config.js    ← the file you edit: Firebase config + email allowlist
-  core.js               ← config, allowlist, SDK loading, offline grace
-  guard.js              ← the gate; imported by every page
-  login.js              ← drives login.html
 todo/
   README.md             ← idea → planning → promotion workflow
   index.html            ← todo/status board
