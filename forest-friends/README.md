@@ -36,8 +36,9 @@ all in English **or** Telugu.
 9. **No microphone?** **Tap an animal** in the bottom row to summon one, tap a
    roaming animal to send it home, or use the **✂️ Fewer** / **🧹 Exit all**
    buttons. Fully playable without voice.
-10. Open **☰ Menu → All animal sounds** to browse or search all 76 animals and
-    play a real recording without summoning one into the scene.
+10. Open **☰ Menu → Indian animal sounds** to browse all 36 familiar animals.
+    Starting another sound stops the previous one; the selected card stays
+    highlighted until its recording ends.
 
 ## Command words it understands
 
@@ -54,14 +55,13 @@ Counts are capped at **5** per spoken command, and the forest holds at most
 name (script **and** romanized), likely mis-hearings, and simple plurals, so
 "elephant", "elephants", "enugu", and "ఏనుగు" all summon the same friend.
 
-### Forgiving speech ("2 whales" heard as "to Wales")
+### Forgiving speech
 
 Speech recognition mangles kids' voices constantly. Because a call is always
 **gated to the current letter** (a small set of animals), we can afford to be
 generous: if no exact name matches, the transcript is fuzzy-matched (Levenshtein
 distance, biased toward the same first letter and similar length) against **only
-the current letter's animals**. So on letter **W**, "wales" → **Whale**, "beer"
-→ **Bear**, "kangaru" → **Kangaroo**. Common number homophones are handled too:
+the current letter's animals**. Common number homophones are handled too:
 *to/too* → 2, *for* → 4, *ate* → 8. This can't leak across letters, so a
 mis-hearing only ever picks a same-letter animal.
 
@@ -80,9 +80,9 @@ and its own way of moving:
 
 | Motion | Gait animation | How it moves | Examples |
 |---|---|---|---|
-| 🐾 Walk | trotting two-step bob | wanders the whole map, bouncing off edges | lion, elephant, bear, zebra … |
-| 🐦 Fly | quick wing-flap (rises & squashes, banking) | darts fast across the whole map | bat, bee, eagle, owl, parrot, vulture, nightingale |
-| 🐠 Swim | slow side-to-side undulation | follows the **river** centreline up and down the stream | whale, dolphin, frog, turtle, duck, penguin, yabby … |
+| 🐾 Walk | trotting two-step bob | wanders the whole map, bouncing off edges | lion, elephant, bear, cow … |
+| 🐦 Fly | quick wing-flap (rises & squashes, banking) | darts fast across the whole map | bee, eagle, owl, parrot, myna |
+| 🐠 Swim | slow side-to-side undulation | follows the **river** centreline up and down the stream | frog, duck |
 
 Walkers and fliers run/fly in from a random side; swimmers appear in the river.
 Each instance has its own speed, size and phase, so a herd never marches in
@@ -90,38 +90,42 @@ lockstep. Tapping an animal replays its sound; sending one home fades it out.
 
 ## Authentic animal field recordings
 
-At play time the visitor's browser asks
+The collection is deliberately limited to 36 animals familiar to children in
+India rather than padding every letter with obscure foreign species. At play
+time the visitor's browser asks
 [iNaturalist](https://www.inaturalist.org) for research-grade observations of
 the animal that contain sound (`realsounds.js`). These are real field recordings
 tied to an identified taxon, a source observation, a recordist and licence.
 Results are cached and prefetched the moment a letter appears, so summoning is
 snappy.
 
-Broad everyday labels are mapped to explicit taxa (for example Lion →
-`Panthera leo`), and only non-captive research-grade observations are requested.
+Every animal is mapped to an explicit taxon. The resolver first requests
+non-captive, research-grade observations recorded in India and falls back to a
+verified global observation of the same taxon only when needed.
 If no trustworthy recording is found, the game stays quiet and says so instead
 of imitating the animal with an oscillator. Nothing is fetched or bundled at
 build time — the recording
 is fetched by the end-user's browser, which keeps the repo tiny and adds no audio
 files to host or license.
 
-## Design notes — "publicly available assets"
+## Design notes
 
-The game bundles **no media files** — nothing to host, license, or ship:
+The supplied forest film is bundled locally; animal recordings remain remote so
+their source and licence stay attached to their iNaturalist observation:
 
-- **Animals** are Unicode emoji, optically scaled into five size bands so an ant
+- **Animals** are Unicode emoji, optically scaled into five size bands so a bee
   no longer appears as large as an elephant. The supplied forest film is bundled
   as the persistent visual reference and production background.
 - **Animal sounds** use only real field recordings fetched at runtime from
   research-grade iNaturalist observations (`realsounds.js`). Each cached result
   retains its source URL, recordist attribution and licence metadata.
-- **Background music** is always **synthesized live** (a soft looping pentatonic
-  tune), no files.
+- **Forest ambience** is generated live from softly filtered noise shaped like
+  wind and rustling leaves. It has no melody, video audio, or animal calls.
 - **Voice input** uses the browser's built-in **Web Speech API**
   (`SpeechRecognition`) — best support in Chrome/Edge. Where it's unavailable the
   tap-to-summon fallback keeps the game fully playable.
 
-> The only optional network request is the Commons audio lookup, made from the
+> The only optional network request is the iNaturalist audio lookup, made from the
 > end-user's browser at play time; everything else is 100% offline.
 
 ## Files
@@ -130,16 +134,16 @@ The game bundles **no media files** — nothing to host, license, or ship:
 index.html    scene markup, control bar, letter card, index row, help overlay
 styles.css    living film treatment, responsive UI and animal gait animations
 animals.js    window.ANIMALS dataset — name, emoji, Telugu name, aliases, sound
-audio.js      window.GameAudio — background music and small interface cues
+audio.js      window.GameAudio — wind-and-leaves ambience and interface cues
 realsounds.js window.RealSounds — taxon-identified recordings from iNaturalist
 game.js       game core — speech, command parsing, sizing and roaming motions
 ```
 
 ### Data / engine contracts
 
-- `window.ANIMALS`: array of `{ key, name, emoji, telugu, teluguRoman, aliases[], sound }`.
+- `window.ANIMALS`: curated array of `{ key, name, emoji, taxon, aliases[], sound }`.
   `window.animalsByLetter(letter)` returns the animals whose English name starts
-  with that letter (used to build the index row). Every A–Z letter has ≥2 animals.
+  with that letter. Only letters represented by the curated collection are used.
 - `window.GameAudio`: `unlock()`, `playAnimal(soundName)`, `startMusic()`,
   `stopMusic()`, `isMusicOn()`, `setMusicVolume(v)`. Sound names are a fixed
   vocabulary (roar, growl, chirp, trumpet, buzz, meow, …) shared with the dataset.
@@ -152,5 +156,5 @@ game.js       game core — speech, command parsing, sizing and roaming motions
 
 ## Building blocks
 
-The animal dataset, authentic recording resolver and background-music engine are
+The animal dataset, authentic recording resolver and forest-ambience engine are
 independent modules wired into the game core.

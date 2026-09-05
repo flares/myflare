@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Forest Friends — voice animal game for kids</title>
-<link rel="stylesheet" href="styles.css?v=8">
+<link rel="stylesheet" href="styles.css?v=9">
 </head>
 <body>
   <!-- ======================= FOREST SCENE ======================= -->
@@ -23,9 +23,12 @@
     </div>
 
     <!-- big prompt letter, bottom-right -->
-    <div id="letterCard" class="letter-card" title="Say an animal that starts with this letter!">
-      <span id="letterGlyph" class="letter-glyph">A</span>
-      <span class="letter-hint">find a friend</span>
+    <div id="letterPrompt" class="letter-prompt">
+      <div id="letterCard" class="letter-card" title="Say an animal that starts with this letter!">
+        <span id="letterGlyph" class="letter-glyph">A</span>
+        <span class="letter-hint">find a friend</span>
+      </div>
+      <button id="newLetterBtn" class="btn letter-new-btn" title="Show a new letter">🎲 New letter</button>
     </div>
 
     <!-- floating speech bubble showing what was heard -->
@@ -43,8 +46,7 @@
         <span class="mic-dot"></span>
         <span id="micLabel">Tap to talk</span>
       </button>
-      <button id="musicBtn" class="btn" aria-pressed="false" title="Playful background music">🎵 Music</button>
-      <button id="newLetterBtn" class="btn" title="Show a new letter">🎲 New letter</button>
+      <button id="musicBtn" class="btn" aria-pressed="false" title="Soft wind and leaves, with no animal calls">🌿 Forest sound</button>
       <button id="reduceBtn" class="btn" title="Randomly send some animals home">✂️ Fewer</button>
       <button id="clearBtn" class="btn" title="Send everyone home">🧹 Exit all</button>
       <select id="langSelect" class="btn" title="Voice language">
@@ -61,7 +63,7 @@
   <footer class="index-bar">
     <div class="index-label">
       Friends beginning with <b id="indexLetter">A</b>
-      <span class="index-tip">Say “<span id="indexExample">Ant</span> come” or tap a card</span>
+      <span class="index-tip">Say “<span id="indexExample">Cow</span> come” or tap a card</span>
     </div>
     <div id="indexRow" class="index-row"><!-- animal chips injected here --></div>
   </footer>
@@ -83,7 +85,7 @@
         <li>No microphone? <b>Tap an animal</b> in the bottom row to summon it. Use <b>🎲 New letter</b> to skip a letter.</li>
         <li>Open <b>☰ Menu</b> to browse and play every animal sound in one scrollable library.</li>
       </ol>
-      <p class="overlay-note">Tip: works best in Chrome. Animal voices are taxon-identified, research-grade field recordings from iNaturalist. If a verified recording is unavailable, the game stays quiet instead of imitating one.</p>
+      <p class="overlay-note">Tip: works best in Chrome. The animal list is limited to familiar animals from India. Recordings made in India are preferred; verified same-species recordings are used when a local one is unavailable.</p>
       <button id="helpStart" class="btn btn-primary">Let's play! 🎉</button>
     </div>
   </div>
@@ -99,8 +101,8 @@
       <section class="sound-library" aria-labelledby="soundLibraryTitle">
         <div class="sound-library-head">
           <div>
-            <h3 id="soundLibraryTitle">🔊 All animal sounds</h3>
-            <p>Tap any friend to hear a real field recording.</p>
+            <h3 id="soundLibraryTitle">🔊 Indian animal sounds</h3>
+            <p>Tap to listen. The selected animal stays highlighted until its recording ends.</p>
           </div>
           <label class="sound-search">
             <span class="sr-only">Search animals</span>
@@ -114,9 +116,9 @@
   </div>
 
   <!-- data + engines (built as separate modules) -->
-  <script src="animals.js?v=8"></script>
-  <script src="audio.js?v=8"></script>
-  <script src="realsounds.js?v=8"></script>
-  <script src="game.js?v=8"></script>
+  <script src="animals.js?v=9"></script>
+  <script src="audio.js?v=9"></script>
+  <script src="realsounds.js?v=9"></script>
+  <script src="game.js?v=9"></script>
 </body>
 </html>

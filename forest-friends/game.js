@@ -25,6 +25,7 @@
   var riverSvg     = document.getElementById("river");
   var letterGlyph  = document.getElementById("letterGlyph");
   var letterCard   = document.getElementById("letterCard");
+  var letterPrompt = document.getElementById("letterPrompt");
   var indexRow     = document.getElementById("indexRow");
   var indexLetter  = document.getElementById("indexLetter");
   var indexExample = document.getElementById("indexExample");
@@ -70,7 +71,7 @@
 
   // habitat -> where an animal roams. Fliers stay in the sky, swimmers in the
   // pond, everyone else on the ground.
-  var AIR   = { bat:1, bee:1, eagle:1, owl:1, parrot:1, vulture:1, nightingale:1 };
+  var AIR   = { bee:1, crow:1, eagle:1, myna:1, owl:1, parrot:1, peacock:1, pigeon:1, sparrow:1, vulture:1 };
   var WATER = { alligator:1, crocodile:1, dolphin:1, duck:1, flamingo:1, frog:1, goose:1,
                 hippopotamus:1, jellyfish:1, newt:1, otter:1, penguin:1, swan:1, toad:1,
                 turtle:1, walrus:1, whale:1, xraytetra:1, yabby:1 };
@@ -105,7 +106,7 @@
     if (indexBar) {
       var ibh = indexBar.getBoundingClientRect().height;
       stage.style.bottom = (ibh + 8) + "px";
-      letterCard.style.bottom = (ibh + 8) + "px";
+      if (letterPrompt) letterPrompt.style.bottom = (ibh + 8) + "px";
     }
     var r = stage.getBoundingClientRect();
     stageW = r.width; stageH = r.height;
@@ -213,8 +214,7 @@
       chip.innerHTML =
         '<span class="chip-count" hidden>0</span>' +
         '<span class="chip-emoji">' + a.emoji + '</span>' +
-        '<span class="chip-name">' + a.name + '</span>' +
-        '<span class="chip-tel">' + (a.teluguRoman || "") + '</span>';
+        '<span class="chip-name">' + a.name + '</span>';
       chip.addEventListener("click", function () { ensureAudio(); enterN(a, 1); });
       indexRow.appendChild(chip);
       if (window.RealSounds) window.RealSounds.prefetch(a);   // warm real-sound lookups
@@ -268,8 +268,8 @@
   // and insects small, everyday animals readable, and megafauna impressive
   // without letting any friend swallow the scene.
   var TINY = { ant:1, bee:1, mouse:1 };
-  var SMALL = { bat:1, frog:1, hedgehog:1, newt:1, nightingale:1, owl:1, parrot:1,
-                quail:1, rabbit:1, squirrel:1, toad:1, xerus:1, xraytetra:1 };
+  var SMALL = { bee:1, crow:1, frog:1, mouse:1, myna:1, owl:1, parrot:1, pigeon:1,
+                rabbit:1, sparrow:1, squirrel:1 };
   var LARGE = { bear:1, buffalo:1, camel:1, cow:1, giraffe:1, gorilla:1, hippopotamus:1,
                 horse:1, lion:1, moose:1, tiger:1, walrus:1, yak:1, zebra:1, zebu:1 };
   var HUGE = { elephant:1, whale:1 };
@@ -463,9 +463,9 @@
 
   // Animal voices must be recordings, never oscillator impressions. A missing
   // verified clip is preferable to teaching a child the wrong sound.
-  function playSound(a) {
+  function playSound(a, onEnded) {
     if (a && a.key && window.RealSounds) {
-      return window.RealSounds.play(a).then(function (ok) {
+      return window.RealSounds.play(a, onEnded).then(function (ok) {
         if (!ok) showBubble("A real " + a.name.toLowerCase() + " recording isn't available yet.", true);
         return ok;
       });
@@ -483,11 +483,10 @@
       var button = document.createElement("button");
       button.className = "sound-item";
       button.type = "button";
-      button.dataset.search = norm(a.name + " " + (a.telugu || "") + " " + (a.teluguRoman || ""));
+      button.dataset.search = norm(a.name + " " + (a.telugu || "") + " " + (a.teluguRoman || "") + " " + (a.aliases || []).join(" "));
       button.setAttribute("aria-label", "Play " + a.name + " sound");
       button.innerHTML = '<span class="sound-item-emoji">' + a.emoji + '</span>' +
-        '<span class="sound-item-copy"><span class="sound-item-name">' + a.name + '</span>' +
-        '<span class="sound-item-telugu">' + (a.telugu || a.teluguRoman || "") + '</span></span>' +
+        '<span class="sound-item-copy"><span class="sound-item-name">' + a.name + '</span></span>' +
         '<span class="sound-item-state" aria-hidden="true">▶</span>';
       button.addEventListener("pointerenter", function () {
         if (window.RealSounds) window.RealSounds.prefetch(a);
@@ -498,16 +497,21 @@
       button.addEventListener("click", function () {
         ensureAudio();
         if (button.classList.contains("is-loading")) return;
+        if (window.RealSounds) window.RealSounds.stop();
+        Array.prototype.forEach.call(soundList.children, function (item) {
+          item.classList.remove("is-loading", "is-playing");
+          item.querySelector(".sound-item-state").textContent = "▶";
+        });
         button.classList.add("is-loading");
         button.querySelector(".sound-item-state").textContent = "●";
-        playSound(a).then(function (ok) {
+        playSound(a, function () {
+          button.classList.remove("is-loading", "is-playing");
+          button.querySelector(".sound-item-state").textContent = "▶";
+        }).then(function (ok) {
           button.classList.remove("is-loading");
           button.classList.toggle("is-playing", ok);
           button.querySelector(".sound-item-state").textContent = ok ? "♪" : "—";
-          setTimeout(function () {
-            button.classList.remove("is-playing");
-            button.querySelector(".sound-item-state").textContent = "▶";
-          }, ok ? 2600 : 1200);
+          if (!ok) setTimeout(function () { button.querySelector(".sound-item-state").textContent = "▶"; }, 1200);
         });
       });
       soundList.appendChild(button);
@@ -534,6 +538,7 @@
       stopListening();
       setTimeout(function () { if (soundSearch) soundSearch.focus(); }, 0);
     } else {
+      if (window.RealSounds) window.RealSounds.stop();
       menuBtn.focus();
     }
   }
@@ -741,8 +746,8 @@
   micBtn.addEventListener("click", function () { if (wantListening) stopListening(); else startListening(); });
   musicBtn.addEventListener("click", function () {
     ensureAudio(); if (!AUDIO) return;
-    if (AUDIO.isMusicOn()) { AUDIO.stopMusic(); musicBtn.setAttribute("aria-pressed", "false"); musicBtn.textContent = "🎵 Music"; }
-    else { AUDIO.startMusic(); musicBtn.setAttribute("aria-pressed", "true"); musicBtn.textContent = "🔊 Music on"; }
+    if (AUDIO.isMusicOn()) { AUDIO.stopMusic(); musicBtn.setAttribute("aria-pressed", "false"); musicBtn.textContent = "🌿 Forest sound"; }
+    else { AUDIO.startMusic(); musicBtn.setAttribute("aria-pressed", "true"); musicBtn.textContent = "🌿 Forest sound on"; }
   });
   newLetterBtn.addEventListener("click", function () { ensureAudio(); randomLetter(); });
   clearBtn.addEventListener("click", function () { ensureAudio(); exitAll(); });
@@ -774,7 +779,7 @@
   });
   helpStart.addEventListener("click", function () {
     showHelp(false); ensureAudio(); startListening();
-    if (AUDIO && !AUDIO.isMusicOn()) { AUDIO.startMusic(); musicBtn.setAttribute("aria-pressed", "true"); musicBtn.textContent = "🔊 Music on"; }
+    if (AUDIO && !AUDIO.isMusicOn()) { AUDIO.startMusic(); musicBtn.setAttribute("aria-pressed", "true"); musicBtn.textContent = "🌿 Forest sound on"; }
   });
   window.addEventListener("resize", function () { plantTrees(); measureStage(); });
 
