@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+  <meta http-equiv="refresh" content="2;url=./?auth-removed=1">
+  <title>Authentication removed — Myflare</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { min-height: 100vh; margin: 0; display: grid; place-items: center; padding: 1.5rem; background: #f3f0e8; color: #24372d; font: 16px/1.5 system-ui, sans-serif; }
+    main { max-width: 34rem; text-align: center; }
+    h1 { margin: 0 0 .5rem; font-size: clamp(1.5rem, 5vw, 2.2rem); }
+    p { margin: .4rem 0 1rem; color: #5d6d63; }
+    a { display: inline-block; border-radius: 999px; padding: .7rem 1rem; background: #285c42; color: #fff; font-weight: 700; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Taking you back to Myflare…</h1>
+    <p>The unfinished sign-in gate has been removed. This page repairs redirects from older cached copies of the site.</p>
+    <a id="homeLink" href="./?auth-removed=1">Continue to Myflare</a>
+  </main>
+  <script>
+    // A unique query bypasses an old cached homepage that still loaded the
+    // removed authentication gate. This page performs no authentication.
+    var destination = new URL("./", window.location.href);
+    destination.searchParams.set("auth-removed", String(Date.now()));
+    document.getElementById("homeLink").href = destination.href;
+    window.location.replace(destination.href);
+  </script>
+</body>
+</html>
